@@ -1,4 +1,6 @@
 import { applyDiceMaxFloor, formatDiceFormula} from "../easy-effects/dice-formula.js";
+import { addCombatDiceMods } from "../easy-effects/nouns.js";
+import { getItemAlwaysActiveCombatMods } from "../easy-effects/registry.js";
 import { normalizeWeaponProperties } from "../item/weapon-properties.js";
 
 /**
@@ -93,8 +95,11 @@ export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}) {
 
   const rank = Number(actor?.system?.attributes?.rank?.value ?? 0) || 0;
   const eeMods = actor?.system?.attributes?.easyEffectsMods ?? {};
-  const alwaysPower = Number(eeMods.attackPower ?? 0) || 0;
-  const alwaysMax = Number(eeMods.attackMax ?? 0) || 0;
+  const local = weaponItem?.system?.alwaysActiveCombatMods
+    ?? getItemAlwaysActiveCombatMods(weaponItem, actor);
+  const always = addCombatDiceMods(eeMods, local);
+  const alwaysPower = Number(always.attackPower ?? 0) || 0;
+  const alwaysMax = Number(always.attackMax ?? 0) || 0;
   const clashPower = Number(clashBonuses.attackPower ?? 0) || 0;
   const clashMax = Number(clashBonuses.attackMax ?? 0) || 0;
 
@@ -192,8 +197,11 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}) {
     ? Number(actor?.system?.abilities?.ins?.value ?? 0) || 0
     : Number(actor?.system?.abilities?.tem?.value ?? 0) || 0;
   const eeMods = actor?.system?.attributes?.easyEffectsMods ?? {};
-  const alwaysPower = Number(isEvade ? eeMods.evadePower : eeMods.blockPower) || 0;
-  const alwaysMax = Number(isEvade ? eeMods.evadeMax : eeMods.blockMax) || 0;
+  const local = outfit?.system?.alwaysActiveCombatMods
+    ?? getItemAlwaysActiveCombatMods(outfit, actor);
+  const always = addCombatDiceMods(eeMods, local);
+  const alwaysPower = Number(isEvade ? always.evadePower : always.blockPower) || 0;
+  const alwaysMax = Number(isEvade ? always.evadeMax : always.blockMax) || 0;
   const clashPower = Number(isEvade ? clashBonuses.evadePower : clashBonuses.blockPower) || 0;
   const clashMax = Number(isEvade ? clashBonuses.evadeMax : clashBonuses.blockMax) || 0;
 

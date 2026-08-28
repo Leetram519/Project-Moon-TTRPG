@@ -372,6 +372,13 @@ export function resolvePathShorthand(actor, segment) {
   return null;
 }
 
+export const COMBAT_DICE_KEYS = [
+  "attackPower", "attackMax",
+  "blockPower", "blockMax",
+  "evadePower", "evadeMax",
+  "damagePower", "damageMax",
+];
+
 export function emptyAlwaysActiveMods() {
   const mods = {
     attackPower: 0, blockPower: 0, evadePower: 0, damagePower: 0,
@@ -389,6 +396,36 @@ export function emptyAlwaysActiveMods() {
     if (key && mods[key] === undefined) mods[key] = 0;
   }
   return mods;
+}
+
+/** Only grab the combat power/max modifiers. Weapon and outfit [Always Active] effects keep these on the item. */
+export function pickCombatDiceMods(mods) {
+  const out = {};
+
+  for (const key of COMBAT_DICE_KEYS) {
+    out[key] = Number(mods?.[key] ?? 0) || 0;
+  }
+
+  return out;
+}
+
+/** Copy the modifiers, but reset all combat dice modifiers to 0. */
+export function zeroCombatDiceMods(mods) {
+  const out = { ...mods };
+
+  for (const key of COMBAT_DICE_KEYS) out[key] = 0;
+
+  return out;
+}
+
+/** Combine the combat dice modifiers from two sets of modifiers. */
+export function addCombatDiceMods(a, b) {
+  const out = pickCombatDiceMods(a);
+  const extra = pickCombatDiceMods(b);
+
+  for (const key of COMBAT_DICE_KEYS) out[key] += extra[key];
+
+  return out;
 }
 
 export function applyResourceMod(mods, nounId, signedAmount) {

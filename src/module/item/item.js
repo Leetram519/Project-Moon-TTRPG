@@ -16,6 +16,7 @@ import {
   promptDeclareSkillDialog,
 } from "./declare-skill.js";
 import { applyDiceMaxFloor, formatDiceFormula } from "../easy-effects/dice-formula.js";
+import { getItemAlwaysActiveCombatMods } from "../easy-effects/registry.js";
 import { promptRangedAmmo } from "../combat/clash-dialog.js";
 import { resolveRangedDamageType } from "../damage-application.js";
 import { normalizeWeaponProperties } from "./weapon-properties.js";
@@ -220,8 +221,11 @@ export class ItemPMTTRPG extends Item {
 
       dicePowerFromAttack = Number(actorData?.system?.attributes?.attackModifier?.value ?? 0);
       const eeMods = actorData?.system?.attributes?.easyEffectsMods;
-      const eeAttackMax = Number(eeMods?.attackMax ?? 0);
       const eeRangeUp = Number(eeMods?.rangeBonus ?? 0);
+      const local = getItemAlwaysActiveCombatMods(itemData, actorData);
+      data.alwaysActiveCombatMods = local;
+      const eeAttackMax = Number(eeMods?.attackMax ?? 0) + Number(local.attackMax ?? 0);
+      dicePowerFromAttack += Number(local.attackPower ?? 0);
       const { sides: dieSides, powerAdjust: maxFloorPower } = applyDiceMaxFloor(
         baseDieSides,
         diceMaxBonus + eeAttackMax,
@@ -289,10 +293,12 @@ export class ItemPMTTRPG extends Item {
       const tem = Number(actorData?.system?.abilities?.tem?.value ?? 0);
       const ins = Number(actorData?.system?.abilities?.ins?.value ?? 0);
       const eeMods = actorData?.system?.attributes?.easyEffectsMods;
-      const blockFromEffects = Number(eeMods?.blockPower ?? 0);
-      const evadeFromEffects = Number(eeMods?.evadePower ?? 0);
-      const blockMaxFromEffects = Number(eeMods?.blockMax ?? 0);
-      const evadeMaxFromEffects = Number(eeMods?.evadeMax ?? 0);
+      const local = getItemAlwaysActiveCombatMods(itemData, actorData);
+      data.alwaysActiveCombatMods = local;
+      const blockFromEffects = Number(eeMods?.blockPower ?? 0) + Number(local.blockPower ?? 0);
+      const evadeFromEffects = Number(eeMods?.evadePower ?? 0) + Number(local.evadePower ?? 0);
+      const blockMaxFromEffects = Number(eeMods?.blockMax ?? 0) + Number(local.blockMax ?? 0);
+      const evadeMaxFromEffects = Number(eeMods?.evadeMax ?? 0) + Number(local.evadeMax ?? 0);
 
       const blockMaxApplied = applyDiceMaxFloor(blockBaseSides, blockMaxFromEffects);
       const evadeMaxApplied = applyDiceMaxFloor(evadeBaseSides, evadeMaxFromEffects);
