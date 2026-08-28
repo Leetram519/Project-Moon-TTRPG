@@ -3,7 +3,7 @@ import { KEYWORDS as LEXER_KEYWORDS } from "./lexer.js";
 const ACTIONS = new Set([
   "gain", "spend", "lose", "require", "inflict", "reduce", "increase",
   "convert", "create", "dialog", "message", "burst", "proc", "deal", "heal", "add", "remove",
-  "set", "halve", "double", "regen", "power", "dice", "roll", "pause",
+  "set", "halve", "double", "regen", "power", "dice", "range", "roll", "pause",
   "advantage", "disadvantage",
 ]);
 

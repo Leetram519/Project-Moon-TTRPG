@@ -179,34 +179,49 @@ export class ItemPMTTRPG extends Item {
 
     if (itemData.type == 'weapon') {
       const baseDieSides = 10;
+      const baseRange = 1;
       let diceMaxBonus = 0;
       let dicePowerFromHand = 0;
       let dicePowerFromAttack = 0;
+      let rangeBonus = 0;
       Object.assign(data, normalizeWeaponProperties(data));
 
+      switch (data.weaponType) {
+        // "[Ranged Weapons] have a base Range of 10 SQRs, which can be modified with certain Effects." // CR 3.x
+        case 'ranged':
+          rangeBonus += 9;
+          break;
+        default:
+          break;
+      }
+
       switch (data.formProperty) {
-      case 'medium':
-      case 'highCaliber':
-        diceMaxBonus += 2;
-        break;
-      default:
-        break;
+        case 'long':
+          rangeBonus += 1;
+          break;
+        case 'medium':
+        case 'highCaliber':
+          diceMaxBonus += 2;
+          break;
+        default:
+          break;
       }
 
       switch (data.handProperty) {
-      case 'off1h':
-        dicePowerFromHand += 1;
-        break;
-      case 'off2h':
-        dicePowerFromHand += 2;
-        break;
-      default:
-        break;
+        case 'off1h':
+          dicePowerFromHand += 1;
+          break;
+        case 'off2h':
+          dicePowerFromHand += 2;
+          break;
+        default:
+          break;
       }
 
       dicePowerFromAttack = Number(actorData?.system?.attributes?.attackModifier?.value ?? 0);
       const eeMods = actorData?.system?.attributes?.easyEffectsMods;
       const eeAttackMax = Number(eeMods?.attackMax ?? 0);
+      const eeRangeUp = Number(eeMods?.rangeBonus ?? 0);
       const { sides: dieSides, powerAdjust: maxFloorPower } = applyDiceMaxFloor(
         baseDieSides,
         diceMaxBonus + eeAttackMax,
@@ -217,10 +232,11 @@ export class ItemPMTTRPG extends Item {
       data.dicePowerFromHand = dicePowerFromHand;
       data.dicePowerFromAttack = dicePowerFromAttack;
       data.dicePowerTotal = dicePowerTotal;
-      // Compute Effect Points (EP) for weapons: (Rank*2)+2, minimum 0.
+      data.range = baseRange + rangeBonus + eeRangeUp;
+
       const rank = Number(data.rank ?? 0);
       const weaponEpBase = rank < 0 ? 0 : (rank * 2) + 2;
-      // Hand properties may add EP (e.g., 2H weapons grant +2 EP)
+
       let epBonusFromHands = 0;
       switch (data.handProperty) {
       case 'off2h':
@@ -624,9 +640,11 @@ export class ItemPMTTRPG extends Item {
         const targeting = game.projectmoonttrpg?.targeting;
         const chosenTarget = targeting ? await targeting.promptTargetSelection({
           actor: this.actor,
+          token: this.actor.getActiveTokens(true)[0] ?? null,
           title: this.name,
           sourceName: this.name,
           sourceImg: this.img,
+          weaponRange: this.system.range,
           preferredCombatantId: game.combat?.combatant?.id ?? null,
         }) : undefined;
 
@@ -669,6 +687,7 @@ export class ItemPMTTRPG extends Item {
           title: this.name,
           sourceName: this.name,
           sourceImg: this.img,
+          weaponRange: this.system.range,
           preferredCombatantId: game.combat?.combatant?.id ?? null,
         }) : undefined);
 

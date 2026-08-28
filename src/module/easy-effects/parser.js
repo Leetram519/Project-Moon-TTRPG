@@ -276,7 +276,7 @@ class Parser {
         this.peek()
       );
     }
-    const okBonus = new Set(["power up", "power down", "dice max up", "dice max down"]);
+    const okBonus = new Set(["power up", "power down", "dice max up", "dice max down", "range up", "range down"]);
     for (const action of stmt.actions ?? []) {
       if (action.verb === "burst") {
         throw new ParseError(
@@ -376,6 +376,7 @@ class Parser {
     }
     else if (this.check("IDENT", "deal") || this.check("IDENT", "heal") || this.check("IDENT", "set") || this.check("IDENT", "instant")) stmt = this.parseNaturalStatement();
     else if (this._isBonusVerbAhead()) stmt = this.parseBonusVerbStatement();
+    else if (this.check("KEYWORD", "range")) stmt = this.parseNaturalStatement();
     else stmt = this.parseDoStatement();
 
     stmt.polarity = polarity;
@@ -839,7 +840,7 @@ class Parser {
 
   /**
    * Parses a single action, handling multi-keyword verbs:
-   *   power up / power down / dice max up / dice max down / regen / <IDENT>
+   *   power [up/down] / dice max [up/down] / range [up/down] / regen / <IDENT>
    *
    * Returns { type:"Action", verb, noun, argument, amount, per, target }
    */
@@ -878,6 +879,18 @@ class Parser {
       }
       noun = this._parseBonusNoun();
 
+    } else if (t0.type === "KEYWORD" && t0.value === "range") {
+      if (t1.type === "KEYWORD" && t1.value === "up") {
+        this.consume("KEYWORD", "range"); this.consume("KEYWORD", "up");
+        verb = "range up";
+      } else if (t1.type === "KEYWORD" && t1.value === "down") {
+        this.consume("KEYWORD", "range"); this.consume("KEYWORD", "down");
+        verb = "range down";
+      } else {
+        throw new ParseError(`Expected 'up' or 'down' after 'range', got '${t1.value}'`, t1);
+      }
+      noun = "range";
+
     } else if (t0.type === "KEYWORD" && t0.value === "regen") {
       this.consume("KEYWORD", "regen");
       verb = "regen";
@@ -896,7 +909,7 @@ class Parser {
     // Optional status/resource name argument (only for standard verbs)
     let argument = null;
     let pool = dealPool ?? null;
-    if (!["power up","power down","dice max up","dice max down","regen","deal","heal"].includes(verb)) {
+    if (!["power up","power down","dice max up","dice max down","range up","range down","regen","deal","heal"].includes(verb)) {
       if (noun === "resource") argument = this.parseStatusName();
       else if (this.isStatusNameToken()) argument = this.parseStatusName();
     }
@@ -1729,13 +1742,14 @@ class Parser {
       this.check("KEYWORD", "power")
       || this.check("KEYWORD", "dice")
       || this.check("KEYWORD", "regen")
+      || this.check("KEYWORD", "range")
     ) {
       return this.parseSingleAction();
     }
 
     const verbTok = this.consume("KEYWORD");
     if (!["gain", "lose", "inflict", "reduce", "increase", "halve", "double"].includes(verbTok.value))
-      throw new ParseError(`Expected 'gain', 'lose', 'inflict', 'reduce', 'increase', 'halve', 'double', 'convert', 'set', 'deal', 'heal', 'burst', 'proc', 'instant', 'pause', 'advantage', 'disadvantage', 'message', 'dialog', 'power', 'dice', 'regen', or 'roll', got '${verbTok.value}'`, verbTok);
+      throw new ParseError(`Expected 'gain', 'lose', 'inflict', 'reduce', 'increase', 'halve', 'double', 'convert', 'set', 'deal', 'heal', 'burst', 'proc', 'instant', 'pause', 'advantage', 'disadvantage', 'message', 'dialog', 'power', 'range', 'dice', 'regen', or 'roll', got '${verbTok.value}'`, verbTok);
 
     if (verbTok.value === "halve" || verbTok.value === "double") {
       return this._desugarStatusScaleAction(verbTok.value);

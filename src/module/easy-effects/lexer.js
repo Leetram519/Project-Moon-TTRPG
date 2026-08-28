@@ -24,8 +24,8 @@ export const KEYWORDS = new Set([
   "next", "round", "turn", "pause",
   // effect template polarity
   "positive", "negative",
-  // verb component keywords (power up/down, dice max up/down, regen)
-  "power", "dice", "regen", "up", "down", "max",
+  // verb component keywords (power up/down, dice max up/down, range up/down, regen)
+  "power", "dice", "regen", "range", "up", "down", "max",
   "advantage", "disadvantage",
   "before", "after",
   "let",

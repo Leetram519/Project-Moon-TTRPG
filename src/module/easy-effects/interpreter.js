@@ -332,6 +332,7 @@ function resolvePath(segments, context) {
       blockMax:    sideBag.blockMax    ?? 0,
       evadeMax:    sideBag.evadeMax    ?? 0,
       damageMax:   sideBag.damageMax   ?? 0,
+      rangeBonus:  sideBag.rangeBonus  ?? 0,
       regenHP:     sideBag.regenHP     ?? 0,
       regenST:     sideBag.regenST     ?? 0,
     };
@@ -979,6 +980,18 @@ const ACTION_HANDLERS = {
     for (const field of fields) _applyClashBonus(context, field, -amount, action.target ?? "self");
   },
 
+  "range up": async (action, context, amount) => {
+    const fields = getPowerFields(action.noun);
+    if (!fields.length) { console.warn(`[EasyEffects] Unknown noun for range up/down: '${action.noun}'`); return; }
+    for (const field of fields) _applyClashBonus(context, field, +amount, action.target ?? "self");
+  },
+
+  "range down": async (action, context, amount) => {
+    const fields = getPowerFields(action.noun);
+    if (!fields.length) { console.warn(`[EasyEffects] Unknown noun for range up/down: '${action.noun}'`); return; }
+    for (const field of fields) _applyClashBonus(context, field, -amount, action.target ?? "self");
+  },
+
   regen: async (action, context, amount) => {
     const field = getRegenField(action.noun);
     if (field) {
@@ -1534,6 +1547,20 @@ export function executeAlwaysActive(ast, prepareContext) {
               if (fields.length) {
                 for (const f of fields) mods[f] = (mods[f] ?? 0) - amount;
               } else console.warn(`[EasyEffects] Unknown noun for dice max down: '${action.noun}'`);
+              break;
+            }
+            case "range up": {
+              const fields = getPowerFields(action.noun);
+              if (fields.length) {
+                for (const f of fields) mods[f] = (mods[f] ?? 0) + amount;
+              } else console.warn(`[EasyEffects] Unknown noun for range up: '${action.noun}'`);
+              break;
+            }
+            case "range down": {
+              const fields = getPowerFields(action.noun);
+              if (fields.length) {
+                for (const f of fields) mods[f] = (mods[f] ?? 0) - amount;
+              } else console.warn(`[EasyEffects] Unknown noun for range down: '${action.noun}'`);
               break;
             }
             case "add":

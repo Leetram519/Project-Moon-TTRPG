@@ -15,7 +15,7 @@
     {{#if options.length}}
       <div class="target-choice-list">
         {{#each options as |choice|}}
-          <label class="target-choice {{#if choice.isCurrent}}target-choice--current{{/if}}">
+          <label class="target-choice {{#if choice.isCurrent}}target-choice--current{{/if}} {{#ifEquals choice.outOfRange false}}target-choice--out-of-range{{/ifEquals}}">
             <input type="radio" name="combatantId" value="{{choice.combatantId}}" {{#if choice.isDefault}}checked{{/if}} />
             <img class="target-choice__icon" src="{{choice.img}}" title="{{choice.name}}" alt="{{choice.name}}"/>
             <div class="target-choice__content">
@@ -24,8 +24,9 @@
                 <span class="tag target-choice__initiative">{{choice.initiativeLabel}}</span>
               </div>
               <div class="target-choice__tags">
-                  {{#if choice.isCurrent}}<span class="tag tag--current">{{localize "PMTTRPG.Dialog.currentTurn"}}</span>{{/if}}
+                {{#if choice.isCurrent}}<span class="tag tag--current">{{localize "PMTTRPG.Dialog.currentTurn"}}</span>{{/if}}
                 {{#if choice.isSelf}}<span class="tag">{{localize "PMTTRPG.Dialog.selfTarget"}}</span>{{/if}}
+                {{#ifEquals choice.outOfRange false}}<span class="tag tag--out-of-range">{{localize "PMTTRPG.Dialog.outOfRange"}}</span>{{/ifEquals}}
               </div>
             </div>
           </label>

@@ -44,6 +44,12 @@
     box-shadow: inset 0 0 0 1px rgba(244, 201, 111, 0.14);
   }
 
+  .target-choice--out-of-range {
+    border-color: rgba(66, 66, 66, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(36, 36, 36, 0.14);
+    filter: grayscale(0.5);
+  }
+
   .target-choice__icon,
   .dialog-summary__icon {
     width: 2.75rem;
@@ -84,6 +90,11 @@
   .tag--current {
     background: rgba(244, 201, 111, 0.18);
     color: var(--sheet-gold-bright);
+  }
+
+  .tag--out-of-range {
+    background: rgba(56, 56, 56, 0.18);
+    color: var(--sheet-ink);
   }
 
   .target-summary {

@@ -65,6 +65,8 @@ import {
   recycledPowerPenalty,
 } from "./recycled-evade.js";
 
+import {PMTTRPGUtility} from '../utility.js';
+
 const REACTIONS_THAT_CLEAR_RECYCLED = new Set([
   RETALIATION_TYPES.EVADE,
   RETALIATION_TYPES.BLOCK,
@@ -198,7 +200,7 @@ export async function handleRetaliateClick(state, { isIntercept = false } = {}) 
     return;
   }
 
-  if (choice.type === RETALIATION_TYPES.COUNTER && _isRangedWeapon(choice.item)) {
+  if (choice.type === RETALIATION_TYPES.COUNTER && PMTTRPGUtility.isRangedWeapon(choice.item)) {
     const ammoPick = await promptRangedCounterAmmo(retaliatorActor, choice.item);
     if (!ammoPick) return;
     choice.ammo = ammoPick.ammo;
@@ -313,7 +315,7 @@ async function _executeClash(state, retaliatorActor, choice) {
   }
 
   const counterDryFire = choice.type === RETALIATION_TYPES.COUNTER
-    && (_isRangedWeapon(choice.item) && (choice.dryFire === true || !choice.ammo));
+    && (PMTTRPGUtility.isRangedWeapon(choice.item) && (choice.dryFire === true || !choice.ammo));
 
   // Rebuild clash context so EasyEffects On Clash can add bonuses before the roll.
   const clashCtx = createClashContext();
@@ -455,12 +457,12 @@ async function _executeClash(state, retaliatorActor, choice) {
     state.hpDamage = finalResult;
     state.stDamage = finalResult;
   } else if (result === CLASH_RESULTS.DEFENSE_WIN && state.retaliationType === RETALIATION_TYPES.BLOCK) {
-    state.blockWinStExempt = _isRangedWeapon(attackerItem);
+    state.blockWinStExempt = PMTTRPGUtility.isRangedWeapon(attackerItem);
   } else if (result === CLASH_RESULTS.DEFENSE_WIN && counterItem) {
-    const inRange = _isTargetInWeaponRange(
+    const inRange = PMTTRPGUtility.isTargetInWeaponRange(
       state.retaliatorTokenId,
       state.attackerTokenId,
-      counterItem,
+      {weapon: counterItem},
     );
     state.counterInRange = inRange;
     if (inRange) {
@@ -584,47 +586,9 @@ function _counterDamageType(counterItem, choice, appliedTool) {
 }
 
 function _rangedAttackConsumesMovement(weapon) {
-  if (!_isRangedWeapon(weapon)) return false;
+  if(!PMTTRPGUtility.isRangedWeapon(weapon)) return false;
   const { formProperty } = normalizeWeaponProperties(weapon.system);
-  return formProperty !== "lowCaliber";
-}
-
-/**
- * Effective weapon range in squares.
- * Melee 1, Long melee 2, Ranged 10.
- * @param {Item|null} weapon
- * @returns {number}
- */
-function _getWeaponRangeSquares(weapon) {
-  if (!weapon) return 1;
-  if (_isRangedWeapon(weapon)) return 10;
-  const { formProperty } = normalizeWeaponProperties(weapon.system);
-  if (formProperty === "long") return 2;
-  return 1;
-}
-
-/**
- * Grid distance in squares between two tokens.
- * @param {Token|null} tokenA
- * @param {Token|null} tokenB
- * @returns {number|null}
- */
-function _tokenDistanceSquares(tokenA, tokenB) {
-  if (!tokenA || !tokenB || !canvas?.grid) return null;
-
-  const a = canvas.grid.getOffset(tokenA.center);
-  const b = canvas.grid.getOffset(tokenB.center);
-  if (!a || !b) return null;
-
-  return Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
-}
-
-function _isTargetInWeaponRange(fromTokenId, toTokenId, weapon) {
-  const from = fromTokenId ? canvas.tokens.get(fromTokenId) : null;
-  const to   = toTokenId ? canvas.tokens.get(toTokenId) : null;
-  const distance = _tokenDistanceSquares(from, to);
-  if (distance == null) return true;
-  return distance <= _getWeaponRangeSquares(weapon);
+  return weapon.system?.formProperty !== "lowCaliber";
 }
 
 /**

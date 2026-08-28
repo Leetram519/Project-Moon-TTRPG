@@ -110,6 +110,45 @@ export class PMTTRPGUtility {
 
   }
 
+  static isRangedWeapon(weapon) {
+    return weapon?.system?.weaponType === "ranged";
+  }
+
+  /**
+   * Effective weapon range in squares.
+   * Melee 1, Long melee 2, Ranged 10.
+   * @param {Item|null} weapon
+   * @returns {number}
+   */
+  static getWeaponRangeSquares(weapon) {
+    return weapon?.system?.range || 1;
+  }
+
+  /**
+   * Grid distance in squares between two tokens.
+   * @param {Token|null} tokenA
+   * @param {Token|null} tokenB
+   * @returns {number|null}
+   */
+  static tokenDistanceSquares(tokenA, tokenB) {
+    if (!tokenA || !tokenB || !canvas?.grid) return null;
+  
+    const a = canvas.grid.getOffset(tokenA.center);
+    const b = canvas.grid.getOffset(tokenB.center);
+    if (!a || !b) return null;
+  
+    return Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
+  }
+  
+  static isTargetInWeaponRange(fromTokenId, toTokenId, { weapon = null, weaponRange = 1 }) {    
+    const from = fromTokenId ? canvas.tokens.get(fromTokenId) : null;
+    const to   = toTokenId ? canvas.tokens.get(toTokenId) : null;
+    const distance = PMTTRPGUtility.tokenDistanceSquares(from, to);
+    if (distance == null) return true;
+    if(weapon) return distance <= PMTTRPGUtility.getWeaponRangeSquares(weapon);
+    else return distance <= weaponRange;
+  }
+
   static get nightmode() {
     return document.querySelector('body').classList.contains('theme-dark');
   }

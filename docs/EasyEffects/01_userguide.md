@@ -243,13 +243,14 @@ The `[Always Active]` trigger is special. It doesn't wait for combat events, and
 
 You cannot use dice or randomness with `[Always Active]` effects. It is strictly intended for passive effects that do not depend on any other variables.
 
-Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, plus `power` / `dice max` passives.
+Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, `power` / `dice max` passives, and `range up` passives.
 
 Example:
 
 ```
 [Always Active]
 dice max up attack 2;
+range up 1;
 gain 2 maxHp;
 set maxSp to 0;
 set resistances to fatal;
@@ -875,6 +876,7 @@ power down evade 1 on target;
 | `dice max <up/down> <attack/block/evade/defense> <N> [on <target>]` | Dice Max (faces) on that side's roll (`defense` = Block and Evade) |
 | `advantage` / `disadvantage` `[on\|to <t>]` | Clash-side Adv/Disadv (cancel if both; `[On Clash Start]`) |
 | `regen <hp/st/sp/light> <N>` | Shorthand to gain HP/ST/SP/Light |
+| `range up <N>` | Increase a weapon's range. |
 
 `<Status>` is a display name (`Burn`, `"Panic [Fight]"`) or a Document UUID (`Item.xxx`, quoted or bare dotted). Lookup order: UUID -> world Items -> packs.
 

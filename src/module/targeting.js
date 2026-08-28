@@ -1,4 +1,5 @@
 import { PMTTRPGUtility } from "./utility.js";
+import { showWeaponRange, hideWeaponRange } from './canvas/token.js';
 
 const { renderTemplate } = foundry.applications.handlebars;
 
@@ -7,15 +8,15 @@ function getInitiativeMisc(actor, miscType) {
 }
 
 function computeInitiativeFormulaParts(actor, { macroMisc = null, manualMisc = null } = {}) {
-  const justice = Number(actor?.system?.abilities?.jus?.mod ?? actor?.system?.abilities?.jus?.value ?? 0) || 0;
+  const speedBonus = Number.isFinite(Number(actor.system.attributes.speed.bonus)) ? Number(actor.system.attributes.speed.bonus) : 0;
   const resolvedMacroMisc = Number.isFinite(Number(macroMisc)) ? Number(macroMisc) : getInitiativeMisc(actor, 'macroMisc');
   const resolvedManualMisc = Number.isFinite(Number(manualMisc)) ? Number(manualMisc) : getInitiativeMisc(actor, 'manualMisc');
 
   return {
-    justice,
+    speedBonus,
     macroMisc: resolvedMacroMisc,
     manualMisc: resolvedManualMisc,
-    formula: `1d6${justice >= 0 ? `+${justice}` : justice}${resolvedMacroMisc >= 0 ? `+${resolvedMacroMisc}` : resolvedMacroMisc}${resolvedManualMisc >= 0 ? `+${resolvedManualMisc}` : resolvedManualMisc}`,
+    formula: `1d6${speedBonus >= 0 ? `+${speedBonus}` : speedBonus}${resolvedMacroMisc >= 0 ? `+${resolvedMacroMisc}` : resolvedMacroMisc}${resolvedManualMisc >= 0 ? `+${resolvedManualMisc}` : resolvedManualMisc}`,
   };
 }
 
@@ -80,8 +81,10 @@ function isCombatantVisible(combatant) {
   return !token.hidden;
 }
 
-function buildCombatantTarget(combatant, { actorId = null } = {}) {
+function buildCombatantTarget(combatant, { actorId = null, weaponRange = 1 } = {}) {
   if (!combatant?.actor) return null;
+
+  const selfToken = game.actors.get(actorId).getActiveTokens(true, true)[0];
 
   const actor = combatant.actor;
   const token = combatant.token ?? combatant.tokenDocument ?? null;
@@ -93,28 +96,29 @@ function buildCombatantTarget(combatant, { actorId = null } = {}) {
     actor,
     actorId: actor.id ?? null,
     token,
-    tokenId: token?.id ?? null,
+    tokenId: combatant.tokenId ?? null,
     name: combatant.name ?? actor.name ?? '',
     img: getCombatantImage(combatant),
     initiative,
     initiativeLabel: initiative ?? '-',
     isCurrent: game.combat?.combatant?.id === combatant.id,
     isSelf: actorId ? actor.id === actorId : false,
+    outOfRange: PMTTRPGUtility.isTargetInWeaponRange(selfToken._id, combatant.tokenId, {weaponRange}),
   };
 }
 
-export function getCombatantTargetOptions({ combat = game.combat, actorId = null, includeHidden = false } = {}) {
+export function getCombatantTargetOptions({ combat = game.combat, actorId = null, tokenId = null, weaponRange = null, includeHidden = false } = {}) {
   return getCombatants(combat)
     .filter(combatant => Boolean(combatant?.actor))
     .filter(combatant => includeHidden || isCombatantVisible(combatant))
-    .map(combatant => buildCombatantTarget(combatant, { actorId }))
+    .map(combatant => buildCombatantTarget(combatant, { actorId, tokenId, weaponRange }))
     .filter(Boolean);
 }
 
-export function resolveCombatantTarget(combatantId, { combat = game.combat, actorId = null } = {}) {
+export function resolveCombatantTarget(combatantId, { combat = game.combat, tokenId = null, weaponRange = null, actorId = null } = {}) {
   if (!combatantId) return null;
   const combatant = getCombatants(combat).find(entry => entry.id === combatantId) ?? null;
-  return combatant ? buildCombatantTarget(combatant, { actorId }) : null;
+  return combatant ? buildCombatantTarget(combatant, { actorId, tokenId, weaponRange }) : null;
 }
 
 function getUserTargetedTokens() {
@@ -142,11 +146,13 @@ function resolveCombatantForToken(token, combat = game.combat) {
   }) ?? null;
 }
 
-function buildTargetFromToken(token, { actorId = null, combat = game.combat } = {}) {
+function buildTargetFromToken(token, { actorId = null, combat = game.combat, weaponRange = 1 } = {}) {
   if (!token?.actor) return null;
 
   const combatant = resolveCombatantForToken(token, combat);
   if (combatant) return buildCombatantTarget(combatant, { actorId });
+
+  const selfToken = game.actors.get(actorId).getActiveTokens(true, true)[0];
 
   const actor = token.actor;
   const tokenDoc = token.document ?? token;
@@ -163,6 +169,7 @@ function buildTargetFromToken(token, { actorId = null, combat = game.combat } = 
     initiativeLabel: '-',
     isCurrent: false,
     isSelf: actorId ? actor.id === actorId : false,
+    outOfRange: PMTTRPGUtility.isTargetInWeaponRange(selfToken._id, token._id, {weaponRange}),
   };
 }
 
@@ -186,16 +193,19 @@ function getSelectedCombatantId(options = [], preferredCombatantId = null, comba
 
 export async function promptTargetSelection({
   actor = null,
+  token = null,
   combat = game.combat,
   title = game.i18n.localize('PMTTRPG.Dialog.targetingTitle'),
   hint = game.i18n.localize('PMTTRPG.Dialog.chooseTargetHint'),
   sourceName = '',
   sourceImg = '',
+  weaponRange = 1,
   allowNone = false,
   includeHidden = false,
   preferredCombatantId = null,
 } = {}) {
-  const options = getCombatantTargetOptions({ combat, actorId: actor?.id ?? null, includeHidden });
+  const selfToken = game.actors.get(actor?.id ?? null).getActiveTokens(true, true)[0];
+  const options = getCombatantTargetOptions({ combat, actorId: actor?.id ?? null, tokenId: token?.id ?? null, weaponRange, includeHidden });
   const targetedTokens = getUserTargetedTokens();
 
   // One crosshair target does not need a picker.
@@ -204,6 +214,10 @@ export async function promptTargetSelection({
   }
 
   if (!options.length) return undefined;
+
+  if(selfToken) {
+    showWeaponRange(selfToken._id, weaponRange);
+  }
 
   const selectedCombatantId = getSelectedCombatantId(options, preferredCombatantId, combat);
   const dialogData = {
@@ -235,19 +249,30 @@ export async function promptTargetSelection({
     callback: (event, button, dialog) => {
       const form = dialog.element.querySelector('form');
       const combatantId = form.combatantId?.value ?? selectedCombatantId;
+      if(selfToken) {
+        hideWeaponRange(selfToken._id);
+      }
       return resolveCombatantTarget(combatantId, { combat, actorId: actor?.id ?? null });
     }
   }, {
     action: 'cancel',
     label: game.i18n.localize('PMTTRPG.Dialog.cancel'),
-    callback: () => null
+    callback: () => {
+      if(selfToken) {
+        hideWeaponRange(selfToken._id);
+      }
+    }
   }];
 
   if (allowNone) {
     buttons.push({
       action: 'none',
       label: game.i18n.localize('PMTTRPG.Dialog.noTarget'),
-      callback: () => null
+      callback: () => {
+      if(selfToken) {
+        hideWeaponRange(selfToken._id);
+      }
+      }
     });
   }
 

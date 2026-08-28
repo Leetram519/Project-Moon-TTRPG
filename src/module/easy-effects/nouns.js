@@ -166,6 +166,11 @@ export const NOUNS = {
     powerField: "damagePower",
     maxField: "damageMax",
   },
+  range: {
+    kind: "combat",
+    ops: ["range up", "range down"],
+    powerField: "rangeBonus",
+  },
 
   hp: {
     kind: "pool",
@@ -280,6 +285,10 @@ export function isBonusNoun(name) {
   return nounAllowsOp(name, "power up") || nounAllowsOp(name, "dice max up");
 }
 
+export function isRangeNoun(name) {
+  return nounAllowsOp(name, "range up");
+}
+
 export function isRegenNoun(name) {
   return nounAllowsOp(name, "regen");
 }
@@ -367,7 +376,7 @@ export function emptyAlwaysActiveMods() {
   const mods = {
     attackPower: 0, blockPower: 0, evadePower: 0, damagePower: 0,
     attackMax:   0, blockMax:   0, evadeMax:   0, damageMax:   0,
-    lightBonus:  0,
+    lightBonus:  0, rangeBonus: 0,
     overrides: {},
     overrideSources: {},
     resistanceOverrides: {},

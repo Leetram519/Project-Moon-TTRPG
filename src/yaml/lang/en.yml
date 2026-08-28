@@ -273,6 +273,7 @@ PMTTRPG.Dialog.noCombatantsToTarget: 'No combatants are available to target.'
 PMTTRPG.Dialog.target: 'Target'
 PMTTRPG.Dialog.selfTarget: 'Self'
 PMTTRPG.Dialog.currentTurn: 'Current turn'
+PMTTRPG.Dialog.outOfRange: 'Out of Range'
 
 PMTTRPG.Notifications.noWeaponWarning: 'No weapon is available to use this skill.'
 PMTTRPG.Notifications.noOutfitWarning: 'No outfit is available to use this skill.'

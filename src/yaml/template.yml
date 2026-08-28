@@ -269,11 +269,12 @@ Item:
     equipped: false
     customNotes: ''
     easyEffects: ''
+    range: 1
   outfit:
     templates:
       - base
     outfitProperty: none
-    rank: 0
+    rank: 1
     blockDice: 1d10+0
     evadeDice: 1d12+0
     blockDiceComputed: 1d10+0
