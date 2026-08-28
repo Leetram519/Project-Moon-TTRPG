@@ -226,6 +226,7 @@ export class ItemPMTTRPG extends Item {
       data.alwaysActiveCombatMods = local;
       const eeAttackMax = Number(eeMods?.attackMax ?? 0) + Number(local.attackMax ?? 0);
       dicePowerFromAttack += Number(local.attackPower ?? 0);
+      const eeRangeUp = Number(eeMods?.rangeBonus ?? 0);
       const { sides: dieSides, powerAdjust: maxFloorPower } = applyDiceMaxFloor(
         baseDieSides,
         diceMaxBonus + eeAttackMax,
