@@ -68,7 +68,9 @@
     "systems/projectmoonttrpg/templates/combat/parts/detail-stat-tracker.hbs",
     // Character sheet dialogs
     "systems/projectmoonttrpg/templates/dialog/apply-end-of-combat-healing.hbs",
-    "systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs"
+    "systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs",
+    // Settings partials
+    "systems/projectmoonttrpg/templates/settings/homebrew-menu.hbs"
   ];
 
   // Load the template parts
