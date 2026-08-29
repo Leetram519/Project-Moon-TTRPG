@@ -244,22 +244,20 @@
   </section>
   {{/unless}}
 
-  {{#unless (or (not augment)) }}
+  {{#unless (or (eq augments.length 0)) }}
   <section class="equipment-section equipment-section--augment">
     <header class="tab-section-header">
       <h3 class="tab-section-title">{{localize "PMTTRPG.Augment"}}</h3>
       {{#unless locked}}
-        {{#unless augment}}
         <button type="button" data-action="itemCreate" data-type="augment">{{localize "PMTTRPG.AddAugment"}}</button>
-        {{/unless}}
       {{/unless}}
     </header>
     <ol class="items-list">
-      {{#if augment}}
-      {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-row-augment.hbs" item=augment selects=selects locked=locked}}
+      {{#each augments as |augment|}}
+        {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-row-augment.hbs" item=augment selects=selects locked=locked}}
       {{else}}
-      <li class="tab-empty-item"><p class="tab-empty">{{localize "PMTTRPG.Augment"}} — {{localize "PMTTRPG.None"}}</p></li>
-      {{/if}}
+        <li class="tab-empty-item"><p class="tab-empty">{{localize "PMTTRPG.Augment"}} — {{localize "PMTTRPG.None"}}</p></li>
+      {{/each}}
     </ol>
   </section>
   {{else if editMode}}
@@ -267,9 +265,7 @@
     <header class="tab-section-header">
       <h3 class="tab-section-title">{{localize "PMTTRPG.Augment"}}</h3>
       {{#unless locked}}
-        {{#unless augment}}
         <button type="button" data-action="itemCreate" data-type="augment">{{localize "PMTTRPG.AddAugment"}}</button>
-        {{/unless}}
       {{/unless}}
     </header>
   </section>

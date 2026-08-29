@@ -1,4 +1,4 @@
-<li class="item item--outfit item--loadout collapsed" data-item-id="{{item._id}}">
+<li class="item item--outfit item--loadout collapsed {{#if item.system.equipped}}{{else}}item--outfit-unequipped{{/if}}" data-item-id="{{item._id}}">
   <div class="item-title-row">
     <div class="item-title-row__lead">
       {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=item.img name=item.name}}
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="item-controls">
-      {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-controls-loadout.hbs" itemId=item._id locked=locked equippable=true equipped=item.system.equipped mode="wear"}}
+      {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-controls-loadout.hbs" itemId=item._id locked=locked equippable=true equipped=item.system.equipped mode="wear" activable=false}}
     </div>
   </div>
   <div class="item-details">

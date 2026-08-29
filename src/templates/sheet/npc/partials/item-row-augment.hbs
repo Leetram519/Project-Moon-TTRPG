@@ -1,11 +1,11 @@
-<li class="item item--augment item--loadout collapsed" data-item-id="{{item._id}}">
+<li class="item item--augment item--loadout collapsed {{#if item.system.active}}{{else}}item--augment-inactive{{/if}}" data-item-id="{{item._id}}">
   <div class="item-title-row">
     <div class="item-title-row__lead">
       {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=item.img name=item.name}}
       <strong class="item-name">{{item.name}}</strong>
     </div>
     <div class="item-controls">
-      {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-controls-loadout.hbs" itemId=item._id locked=locked equippable=false}}
+      {{> "systems/projectmoonttrpg/templates/sheet/npc/partials/item-controls-loadout.hbs" itemId=item._id locked=locked equippable=false activable=true active=item.system.active}}
     </div>
   </div>
   <div class="item-details">

@@ -1,3 +1,15 @@
 <div class="tab-scroll augment-tab">
-  {{> "systems/projectmoonttrpg/templates/sheet/character/partials/augment.hbs"}}
+  <section class="equipment-section equipment-section--augment">
+    <header class="tab-section-header">
+      <h3 class="tab-section-title">{{localize "PMTTRPG.Augment"}}</h3>
+      <button type="button" data-action="itemCreate" data-type="augment">{{localize "PMTTRPG.AddAugment"}}</button>
+    </header>
+  <ol class="items-list">
+  {{#each augments as |augment|}}
+    {{> "systems/projectmoonttrpg/templates/sheet/character/partials/augment.hbs" augment=augment}}
+  {{else}}
+    <p class="tab-empty">{{localize "PMTTRPG.NoAugments"}}</p>
+  {{/each}}
+  </ol>
+  </section>
 </div>

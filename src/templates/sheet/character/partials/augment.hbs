@@ -1,44 +1,31 @@
-<section class="equipment-section equipment-section--augment">
-  <header class="tab-section-header">
-    <h3 class="tab-section-title">{{localize "PMTTRPG.Augment"}}</h3>
-    {{#unless augment}}
-    <button type="button" data-action="itemCreate" data-type="augment">{{localize "PMTTRPG.AddAugment"}}</button>
-    {{/unless}}
-  </header>
-
-  {{#if augment}}
-  <ol class="items-list">
-    <li class="item item--augment" data-item-id="{{augment._id}}">
-      <div class="item-title-row">
-        <div class="item-title-row__lead">
-          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=augment.img name=augment.name}}
-          <strong class="item-name">{{augment.name}}</strong>
-        </div>
-        <div class="item-controls">
-          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-augment.hbs" itemId=augment._id}}
-        </div>
+{{#if augment}}
+  <li class="item item--augment {{#if augment.system.active}}{{else}}item--augment-inactive{{/if}}" data-item-id="{{augment._id}}">
+    <div class="item-title-row">
+      <div class="item-title-row__lead">
+        {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=augment.img name=augment.name}}
+        <strong class="item-name">{{augment.name}}</strong>
       </div>
-      <div class="item-details">
-        <div class="item-tags">
-          {{#if augment.system.rank}}
-            <span class="tag tag--rank">{{localize "PMTTRPG.AugmentRank"}}: {{augment.system.rank}}</span>
-          {{/if}}
-        </div>
-        {{#if augment.system.descriptionEnriched}}
-        <div class="item-flavor description">{{{augment.system.descriptionEnriched}}}</div>
-        {{/if}}
-        {{#if augment.system.effectSummaryGroups.length}}
-          {{#with (lookup augment.system.effectSummaryGroups 0) as |group|}}
-          <div class="item-effect-summary">
-            <h4 class="item-effect-summary__title">{{group.heading}}</h4>
-            <div class="item-effect-summary__body">{{{group.summaryText}}}</div>
-          </div>
-          {{/with}}
+      <div class="item-controls">
+        {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-augment.hbs" itemId=augment._id active=augment.system.active}}
+      </div>
+    </div>
+    <div class="item-details">
+      <div class="item-tags">
+        {{#if augment.system.rank}}
+          <span class="tag tag--rank">{{localize "PMTTRPG.AugmentRank"}}: {{augment.system.rank}}</span>
         {{/if}}
       </div>
-    </li>
-  </ol>
-  {{else}}
-  <p class="tab-empty">{{localize "PMTTRPG.NoAugments"}}</p>
-  {{/if}}
-</section>
+      {{#if augment.system.descriptionEnriched}}
+      <div class="item-flavor description">{{{augment.system.descriptionEnriched}}}</div>
+      {{/if}}
+      {{#if augment.system.effectSummaryGroups.length}}
+        {{#with (lookup augment.system.effectSummaryGroups 0) as |group|}}
+        <div class="item-effect-summary">
+          <h4 class="item-effect-summary__title">{{group.heading}}</h4>
+          <div class="item-effect-summary__body">{{{group.summaryText}}}</div>
+        </div>
+        {{/with}}
+      {{/if}}
+    </div>
+  </li>
+{{/if}}

@@ -19,6 +19,21 @@
   {{/if}}
 </button>
 {{/if}}
+{{#if activable}}
+<button type="button"
+        class="item-control tool-equip{{#if active}} tool-equip--on{{else}} tool-equip--stowed{{/if}}"
+        data-action="augmentActivate"
+        data-item-id="{{itemId}}"
+        title=""
+        aria-label=""
+        aria-pressed="{{#if active}}true{{else}}false{{/if}}">
+    {{#if active}}
+    <i class="fa-solid fa-square-check"></i>
+    {{else}}
+    <i class="fa-solid fa-square-xmark"></i>
+    {{/if}}
+</button>
+{{/if}}
 {{#unless locked}}
 <button type="button" class="item-control" data-action="itemEdit" data-item-id="{{itemId}}" title="{{localize "PMTTRPG.Common.EditItem"}}" aria-label="{{localize "PMTTRPG.Common.EditItem"}}"><i class="fas fa-edit" aria-hidden="true"></i></button>
 <button type="button" class="item-control" data-action="itemDelete" data-item-id="{{itemId}}" title="{{localize "PMTTRPG.Common.DeleteItem"}}" aria-label="{{localize "PMTTRPG.Common.DeleteItem"}}"><i class="fas fa-trash" aria-hidden="true"></i></button>

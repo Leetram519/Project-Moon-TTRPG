@@ -352,6 +352,7 @@ Item:
     effects: []
     customNotes: ''
     easyEffects: ''
+    active: true
   effect:
     templates:
       - base

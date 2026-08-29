@@ -29,6 +29,7 @@ export class PMTTRPGActorNpcSheet extends PMTTRPGCharacterSheet {
       itemEdit: PMTTRPGCharacterSheet.prototype._onItemEdit,
       itemDelete: PMTTRPGCharacterSheet.prototype._onItemDelete,
       itemEquip: PMTTRPGCharacterSheet.prototype._onEquipEquipment,
+      augmentActivate: PMTTRPGCharacterSheet.prototype._onAugmentActivate,
       toggleDetails: PMTTRPGCharacterSheet.prototype._onToggleDetails,
       counterIncrease: PMTTRPGCharacterSheet.prototype._onCounterIncrease,
       counterDecrease: PMTTRPGCharacterSheet.prototype._onCounterDecrease,
@@ -117,10 +118,6 @@ export class PMTTRPGActorNpcSheet extends PMTTRPGCharacterSheet {
   async _onItemCreate(event, target) {
     event.preventDefault();
     const type = target.dataset.type;
-    if (type === "augment" && this.actor.items.some(item => item.type === "augment")) {
-      ui.notifications.warn(game.i18n.localize("PMTTRPG.AugmentOnlyOne"));
-      return;
-    }
     const data = foundry.utils.duplicate(target.dataset);
     const itemName = data.name || game.i18n.localize(`TYPES.Item.${type}`) || type;
     delete data.action;

@@ -108,14 +108,14 @@ function resolveOwnedItem(actor, item) {
 function isPassiveClashItem(item) {
   if (!item) return false;
   if (item.type === "weapon" || item.type === "skill") return false;
-  if (item.type === "augment") return true;
+  if (item.type === "augment") return item.system?.active === true;
   if (item.type === "outfit") return item.system?.equipped === true;
   return false;
 }
 
 function itemIsLoadoutActive(item, actor) {
   if (!item) return false;
-  if (item.type === "augment") return true;
+  if (item.type === "augment") return item.system?.active === true;
   if (item.type === "tool") return !!item.system?.equipped && isToolPresent(item);
   if (item.type === "skill") return actor?.type === "npc" || item.system?.equipped === true;
   if (item.type === "weapon" || item.type === "outfit") return item.system?.equipped === true;

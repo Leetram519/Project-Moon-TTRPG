@@ -1,4 +1,4 @@
-<li class="item item--outfit collapsed{{#if item.system.equipped}} item--equipped{{/if}}" data-item-id="{{item._id}}">
+<li class="item item--outfit collapsed{{#if item.system.equipped}} item--equipped{{else}} item--outfit-unequipped{{/if}}" data-item-id="{{item._id}}">
   <div class="item-title-row">
     <div class="item-title-row__lead">
       {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=item.img name=item.name}}

@@ -82,6 +82,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
       itemEdit: PMTTRPGCharacterSheet.prototype._onItemEdit,
       itemDelete: PMTTRPGCharacterSheet.prototype._onItemDelete,
       itemEquip: PMTTRPGCharacterSheet.prototype._onEquipEquipment,
+      augmentActivate: PMTTRPGCharacterSheet.prototype._onAugmentActivate,
       toggleDetails: PMTTRPGCharacterSheet.prototype._onToggleDetails,
       counterIncrease: PMTTRPGCharacterSheet.prototype._onCounterIncrease,
       counterDecrease: PMTTRPGCharacterSheet.prototype._onCounterDecrease,
@@ -213,7 +214,6 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
         return augment;
       })
       .sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.augment = context.augments[0] ?? null;
     context.statuses = this._prepareStatusItems(context.items);
 
     context.system.isToken = this.actor.isToken;
@@ -985,10 +985,6 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
   async _onItemCreate(event, target) {
     event.preventDefault();
     const type = target.dataset.type;
-    if (type === "augment" && this.actor.items.some(item => item.type === "augment")) {
-      ui.notifications.warn(game.i18n.localize("PMTTRPG.AugmentOnlyOne"));
-      return;
-    }
     const data = foundry.utils.duplicate(target.dataset);
     const itemName = data.name || game.i18n.localize(`TYPES.Item.${type}`) || type;
     delete data.action;
@@ -1024,6 +1020,20 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     const currentlyOn = !!(source.equipped || source.held || item.system?.equipped);
     const update = { "system.equipped": !currentlyOn };
     if (item.type === "tool") update["system.held"] = foundry.data.operators.ForcedDeletion;
+    await item.update(update);
+  }
+
+  async _onAugmentActivate(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const itemId = this._itemIdFor(target);
+    const item = itemId ? this.actor.items.get(itemId) : null;
+    if (!item) return;
+
+    // Prefer source so a leftover system.held overlay can't invert the toggle.
+    const source = item._source?.system ?? {};
+    const currentlyOn = !!(source.active);
+    const update = { "system.active": !currentlyOn };
     await item.update(update);
   }
 
@@ -1257,11 +1267,6 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
   async _onDropItem(event, item) {
     if (!item) return null;
     if (item.parent?.id === this.actor.id) return null;
-
-    if (item.type === "augment" && this.actor.items.some(owned => owned.type === "augment")) {
-      ui.notifications.warn(game.i18n.localize("PMTTRPG.AugmentOnlyOne"));
-      return null;
-    }
 
     if (item.type === "status") {
       const stacks = Math.max(0, Math.trunc(Number(item.system?.stacks ?? 1) || 0));
