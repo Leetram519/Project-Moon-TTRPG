@@ -64,6 +64,11 @@ packs:
     path: packs/macros-pmttrpg-srd
     type: Macro
     private: false
+  - name: boi-homebrew
+    label: Boi's Homebrew Effects List
+    path: packs/boi-homebrew
+    type: Item
+    private: true
 languages:
   - lang: en
     name: English

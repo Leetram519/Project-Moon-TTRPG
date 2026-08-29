@@ -39,6 +39,8 @@ import {
 } from "./canvas/token.js";
 import { registerClashChatListeners } from "./combat/clash-chat.js";
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
+import { HomebrewSettings } from "./settings/homebrew-settings.js";
+import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
@@ -176,6 +178,9 @@ Hooks.once("init", async function() {
   registerEasyEffectsHooks();
   registerActorScriptHooks();
   registerClashChatListeners();
+
+  HomebrewSettings.register();
+  BoiHomebrew.registerSetting();
 });
 
 Hooks.once("ready", async function() {
@@ -240,6 +245,8 @@ Hooks.once("ready", async function() {
       ui.combat.render();
     }
   });
+
+  BoiHomebrew.applyState();
 });
 
 Hooks.on('createChatMessage', async (message, options, id) => {
