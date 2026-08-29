@@ -1,0 +1,19 @@
+<form>
+  <div class="homebrew-menu">
+    {{#each homebrews}}
+    <div class="homebrew-entry form-group">
+      <label>
+        <input type="checkbox" name="{{#if id}}{{id}}{{/if}}" {{#if enabled}}checked{{/if}} />
+        <strong>{{label}}</strong>
+      </label>
+      <p class="hint">{{hint}}</p>
+    </div>
+    {{/each}}
+  </div>
+
+  <footer class="sheet-footer">
+    <button type="submit">
+      <i class="fas fa-save"></i> Save
+    </button>
+  </footer>
+</form>
