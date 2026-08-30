@@ -2028,6 +2028,8 @@ class Parser {
     if (this.check("KEYWORD", "do")) this.consume("KEYWORD", "do");
     const gainActions = this.parseNaturalActionChain();
 
+    spendAmount.snapshot = true;
+
     const condition = {
       type: "Condition",
       lhs: { type: "ACCESSOR", expr: { type: "Path", segments: [spendTarget, "status", statusName] } },

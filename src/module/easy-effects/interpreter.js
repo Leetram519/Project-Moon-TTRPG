@@ -39,6 +39,19 @@ function declareVariable(context, name, value) {
   context._eeVars.set(name, value);
 }
 
+function readAmountSnapshot(context, node) {
+  if (!node?.snapshot) return undefined;
+  const cache = context?._amountSnapshots;
+  if (!(cache instanceof WeakMap) || !cache.has(node)) return undefined;
+  return cache.get(node);
+}
+
+function writeAmountSnapshot(context, node, value) {
+  if (!node?.snapshot) return;
+  if (!(context._amountSnapshots instanceof WeakMap)) context._amountSnapshots = new WeakMap();
+  context._amountSnapshots.set(node, value);
+}
+
 async function evaluateExpr(node, context) {
   switch (node.type) {
     case "Num":   return node.value;
@@ -522,17 +535,26 @@ function coerceActorPathValue(value) {
 
 async function resolveAmount(amountNode, context) {
   if (!amountNode) return 1;
+  const cached = readAmountSnapshot(context, amountNode);
+  if (cached !== undefined) return cached;
+  let value;
   switch (amountNode.type) {
-    case "NUMBER":   return amountNode.value;
-    case "DICE":     return evaluateDiceFormula(amountNode.value, context);
-    case "ACCESSOR": return Number(await evaluateExpr(amountNode.expr, context)) || 0;
-    case "EFFECT_N": return Math.max(0, Number(context.effectN) || 0);
-    case "POOL_MAX": return 0; // resolved per-actor in set handler
+    case "NUMBER":   value = amountNode.value; break;
+    case "DICE":     value = await evaluateDiceFormula(amountNode.value, context); break;
+    case "ACCESSOR": value = Number(await evaluateExpr(amountNode.expr, context)) || 0; break;
+    case "EFFECT_N": value = Math.max(0, Number(context.effectN) || 0); break;
+    case "POOL_MAX": value = 0; break; // resolved per-actor in set handler
     case "MULTIPLIEDPATH":
-      return resolvePath(amountNode.path.segments, context)
+      value = resolvePath(amountNode.path.segments, context)
         * await resolveAmount(amountNode.multiplier, context);
-    default: console.warn(`[EasyEffects] Unknown amount type '${amountNode.type}'`); return 1;
+      break;
+    default:
+      console.warn(`[EasyEffects] Unknown amount type '${amountNode.type}'`);
+      value = 1;
+      break;
   }
+  writeAmountSnapshot(context, amountNode, value);
+  return value;
 }
 
 /**
@@ -567,17 +589,26 @@ async function resolveActionAmount(action, context) {
 
 function resolveAmountSync(amountNode, context) {
   if (!amountNode) return 1;
+  const cached = readAmountSnapshot(context, amountNode);
+  if (cached !== undefined) return cached;
+  let value;
   switch (amountNode.type) {
-    case "NUMBER":   return amountNode.value;
-    case "DICE":     console.warn("[EasyEffects] Dice not allowed in [Always Active]"); return 0;
-    case "ACCESSOR": return Number(evaluateExprSync(amountNode.expr, context)) || 0;
-    case "EFFECT_N": return Math.max(0, Number(context.effectN) || 0);
-    case "POOL_MAX": return 0;
+    case "NUMBER":   value = amountNode.value; break;
+    case "DICE":
+      console.warn("[EasyEffects] Dice not allowed in [Always Active]");
+      value = 0;
+      break;
+    case "ACCESSOR": value = Number(evaluateExprSync(amountNode.expr, context)) || 0; break;
+    case "EFFECT_N": value = Math.max(0, Number(context.effectN) || 0); break;
+    case "POOL_MAX": value = 0; break;
     case "MULTIPLIEDPATH":
-      return resolvePath(amountNode.path.segments, context)
+      value = resolvePath(amountNode.path.segments, context)
         * resolveAmountSync(amountNode.multiplier, context);
-    default: return 1;
+      break;
+    default: value = 1; break;
   }
+  writeAmountSnapshot(context, amountNode, value);
+  return value;
 }
 
 // ── Action handlers ───────────────────────────────────────────────────────────
@@ -1155,6 +1186,7 @@ async function resolveLhs(lhs, context) {
 
 async function resolveRhs(rhs, context) {
   if (!rhs) return 0;
+  if (rhs.snapshot) return resolveAmount(rhs, context);
   if (rhs.type === "NUMBER")   return rhs.value;
   if (rhs.type === "EFFECT_N") return Math.max(0, Number(context.effectN) || 0);
   if (rhs.type === "ACCESSOR") return evaluateExpr(rhs.expr, context);
@@ -1165,6 +1197,7 @@ async function resolveRhs(rhs, context) {
 
 function resolveRhsSync(rhs, context) {
   if (!rhs) return 0;
+  if (rhs.snapshot) return resolveAmountSync(rhs, context);
   if (rhs.type === "NUMBER")   return rhs.value;
   if (rhs.type === "EFFECT_N") return Math.max(0, Number(context.effectN) || 0);
   if (rhs.type === "ACCESSOR") return evaluateExprSync(rhs.expr, context);
@@ -1271,7 +1304,7 @@ export async function execute(ast, trigger, context) {
   const dialogDepth = Number(context?._dialogDepth) || 0;
   ensureRollsBag(context);
   // Fresh lets per execute() call. Dialog answers and concurrent runs stay isolated.
-  const execContext = { ...context, _eeVars: new Map(), _scriptAst: ast };
+  const execContext = { ...context, _eeVars: new Map(), _scriptAst: ast, _amountSnapshots: new WeakMap() };
 
   for (const block of ast.blocks) {
     if (block.trigger !== trigger) continue;
@@ -1501,6 +1534,7 @@ export function executeAlwaysActive(ast, prepareContext) {
     clash: null,
     combat: prepareContext.combat ?? globalThis.game?.combat ?? null,
     _eeVars: new Map(),
+    _amountSnapshots: new WeakMap(),
   };
 
   for (const block of ast.blocks) {
