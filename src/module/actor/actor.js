@@ -880,6 +880,33 @@ export class ActorPMTTRPG extends Actor {
   }
 
   /**
+   * Apply post-combat healing to this actor.
+   * According to CR 3.x, actors regen Full ST, [Rank] Light and 5 + [Prudence] SP.
+   */
+  async applyPostCombatHealing() {
+    const updates = {};
+    updates[`system.attributes.st.value`] = this.system.st.max;
+    updates[`system.attributes.light.value`] = this.system.light.value + this.system.rank;
+    updates[`system.attributes.sp.value`] = this.system.sp.value + this.system.abilities.pru + 5;
+    await actor.update(updates);
+  }
+
+  /**
+   * Apply post-combat healing to this actor.
+   * According to CR 3.x, actors regen (25 + [For*3] + [Rank*3]) HP, 3 + [Prudence] SP, and [Rank] Light.
+   * Multiply this by the number of hours rested.
+   * 
+   * @param {number} hours Number of hours to rest
+   */
+  async applyRestHealing(hours = 1) {
+    const updates = {};
+    updates[`system.attributes.hp.value`] = this.system.hp.value + (this.system.abilities.for + this.system.rank + 25) * hours;
+    updates[`system.attributes.sp.value`] = this.system.sp.value + (this.system.abilities.pru + 3) * hours;
+    updates[`system.attributes.light.value`] = this.system.light.value + (this.system.rank) * hours;
+    await actor.update(updates);
+  }
+
+  /**
    * Scrolling text helper method.
    *
    * @param {number} delta Difference to display.

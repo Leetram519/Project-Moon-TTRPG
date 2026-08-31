@@ -87,6 +87,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
       counterDecrease: PMTTRPGCharacterSheet.prototype._onCounterDecrease,
       statusControl: PMTTRPGCharacterSheet.prototype._onStatusControl,
       easyEffects: PMTTRPGCharacterSheet.prototype._onOpenEasyEffects,
+      applyRest: PMTTRPGCharacterSheet.prototype._onApplyRest,
     },
   };
 
@@ -907,6 +908,11 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     const macroMisc = Number(this.actor.flags?.projectmoonttrpg?.initiative?.macroMisc ?? 0) || 0;
     const manualMisc = Number(form?.querySelector('input[name="flags.projectmoonttrpg.initiative.manualMisc"]')?.value ?? this.actor.flags?.projectmoonttrpg?.initiative?.manualMisc ?? 0 ) || 0;
     await PMTTRPGTargetingAPI.rollInitiative(this.actor, { macroMisc, manualMisc });
+  }
+
+  async _onApplyRest() {
+    event.preventDefault();
+    await this.actor.applyRestHealing(1);
   }
 
   async _onUsedActionEconomy(event, target) {
