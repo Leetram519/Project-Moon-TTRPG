@@ -15,7 +15,7 @@ system:
   origin: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
+    [On Action]
     disadvantage;
     lose 1 Paralysis;
 

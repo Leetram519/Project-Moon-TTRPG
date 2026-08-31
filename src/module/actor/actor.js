@@ -2,7 +2,7 @@ import { PMTTRPGUtility } from '../utility.js';
 import { getActionEconomyFromRank, getRankFromLevel, TACTICAL_SQUARES_BASE, squareTurnCap } from './progression.js';
 import { actorHistorySquareCost, actorSquaresExhausted } from '../combat/movement.js';
 const { renderTemplate } = foundry.applications.handlebars;
-import { applyAlwaysActiveModifiers, runOnTakingDamage, runDepletedEasyEffects } from '../easy-effects/registry.js';
+import { applyAlwaysActiveModifiers, emitActorAction, runOnTakingDamage, runDepletedEasyEffects } from '../easy-effects/registry.js';
 import { applyResourceModsToSystem, applyResourceOverridesToSystem } from '../easy-effects/nouns.js';
 import { applyInventorySlotUsage } from '../inventory/slots.js';
 import { isPendingStatus, normalizeArrival } from '../status/pending.js';
@@ -369,9 +369,10 @@ export class ActorPMTTRPG extends Actor {
    * Spend from an action-economy pool.
    * @param {"actions"|"reactions"|"movement"} poolKey
    * @param {number} [amount=1]
+   * @param {{ warn?: boolean }} [options]
    * @returns {Promise<boolean>}
    */
-  async spendActionEconomy(poolKey, amount = 1) {
+  async spendActionEconomy(poolKey, amount = 1, { warn = true } = {}) {
     const allowed = new Set(['actions', 'reactions', 'movement']);
     if (!allowed.has(poolKey)) {
       throw new Error(`Invalid action economy pool: ${poolKey}`);
@@ -382,19 +383,46 @@ export class ActorPMTTRPG extends Actor {
     if (spent === 0) return false;
     const current = Number(pool.value) || 0;
     if (current < spent) {
-      ui.notifications.warn(game.i18n.format('PMTTRPG.Notifications.actionEconomyInsufficient', {
-        name: this.name,
-        pool: game.i18n.localize({
-          actions: 'PMTTRPG.Actions',
-          reactions: 'PMTTRPG.Reactions',
-          movement: 'PMTTRPG.Movement',
-        }[poolKey]),
-        current,
-        needed: spent,
-      }));
+      if (warn) {
+        ui.notifications.warn(game.i18n.format('PMTTRPG.Notifications.actionEconomyInsufficient', {
+          name: this.name,
+          pool: game.i18n.localize({
+            actions: 'PMTTRPG.Actions',
+            reactions: 'PMTTRPG.Reactions',
+            movement: 'PMTTRPG.Movement',
+          }[poolKey]),
+          current,
+          needed: spent,
+        }));
+      }
       return false;
     }
     await this.update({ [`system.attributes.${poolKey}.value`]: current - spent });
+    return true;
+  }
+
+  /**
+   * Spend 1 Action or Reaction and run [On Action].
+   * @param {"action"|"reaction"} kind
+   * @param {object} [payload]
+   * @param {{ warn?: boolean }} [options]
+   * @returns {Promise<boolean>}
+   */
+  async useActionEconomy(kind, payload = {}, { warn = true } = {}) {
+    const actionType = kind === "reaction" ? "reaction" : "action";
+    const poolKey = actionType === "reaction" ? "reactions" : "actions";
+    const spent = await this.spendActionEconomy(poolKey, 1, { warn });
+    if (!spent && warn) return false;
+    try {
+      await emitActorAction({
+        ...payload,
+        actor: this,
+        actorId: this.id,
+        actionType,
+      });
+    } catch (error) {
+      console.warn("[EasyEffects] actorAction hook failed", error);
+    }
     return true;
   }
 

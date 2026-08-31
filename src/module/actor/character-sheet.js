@@ -5,7 +5,6 @@ import { buildEffectSummaryGroups } from "../effects/effect-summary.js";
 import { groupStatuses } from "../status/group-statuses.js";
 import { isPendingStatus } from "../status/pending.js";
 import { EasyEffectsEditor } from "../apps/easy-effects-editor.js";
-import { emitActorAction } from "../easy-effects/registry.js";
 import { buildEffectiveResistanceDisplay, DAMAGE_TYPES } from "../damage-application.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -942,18 +941,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     event.preventDefault();
     if (!this.actor.isOwner) return;
     const kind = target?.dataset?.kind === "reaction" ? "reaction" : "action";
-    const poolKey = kind === "reaction" ? "reactions" : "actions";
-    const spent = await this.actor.spendActionEconomy(poolKey, 1);
-    if (!spent) return;
-    try {
-      await emitActorAction({
-        actor: this.actor,
-        actorId: this.actor.id,
-        actionType: kind,
-      });
-    } catch (error) {
-      console.warn("[EasyEffects] actorAction hook failed", error);
-    }
+    await this.actor.useActionEconomy(kind);
   }
 
   async _onEditImage(event, target) {

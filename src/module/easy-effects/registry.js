@@ -525,7 +525,7 @@ const TRIGGER_HOOKS = [
   },
 
   // ── [On Action] ─────────────────────────────────────────────────────────────
-  // Fires whenever the actor uses an action or reaction with this item.
+  // Fires for Attack, Block, Counter, Evade, and the sheet [Used Action] / [Used Reaction] buttons.
   {
     hook: "pmttrpg.actorAction",
     triggerName: "On Action",
@@ -534,13 +534,15 @@ const TRIGGER_HOOKS = [
       if (!actor) return [];
       return [...getEquippedItems(actor), ...uniqueStatusItems(actor.items)];
     },
-    buildContext: ({ actor, target }) => {
+    buildContext: ({ actor, target, attacker, defender, clash }) => {
       if (!actor) return null;
       return {
-        self:   actor,
-        target: target ?? null,
-        ally:   null,
-        clash:  null,
+        self:      actor,
+        target:    target ?? null,
+        attacker:  attacker ?? null,
+        defender:  defender ?? null,
+        ally:      null,
+        clash:     clash ?? null,
       };
     },
   },
@@ -765,6 +767,7 @@ export async function runItemEasyEffects(item, triggerName, context = {}) {
 }
 
 /**
+ * [On Action] scripts. On a clash, pass `clash`, `attacker`, and `defender`.
  * @param {object} payload
  * @returns {Promise<void>}
  */

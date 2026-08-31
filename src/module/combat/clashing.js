@@ -6,6 +6,7 @@
  *   3. _executeClash()          — both rolls made, result computed
  *
  * EasyEffects hooks fired here:
+ *   pmttrpg.actorAction         [On Action] for Attack / Block / Counter / Evade
  *   pmttrpg.clashStarted       { attacker, defender, attackerItem, defenderItem, clash }
  *   pmttrpg.clashResolved      { winner, loser, attackerItem, defenderItem,
  *                                attackerRoll, defenderRoll, clash }
@@ -71,6 +72,12 @@ const REACTIONS_THAT_CLEAR_RECYCLED = new Set([
   RETALIATION_TYPES.EVADE,
   RETALIATION_TYPES.BLOCK,
   RETALIATION_TYPES.COUNTER,
+]);
+
+const REACTIONS_THAT_SPEND = new Set([
+  RETALIATION_TYPES.BLOCK,
+  RETALIATION_TYPES.COUNTER,
+  RETALIATION_TYPES.EVADE,
 ]);
 
 // ── Phase 1: Initiate Attack ──────────────────────────────────────────────────
@@ -341,6 +348,14 @@ async function _executeClash(state, retaliatorActor, choice) {
     clash:        clashCtx,
   };
 
+  await _spendClashActionEconomy({
+    attackerActor,
+    retaliatorActor,
+    choice,
+    isRecycled,
+    clash: clashCtx,
+  });
+
   await emitClashStarted({ ...clashPayloadBase, side: "attacker" });
   await emitClashStarted({ ...clashPayloadBase, side: "defender" });
 
@@ -561,6 +576,37 @@ async function _executeClash(state, retaliatorActor, choice) {
 
 function _isRangedWeapon(weapon) {
   return weapon?.system?.weaponType === "ranged";
+}
+
+/**
+ * Spend Action (attacker) or Reaction (block / counter / evade) and run [On Action].
+ */
+async function _spendClashActionEconomy({
+  attackerActor,
+  retaliatorActor,
+  choice,
+  isRecycled,
+  clash,
+}) {
+  const payload = {
+    attacker: attackerActor,
+    defender: retaliatorActor,
+    clash,
+  };
+  const silent = { warn: false };
+  if (attackerActor) {
+    await attackerActor.useActionEconomy("action", {
+      ...payload,
+      target: retaliatorActor,
+    }, silent);
+  }
+  if (isRecycled || !retaliatorActor) return;
+  if (!REACTIONS_THAT_SPEND.has(choice?.type)) return;
+  await retaliatorActor.useActionEconomy("reaction", {
+    ...payload,
+    target: attackerActor,
+    reactionType: choice.type,
+  }, silent);
 }
 
 function _reactionAppliedToolActionType(type) {
