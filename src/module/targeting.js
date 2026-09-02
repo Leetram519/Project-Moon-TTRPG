@@ -84,7 +84,7 @@ function isCombatantVisible(combatant) {
 function buildCombatantTarget(combatant, { actorId = null, weaponRange = 1 } = {}) {
   if (!combatant?.actor) return null;
 
-  const selfToken = game.actors.get(actorId).getActiveTokens(true, true)[0];
+  const selfToken = game.actors.get(actorId).getActiveTokens(false, true)[0];
 
   const actor = combatant.actor;
   const token = combatant.token ?? combatant.tokenDocument ?? null;
