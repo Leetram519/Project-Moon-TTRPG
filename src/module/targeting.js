@@ -333,7 +333,8 @@ export async function rollInitiative(actor, { macroMisc = null, manualMisc = nul
   if (!actor) return false;
 
   const parts = computeInitiativeFormulaParts(actor, { macroMisc, manualMisc });
-  const roll = await (new Roll(parts.formula, actor.getRollData())).evaluate();
+  // TODO: Initiative Dice Visual Type
+  const roll = await (new Roll(parts.formula, {type:rollData.visualType}, actor.getRollData())).evaluate();
   const rollPMTTRPG = await roll.render();
 
   const templateData = {

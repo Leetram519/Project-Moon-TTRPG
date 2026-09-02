@@ -41,6 +41,7 @@ import { registerClashChatListeners } from "./combat/clash-chat.js";
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
 
 import * as chat from "./chat.js";
+import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
 
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -457,6 +458,10 @@ Hooks.on('renderDialog', (dialog, html, options) => {
       });
     })
   }
+});
+
+Hooks.once('diceSoNiceReady', async (dice3d) => {
+  await registerDiceSoNice(dice3d);
 });
 
 /* -------------------------------------------- */
