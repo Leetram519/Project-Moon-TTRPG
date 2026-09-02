@@ -912,7 +912,30 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
 
   async _onApplyRest() {
     event.preventDefault();
-    await this.actor.applyRestHealing(1);
+    return foundry.applications.api.DialogV2.wait({
+      window: { title: game.i18n.format('PMTTRPG.Dialog.skillRollTitle', { skill: skill.name }) },
+      position: { width: 440 },
+      classes: dlgOptions.classes,
+      content: html,
+      buttons: [{
+        action: 'roll',
+        label: game.i18n.localize('PMTTRPG.Dialog.roll'),
+        default: true,
+        callback: (event, button, dialog) => {
+          const form = dialog.element.querySelector('form');
+          return {
+            itemId: form.itemId?.value ?? defaultOption?.id ?? null,
+            consumeLight: !!form.consumeLight?.checked,
+          };
+        }
+      }, {
+        action: 'cancel',
+        label: game.i18n.localize('PMTTRPG.Dialog.cancel'),
+        callback: () => null
+      }],
+      rejectClose: false
+    });
+    //await this.actor.applyRestHealing(1);
   }
 
   async _onUsedActionEconomy(event, target) {
