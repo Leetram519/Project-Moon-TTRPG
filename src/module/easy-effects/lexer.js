@@ -51,6 +51,17 @@ function readFloorOperator(source, index) {
   return { value: "//", length: 2 };
 }
 
+function readDiceSoNiceFlavorSuffix(source, index) {
+  let i = index;
+  while (i < source.length) {
+    if (source[i] != "[") break;
+    i++;
+    while (i < source.length && !/[\]]/.test(source[i])) i++;
+    i++;
+  }
+  return i === index ? null : { length: i - index };
+}
+
 function readKeepDropSuffixes(source, index) {
   let i = index;
   while (i < source.length) {
@@ -77,6 +88,11 @@ function readNumberOrDice(source, index, diceError) {
       diceStr += source.slice(i, i + keep.length);
       i += keep.length;
     }
+    const visuals = readDiceSoNiceFlavorSuffix(source, i);
+    if(visuals) {
+      diceStr += source.slice(i, i + visuals.length);
+      i += visuals.length;
+    }
     return { type: "DICE", value: diceStr, length: i - index };
   }
   return { type: "NUMBER", value: num, length: i - index };
@@ -89,14 +105,19 @@ function readNumberOrDice(source, index, diceError) {
 export function tokenize(source) {
   const tokens = [];
   let i = 0;
+  let iSinceLastLine = 0;
 
   while (i < source.length) {
-    if (source[i] === " " || source[i] === "\t" || source[i] === "\r") {
-      i++;
-      continue;
-    }
     if (source[i] === "\n") {
       tokens.push({ type: "NEWLINE", value: "\n" });
+      i++;
+      iSinceLastLine = 0;
+      continue;
+    }
+
+    iSinceLastLine++;
+
+    if (source[i] === " " || source[i] === "\t" || source[i] === "\r") {
       i++;
       continue;
     }
@@ -108,7 +129,7 @@ export function tokenize(source) {
     }
 
     // TRIGGER [...]
-    if (source[i] === "[") {
+    if (iSinceLastLine === 1 && source[i] === "[") {
       const end = source.indexOf("]", i);
       if (end === -1) throw new LexError("Unclosed '[' in trigger", i);
       tokens.push({ type: "TRIGGER", value: source.slice(i + 1, end).trim() });
