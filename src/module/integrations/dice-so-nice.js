@@ -118,66 +118,78 @@ export async function registerDiceSoNice(dice3d) {
     name: 'fortitude',
     description: 'Fortitude',
     category: 'Stats',
-    foreground: '#F5EAD0',
-    background: '#2A1A08',
-    outline: '#8B5E2A',
-    texture: 'marble',
-    material: 'stone'
+    foreground: '#ff0000',
+    background: '#000000',
+    outline: 'none',
+    edge: '#ff0000',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'prudence',
     description: 'Prudence',
     category: 'Stats',
-    foreground: '#D8F0FF',
-    background: '#040D18',
-    outline: '#2A6090',
-    texture: 'glitterFine',
-    material: 'glass'
+    foreground: '#ede9bd',
+    background: '#000000',
+    outline: 'none',
+    edge: '#ede9bd',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'justice',
     description: 'Justice',
     category: 'Stats',
-    foreground: '#FFF8D0',
-    background: '#1A1400',
-    outline: '#A08000',
-    texture: 'bronze',
-    material: 'metal'
+    foreground: '#3fbdb3',
+    background: '#000000',
+    outline: 'none',
+    edge: '#3fbdb3',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'charm',
     description: 'Charm',
     category: 'Stats',
-    foreground: '#FFD6F0',
-    background: '#1A0010',
-    outline: '#C04080',
-    texture: 'candy',
-    material: 'plastic'
+    foreground: '#834c81',
+    background: '#000000',
+    outline: 'none',
+    edge: '#834c81',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'insight',
     description: 'Insight',
     category: 'Stats',
-    foreground: '#E8D8FF',
-    background: '#0D0818',
-    outline: '#6040A0',
-    texture: 'glitter',
-    material: 'glass'
+    foreground: '#f2ebc0',
+    background: '#000000',
+    outline: 'none',
+    edge: '#f2ebc0',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'temperance',
     description: 'Temperance',
     category: 'Stats',
-    foreground: '#D8FFE8',
-    background: '#081410',
-    outline: '#305840',
-    texture: 'water',
-    material: 'stone'
+    foreground: '#804c82',
+    background: '#000000',
+    outline: 'none',
+    edge: '#804c82',
+    texture: 'none',
+    material: 'frosted',
+    font: 'signika'
   });
 
   // ─── DAMAGE TYPE DEFAULTS ────────────────────────────────────────────────────
