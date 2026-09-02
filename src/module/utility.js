@@ -149,6 +149,25 @@ export class PMTTRPGUtility {
     else return distance <= weaponRange;
   }
 
+  /**
+ * Reliably retrieves the Token and Actor from a Combatant
+ *
+ * @param {Combatant} combatant - The combatant document
+ * @returns {{ token: TokenDocument|null, actor: Actor|null }}
+ */
+  static resolveTokenAndActor(combatant) {
+    const token = combatant.token ?? canvas.scene?.tokens.get(combatant.tokenId) ?? null;
+
+    if (!token) {
+      const fallbackActor = game.actors.get(combatant.actorId) ?? null;
+      return { token: null, actor: fallbackActor };
+    }
+
+    const actor = token.actor ?? null;
+
+    return { token, actor };
+  }
+
   static get nightmode() {
     return document.querySelector('body').classList.contains('theme-dark');
   }
