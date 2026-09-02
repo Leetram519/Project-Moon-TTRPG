@@ -276,10 +276,15 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}) {
  * Builds and evaluates a Roll, returning a RollResult.
  * @param {string} formula
  * @param {object} rollData
+ * @param {string} rollData.visualType
  * @returns {Promise<RollResult>}
  */
 async function evaluate(formula, rollData = {}, breakdown = []) {
-  const roll = await new Roll(formula, rollData).evaluate();
+  // TODO: Clash roll visualTypes
+  console.log(rollData);
+
+  const roll = await new Roll(formula, rollData, {type:rollData.visualType}).evaluate();
+  console.log(roll);
   return {
     total:   roll.total,
     formula: roll.formula,
@@ -340,8 +345,11 @@ function poolSubtotals(roll) {
  * @param {object} rollData
  * @param {RollBreakdownRow[]} breakdown
  * @param {"normal"|"advantage"|"disadvantage"|"canceled"} mode
+ * @param {string} visualType Visual Type for Dice So Nice integration
  */
-async function evaluateWithRollMode(formula, rollData, breakdown, mode) {
+async function evaluateWithRollMode(formula, rollData, breakdown, mode, visualType) {
+  rollData.visualType = visualType;
+
   if (mode === "canceled") {
     const rows = [...(breakdown ?? [])];
     rows.push({
@@ -397,7 +405,7 @@ function rollDataForActor(actor) {
 export async function rollAttack(actor, weaponItem, bonuses = {}, options = {}) {
   const built = buildOffensiveDiceParts(actor, weaponItem, bonuses);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode);
+  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, weaponItem.system.damageType);
 }
 
 /**
@@ -409,7 +417,7 @@ export async function rollAttack(actor, weaponItem, bonuses = {}, options = {}) 
 export async function rollEvade(actor, bonuses = {}, options = {}) {
   const built = buildDefenseDiceParts(actor, "evade", bonuses);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode);
+  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, "evade");
 }
 
 /**
@@ -421,7 +429,7 @@ export async function rollEvade(actor, bonuses = {}, options = {}) {
 export async function rollBlock(actor, bonuses = {}, options = {}) {
   const built = buildDefenseDiceParts(actor, "block", bonuses);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode);
+  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, "block");
 }
 
 /**
