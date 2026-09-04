@@ -8,110 +8,130 @@ export async function registerDiceSoNice(dice3d) {
     name: 'blunt',
     description: 'Blunt Damage',
     category: 'Damage',
-    foreground: '#F2D98A',
-    background: '#2E1F0E',
-    outline: '#7A5C30',
-    texture: 'wood',
-    material: 'wood'
+    foreground: '#ff7917',
+    background: '#4d2f1a',
+    outline: 'none',
+    edge: '#ff7917',
+    texture: 'concrete',
+    material: 'stone',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'slash',
     description: 'Slash Damage',
     category: 'Damage',
-    foreground: '#FF9EA8',
-    background: '#1A0006',
-    outline: '#C0233A',
-    texture: 'stainedglass',
-    material: 'glass'
+    foreground: '#ff7917',
+    background: '#4d2f1a',
+    outline: 'none',
+    edge: '#ff7917',
+    texture: 'bronze01',
+    material: 'metal',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'pierce',
     description: 'Pierce Damage',
     category: 'Damage',
-    foreground: '#E8F4FF',
-    background: '#0D1820',
-    outline: '#4A7A9B',
+    foreground: '#ff7917',
+    background: '#4d2f1a',
+    outline: 'none',
+    edge: '#ff7917',
     texture: 'ice',
-    material: 'glass'
+    material: 'glass',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'evade',
     description: 'Evade Dice',
     category: 'Defense',
-    foreground: '#CCFFEE',
-    background: '#061A12',
-    outline: '#2EA876',
-    texture: 'water',
-    material: 'plastic'
+    foreground: '#00f9ff',
+    background: '#0f5657',
+    outline: 'none',
+    edge: '#00f9ff',
+    texture: 'frosted',
+    material: 'cloudy',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'block',
     description: 'Block Dice',
     category: 'Defense',
-    foreground: '#E8E0D0',
-    background: '#3A3530',
-    outline: '#8C8070',
-    texture: 'rock',
-    material: 'stone'
+    foreground: '#00f9ff',
+    background: '#0f5657',
+    outline: 'none',
+    edge: '#00f9ff',
+    texture: 'metal',
+    material: 'none',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'kinetic',
     description: 'Kinetic Force Damage',
     category: 'Combat',
-    foreground: '#E8D0FF',
-    background: '#12011F',
-    outline: '#8855CC',
+    foreground: '#ffffff',
+    background: '#000000',
+    outline: 'none',
+    edge: '#ffffff',
     texture: 'stars',
-    material: 'glass'
+    material: 'glass',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'poise',
     description: 'Poise',
     category: 'Critical',
-    foreground: '#FFFFFF',
-    background: '#1C1C22',
-    outline: '#9090A8',
-    texture: 'chrome',
-    material: 'metal'
+    foreground: '#bec5c6',
+    background: '#333333',
+    outline: 'none',
+    edge: '#bec5c6',
+    texture: 'water',
+    material: 'glass',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'critical',
     description: 'Critical',
     category: 'Critical',
-    foreground: '#FFE8D0',
-    background: '#200000',
-    outline: '#FF3300',
-    texture: 'fire',
-    material: 'metal'
+    foreground: '#dabe17',
+    background: '#333333',
+    outline: 'none',
+    edge: '#dabe17',
+    texture: 'water_2',
+    material: 'glass',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'ruin',
     description: 'Ruin',
     category: 'Devastation',
-    foreground: '#CCFF44',
-    background: '#101808',
-    outline: '#5A8020',
-    texture: 'poison',
-    material: 'plastic'
+    foreground: '#aa1a1f',
+    background: '#13082b',
+    outline: 'none',
+    edge: '#38177e',
+    texture: 'none',
+    material: 'chrome',
+    font: 'signika'
   });
 
   dice3d.addColorset({
     name: 'devastation',
     description: 'Devastation',
     category: 'Devastation',
-    foreground: '#FF8C00',
-    background: '#0A0000',
-    outline: '#600000',
-    texture: 'lava',
-    material: 'metal'
+    foreground: '#301368',
+    background: '#000000',
+    outline: 'none',
+    edge: '#54108d',
+    texture: 'none',
+    material: 'chrome',
+    font: 'signika'
   });
 
   dice3d.addColorset({
