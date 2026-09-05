@@ -6,6 +6,7 @@ import { groupStatuses } from "../status/group-statuses.js";
 import { isPendingStatus } from "../status/pending.js";
 import { EasyEffectsEditor } from "../apps/easy-effects-editor.js";
 import { buildEffectiveResistanceDisplay, DAMAGE_TYPES } from "../damage-application.js";
+import { getDiceType } from "../integrations/dice-so-nice.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -885,7 +886,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
 
     if (target.classList.contains("ability-rollable") && data.roll) {
       const flavorText = data.label;
-      templateData = { title: flavorText };
+      templateData = { title: flavorText, visualType: getDiceType(data.roll) };
       return PMTTRPGRolls.doStatRoll({ actor: this.actor, stat: data.roll, label: flavorText, templateData });
     }
     else if (item?.type === "outfit" && data.roll) {

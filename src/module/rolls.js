@@ -357,6 +357,9 @@ export class PMTTRPGRolls {
       speaker: ChatMessage.getSpeaker({ actor: this.actor })
     };
 
+    // Dice So Nice Dice Type Integration
+    rollData.type = templateData.visualType;
+
     let rollMode = "publicroll";
     switch(game.release.generation) {
       case 13:
@@ -377,7 +380,7 @@ export class PMTTRPGRolls {
       // Validate teh roll
       let validRoll = false;
       try {
-        validRoll = typeof Roll.validate === "function" ? Roll.validate(roll.trim()) : !!(new Roll(roll.trim(), rollData));
+        validRoll = typeof Roll.validate === "function" ? Roll.validate(roll.trim()) : !!(new Roll(roll.trim(), {type:rollData.visualType}, rollData));
       } catch (error) {
         validRoll = false;
       }
@@ -413,7 +416,7 @@ export class PMTTRPGRolls {
           try {
             overrideIsValid = typeof Roll.validate === "function"
               ? Roll.validate(formulaOverride.trim())
-              : !!(new Roll(formulaOverride.trim(), rollData));
+              : !!(new Roll(formulaOverride.trim(), {type:rollData.visualType}, rollData));
           }
           catch (error) {
             overrideIsValid = false;
@@ -485,7 +488,7 @@ export class PMTTRPGRolls {
         }
 
         // Do the roll.
-        let roll = new Roll(`${formula}`, rollData);
+        let roll = new Roll(`${formula}`, {type:rollData.visualType}, rollData);
         await (roll.evaluate());
         let rollType = templateData.rollType ?? 'none';
         // Add success notification.
