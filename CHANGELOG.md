@@ -9,23 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New Features
 
-- Added anything in CR that interacted with a weapon's Range. (by @Leetram)
-- [EasyEffects] `range up/down <Amount>` syntax added. (by @Leetram)
-- You can now have multiple Augments per actor. (by @Leetram)
-- Clashes now spend the attacker's Action and defender's Reaction when needed. (by @Bullesta)
-- [EasyEffects] `[On Action]` now triggers before clash dice are rolled, allowing Paralysis and Bleed to trigger at the correct time. (by @Bullesta)
+- Added anything in CR that interacted with a weapon's Range.
+- [EasyEffects] `range up/down <Amount>` syntax added.
+- You can now have multiple Augments per actor.
+- Clashes now spend the attacker's Action and defender's Reaction when needed.
+- [EasyEffects] `[On Action]` now triggers before clash dice are rolled, allowing Paralysis and Bleed to trigger at the correct time.
+- [DiceSoNice] Dice rolls now have visual flavour colors.
+- [DiceSoNice] Dice rolls now support "flavour syntax", such as `1d10[poise]`, `1d12+2[pierce]`, `2d8kh[ruin]`, putting a dice type onto the dice roll.
 
 ### QoL
 
-- Target list now highlights targets that are within range over ones that are out of range. (by @Leetram)
-- While targeting, there is now a red square highlighting the actor's range. (by @Leetram)
-- Augments can now be enabled and disabled at will. (by @Leetram)
-- Improved Styling of unequipped/inactive equipment. (by @Leetram)
+- Target list now highlights targets that are within range over ones that are out of range.
+- While targeting, there is now a red square highlighting the actor's range.
+- Augments can now be enabled and disabled at will.
+- Improved Styling of unequipped/inactive equipment.
 
 ### Bug Fixes
 
-- [EasyEffects] `[Always Active]` `power/dice max` effects are now scoped to the item they came from, instead of applying to all items. (by @Bullesta)
-- [EasyEffects] `spend <Amount> <Status> to ...` now snapshots the amount being spent before the following actions are run. (by @Bullesta)
+- [EasyEffects] `[Always Active]` `power/dice max` effects are now scoped to the item they came from, instead of applying to all items.
+- [EasyEffects] `spend <Amount> <Status> to ...` now snapshots the amount being spent before the following actions are run.
+
+### Cleanup
+
+- Removed some old unused rolling code.
 
 ## [0.1.2] - 2026/08/26
 
