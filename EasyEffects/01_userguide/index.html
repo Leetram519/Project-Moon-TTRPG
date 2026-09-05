@@ -1,0 +1,2301 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="System documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../02_devguide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>User Guide - PMTTRPG FoundryVTT Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#what-is-easyeffects" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-header__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMTTRPG FoundryVTT Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              User Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  EasyEffects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/actor/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-nav__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMTTRPG FoundryVTT Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EasyEffects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_devguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat Sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/actor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Actor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/combat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/easy-effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Effects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/item/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/damage-application/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Damage Application
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/handlebars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handlebars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/pool-clamp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pool Clamp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/projectmoonttrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/rolls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rolls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/slug/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status-macro-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macro API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/targeting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Targeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/utilities.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>This guide is for <strong>Game Masters and content creators</strong> who want to write effects on weapons, outfits, augments, and skills without touching any code.</p>
+<hr />
+<h1 id="what-is-easyeffects">What is EasyEffects?</h1>
+<p>EasyEffects is a small scripting language built into the Project Moon TTRPG system. It lets you describe what an item <em>does</em> in plain, readable text — and the system handles the rest automatically.</p>
+<p>You write EasyEffects scripts directly on an item sheet, in the <strong>EasyEffects</strong> text field.</p>
+<hr />
+<h1 id="the-basic-idea">The Basic Idea</h1>
+<p>Every EasyEffects script is made of one or more <strong>blocks</strong>. A block says:</p>
+<blockquote>
+<p><em>"When </em><em>this thing</em><em> happens… do </em><em>that</em><em>."</em></p>
+</blockquote>
+<pre><code>[Clash Win]
+gain 1 Charge;
+</code></pre>
+<p>That's it. When the item's actor wins a clash, they gain 1 stack of Charge.</p>
+<hr />
+<h1 id="where-scripts-live">Where scripts live</h1>
+<p>Most of the scripts you will see are attached to an <strong>item</strong>: a weapon, outfit, augment, skill, tool, or status. Item scripts run while the item is equipped or the status is on the actor.</p>
+<p>Each <strong>actor</strong> also has a script for core mechanics of the system like what happens when you run out HP/ST/SP. </p>
+<ul>
+<li><strong>World script.</strong> Go to Game Settings -&gt; Project Moon TTRPG -&gt; <em>World EasyEffects script</em> -&gt; <strong>Edit World Script</strong>. Every actor uses this script by default, including actors imported from a compendium.</li>
+<li><strong>Actor script.</strong> Open an actor sheet, select the 3-elipses menu in the window header, then select <strong>EasyEffects Script</strong>. The editor shows the world script until it is changed.</li>
+</ul>
+<p>Saving an actor script that differs from the world script <strong>detaches</strong> the actor. It keeps its own copy and no longer receives world script changes. The editor header shows the current state. <strong>Sync From World</strong> discards the actor copy and reattaches it.</p>
+<p>Both editors are GM-only and reject scripts that fail to parse.</p>
+<hr />
+<h1 id="triggers">Triggers</h1>
+<p>A trigger tells the system <strong>when</strong> to fire your effect. Write it in square brackets on its own line.</p>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>When it fires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[Always Active]</code></td>
+<td>A passive effect that's applied while the item is equipped</td>
+</tr>
+<tr>
+<td><code>[On Clash Start]</code></td>
+<td>When retaliation begins, before <strong>either</strong> clash die is rolled (both sides). Declare-only attack cards do not fire this yet</td>
+</tr>
+<tr>
+<td><code>[On Clash]</code></td>
+<td>Same timing as On Clash Start (alias for setup effects)</td>
+</tr>
+<tr>
+<td><code>[On Clash With Attack]</code> / <code>[… With Block|Evade|Defense]</code></td>
+<td>Same as On Clash, filtered by reaction. <code>Attack</code>/<code>Counter</code>/<code>Offensive</code> = Offensive Dice; <code>Block</code> / <code>Evade</code> exact; <code>Defense</code> = Block or Evade</td>
+</tr>
+<tr>
+<td><code>[Clash Win]</code> / <code>[On Clash Win]</code></td>
+<td>The item's actor wins a clash</td>
+</tr>
+<tr>
+<td><code>[Clash Win With Attack]</code> / <code>[… With Block|Evade|Defense]</code></td>
+<td>Clash Win filtered by that side’s reaction</td>
+</tr>
+<tr>
+<td><code>[Clash Lose]</code> / <code>[On Clash Lose]</code></td>
+<td>The item's actor loses a clash</td>
+</tr>
+<tr>
+<td><code>[Clash Lose With Attack]</code> / <code>[… With Block|Evade|Defense]</code></td>
+<td>Clash Lose filtered by that side’s reaction</td>
+</tr>
+<tr>
+<td><code>[On Damage Calc]</code></td>
+<td>Before damage is finalized</td>
+</tr>
+<tr>
+<td><code>[On Hit]</code></td>
+<td>An attack connects, either one-sided or after a Clash Win. Runs on the <strong>attacker</strong> weapon/tool and statuses. After a clash, runs <strong>after</strong> the result card posts</td>
+</tr>
+<tr>
+<td><code>[On Being Hit]</code></td>
+<td>Same hit, but runs <strong>status</strong> scripts on the <strong>defender</strong> (<code>self</code> = defender, <code>target</code>/<code>attacker</code> = hitter). Same post-card timing as On Hit</td>
+</tr>
+<tr>
+<td><code>[On Instant]</code></td>
+<td>Instant skill activation</td>
+</tr>
+<tr>
+<td><code>[On Burst]</code></td>
+<td>Status-local burst body on the status being burst (shorthand for <code>[On &lt;this status&gt; Burst]</code>)</td>
+</tr>
+<tr>
+<td><code>[On &lt;Status&gt; Burst]</code></td>
+<td>After that status’s burst resolves. Used by skills, addons, and other statuses (e.g. <code>[On Tremor Burst]</code>)</td>
+</tr>
+<tr>
+<td><code>[On &lt;Name&gt;]</code></td>
+<td>Freeform named proc driven by <code>proc &lt;Name&gt;</code> (any name that is not a reserved lifecycle trigger)</td>
+</tr>
+<tr>
+<td><code>[On Action]</code></td>
+<td>At the end of an action</td>
+</tr>
+<tr>
+<td><code>[On Stagger]</code></td>
+<td>The item's actor becomes Staggered</td>
+</tr>
+<tr>
+<td><code>[On Applied]</code></td>
+<td>This status was created on the actor (first appear only)</td>
+</tr>
+<tr>
+<td><code>[On Removed]</code></td>
+<td>This status was cleared from the actor (full clear only)</td>
+</tr>
+<tr>
+<td><code>[On Gain]</code></td>
+<td>This status gained stacks (every increase, including first apply)</td>
+</tr>
+<tr>
+<td><code>[On Lose]</code></td>
+<td>This status lost stacks (every decrease, including full clear)</td>
+</tr>
+<tr>
+<td><code>[Turn Start]</code></td>
+<td>The start of the item's actor's turn in combat</td>
+</tr>
+<tr>
+<td><code>[On Move]</code></td>
+<td>After a token walk on the actor's turn</td>
+</tr>
+<tr>
+<td><code>[End of Round]</code></td>
+<td>When the combat round advances</td>
+</tr>
+<tr>
+<td><code>[On Taking Damage]</code></td>
+<td>Before damage is applied to the defender (flat resists, etc.)</td>
+</tr>
+<tr>
+<td><code>[On Taking &lt;Filter&gt; Damage]</code></td>
+<td>Same, but only when the hit matches a pool, status source, or damage type (see below)</td>
+</tr>
+<tr>
+<td><code>[On Depleted]</code></td>
+<td>A pool just dropped from above zero to zero</td>
+</tr>
+<tr>
+<td><code>[On Depleted &lt;Pool&gt;]</code></td>
+<td>Same, but only for <code>HP</code>, <code>ST</code>, <code>SP</code>, or <code>Light</code></td>
+</tr>
+</tbody>
+</table>
+<p>One item can have <strong>multiple trigger blocks</strong> — just list them one after another:</p>
+<pre><code>[Clash Win]
+gain 1 Charge;
+
+[Turn Start]
+lose 1 Charge;
+</code></pre>
+<p><code>[On Applied]</code> / <code>[On Removed]</code> / <code>[On Gain]</code> / <code>[On Lose]</code> are for <strong>status</strong> items.</p>
+<ul>
+<li><strong>Applied / Removed:</strong> fire once when the status first appears or fully clears.</li>
+<li><strong>Gain / Lose:</strong> fire on every stack change. First apply runs Applied <strong>and</strong> Gain; full clear runs Lose <strong>and</strong> Removed.</li>
+</ul>
+<pre><code>[On Applied]
+deal 5 SP damage to self;
+heal 1 light damage to self;
+
+[On Removed]
+heal 10 ST damage to self;
+</code></pre>
+<pre><code>[On Gain]
+gain (changed.amount) Critical;
+
+[On Lose]
+require (changed.after) == 0 then deal 5 hp damage to self;
+</code></pre>
+<p><code>[On Gain]</code> and <code>[On Lose]</code> expose the stack delta:</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>changed.amount</code></td>
+<td>Signed delta (<code>+3</code> on Gain, <code>-2</code> on Lose)</td>
+</tr>
+<tr>
+<td><code>changed.before</code></td>
+<td>Stacks before the change</td>
+</tr>
+<tr>
+<td><code>changed.after</code></td>
+<td>Stacks after the change</td>
+</tr>
+</tbody>
+</table>
+<p>(<code>gain 1 Light</code> adds a <strong>status</strong> named Light. Use <code>heal … light damage</code> to restore the Light pool.)</p>
+<h2 id="choice-dialogs">Choice dialogs</h2>
+<p>Use a dialog to run a branch based on the player's answer:</p>
+<pre><code>[On Being Hit]
+create dialog &quot;Proc Tremor Burst?&quot;:
+  burst as &quot;Burst&quot;,
+  skip as &quot;Do not burst&quot;
+  to attacker;
+
+[On Dialog Answer burst]
+burst Tremor on self;
+</code></pre>
+<ul>
+<li>Syntax: <code>[create] dialog "&lt;prompt&gt;" : &lt;answerId&gt; [as] "&lt;button label&gt;", ... [to|on &lt;self|target|ally|attacker|originator&gt;];</code></li>
+<li><code>dialog</code> is shorthand for <code>create dialog</code>.</li>
+<li><code>as</code> before the label is optional (<code>burst "Burst"</code> still works).</li>
+<li>A dialog needs <strong>at least two</strong> choices. Answer IDs must be unique within that dialog.</li>
+<li>Choices may span lines; commas between choices are required.</li>
+<li><code>[On Dialog Answer &lt;id&gt;]</code> runs <strong>only on the same item script</strong> that opened the dialog.</li>
+<li>The answer branch keeps the same <code>self</code>, <code>target</code>, <code>item</code>, <code>clash</code>, and other context.</li>
+<li>Trailing <code>to attacker</code> (also <code>self</code> / <code>target</code> / <code>ally</code>) prompts that actor's controlling user, even if another client is resolving the hit. Omit it to prompt the local client.</li>
+<li>Canceling, closing the window, or a remote timeout selects nothing and runs no answer block.</li>
+<li>The parent block continues after the answer branch or cancellation.</li>
+<li>Not allowed in <code>[Always Active]</code>.</li>
+</ul>
+<p>Answer IDs are <strong>local control flow</strong>, not global game events. An answer ID of <code>burst</code> does not trigger a Burst. Call <code>burst &lt;Status&gt;</code> to run the Burst dispatcher.</p>
+<p>For example on the Tremor Status effect above:
+<code>self</code> is the defender who has the status; <code>to attacker</code> asks the hitter.</p>
+<h2 id="chat-messages">Chat messages</h2>
+<pre><code>[On Hit]
+on roll 1d10 &lt;= Poise then
+  create message &quot;Poise broke! Rolled (roll) vs (Poise).&quot; on self
+  and lose all Poise on self;
+
+create message &quot;Took (incoming.amount) damage from (incoming.source).&quot; on self;
+message &quot;Hello from (self.rank).&quot; on target;
+</code></pre>
+<ul>
+<li>Syntax: <code>[create] message "&lt;text&gt;" [on|to &lt;self|target|ally|attacker|originator&gt;];</code></li>
+<li><code>message</code> is shorthand for <code>create message</code>.</li>
+<li><code>on</code> / <code>to</code> sets the <strong>speaker</strong> (who the chat line appears as). Defaults to <code>self</code>.</li>
+<li>Works standalone or after <code>require</code> / <code>on roll … then</code> / <code>and</code> like other actions.</li>
+<li>Values: any <code>(…)</code> accessor inside the quotes is evaluated and substituted (<code>(roll)</code>, <code>(Poise)</code>, <code>(incoming.amount)</code>, <code>(self.hp)</code>, named binds, math, etc.).</li>
+<li>Literal parentheses: <code>\(</code> and <code>\)</code>. A literal backslash is <code>\\</code>.</li>
+<li>Not allowed in <code>[Always Active]</code>.</li>
+</ul>
+<h2 id="delayed-statuses-next-round-next-turn">Delayed statuses (<code>next round</code> / <code>next turn</code>)</h2>
+<p>Most weapon Inflict effects, including Tremor, Rupture, Sinking, Bind, and Fragile, apply <strong>next round</strong>. Pending stacks use a separate status item on the actor (<code>system.pending</code>). They appear at the <strong>bottom</strong> of the status tray in gray with a breathing animation and <strong>do not run EasyEffects</strong> until they arrive.</p>
+<pre><code>inflict 3 Tremor next round on target;
+inflict 2 Bind next turn on target;
+gain 1 Haste next round on self;
+
+# Tremor Pause / Rupture Pause / Sinking Pause
+pause Tremor on target;
+</code></pre>
+<ul>
+<li>Arrival: <code>next round</code> promotes after <code>[End of Round]</code> (after clears like “lose all Tremor”). <code>next turn</code> promotes at that actor’s Turn Start.</li>
+<li><code>pause &lt;Status&gt;</code> changes the <strong>same</strong> live status item to pending (default next round) without running Burst or On Lose. Effect List Pause skills run on Clash Win, which finishes <strong>before</strong> <code>[On Being Hit]</code>.</li>
+</ul>
+<h2 id="status-burst">Status Burst</h2>
+<p><code>burst &lt;Status&gt; [on|to &lt;target&gt;];</code> runs a two-phase Burst for any status name:</p>
+<ol>
+<li><strong>Local:</strong> the burstee’s status item runs <code>[On Burst]</code> / <code>[On &lt;Status&gt; Burst]</code> (damage, stack clearing, etc.).</li>
+<li><strong>Global:</strong> equipped gear and statuses on the <strong>attacker</strong> and <strong>burstee</strong> then run matching <code>[On &lt;Status&gt; Burst]</code> blocks (e.g. Tremor–Bleed addons, Rupture Jag).</li>
+</ol>
+<pre><code>[On Burst]
+deal (burst.amount) st damage to self;
+lose all Tremor on self;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>burst.status</code></td>
+<td>Name of the status being burst</td>
+</tr>
+<tr>
+<td><code>burst.amount</code> / <code>burst.before</code></td>
+<td>Stacks when the burst started</td>
+</tr>
+<tr>
+<td><code>burst.after</code></td>
+<td>Stacks after the local phase (often <code>0</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><code>[On Burst]</code> on a status is shorthand for that status’s own burst body. Write <code>[On Tremor Burst]</code> on other items to react after a Tremor burst resolves.</p>
+<p>Not allowed in <code>[Always Active]</code>.</p>
+<h2 id="named-procs">Named Procs</h2>
+<p><code>proc &lt;Name&gt; [on|to &lt;target&gt;] [with &lt;expr&gt; as &lt;Bind&gt;, …];</code> fires a freeform named event in two phases.</p>
+<ol>
+<li><strong>Local:</strong> if the focus actor has a status item matching <code>&lt;Name&gt;</code>, that item’s <code>[On &lt;Name&gt;]</code> runs first (<code>self</code> = focus).</li>
+<li><strong>Global:</strong> equipped gear, statuses, and actor scripts on the <strong>proccer</strong> (script <code>self</code>) and <strong>focus</strong> run matching <code>[On &lt;Name&gt;]</code>.</li>
+</ol>
+<pre><code>[On Hit]
+on roll 1d10 &lt;= Poise then
+  lose all Poise on self
+  and proc Critical;
+
+[On Critical]
+deal 1d10 hp damage per Critical to target;
+lose all Critical on self;
+</code></pre>
+<p><strong>Carry-over binds</strong> are evaluated on the caller and copied to every listener:</p>
+<pre><code>proc Foo with (self.status.Bar) as Bar, self.initiative as Zee;
+proc Critical with (roll) as CritRoll;
+</code></pre>
+<p>Listeners read <code>(Bar)</code>, <code>(Zee)</code>, or <code>(proc.Bar)</code> / <code>(proc.name)</code>. Nested <code>proc</code> replaces binds (no merge).</p>
+<p>Not allowed in <code>[Always Active]</code>.</p>
+<h2 id="passive-effects">Passive Effects</h2>
+<p>The <code>[Always Active]</code> trigger is special. It doesn't wait for combat events, and applies the bonus ONCE when it's equipped, and inverts the bonus when unequipped (bringing it back to normal).</p>
+<p>You cannot use dice or randomness with <code>[Always Active]</code> effects. It is strictly intended for passive effects that do not depend on any other variables.</p>
+<p>Allowed here: resource <code>gain</code> / <code>lose</code> / <code>set</code> on maxes, <code>set resistances to …</code>, <code>power</code> / <code>dice max</code> passives, and <code>range up</code> passives.</p>
+<p>Example:</p>
+<pre><code>[Always Active]
+dice max up attack 2;
+range up 1;
+gain 2 maxHp;
+set maxSp to 0;
+set resistances to fatal;
+</code></pre>
+<ul>
+<li><code>gain</code> / <code>lose</code> on <code>maxHp</code> / <code>maxSt</code> / <code>maxSp</code> / <code>maxLight</code> are <strong>additive</strong> bonuses (misc / light bonus).</li>
+<li><code>set maxSp to 0</code> (also <code>maxHp</code>, <code>maxSt</code>, <code>maxLight</code>) is an <strong>absolute</strong> override of the effective max.</li>
+<li><code>set resistances to fatal</code> (or a single type) overrides outfit resists while the item/status is active; removing it restores the outfit values. Levels: <code>fatal</code> · <code>weak</code> · <code>normal</code> · <code>endured</code> · <code>ineffective</code> · <code>immune</code> (x2, 1.5x, 1, x0.5, x0.25, x0).</li>
+<li>Lowering a max clamps the current value immediately. Removing the item restores the max, but not the points lost to that clamp. Removing an increased max also clamps current to the natural max.</li>
+<li>If several items <code>set</code> the same max, the <strong>lowest</strong> value wins.</li>
+</ul>
+<h3 id="filtered-taking-damage-triggers">Filtered taking-damage triggers</h3>
+<p><code>[On Taking &lt;Filter&gt; Damage]</code> is shorthand for "only run this block for matching hits."</p>
+<table>
+<thead>
+<tr>
+<th>Filter</th>
+<th>Matches when…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(omit)</em> / <code>Any</code></td>
+<td>Always (same as <code>[On Taking Damage]</code>)</td>
+</tr>
+<tr>
+<td><code>HP</code> / <code>ST</code> / <code>SP</code> / <code>Light</code></td>
+<td>Pending pool is that resource</td>
+</tr>
+<tr>
+<td>A status name (<code>Burn</code>, <code>"Bleed"</code>)</td>
+<td>Damage <code>source</code> is that status</td>
+</tr>
+<tr>
+<td>Any other word (<code>Slash</code>, <code>Pierce</code>, <code>Blunt</code>, …)</td>
+<td><code>damageType</code> equals that string (case-insensitive)</td>
+</tr>
+</tbody>
+</table>
+<pre><code>[On Taking Burn Damage]
+reduce damage by 3;
+
+[On Taking SP Damage]
+deal (incoming.amount * 2) hp damage to self;
+</code></pre>
+<p>Pools win over names: <code>[On Taking HP Damage]</code> always means the HP pool, not a status called HP.</p>
+<h3 id="clash-with-attack-block-evade-defense">Clash With Attack / Block / Evade / Defense</h3>
+<p>Filters match the item actor's reaction on that clash, not who started the fight:</p>
+<table>
+<thead>
+<tr>
+<th>Stance</th>
+<th>When it matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Attack</code> / <code>Attacks</code> / <code>Offensive</code> / <code>Counter</code></td>
+<td><strong>Offensive Dice</strong>: initiator Attack, <strong>Counter Reaction</strong>, or Attack Skill. Counter is Offensive, not its own stance at runtime</td>
+</tr>
+<tr>
+<td><code>Block</code></td>
+<td>Block Reaction (or Block Skill) only</td>
+</tr>
+<tr>
+<td><code>Evade</code></td>
+<td>Evade Reaction (or Evade Skill) only</td>
+</tr>
+<tr>
+<td><code>Defense</code> / <code>Defensive</code></td>
+<td>Block <strong>or</strong> Evade. This is the Effect List <em>with [Attack/Defense]</em> bucket</td>
+</tr>
+</tbody>
+</table>
+<pre><code>[On Clash Start With Attack]
+power up attack 1;
+
+[Clash Win With Evade]
+deal 5 hp damage to attacker;
+
+[Clash Win With Attack]
+# Attack or Counter win
+deal 5 hp damage to attacker;
+
+[Clash Win With Defense]
+regen hp 2;
+</code></pre>
+<hr />
+<h1 id="actions">Actions</h1>
+<p>An action is one thing the effect does. End it with a semicolon <code>;</code> or put the next action on a new line.</p>
+<pre><code>[Clash Win]
+gain 1 Charge
+lose 1 Bleed on self;
+</code></pre>
+<h2 id="gaining-and-losing-statuses">Gaining and losing statuses</h2>
+<pre><code>gain 1 Burn on target;
+lose 2 Bleed on self;
+lose all Poise on self;
+halve Burn on self;
+double Charge;
+lose half of Burn on self;
+gain double of Poise on self;
+</code></pre>
+<ul>
+<li><code>gain</code> adds stacks of a status<ul>
+<li>similarly <code>inflict</code> adds stacks of a status, but defaults to <code>target</code> instead of <code>self</code>.</li>
+</ul>
+</li>
+<li><code>lose</code> removes stacks of a status</li>
+<li><code>lose all [of] &lt;Status&gt;</code> removes every stack (same as <code>lose (self.status.Name) Name on self</code>)</li>
+<li><code>set &lt;Status&gt; to &lt;N&gt;</code> / <code>set &lt;N&gt; &lt;Status&gt;</code> sets stacks to an absolute value (0 clears). Clamps to the status’s <code>stackMax</code> when that max is &gt; 0; <code>stackMax</code> 0 means unlimited.</li>
+<li><code>halve &lt;Status&gt;</code> reduces stacks to half rounded down. (same as <code>lose half of &lt;Status&gt;</code>)</li>
+<li><code>double &lt;Status&gt;</code> adds as many stacks as are already there (2x) (same as <code>gain double of &lt;Status&gt;</code>)</li>
+<li><code>on self</code> / <code>on target</code> controls who is affected</li>
+</ul>
+<p>If you leave out <code>on ...</code>, the effect defaults to <code>self</code>, unless using <code>inflict</code>.</p>
+<p>Players need an <strong>active GM</strong> online for changes to actors they don't own (e.g. <code>inflict 1 Bleed on target</code>). Owned-self updates work without that.</p>
+<h3 id="resolving-status-templates">Resolving status templates</h3>
+<p>Status templates resolve in this order: <strong>Document UUID</strong> -&gt; <strong>world Items directory</strong> -&gt; <strong>Item compendia</strong>. World-only statuses can be referenced by name. Use a UUID to pin a specific document:</p>
+<pre><code>inflict Item.BFzoOtZRYWAmDjIW on target;
+inflict 1 &quot;Item.BFzoOtZRYWAmDjIW&quot; on target;
+gain 1 &quot;Test Effect&quot; on self;   # Example world item not from compendium
+# Hyphenated UUIDs (compendium pack ids) must be quoted:
+inflict &quot;Compendium.projectmoonttrpg.status-pmttrpg-srd.Item.abc123&quot; on target;
+</code></pre>
+<p>The applied stack uses the status’s <strong>display name</strong> for merging, tray display, and paths (<code>self.status."Test Effect"</code>).</p>
+<h3 id="status-names-in-formulas">Status names in formulas</h3>
+<p>A bare status name in an amount/<code>(…)</code> formula means <strong>that status’s stack count on self</strong> (same as <code>self.status.Burn</code>):</p>
+<pre><code>deal Burn hp damage to self;
+halve Burn on self;
+power up attack 1 per (Burn);
+</code></pre>
+<p>Use <code>target.status.Burn</code> (or <code>attacker.status.…</code>) when you need someone else’s stacks. The applier UUID is available at <code>.origin</code>; status scripts can also use the <code>originator</code> target/path root:</p>
+<pre><code># Return damage to the actor who applied the status effect
+[On Being Hit]
+deal 1 hp damage to originator;
+
+require (target.status.&quot;Mark [Assassination]&quot;.origin) == (self.uuid) then
+  deal 3 hp damage after resistances to target;
+</code></pre>
+<p><code>gain</code> / <code>inflict</code> from EasyEffects set <code>system.origin</code> to the script’s <code>self</code> on first apply. Later stacks keep the existing origin.</p>
+<h3 id="multi-word-status-names">Multi-word status names</h3>
+<p>Wrap the name in double quotes:</p>
+<pre><code>gain 1 &quot;Stagger Fragile&quot; on target;
+lose 1 &quot;Stagger Fragile&quot; on self;
+</code></pre>
+<p>Single-word names don't need quotes, but you can add them if you want. Reserved words (<code>half</code>, <code>double</code>, <code>halve</code>, <code>convert</code>, <code>by</code>, …) must be quoted too: <code>gain 1 "Double"</code>.</p>
+<h2 id="dealing-damage-and-healing">Dealing damage and healing</h2>
+<pre><code>do deal damage 5 on target;
+deal (self.rank) hp damage to target;
+deal 5 hp and st damage to target;
+deal (incoming.amount) blunt hp damage to attacker;
+deal (Smoke) hp damage before resistances to target;
+do heal 10 on self;
+heal 10 ST damage to self;
+heal 5 hp and st damage to self;
+heal 1 light damage to self;
+</code></pre>
+<p>You can join multiple resource pools with <code>and</code> (<code>hp and st</code>, <code>hp and st and sp</code>). The same amount applies to each pool. Action chaining still uses <code>and</code> between full actions (<code>deal 5 hp damage to target and heal 3 st damage to self</code>).</p>
+<h3 id="before-after-resistances">Before / after resistances</h3>
+<p>Hits go through a <strong>before</strong> bucket, then outfit type resistance (<code>×</code>), then an <strong>after</strong> bucket:</p>
+<pre><code>[before-resist amount]  -&gt;  × Type Resistance  -&gt;  [after-resist flats]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Timing</th>
+<th>On <code>deal</code></th>
+<th>On <code>reduce</code> / <code>increase</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>after</strong> (default for <code>deal</code>)</td>
+<td>Flat damage; skips type resist</td>
+<td>Apply after the multiply (Protection, Fragile, Smoke)</td>
+</tr>
+<tr>
+<td><strong>before</strong> (default for <code>reduce</code> / <code>increase</code>)</td>
+<td>Amount is multiplied by type resist</td>
+<td>Change the pending amount first (Overcharge, Type Protection)</td>
+</tr>
+</tbody>
+</table>
+<pre><code>deal 5 hp damage after resistances to target;   # same as bare deal
+deal 5 slash hp damage before resistances to target;
+
+[On Taking HP Damage]
+reduce damage by Protection after resistances;
+increase damage by Fragile after resistances;
+reduce damage by 3 before resistances;          # same as bare reduce
+</code></pre>
+<p>Singular <code>resistance</code> works too.</p>
+<p>On <code>[On Taking Damage]</code>, you can read the pending hit with <code>incoming.*</code> (alias of <code>damage.*</code>) and reflect or rewrite it:</p>
+<pre><code>[On Taking Damage]
+deal (incoming.amount) hp damage to attacker;
+
+[On Taking HP Damage]
+deal (incoming.amount) blunt hp damage to attacker;
+
+[On Taking SP Damage]
+convert (incoming.amount * 2) damage to hp;
+convert damage to hp and st;
+
+[On Taking Pierce Damage]
+convert damage to blunt;
+</code></pre>
+<ul>
+<li><code>incoming.amount</code> / <code>damage.amount</code> - how much is about to apply</li>
+<li><code>incoming.pool</code> - <code>hp</code>, <code>st</code>, <code>sp</code>, or <code>light</code></li>
+<li><code>incoming.source</code> - status name when the damage came from a status (e.g. Burn)</li>
+<li><code>incoming.damageType</code> - slash / pierce / blunt / whatever was passed in</li>
+<li><code>attacker</code> - the actor dealing the damage (same as <code>target</code> on this trigger)</li>
+</ul>
+<p><code>deal</code> accepts an optional damage type before or after the pool: <code>blunt hp damage</code> or <code>hp blunt damage</code>. If you omit the type and/or pool while reflecting, the new hit keeps <code>incoming.damageType</code> and <code>incoming.pool</code> (pool still defaults to <code>hp</code> outside that context). On non-status items during a clash, an omitted type falls back to the clash weapon's damage type. <strong>Status</strong> scripts such as Tremor Burst stay typeless / <code>none</code> unless a type is specified.</p>
+<p><code>convert</code> changes the <strong>pending</strong> hit (pool and/or type, optionally amount) without firing another damage event. Pool destinations can use <code>and</code> the same way as <code>deal</code> / <code>heal</code> (<code>convert damage to hp and st</code>).</p>
+<p>Nested <code>deal</code> / <code>heal</code> from inside <code>[On Taking Damage]</code> does <strong>not</strong> re-run that trigger. Status ticks and other top-level <code>deal</code>s still run resists normally.</p>
+<h2 id="modificating-your-combat-bonuses">Modificating your Combat Bonuses</h2>
+<p>Clash-time Power / Max write into that clash's <strong>per-side</strong> bonus bags (<code>attacker</code> / <code>defender</code>).
+<code>on self</code> (default) affects the item owner's side; <code>on target</code> affects the other side.</p>
+<pre><code>[On Clash Start]
+power up attack 2;
+power down evade 1 on target;
+
+dice max up attack 1;
+dice max down evade 2;
+</code></pre>
+<ul>
+<li><code>power up</code> / <code>power down</code>: flat Dice Power added after the roll.</li>
+<li><code>dice max up</code> / <code>dice max down</code>: changes die faces (d10 +2 Max → d12). If faces would go below 1, each excess Max reduction becomes −1 Power instead.</li>
+<li>Use <code>on target</code> for Enemy Power Down effects so the penalty applies to the other roll.</li>
+</ul>
+<h3 id="advantage-disadvantage">Advantage / Disadvantage</h3>
+<p>Clash dice (attack / block / evade / counter) can roll with Advantage or Disadvantage. Roll twice and keep the highest for Advantage or lowest for Disadvantage. They <strong>cancel</strong> if both apply. Multiple sources still produce only two rolls.</p>
+<pre><code>[On Clash Start]
+advantage;
+disadvantage on target;
+</code></pre>
+<ul>
+<li>Writes into that side’s clash bonus bag (same targeting as <code>power up</code>: <code>self</code> default, <code>on target</code> for the other side).</li>
+<li>Not valid in <code>[Always Active]</code>. Use <code>[On Clash Start]</code> (see Paralysis below as an example).</li>
+</ul>
+<p><strong>Paralysis</strong> (Effect List): Disadv on the Action/Reaction die, then −1 stack; clear all at end of round.</p>
+<pre><code>[On Clash Start] # TODO: placeholder, change to [On Action] when implemented
+disadvantage;
+lose 1 Paralysis;
+
+[End of Round]
+lose all Paralysis;
+</code></pre>
+<hr />
+<h1 id="amounts">Amounts</h1>
+<p>Amounts can be plain numbers, dice rolls, or values read from the actor.</p>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flat number</td>
+<td><code>3</code></td>
+<td>Always 3</td>
+</tr>
+<tr>
+<td>Dice</td>
+<td><code>1d6</code></td>
+<td>Roll a d6 at runtime</td>
+</tr>
+<tr>
+<td>Actor value</td>
+<td><code>(self.rank)</code></td>
+<td>Equal to the actor's Rank</td>
+</tr>
+<tr>
+<td>Math expression</td>
+<td><code>(self.rank * 2 + 1)</code></td>
+<td>Calculated at runtime</td>
+</tr>
+</tbody>
+</table>
+<pre><code>gain (self.rank) Charge;
+do deal damage 1d6 on target;
+do deal damage (self.rank * 2) on target;
+</code></pre>
+<p>Dice and math can even be combined inside parentheses:</p>
+<pre><code>do deal damage (1d6 + self.rank) on target;
+</code></pre>
+<hr />
+<h1 id="conditions">Conditions</h1>
+<p>Conditions run an action only when their expression is true.</p>
+<h2 id="rolling-once-roll-on-roll">Rolling once (<code>roll</code> / <code>on roll</code>)</h2>
+<p>Dice inside amounts and <code>(…)</code> formulas roll separately on every evaluation. Bind the roll first when multiple branches need the same result:</p>
+<pre><code>on roll 1d10 &lt;= Poise then lose all Poise on self;
+
+roll 1d10;
+require the roll &lt;= Poise then lose all Poise on self;
+
+# Reuse one named roll across branches
+roll 1d4 as panic;
+require (panic) == 1 then inflict 1 &quot;Panic [Fight]&quot; on self;
+require (panic) == 2 then inflict 1 &quot;Panic [Flight]&quot; on self;
+</code></pre>
+<ul>
+<li><code>the roll</code> and <code>(roll)</code> read the last <code>roll</code> / <code>on roll</code> in this trigger block.</li>
+<li><code>(panic)</code> (or any bind name) reads that named total. Avoid status names because a named roll wins when both names match.</li>
+<li>On numeric compares (<code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>), a bare status on the RHS (e.g. <code>&lt;= Poise</code>) means <strong>self stack count</strong>, same as <code>(Poise)</code>.</li>
+<li>Equality (<code>==</code> / <code>!=</code>) treats a bare status name as a <strong>string</strong> (e.g. <code>require damage from Burn</code>).</li>
+<li>Not allowed under <code>[Always Active]</code> (no randomness there).</li>
+<li>If <strong>Dice So Nice</strong> is installed, <code>roll</code> / <code>on roll</code> <strong>and</strong> dice amounts (<code>deal 1d10…</code>, <code>heal 1d6…</code>, etc.) animate and the script <strong>waits until the dice settle</strong>. Without DSN, totals resolve silently.</li>
+<li>Simple <code>NdX per K</code> expands before rolling: <code>deal 1d10 hp damage per Critical</code> with 8 Critical -&gt; one <code>8d10</code> roll (not <code>1d10 × 8</code>). Flat amounts multiply (<code>deal 2 per Critical</code> -&gt; 16).</li>
+</ul>
+<h2 id="require-then"><code>require ... then</code></h2>
+<pre><code>require 3 self Charge then gain 1 Poise;
+</code></pre>
+<p>Reads: <em>"If you have at least 3 Charge, gain 1 Poise."</em></p>
+<p>Short form: <code>require &lt;amount&gt; &lt;who&gt; &lt;Status&gt; then &lt;action&gt;</code></p>
+<p>Full expression form:</p>
+<pre><code>require (self.status.Charge) &gt;= 3 then gain 1 Poise;
+require the roll &lt;= Poise then lose all Poise on self;
+</code></pre>
+<p>On <code>[On Taking Damage]</code>, you can gate by status source (status <strong>name</strong>), or use a filtered trigger instead:</p>
+<pre><code>require damage from Burn then reduce damage by 2;
+
+[On Taking Burn Damage]
+reduce damage by 2;
+</code></pre>
+<p><code>reduce</code> / <code>increase</code> take an optional <code>by</code>, a full amount formula (<code>N</code>, <code>N*2</code>, <code>(N // 2)</code>, dice, etc.), and optional <code>before|after resistance[s]</code> (default <strong>before</strong>):</p>
+<pre><code>reduce damage by N;
+increase damage by N*2;
+reduce damage by Protection after resistances;
+</code></pre>
+<h2 id="effect-templates-n-positive-negative-result-choice">Effect templates (<code>N</code>, <code>positive:</code>, <code>negative:</code>, <code>RESULT</code>, <code>CHOICE</code>)</h2>
+<p>Catalog <strong>effect</strong> items (Burn Resistance, etc.) can ship an EasyEffects template. Those templates may use:</p>
+<ul>
+<li>bare <code>N</code> (also inside math like <code>N*2</code>) - equals the number of buyins for that effect on the equipment.</li>
+<li><code>positive:</code> / <code>negative:</code> - keep only the branch that matches the entry's Positive/Negative mode (sticky until the next polarity label or trigger)</li>
+<li><code>RESULT</code> inside a clash trigger - filled from the gear entry's Win / Lose / None dropdown (<code>procResult</code>). <code>Win</code> → <code>Win</code>, <code>Lose</code> → <code>Lose</code>. <code>None</code> drops that whole trigger block.</li>
+<li><code>CHOICE</code> in a trigger or action - filled from the gear entry's Attack / Defense dropdown (<code>procChoice</code>). <code>Attack</code> → <code>Attack</code>. <code>Defense</code> → <code>Defense</code> (Block and Evade). Leave the dropdown on <strong>Attack / Defense</strong> to drop <code>with CHOICE</code> from the trigger (<code>[Clash Win]</code>) and skip body lines that still have <code>CHOICE</code>.</li>
+</ul>
+<p>Those tokens are <strong>effect-template only</strong>. They do not exist on equipment after sync.</p>
+<p>On a weapon / outfit / skill / etc., linked effect templates are stamped into a managed region on the host EasyEffects script:</p>
+<pre><code># &gt;&gt;&gt; synced effects
+# Burn Resistance
+[On Taking Burn Damage]
+reduce damage by 2;
+# &lt;&lt;&lt; synced effects
+</code></pre>
+<p>Adding, removing, or changing an effect's intensity, mode, clash result, or Attack/Defense choice updates only that block. Put custom scripts <strong>outside</strong> the markers so they are not overwritten.</p>
+<p>If you edit <em>inside</em> the synced block, auto-update pauses and warns you. Use <strong>Sync with current effects</strong> twice to confirm a rebuild; text outside the markers is preserved.</p>
+<p>Example template on Burn Resistance:</p>
+<pre><code>[On Taking Burn Damage]
+positive:
+reduce damage by N;
+negative:
+increase damage by N;
+</code></pre>
+<p>Example template for a clash buy-in (Inflict Burn, etc.):</p>
+<pre><code>[Clash RESULT with CHOICE]
+positive:
+inflict N Burn;
+negative:
+gain N Burn;
+</code></pre>
+<p>With intensity <code>2</code>, clash result <strong>Win</strong>, and Attack/Defense <strong>Attack</strong>, sync stamps:</p>
+<pre><code>[Clash Win with Attack]
+inflict 2 Burn;
+</code></pre>
+<p>Leave Attack/Defense unset to stamp <code>[Clash Win]</code> with no <code>with</code>.</p>
+<p><code>[Clash RESULT With Evade]</code> and <code>[On Clash RESULT]</code> work the same way.</p>
+<p>Augment conditionals such as Burn Bonus use <code>CHOICE</code> without <code>RESULT</code>:</p>
+<pre><code>[On Clash Start with CHOICE]
+require 2 target Burn then power up CHOICE 1;
+</code></pre>
+<p>With <strong>Defense</strong> chosen, that becomes <code>[On Clash Start with Defense]</code> and <code>power up Defense 1</code> (both Block and Evade).</p>
+<p>Combat runs <strong>only</strong> the host's EasyEffects (not the catalog effect document).</p>
+<h2 id="spend-to"><code>spend ... to</code></h2>
+<p><code>spend</code> is the most powerful shorthand. It:</p>
+<ol>
+<li>Checks that the actor has enough stacks</li>
+<li>Runs the actions you specify</li>
+<li>Automatically removes the spent stacks — you never write <code>lose</code> manually</li>
+</ol>
+<pre><code>spend 3 Charge to gain 1 Poise;
+</code></pre>
+<p>Reads: <em>"If you have at least 3 Charge, gain 1 Poise, then lose 3 Charge."</em></p>
+<p>You can specify who spends with <code>on</code>:</p>
+<pre><code>spend 3 &quot;Stagger Fragile&quot; on target to deal damage 5 on target;
+</code></pre>
+<hr />
+<h1 id="chaining-actions-and">Chaining Actions (<code>and</code>)</h1>
+<p>Multiple actions can be chained with <code>and</code>. The condition (if any) applies to all of them.</p>
+<pre><code>require 3 self Charge then gain 1 Poise and lose 3 Charge;
+gain 1 Burn on target and gain 1 Smoke on target;
+</code></pre>
+<p>You can also give each action in a chain its own target:</p>
+<pre><code>do add status Poise 1 on self and deal damage 1d6 on target;
+</code></pre>
+<p>If you omit <code>on</code> for a later action, it inherits the previous action's target.</p>
+<hr />
+<h1 id="scaling-with-per">Scaling with <code>per</code></h1>
+<p>You can multiply an amount by a live value using <code>per</code>:</p>
+<pre><code>do deal damage 2 per (self.status.Charge) on target;
+</code></pre>
+<p>Reads: <em>"Deal 2 damage for each stack of Charge on self."</em></p>
+<hr />
+<h1 id="flags-boolean-checks">Flags (boolean checks)</h1>
+<p>These let you check whether someone is in a certain state:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isStaggered self/target</code></td>
+<td>Is currently Staggered</td>
+</tr>
+<tr>
+<td><code>isPanicking self/target</code></td>
+<td>Is currently Panicking</td>
+</tr>
+<tr>
+<td><code>hasStatus &lt;Name&gt; self/target</code></td>
+<td>Has at least 1 stack of that status</td>
+</tr>
+</tbody>
+</table>
+<pre><code>require isStaggered target == 1 then gain 2 Bleed on target;
+require hasStatus Burn target == 1 then do deal damage 3 on target;
+</code></pre>
+<hr />
+<h1 id="comments">Comments</h1>
+<p>Lines starting with <code>#</code> are ignored:</p>
+<pre><code>[Clash Win]
+# Build charge on each win
+gain 1 Charge;
+# Dump at 3
+spend 3 Charge to gain 1 Poise;
+</code></pre>
+<hr />
+<h1 id="full-examples">Full Examples</h1>
+<h2 id="charge-poise-dump">Charge → Poise dump</h2>
+<pre><code>[Clash Win]
+gain 1 Charge;
+spend 3 Charge to gain 1 Poise;
+</code></pre>
+<h2 id="burn-on-hit-burst-at-3-stacks">Burn on hit, burst at 3 stacks</h2>
+<pre><code>[On Hit]
+gain 1 Burn on target;
+spend 3 Burn on target to do deal damage 2d8 on target;
+</code></pre>
+<h2 id="rank-scaling-bleed">Rank-scaling bleed</h2>
+<pre><code>[On Hit]
+gain (self.rank) Bleed on target;
+</code></pre>
+<h2 id="combo-weapon-two-triggers">Combo weapon — two triggers</h2>
+<pre><code>[Clash Win]
+gain 1 Charge;
+
+[On Hit]
+do deal damage 1d6 on target;
+</code></pre>
+<h2 id="punish-the-staggered">Punish the Staggered</h2>
+<pre><code>[On Hit]
+gain 1 Bleed on target;
+require isStaggered target == 1 then gain 2 Bleed on target;
+</code></pre>
+<h2 id="aoe-smoke-on-clash-win">AoE Smoke on Clash Win</h2>
+<pre><code>[Clash Win]
+gain 1 Smoke on enemies;
+</code></pre>
+<h2 id="outfit-rally-aura">Outfit — rally aura</h2>
+<pre><code>[Turn Start]
+do heal 5 on allies;
+</code></pre>
+<h2 id="scale-damage-by-clash-margin">Scale damage by clash margin</h2>
+<pre><code>[Clash Win]
+do deal damage (clash.margin * 2) on target;
+</code></pre>
+<h2 id="dice-math-combo">Dice + math combo</h2>
+<pre><code>[Clash Win]
+do deal damage (1d6 + self.rank) on target;
+</code></pre>
+<h2 id="hardblood-shield">Hardblood shield</h2>
+<pre><code>[On Damage Calc]
+spend 1 self Bleed to regen hp 3;
+</code></pre>
+<h2 id="limbus-style-clashing-buff">Limbus style clashing buff</h2>
+<pre><code>[On Clash Start]
+power up attack 1 per (self.status.Burn);
+</code></pre>
+<h2 id="enemy-power-down-on-clash">Enemy Power Down (On Clash)</h2>
+<pre><code>[On Clash Start]
+power down attack 1 on target;
+power down block 1 on target;
+power down evade 1 on target;
+</code></pre>
+<hr />
+<h1 id="quick-reference-card">Quick Reference Card</h1>
+<h2 id="triggers_1">Triggers</h2>
+<p><code>[Clash Win]</code> / <code>[On Clash Win]</code> · <code>[Clash Lose]</code> / <code>[On Clash Lose]</code> · <code>[… With Attack|Block|Evade|Defense|Counter]</code> · <code>[On Clash]</code> / <code>[On Clash Start]</code> · <code>[On Hit]</code> · <code>[On Being Hit]</code> · <code>[On Burst]</code> · <code>[On &lt;Status&gt; Burst]</code> · <code>[On &lt;Name&gt;]</code> · <code>[On Stagger]</code> · <code>[On Applied]</code> · <code>[On Gain]</code> · <code>[On Lose]</code> · <code>[On Removed]</code> · <code>[On Dialog Answer &lt;id&gt;]</code> · <code>[Turn Start]</code> · <code>[On Taking &lt;Filter&gt; Damage]</code></p>
+<h2 id="targets">Targets</h2>
+<p><code>self</code> · <code>target</code> · <code>ally</code> · <code>attacker</code> · <code>originator</code> · <code>enemies</code> · <code>allies</code> · <code>all</code></p>
+<p><code>originator</code> is the actor stored on the host status’s <code>system.origin</code> (who applied it). Only meaningful on <strong>status</strong> scripts.</p>
+<h2 id="actions_1">Actions</h2>
+<table>
+<thead>
+<tr>
+<th>Statement</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create dialog "&lt;prompt&gt;" : &lt;id&gt; [as] "&lt;label&gt;", ... [to|on &lt;target&gt;]</code></td>
+<td>Ask a player; then run <code>[On Dialog Answer &lt;id&gt;]</code> on this script</td>
+</tr>
+<tr>
+<td><code>create message "&lt;text&gt;" [on|to &lt;speaker&gt;]</code></td>
+<td>Post chat as that character; <code>(…)</code> values interpolate</td>
+</tr>
+<tr>
+<td><code>inflict &lt;N&gt; &lt;Status&gt; next round\|turn [on &lt;t&gt;]</code></td>
+<td>Queue pending stacks (no EE until arrival)</td>
+</tr>
+<tr>
+<td><code>pause &lt;Status&gt; [on &lt;t&gt;]</code></td>
+<td>Flip same live status item to pending (Pause skills)</td>
+</tr>
+<tr>
+<td><code>burst &lt;Status&gt; [on\|to &lt;target&gt;]</code></td>
+<td>Status-local <code>[On Burst]</code>, then global <code>[On &lt;Status&gt; Burst]</code></td>
+</tr>
+<tr>
+<td><code>proc &lt;Name&gt; [on\|to &lt;target&gt;] [with … as …]</code></td>
+<td>Named proc -&gt; <code>[On &lt;Name&gt;]</code> (Crit/Dev/custom); optional bind carries</td>
+</tr>
+<tr>
+<td><code>gain &lt;N&gt; &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Add N stacks (target defaults to <code>self</code>)</td>
+</tr>
+<tr>
+<td><code>inflict &lt;N&gt; &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Add N stacks (target defaults to <code>target</code>)</td>
+</tr>
+<tr>
+<td><code>lose &lt;N&gt; &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Remove N stacks</td>
+</tr>
+<tr>
+<td><code>lose all [of] &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Remove every stack</td>
+</tr>
+<tr>
+<td><code>set &lt;Status&gt; to &lt;N&gt; [on &lt;target&gt;]</code></td>
+<td>Set stacks absolutely (<code>set &lt;N&gt; &lt;Status&gt;</code> also works; clamps to <code>stackMax</code> when &gt; 0)</td>
+</tr>
+<tr>
+<td><code>halve &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Reduce stacks to half (floor)</td>
+</tr>
+<tr>
+<td><code>double &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Gain stacks equal to current (2x)</td>
+</tr>
+<tr>
+<td><code>lose half [of] &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Same as <code>halve</code></td>
+</tr>
+<tr>
+<td><code>gain double [of] &lt;Status&gt; [on &lt;target&gt;]</code></td>
+<td>Same as <code>double</code></td>
+</tr>
+<tr>
+<td><code>spend &lt;N&gt; &lt;Status&gt; [on &lt;target&gt;] to &lt;actions&gt;</code></td>
+<td>Require + remove + do</td>
+</tr>
+<tr>
+<td><code>require &lt;condition&gt; then &lt;actions&gt;</code></td>
+<td>Conditional block</td>
+</tr>
+<tr>
+<td><code>roll &lt;dice&gt; [as &lt;name&gt;]</code></td>
+<td>Roll once into <code>(roll)</code> / named bind</td>
+</tr>
+<tr>
+<td><code>on roll &lt;dice&gt; &lt;op&gt; &lt;value&gt; then &lt;actions&gt;</code></td>
+<td>Roll once, compare, then act</td>
+</tr>
+<tr>
+<td><code>deal &lt;N&gt; [&lt;type&gt;] [hp\|st\|sp\|light] damage [before\|after resistances] [to\|on &lt;target&gt;]</code></td>
+<td>Deal damage (default <strong>after</strong> resistances)</td>
+</tr>
+<tr>
+<td><code>do deal damage &lt;N&gt; on &lt;target&gt;</code></td>
+<td>Deal HP damage (standard form)</td>
+</tr>
+<tr>
+<td><code>convert [amount] damage to &lt;pool\|type&gt;</code></td>
+<td>Rewrite pending hit on <code>[On Taking Damage]</code></td>
+</tr>
+<tr>
+<td><code>gain</code>/<code>lose</code>/<code>set</code> <code>Action</code>|<code>Reaction</code>|<code>movement</code> <code>[on &lt;t&gt;]</code></td>
+<td>Current action-economy / tactical SQR pools (<code>actions</code> / <code>reactions</code> / <code>squares</code> / <code>sqr</code> aliases)</td>
+</tr>
+<tr>
+<td><code>gain</code>/<code>lose</code>/<code>set</code> <code>tempHp</code>|<code>tempSt</code>|<code>tempSp</code> <code>[on &lt;t&gt;]</code></td>
+<td>Temporary pool buffers</td>
+</tr>
+<tr>
+<td><code>set hp\|st\|sp\|light to &lt;N\|max&gt; [on\|to &lt;t&gt;]</code></td>
+<td>Set current pool (<code>max</code> = that actor’s current max)</td>
+</tr>
+<tr>
+<td><code>set resistances to &lt;level&gt; [on &lt;t&gt;]</code></td>
+<td>All HP+ST Slash/Pierce/Blunt outfit resists (Always Active = override; event = write outfit)</td>
+</tr>
+<tr>
+<td><code>set &lt;slash\|pierce\|blunt&gt; resistance to &lt;level&gt; [on &lt;t&gt;]</code></td>
+<td>One damage type, both HP and ST</td>
+</tr>
+<tr>
+<td><code>set maxHp\|maxSt\|maxSp\|maxLight to &lt;N&gt;</code></td>
+<td>Absolute max (<code>[Always Active]</code> only)</td>
+</tr>
+<tr>
+<td><code>do heal &lt;N&gt; on &lt;target&gt;</code></td>
+<td>Restore HP</td>
+</tr>
+<tr>
+<td><code>power &lt;up/down&gt; &lt;attack/block/evade/defense&gt; &lt;N&gt; [on &lt;target&gt;]</code></td>
+<td>Dice Power on that side's roll (<code>defense</code> = Block and Evade)</td>
+</tr>
+<tr>
+<td><code>dice max &lt;up/down&gt; &lt;attack/block/evade/defense&gt; &lt;N&gt; [on &lt;target&gt;]</code></td>
+<td>Dice Max (faces) on that side's roll (<code>defense</code> = Block and Evade)</td>
+</tr>
+<tr>
+<td><code>advantage</code> / <code>disadvantage</code> <code>[on\|to &lt;t&gt;]</code></td>
+<td>Clash-side Adv/Disadv (cancel if both; <code>[On Clash Start]</code>)</td>
+</tr>
+<tr>
+<td><code>regen &lt;hp/st/sp/light&gt; &lt;N&gt;</code></td>
+<td>Shorthand to gain HP/ST/SP/Light</td>
+</tr>
+<tr>
+<td><code>range up &lt;N&gt;</code></td>
+<td>Increase a weapon's range.</td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;Status&gt;</code> is a display name (<code>Burn</code>, <code>"Panic [Fight]"</code>) or a Document UUID (<code>Item.xxx</code>, quoted or bare dotted). Lookup order: UUID -&gt; world Items -&gt; packs.</p>
+<h2 id="readable-values">Readable values</h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self.hp</code> / <code>sp</code> / <code>st</code> / <code>light</code></td>
+<td>Core attributes</td>
+</tr>
+<tr>
+<td><code>self.hp%</code> / <code>sp%</code> / <code>st%</code> / <code>light%</code></td>
+<td>Current fill as 0–100 of that pool’s max</td>
+</tr>
+<tr>
+<td><code>self.action</code> / <code>self.reaction</code> / <code>self.movement</code></td>
+<td>Remaining Actions / Reactions / tactical SQRs</td>
+</tr>
+<tr>
+<td><code>self.tempHp</code> / <code>tempSt</code> / <code>tempSp</code></td>
+<td>Temporary buffers</td>
+</tr>
+<tr>
+<td><code>self.rank</code></td>
+<td>Rank</td>
+</tr>
+<tr>
+<td><code>self.attack</code> / <code>evade</code> / <code>block</code></td>
+<td>Combat modifiers</td>
+</tr>
+<tr>
+<td><code>self.stat.for</code> / <code>pru</code> / <code>jus</code> / <code>cha</code> / <code>ins</code> / <code>tem</code></td>
+<td>Ability scores</td>
+</tr>
+<tr>
+<td><code>self.status.Burn</code></td>
+<td>Stack count of Burn on self</td>
+</tr>
+<tr>
+<td><code>self.status.Burn.origin</code></td>
+<td>Actor UUID that applied Burn (empty if unknown)</td>
+</tr>
+<tr>
+<td><code>self.uuid</code> / <code>self.id</code> / <code>self.name</code></td>
+<td>This actor’s UUID / id / name (<code>(self)</code> alone -&gt; name)</td>
+</tr>
+<tr>
+<td><code>item.origin</code></td>
+<td>Applier UUID on the status/item running this script</td>
+</tr>
+<tr>
+<td><code>originator</code> / <code>originator.name</code> / <code>.uuid</code></td>
+<td>Who applied this status (status scripts; bare -&gt; name)</td>
+</tr>
+<tr>
+<td><code>clash.margin</code></td>
+<td>Winning roll − losing roll</td>
+</tr>
+<tr>
+<td><code>clash.attackerRoll</code> / <code>clash.defenderRoll</code></td>
+<td>Raw clash dice</td>
+</tr>
+<tr>
+<td><code>incoming.amount</code> / <code>.pool</code> / <code>.source</code> / <code>.damageType</code></td>
+<td>Pending damage (<code>damage.*</code> also works)</td>
+</tr>
+<tr>
+<td><code>burst.status</code> / <code>.amount</code> / <code>.before</code> / <code>.after</code></td>
+<td>Active Burst snapshot</td>
+</tr>
+<tr>
+<td><code>moved.squares</code> / <code>.spaces</code> / <code>.movement</code> / <code>.forced</code></td>
+<td><code>[On Move]</code> tiles walked (<code>forced</code> is 0 or 1)</td>
+</tr>
+<tr>
+<td><code>proc.name</code> / <code>proc.&lt;Bind&gt;</code></td>
+<td>Active Proc name / <code>with … as</code> binds (bare <code>&lt;Bind&gt;</code> also works)</td>
+</tr>
+<tr>
+<td><code>roll</code> / <code>roll.&lt;name&gt;</code></td>
+<td>Last / named roll-once totals</td>
+</tr>
+</tbody>
+</table>
+<h2 id="math">Math</h2>
+<p><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> (modulo) <code>//</code> or <code>//f</code> (floor) · <code>//c</code> (ceil). All are usable inside <code>( )</code>.</p>
+<h3 id="percent-of-max-postfix">Percent of max (<code>%</code> postfix)</h3>
+<p><code>(self.hp%)</code> is current HP as <strong>0–100</strong> of max (same for <code>st</code> / <code>sp</code> / <code>light</code>). A trailing <code>%</code> on a plain threshold is cosmetic percent-points (matches Effect List wording):</p>
+<pre><code># Overcoming Crisis: HP ≤ (100 − N×20)% of max, +N Power
+[On Clash Start]
+require (self.hp%) &lt;= (100 - N*20) then power up attack N;
+</code></pre>
+<p><code>%</code> remains modulo when it has a right-hand side: <code>(stacks % 3)</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
