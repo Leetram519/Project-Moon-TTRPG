@@ -1,19 +1,120 @@
-<form>
-  <div class="homebrew-menu">
-    {{#each homebrews}}
-    <div class="homebrew-entry form-group">
-      <label>
-        <input type="checkbox" name="{{#if id}}{{id}}{{/if}}" {{#if enabled}}checked{{/if}} />
-        <strong>{{label}}</strong>
-      </label>
-      <p class="hint">{{hint}}</p>
-    </div>
-    {{/each}}
+<form class="homebrew-menu">
+  <nav class="tabs" data-group="primary">
+    <a class="item active" data-tab="packs">
+      <i class="fas fa-boxes-stacked"></i> Homebrew Packs
+    </a>
+    <a class="item" data-tab="advanced">
+      <i class="fas fa-sliders"></i> Advanced (Per-Compendium)
+    </a>
+  </nav>
+
+  <div class="tab-content">
+    <section class="tab active" data-tab="packs">
+      <p class="hint">
+        Enable packs to include their content in your world.
+        Drag rows to set priority — when two packs share an item name, the
+        <strong>higher row wins</strong>.
+      </p>
+
+      <ol class="homebrew-list">
+        {{#each homebrews}}
+        <li class="homebrew-row {{#unless implemented}}not-implemented{{/unless}}"
+            draggable="{{implemented}}"
+            data-id="{{id}}">
+
+          {{!-- Drag handle --}}
+          {{#if implemented}}
+          <span class="drag-handle" title="Drag to reorder">
+            <i class="fas fa-grip-vertical"></i>
+          </span>
+          {{else}}
+          <span class="drag-handle disabled">
+            <i class="fas fa-grip-vertical"></i>
+          </span>
+          {{/if}}
+
+          <label class="toggle-wrap" title="{{#unless implemented}}Not yet implemented{{/unless}}">
+            <input type="checkbox"
+                   name="homebrew.{{id}}.enabled"
+                   {{#if enabled}}checked{{/if}}
+                   {{#unless implemented}}disabled{{/unless}}>
+          </label>
+
+          <div class="pack-info">
+            <span class="pack-label">
+              {{label}}
+              {{#unless implemented}}<em class="wip">(coming soon)</em>{{/unless}}
+            </span>
+            <span class="pack-hint">{{hint}}</span>
+          </div>
+
+          {{#if implemented}}
+          <span class="priority-badge" title="Priority (drag to change)">
+            Priority: {{priority}}
+          </span>
+          <input type="hidden"
+                 class="priority-hidden"
+                 name="homebrew.{{id}}.priority"
+                 value="{{priority}}">
+          {{/if}}
+
+        </li>
+        {{/each}}
+      </ol>
+    </section>
+
+    <section class="tab" data-tab="advanced">
+      <p class="hint">
+        Fine-tune visibility and merge behaviour for every compendium pack. 
+        <strong>Hidden</strong> packs do not appear in the Compendium Browser.
+        <strong>Inactive</strong> packs are excluded from name-merge resolution.
+        <strong>Priority</strong> determines which pack wins when two active packs
+        share an item name (higher = wins).
+      </p>
+
+      <table class="pack-config-table">
+        <thead>
+          <tr>
+            <th>Pack</th>
+            <th title="Hidden from Compendium Browser">Hidden</th>
+            <th title="Excluded from content merges">Inactive</th>
+            <th title="Higher wins on name collision">Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each allPackConfigs}}
+          <tr>
+            <td class="pack-name" title="{{key}}">{{label}}</td>
+            <td class="center">
+              <input type="checkbox"
+                     name="pack.{{key}}.hidden"
+                     {{#if hidden}}checked{{/if}}>
+            </td>
+            <td class="center">
+              <input type="checkbox"
+                     name="pack.{{key}}.active"
+                     {{#unless active}}checked{{/unless}}>
+            </td>
+            <td>
+              <input type="number"
+                     name="pack.{{key}}.priority"
+                     value="{{priority}}"
+                     min="-99"
+                     max="999"
+                     step="1"
+                     class="priority-input">
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </section>
+
   </div>
 
-  <footer class="sheet-footer">
-    <button type="submit">
-      <i class="fas fa-save"></i> Save
+  <footer class="form-footer">
+    <button type="submit" name="submit">
+      <i class="fas fa-save"></i> Save Changes
     </button>
   </footer>
 </form>
