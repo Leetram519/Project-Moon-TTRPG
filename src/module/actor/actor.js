@@ -18,6 +18,7 @@ import {
   resolveResistance,
   tempPoolKey,
 } from '../damage-application.js';
+import { CompendiumManager } from '../homebrew/compendium/compendium-manager.js';
 
 const STATUS_STACK_HOOK_MAX_DEPTH = 8;
 const _statusStackHookDepth = new WeakMap();
@@ -1569,6 +1570,7 @@ export class ActorPMTTRPG extends Actor {
     //   e.g. pack.metadata.id === 'projectmoonttrpg.statuses'
     for (const pack of game.packs) {
       if (pack.documentName !== 'Item') continue;
+      if (!CompendiumManager.getPack(pack.metadata.id).isActive) continue;
 
       const index = await pack.getIndex({ fields: ['name', 'type'] });
       const entry = index.find(

@@ -6,6 +6,7 @@ Actor:
     base:
       easyEffects: ''
       easyEffectsWorldSync: true
+      homebrewDependencies: []
       attributes:
         hp:
           value: 96
@@ -67,6 +68,9 @@ Actor:
           relationships: ''
           notes: ''
           notableHistory: ''
+      homebrew:
+        author: ''
+        source: ''
   character:
     templates:
       - base
@@ -254,6 +258,12 @@ Item:
       name: ''
       description: ''
       slug: ''
+      homebrewDependencies: []
+      subtype: regular
+      subsubtype: regular
+      homebrew:
+        author: ''
+        source: ''
   weapon:
     templates:
       - base
@@ -359,6 +369,8 @@ Item:
     cost: 1
     stackMax: 5
     appliesTo: weapon
+    subtypeWhitelist: [regular]
+    subsubtypeWhitelist: [regular]
     canPositive: true
     canNegative: true
     procOn: alwaysActive

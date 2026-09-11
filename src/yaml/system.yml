@@ -40,6 +40,7 @@ styles:
   - styles/lib/clash.css
   - styles/lib/combat-turn-order.css
   - styles/lib/dialogs.css
+  - styles/lib/settings.css
 media:
   - type: setup
     url: "systems/projectmoonttrpg/assets/thumbnail.webp"

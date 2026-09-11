@@ -484,7 +484,7 @@ PMTTRPG.StatusPriorityHint: "0–100. Higher priority statuses appear first on t
 PMTTRPG.AddStack: "Add Stack"
 PMTTRPG.RemoveStack: "Remove Stack"
 PMTTRPG.NoStatuses: "No active statuses"
-PMTTRPG.StatusNotFound: "Status '{name}' was not found in world items, UUIDs, or status packs."
+PMTTRPG.StatusNotFound: "Status '{name}' was not found in world items, UUIDs, or enabled status packs."
 PMTTRPG.Settings.showStatusTray.name: "Show status tray"
 PMTTRPG.Settings.showStatusTray.hint: "Show active statuses at the top-right of the canvas."
 PMTTRPG.Settings.showTokenStatusBadges.name: "Show token status badges"
