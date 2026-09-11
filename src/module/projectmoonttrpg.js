@@ -52,6 +52,7 @@ import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
+import { CompendiumBrowserOverride } from "./homebrew/compendium/compendium-browser.js";
 
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -81,6 +82,7 @@ Hooks.once("init", async function() {
   CONFIG.Item.documentClass = ItemPMTTRPG;
   CONFIG.Token.objectClass = TokenPMTTRPG;
   CONFIG.Token.rulerClass = TokenRulerPMTTRPG;
+  CONFIG.ui.compendium = CompendiumBrowserOverride;
   registerTokenStatusBadges();
   CONFIG.Item.typeLabels = foundry.utils.mergeObject(CONFIG.Item.typeLabels ?? {}, {
     status: game.i18n.localize("TYPES.Item.status"),
@@ -190,8 +192,8 @@ Hooks.once("init", async function() {
   registerActorScriptHooks();
   registerClashChatListeners();
 
+  CompendiumBrowserOverride.init();
   HomebrewSettings.register();
-  BoiHomebrew.registerSetting();
 });
 
 Hooks.once("ready", async function() {
@@ -272,8 +274,6 @@ Hooks.once("ready", async function() {
       ui.combat.render();
     }
   });
-
-  BoiHomebrew.applyState();
 });
 
 Hooks.on('createChatMessage', async (message, options, id) => {
