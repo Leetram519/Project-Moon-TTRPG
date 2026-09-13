@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- [EasyEffects] Outfit `Additional Reaction` now stamps `[Always Active] gain 1 Reaction`.
+- [EasyEffects] `[On Hit]` / `[On Hit Before Results]` now run on the attacker's active augments.
 - [EasyEffects] `Rupture Boost` and `Tremor Boost` now burst the clash loser (`on target`), so Block Clash Wins apply the Burst.
 - Armored outfits now deal Block Win ST equal to half the Block total when that is greater than the clash difference.
 - NPC sheet loadout now lists a newly added weapon or outfit immediately, instead of waiting until both types exist.

@@ -490,7 +490,12 @@ items:
           macro:
             uuid: ''
       customNotes: ''
-      easyEffects: ''
+      easyEffects: |-
+        # >>> synced effects
+        # Additional Reaction
+        [Always Active]
+        lose 1 Reaction;
+        # <<< synced effects
       equipped: true
     _id: oNGKRbVNpmJuDcfK
     img: systems/projectmoonttrpg/assets/icons/Statuses/Mark_Encirclement.webp

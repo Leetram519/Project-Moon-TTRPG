@@ -487,7 +487,12 @@ items:
           blunt: weak
       equipped: true
       customNotes: ''
-      easyEffects: ''
+      easyEffects: |-
+        # >>> synced effects
+        # Additional Reaction
+        [Always Active]
+        gain 1 Reaction;
+        # <<< synced effects
     _id: vViqSgqdqbQNSO5b
     img: >-
       systems/projectmoonttrpg/assets/icons/limbus_assets/Refraction%20Railway/Line%205/MRR568.webp

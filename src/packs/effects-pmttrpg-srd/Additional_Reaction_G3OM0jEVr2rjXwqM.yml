@@ -23,6 +23,10 @@ system:
   macro:
     uuid: ''
   customNotes: ''
+  easyEffects: |-
+    [Always Active]
+    positive:
+    gain 1 Reaction;
   allowMultiple: false
 effects: []
 sort: 0

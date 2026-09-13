@@ -299,9 +299,8 @@ function clashWinItems({
 }
 
 function onHitItems({ item, appliedTool, attacker, attackerSkill, ammo }) {
-  const out = [item, appliedTool, attackerSkill, ammo].filter(Boolean);
-  if (attacker) out.push(...uniqueStatusItems(attacker.items));
-  return out;
+  return collectSideClashItems(attacker, item, appliedTool, attackerSkill, ammo)
+    .filter((owned) => owned.type !== "outfit");
 }
 
 function onHitContext({ attacker, defender, clash, attackerSkill }) {
