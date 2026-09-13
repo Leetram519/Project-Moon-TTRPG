@@ -13,6 +13,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: >-
     [On Hit Before Results]
@@ -22,13 +32,13 @@ system:
 
     [On RollForNoStancePoise]
 
-    roll 1d10 as poiseRoll tagged "critical-check"
+    roll 1d10[poise] as poiseRoll tagged "critical-check"
 
-    require (poiseRoll) <= (Poise - (4 * "Slasher Stance"))
-    then proc AskForCritical
+    require (poiseRoll) <= (Poise - (4 * "Slasher Stance")) then proc
+    AskForCritical
 
-    require (poiseRoll) > (Poise - (4 * "Slasher Stance"))
-    then proc FailedCriticalRoll
+    require (poiseRoll) > (Poise - (4 * "Slasher Stance")) then proc
+    FailedCriticalRoll
 
 
     [On AskForCritical]
@@ -57,15 +67,6 @@ system:
     [On Lose]
 
     require (changed.after) == 0 then set Critical to 0;
-  proc:
-    turnStart: false
-    endOfRound: false
-    actionOrReaction: false
-    attackerBurst: false
-    onHitWhenActorHas: false
-    onHitWhenTargetHas: false
-    alwaysActive: false
-    skillEffect: false
 effects: []
 ownership:
   default: 0
@@ -77,9 +78,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779621123777
-  modifiedTime: 1787228253844
+  modifiedTime: 1789150388684
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ydPGqz7mrTUDuduT
 sort: 300000

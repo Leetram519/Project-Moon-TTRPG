@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Frostbite.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 1
   stackMax: 5
@@ -27,7 +27,22 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Clash Start]
+    set flag "frostbiteBeforeTarget" on item to (target.status.Frostbite);
+    set flag "frostbiteBeforeSelf" on item to (self.status.Frostbite);
+
+    [On Clash Win]
+    require (target.status.Frostbite) > (item.flag.frostbiteBeforeTarget) then
+      inflict (min(N, 3)) Frostbite on target;
+    require (self.status.Frostbite) > (item.flag.frostbiteBeforeSelf) then
+      inflict (min(N, 3)) Frostbite on self;
+
+    [On Clash Lose]
+    require (target.status.Frostbite) > (item.flag.frostbiteBeforeTarget) then
+      inflict (min(N, 3)) Frostbite on target;
+    require (self.status.Frostbite) > (item.flag.frostbiteBeforeSelf) then
+      inflict (min(N, 3)) Frostbite on self;
 effects: []
 sort: 100000
 ownership:
@@ -42,9 +57,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787225390419
-  modifiedTime: 1787225450168
+  modifiedTime: 1789291745766
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: N44RUGgAkBC3mNWE
 _key: '!items!N44RUGgAkBC3mNWE'

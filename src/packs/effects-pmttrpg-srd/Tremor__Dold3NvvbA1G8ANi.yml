@@ -4,8 +4,8 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Tremor.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
-  slug: tremor
+  description: ''
+  slug: ''
   cost: 1
   stackMax: 5
   appliesTo: skill
@@ -25,7 +25,22 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Clash Start]
+    set flag "tremorBeforeTarget" on item to (target.status.Tremor);
+    set flag "tremorBeforeSelf" on item to (self.status.Tremor);
+
+    [On Clash Win]
+    require (target.status.Tremor) > (item.flag.tremorBeforeTarget) then
+      inflict (min(N, 3)) Tremor on target;
+    require (self.status.Tremor) > (item.flag.tremorBeforeSelf) then
+      inflict (min(N, 3)) Tremor on self;
+
+    [On Clash Lose]
+    require (target.status.Tremor) > (item.flag.tremorBeforeTarget) then
+      inflict (min(N, 3)) Tremor on target;
+    require (self.status.Tremor) > (item.flag.tremorBeforeSelf) then
+      inflict (min(N, 3)) Tremor on self;
 effects: []
 sort: 0
 ownership:
@@ -35,9 +50,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787232171756
-  modifiedTime: 1787232171756
+  modifiedTime: 1789292430062
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.8IsI9UrvhkzYgnjn

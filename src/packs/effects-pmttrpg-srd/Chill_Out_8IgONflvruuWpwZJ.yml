@@ -20,8 +20,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: >-
-    <p>Inflict Bind equal to half of the Frostbite stacks on the target.</p>
+  positive: <p>Inflict Bind equal to half of the Frostbite stacks on the target.</p>
   negative: ''
   macro:
     uuid: ''

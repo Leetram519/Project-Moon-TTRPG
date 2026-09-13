@@ -20,8 +20,24 @@ system:
   stacks: 1
   stackMax: 0
   priority: 0
+  pending: false
+  arrival: ''
+  shelved: false
+  origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Gain]
+    proc gainedOvercharge on self;
 effects: []
 folder: OMSNi4hdekwHrB1H
 sort: 200000
@@ -32,9 +48,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785319357408
-  modifiedTime: 1785575316156
+  modifiedTime: 1789153856048
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

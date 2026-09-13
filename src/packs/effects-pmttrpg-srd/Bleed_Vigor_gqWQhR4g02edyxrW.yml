@@ -31,8 +31,12 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    require (Bleed) >= (N+2) then
-      power up attack N and power up defense N;
+    require (self.flag.hasBleedVigor) == 1 then
+      require (Bleed) >= (N+3) then
+        power up attack N and power up defense N;
+    require (self.flag.hasBleedVigor) == 0 then
+      require (Bleed) >= (N+2) then
+        power up attack N and power up defense N;
 effects: []
 sort: 100000
 ownership:
@@ -47,9 +51,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787225861375
-  modifiedTime: 1787225941305
+  modifiedTime: 1789292171006
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: gqWQhR4g02edyxrW
 _key: '!items!gqWQhR4g02edyxrW'

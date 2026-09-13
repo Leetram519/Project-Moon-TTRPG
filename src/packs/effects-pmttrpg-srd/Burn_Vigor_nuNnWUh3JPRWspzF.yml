@@ -31,8 +31,12 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    require (Burn) >= (N+2) then
-      power up attack N and power up defense N;
+    require (self.flag.hasBurnVigor) == 1 then
+      require (Burn) >= (N+5) then
+        power up attack N and power up defense N;
+    require (self.flag.hasBurnVigor) == 0 then
+      require (Burn) >= (N+2) then
+        power up attack N and power up defense N;
 effects: []
 sort: 0
 ownership:
@@ -45,9 +49,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787171976159
-  modifiedTime: 1787172359986
+  modifiedTime: 1789292046656
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: nuNnWUh3JPRWspzF
 _key: '!items!nuNnWUh3JPRWspzF'

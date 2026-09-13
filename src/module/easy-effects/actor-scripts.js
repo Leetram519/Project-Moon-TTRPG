@@ -20,6 +20,13 @@ require (panic) == 1 then inflict "Panic [Fight]" on self;
 require (panic) == 2 then inflict "Panic [Flight]" on self;
 require (panic) == 3 then inflict "Panic [Fawn]" on self;
 require (panic) == 4 then inflict "Panic [Freeze]" on self;
+
+# CR 3.x : Clear overcharge flags on self at combat end.
+[On Combat End]
+clear flag "charge_decision" on self;
+clear flag "overcharge_enabled" on self;
+clear flag "charge_consumed" on self;
+clear flag "charge_decay" on self;
 `;
 
 export function getWorldEasyEffects() {

@@ -5,6 +5,7 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Endurance.webp
 system:
   name: ''
   description: ''
+  slug: ''
   cost: 2
   stackMax: 5
   appliesTo: outfit
@@ -13,6 +14,8 @@ system:
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -22,6 +25,12 @@ system:
   macro:
     uuid: ''
   customNotes: ''
+  easyEffects: |-
+    [Always Active]
+    positive:
+    gain N speed;
+    negative:
+    lose N speed;
   allowMultiple: true
 effects: []
 sort: 0
@@ -33,11 +42,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.dYnFrDX2sf5IpEhN
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1780308620214
-  modifiedTime: 1780308620214
+  modifiedTime: 1789153474862
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: U6JBtwDo1dFv4Y48
 _key: '!items!U6JBtwDo1dFv4Y48'

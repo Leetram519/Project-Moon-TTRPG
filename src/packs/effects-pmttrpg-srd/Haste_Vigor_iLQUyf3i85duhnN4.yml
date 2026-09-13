@@ -30,6 +30,18 @@ system:
   easyEffects: |-
     [On Clash Start]
     power up CHOICE (min(Haste //f 2, 3));
+
+    [On Combat Start]
+    set flag "hasHasteVigor" on self to 1;
+
+    [On Equip]
+    set flag "hasHasteVigor" on self to 1;
+
+    [On Combat End]
+    clear flag "hasHasteVigor" on self;
+
+    [On Unequip]
+    clear flag "hasHasteVigor" on self;
 effects: []
 sort: 0
 ownership:
@@ -44,7 +56,7 @@ _stats:
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
   createdTime: 1785485127258
-  modifiedTime: 1787388492607
+  modifiedTime: 1789291987701
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: iLQUyf3i85duhnN4
 _key: '!items!iLQUyf3i85duhnN4'

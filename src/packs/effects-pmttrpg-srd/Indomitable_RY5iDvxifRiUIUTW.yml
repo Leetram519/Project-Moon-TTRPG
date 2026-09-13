@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Stagger%20Protection.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 8
   stackMax: 1
@@ -27,7 +27,15 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Combat Start]
+    set flag "indomitable_removeStaggered" on self to 1;
+
+    [On Combat End]
+    clear flag "indomitable_removeStaggered" on self;
+
+    [On Unequip]
+    clear flag "indomitable_removeStaggered" on self;
 effects: []
 sort: 0
 ownership:
@@ -40,9 +48,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485136623
-  modifiedTime: 1787169185369
+  modifiedTime: 1789156408049
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: RY5iDvxifRiUIUTW
 _key: '!items!RY5iDvxifRiUIUTW'

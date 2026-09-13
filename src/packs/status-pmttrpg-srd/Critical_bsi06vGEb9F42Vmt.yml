@@ -13,24 +13,9 @@ system:
   arrival: ''
   shelved: false
   origin: ''
-  customNotes: ''
-  easyEffects: |-
-    [On Critical]
-    require ("Slasher Stance") >= 1 then
-      require (proc.IgnoreDamage) == 0 then deal 1d6 hp damage per Critical to target and
-      lose all Critical on self and
-      gain 2 Critical on self;
-    require ("Slayer Stance") >= 1 then
-      require (proc.IgnoreDamage) == 0 then deal 2d10kh hp damage per Critical to target and
-      lose all Critical on self;
-    require ("Slasher Stance" + "Slayer Stance") == 0 then
-      require (proc.IgnoreDamage) == 0 then deal 1d10 hp damage per Critical to target and
-      lose all Critical on self;
-
-    [On Gain]
-    require (Poise) == 0 then gain 1 Poise;
   proc:
     turnStart: false
+    startOfRound: false
     endOfRound: false
     actionOrReaction: false
     attackerBurst: false
@@ -38,6 +23,22 @@ system:
     onHitWhenTargetHas: false
     alwaysActive: false
     skillEffect: false
+  customNotes: ''
+  easyEffects: |-
+    [On Critical]
+    require ("Slasher Stance") >= 1 then
+      require (proc.IgnoreDamage) == 0 then deal 1d6[critical] hp critical damage per Critical to target and
+      lose all Critical on self and
+      gain 2 Critical on self;
+    require ("Slayer Stance") >= 1 then
+      require (proc.IgnoreDamage) == 0 then deal 2d10kh[critical] hp critical damage per Critical to target and
+      lose all Critical on self;
+    require ("Slasher Stance" + "Slayer Stance") == 0 then
+      require (proc.IgnoreDamage) == 0 then deal 1d10[critical] hp critical damage per Critical to target and
+      lose all Critical on self;
+
+    [On Gain]
+    require (Poise) == 0 then gain 1 Poise;
 effects: []
 ownership:
   default: 0
@@ -49,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779621117903
-  modifiedTime: 1787228681545
+  modifiedTime: 1789150188922
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: bsi06vGEb9F42Vmt
 sort: 150000

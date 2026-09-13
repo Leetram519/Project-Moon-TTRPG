@@ -30,6 +30,18 @@ system:
   easyEffects: |-
     [On Clash Start]
     power up CHOICE (min(Burn //f 3, 3));
+
+    [On Combat Start]
+    set flag "hasBurnVigor" on self to 1;
+
+    [On Equip]
+    set flag "hasBurnVigor" on self to 1;
+
+    [On Combat End]
+    clear flag "hasBurnVigor" on self;
+
+    [On Unequip]
+    clear flag "hasBurnVigor" on self;
 effects: []
 sort: 0
 ownership:
@@ -44,7 +56,7 @@ _stats:
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
   createdTime: 1785485127256
-  modifiedTime: 1787388472883
+  modifiedTime: 1789291971703
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: WdrXOICffVrOMnfN
 _key: '!items!WdrXOICffVrOMnfN'

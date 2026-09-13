@@ -30,6 +30,18 @@ system:
   easyEffects: |-
     [On Clash Start]
     power up CHOICE (min(Frostbite //f 2, 3));
+
+    [On Combat Start]
+    set flag "hasFrostbiteVigor" on self to 1;
+
+    [On Equip]
+    set flag "hasFrostbiteVigor" on self to 1;
+
+    [On Combat End]
+    clear flag "hasFrostbiteVigor" on self;
+
+    [On Unequip]
+    clear flag "hasFrostbiteVigor" on self;
 effects: []
 sort: 0
 ownership:
@@ -44,7 +56,7 @@ _stats:
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
   createdTime: 1785485127258
-  modifiedTime: 1787388486902
+  modifiedTime: 1789291928569
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: fbMVkRGnsvFeXatl
 _key: '!items!fbMVkRGnsvFeXatl'

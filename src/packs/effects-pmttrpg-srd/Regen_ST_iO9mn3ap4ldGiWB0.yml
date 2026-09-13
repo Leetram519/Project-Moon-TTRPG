@@ -28,7 +28,9 @@ system:
   easyEffects: |-
     [On Clash Win With CHOICE]
     positive:
+    set flag "healFromRegenST" on self to 1;
     regen st N;
+    clear flag "healFromRegenST" on self;
 
     [On Clash RESULT With CHOICE]
     negative:
@@ -45,9 +47,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485136626
-  modifiedTime: 1787167876341
+  modifiedTime: 1789155481537
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: iO9mn3ap4ldGiWB0
 _key: '!items!iO9mn3ap4ldGiWB0'

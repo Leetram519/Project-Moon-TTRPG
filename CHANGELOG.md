@@ -29,6 +29,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You can now have multiple Augments per actor.
 - While targeting, there is now a red square highlighting the actor's range.
 - There are now 2 buttons on the header of Actors allowing you to do End of Combat Healing and Out of Combat Resting (according to CR 3.x rules).
+- [EasyEffects] added various CR automation scripts : 
+    - **Charge & Overcharge**
+    - [M] Increase Range
+    - [M] Extra DMG Type
+    - [R] Extra Range
+    - [M] Extension Grip (This is a hacky fix!)
+    - Vital Protections
+    - Comfy Clothes
+    - Bloodthirst
+    - Overcharged Drive
+    - Kinetic Storage
+    - Regeneration Versatility
+    - Indomitable
+    - Paranoid
+    - Squeamish
+    - [R] Overheat (This is a partial fix! Only applies the +2 Dice Power Up, not the "can only use this weapon once per turn" restriction.)
+    - Instant Bind
+    - Burn+
+    - Burn Vigor
+    - Frostbite+
+    - Frostbite Vigor
+    - Bleed+
+    - Bleed Vigor
+    - Instant Crit
+    - Instant Devastation
+    - Rupture+
+    - Instant Rupture
+    - Tremor+
+    - Instant Tremor
+    - Sinking+
+    - Instant Sinking
 
 ### Changed
 
@@ -67,7 +98,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clash spends (actions, reactions, ammo, Light, recycled evade) now go through the GM when the clicker cannot write a token ActorDelta, so a player Retaliate no longer dies on NPC or unlinked-token updates.
 - [EasyEffects] Gaining Devastation (or Critical) with no paired Ruin (or Poise) no longer resets the new stacks to 1.
 - [EasyEffects] `Ruination` now hears a failed Ruin roll and checks the target's Ruin.
-- [EasyEffects] `Bleed+` now applies extra Bleed when Bleed increased during the clash.
 - [EasyEffects] Panic types set `isPanicking`, and Staggered / Self-Staggered set `isStaggered`, on apply and clear those flags on remove. `Sinking Deluge` uses those flags (plus 0 SP) instead of a dialog.
 - [EasyEffects] `Slow Start` and `Bloodthirst` now apply first-round dice Power on `[On Clash Start]`, instead of writing clash bonuses during `[Start of Round]` where they are ignored.
 

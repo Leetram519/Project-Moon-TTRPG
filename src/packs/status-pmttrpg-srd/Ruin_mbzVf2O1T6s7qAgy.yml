@@ -13,6 +13,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: |-
     [On Being Hit Before Results]
@@ -20,7 +30,7 @@ system:
       proc RollForRuin;
 
     [On RollForRuin]
-    roll 1d10 as RuinRoll
+    roll 1d10[ruin] as RuinRoll
     require (RuinRoll) <= Ruin then proc AskForDevastation
     require (RuinRoll) > Ruin then
       proc FailedDevastationRoll on attacker targeting self;
@@ -48,15 +58,6 @@ system:
 
     [On Removed]
     proc Cursed;
-  proc:
-    turnStart: false
-    endOfRound: false
-    actionOrReaction: false
-    attackerBurst: false
-    onHitWhenActorHas: false
-    onHitWhenTargetHas: false
-    alwaysActive: false
-    skillEffect: false
 effects: []
 ownership:
   default: 0
@@ -68,9 +69,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779621125369
-  modifiedTime: 1787229594900
+  modifiedTime: 1789150400087
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: mbzVf2O1T6s7qAgy
 sort: 193750

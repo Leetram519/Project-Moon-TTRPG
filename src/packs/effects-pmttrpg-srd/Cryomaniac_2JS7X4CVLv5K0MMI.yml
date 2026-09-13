@@ -27,20 +27,28 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: |-
+  easyEffects: >-
     [On Clash Win With Attack]
+
     create dialog "Cryomaniac: Transfer Frostbite?":
       transferStT as "Transfer from Self to Target",
       transferTtS as "Transfer from Target to Self"
       to self;
 
     [On Dialog Answer transferStT]
+
     let $taken = (min(self.status.Frostbite, N));
-    require ($taken) > 0 then inflict ($taken) Frostbite on target and lose ($taken) Frostbite on self;
+
+    require ($taken) > 0 then inflict ($taken) Frostbite on target and lose
+    ($taken) Frostbite on self;
+
 
     [On Dialog Answer transferTtS]
+
     let $taken = (min(target.status.Frostbite, N));
-    require ($taken) > 0 then gain ($taken) Frostbite on self and lose ($taken) Frostbite on target;
+
+    require ($taken) > 0 then gain ($taken) Frostbite on self and lose ($taken)
+    Frostbite on target;
 effects: []
 sort: 100000
 ownership:

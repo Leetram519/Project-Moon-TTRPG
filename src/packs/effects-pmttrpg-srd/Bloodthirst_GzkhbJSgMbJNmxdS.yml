@@ -34,6 +34,10 @@ system:
     [On Clash Start]
     require (round) == 1 then
       power up attack N and power up defense N;
+
+    [On Dealing Damage]
+    require (target.hp) <= 0 then
+      gain N Strength next round;
 effects: []
 sort: 0
 ownership:
@@ -46,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485127255
-  modifiedTime: 1787172865847
+  modifiedTime: 1789153664053
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: GzkhbJSgMbJNmxdS
 _key: '!items!GzkhbJSgMbJNmxdS'

@@ -5,8 +5,8 @@ img: >-
   systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Rupture/Rupture.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
-  slug: rupture
+  description: ''
+  slug: ''
   cost: 1
   stackMax: 3
   appliesTo: skill
@@ -28,7 +28,22 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Clash Start]
+    set flag "ruptureBeforeTarget" on item to (target.status.Rupture);
+    set flag "ruptureBeforeSelf" on item to (self.status.Rupture);
+
+    [On Clash Win]
+    require (target.status.Rupture) > (item.flag.ruptureBeforeTarget) then
+      inflict (min(N, 3)) Rupture on target;
+    require (self.status.Rupture) > (item.flag.ruptureBeforeSelf) then
+      inflict (min(N, 3)) Rupture on self;
+
+    [On Clash Lose]
+    require (target.status.Rupture) > (item.flag.ruptureBeforeTarget) then
+      inflict (min(N, 3)) Rupture on target;
+    require (self.status.Rupture) > (item.flag.ruptureBeforeSelf) then
+      inflict (min(N, 3)) Rupture on self;
 effects: []
 sort: 100000
 ownership:
@@ -43,9 +58,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787230920024
-  modifiedTime: 1787230920024
+  modifiedTime: 1789292364500
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: qJ2J5phOZTJlDt8x
 _key: '!items!qJ2J5phOZTJlDt8x'

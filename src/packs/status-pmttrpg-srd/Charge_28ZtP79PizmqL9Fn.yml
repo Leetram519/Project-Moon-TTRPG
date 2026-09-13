@@ -19,8 +19,54 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Combat Start]
+    require hasFlag "charge_decision" self == 0 then
+      create dialog "Enable Overcharge?":
+        yes as "Gain Overcharge from Charge",
+        no as "Charge only"
+        to self;
+
+    [On Gain]
+    require (round) == 1 then
+      require hasFlag "charge_decision" self == 0 then
+        create dialog "Enable Overcharge?":
+          yes as "Gain Overcharge from Charge",
+          no as "Charge only"
+          to self;
+
+    [On Dialog Answer yes]
+    set flag "charge_decision" on self to 1;
+    set flag "overcharge_enabled" on self to 1;
+
+    [On Dialog Answer no]
+    set flag "charge_decision" on self to 1;
+    set flag "overcharge_enabled" on self to 0;
+
+    [On Lose]
+    require (self.flag.overcharge_enabled) == 1 then
+      require (self.flag.charge_decay) == 0 then
+        increase flag "charge_consumed" on self by (-changed.amount);
+        require (self.flag.charge_consumed) >= 10 then
+          gain ((self.flag.charge_consumed) // 10) Overcharge and
+          reduce flag "charge_consumed" on self by (((self.flag.charge_consumed) // 10) * 10);
+
+    [End of Round]
+    require (Charge) > 15 then
+      set flag "charge_decay" on self to 1;
+      lose (3 * (((Charge - 1) // 15))) Charge;
+      clear flag "charge_decay" on self;
 effects: []
 folder: OMSNi4hdekwHrB1H
 sort: 0
@@ -31,9 +77,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785319248810
-  modifiedTime: 1786446404146
+  modifiedTime: 1789147817733
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

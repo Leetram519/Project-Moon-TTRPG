@@ -27,20 +27,28 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: |-
+  easyEffects: >-
     [On Clash Win With Attack]
+
     create dialog "Siphon Curse: Transfer Ruin?":
       transferStT as "Transfer from Self to Target",
       transferTtS as "Transfer from Target to Self"
       to self;
 
     [On Dialog Answer transferStT]
+
     let $taken = (min(self.status.Ruin, N));
-    require ($taken) > 0 then inflict ($taken) Ruin on target and lose ($taken) Ruin on self;
+
+    require ($taken) > 0 then inflict ($taken) Ruin on target and lose ($taken)
+    Ruin on self;
+
 
     [On Dialog Answer transferTtS]
+
     let $taken = (min(target.status.Ruin, N));
-    require ($taken) > 0 then gain ($taken) Ruin on self and lose ($taken) Ruin on target;
+
+    require ($taken) > 0 then gain ($taken) Ruin on self and lose ($taken) Ruin
+    on target;
 effects: []
 sort: 100000
 ownership:

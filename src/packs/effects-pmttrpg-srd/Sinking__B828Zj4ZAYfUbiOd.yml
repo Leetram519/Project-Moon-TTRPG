@@ -5,8 +5,8 @@ img: >-
   systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Sinking/Sinking.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
-  slug: sinking
+  description: ''
+  slug: ''
   cost: 1
   stackMax: 3
   appliesTo: skill
@@ -27,11 +27,21 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
-    positive:
-    inflict N Sinking next round;
-    negative:
-    gain N Sinking next round;
+    [On Clash Start]
+    set flag "sinkingBeforeTarget" on item to (target.status.Sinking);
+    set flag "sinkingBeforeSelf" on item to (self.status.Sinking);
+
+    [On Clash Win]
+    require (target.status.Sinking) > (item.flag.sinkingBeforeTarget) then
+      inflict (min(N, 3)) Sinking on target;
+    require (self.status.Sinking) > (item.flag.sinkingBeforeSelf) then
+      inflict (min(N, 3)) Sinking on self;
+
+    [On Clash Lose]
+    require (target.status.Sinking) > (item.flag.sinkingBeforeTarget) then
+      inflict (min(N, 3)) Sinking on target;
+    require (self.status.Sinking) > (item.flag.sinkingBeforeSelf) then
+      inflict (min(N, 3)) Sinking on self;
 effects: []
 sort: 100000
 ownership:
@@ -41,9 +51,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787233598766
-  modifiedTime: 1787233598766
+  modifiedTime: 1789292504596
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.8IsI9UrvhkzYgnjn

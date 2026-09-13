@@ -13,11 +13,21 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: |-
     [On Devastation]
     proc DevastatingHit on attacker targeting self;
-    deal 1d8 hp damage per Devastation to self;
+    deal 1d8[devastation] hp devastation damage per Devastation to self;
     lose all Devastation on self;
 
     [On Gain]
@@ -29,15 +39,6 @@ system:
 
     [On Removed]
     proc Cursed;
-  proc:
-    turnStart: false
-    endOfRound: false
-    actionOrReaction: false
-    attackerBurst: false
-    onHitWhenActorHas: false
-    onHitWhenTargetHas: false
-    alwaysActive: false
-    skillEffect: false
 effects: []
 ownership:
   default: 0
@@ -49,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779621119816
-  modifiedTime: 1787225152599
+  modifiedTime: 1789150418357
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: hY1hZ4lGV0HaZpma
 sort: 175000

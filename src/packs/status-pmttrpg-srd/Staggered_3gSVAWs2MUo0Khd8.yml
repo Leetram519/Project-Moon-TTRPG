@@ -16,9 +16,22 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: |-
     [On Applied]
+    require (self.flag.indomitable_removeStaggered) == 1 then
+      lose all Staggered on self and
+      clear flag "indomitable_removeStaggered" on self;
     set flag "isStaggered" on self to 1;
     deal 5 sp damage to self;
     heal 1 light to self;
@@ -40,9 +53,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785319503000
-  modifiedTime: 1787225221984
+  modifiedTime: 1789155690403
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

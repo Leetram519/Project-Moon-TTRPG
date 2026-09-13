@@ -27,10 +27,13 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: |-
+  easyEffects: >-
     [Start of Round]
+
     let $bars = (min(Charge // 3, N));
-    require ($bars) >= 1 then spend ($bars * 3) Charge to gain ($bars) "Charge Barrier";
+
+    require ($bars) >= 1 then spend ($bars * 3) Charge to gain ($bars) "Charge
+    Barrier";
 effects: []
 sort: 100000
 ownership:

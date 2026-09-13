@@ -4,7 +4,9 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Bind.webp
 system:
   name: ''
-  description: '[Bind] from Effects and this Skill are applied to the target and are activated immediately. This occurs before any Bind skill effect is used.'
+  description: >-
+    [Bind] from Effects and this Skill are applied to the target and are
+    activated immediately. This occurs before any Bind skill effect is used.
   slug: instant-bind
   cost: 4
   stackMax: 1

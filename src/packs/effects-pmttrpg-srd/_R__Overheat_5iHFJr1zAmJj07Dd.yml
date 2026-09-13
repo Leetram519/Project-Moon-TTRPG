@@ -5,7 +5,7 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Strength.webp
 system:
   name: ''
   description: ''
-  slug: r-overheat
+  slug: ''
   cost: 4
   stackMax: 1
   appliesTo: skill
@@ -28,7 +28,9 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Always Active]
+    power up attack 2;
 effects: []
 sort: 0
 ownership:
@@ -41,9 +43,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787170912489
-  modifiedTime: 1787170912489
+  modifiedTime: 1789291442845
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 5iHFJr1zAmJj07Dd
 _key: '!items!5iHFJr1zAmJj07Dd'

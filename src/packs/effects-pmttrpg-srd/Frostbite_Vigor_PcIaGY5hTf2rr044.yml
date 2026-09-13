@@ -30,8 +30,12 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    require (Frostbite) >= (N+2) then
-      power up attack N and power up defense N;
+    require (self.flag.hasFrostbiteVigor) == 1 then
+      require (Frostbite) >= (N+3) then
+        power up attack N and power up defense N;
+    require (self.flag.hasFrostbiteVigor) == 0 then
+      require (Frostbite) >= (N+2) then
+        power up attack N and power up defense N;
 effects: []
 sort: 100000
 ownership:
@@ -46,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787225390419
-  modifiedTime: 1787225467014
+  modifiedTime: 1789292093881
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: PcIaGY5hTf2rr044
 _key: '!items!PcIaGY5hTf2rr044'

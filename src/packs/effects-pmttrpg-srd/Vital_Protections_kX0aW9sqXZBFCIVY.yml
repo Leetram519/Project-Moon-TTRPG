@@ -14,6 +14,8 @@ system:
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -23,7 +25,18 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Taking critical Damage]
+    positive:
+    reduce damage by (N*2)
+    negative:
+    increase damage by (N*2)
+
+    [On Taking devastation Damage]
+    positive:
+    reduce damage by (N*2)
+    negative:
+    increase damage by (N*2)
   allowMultiple: true
 effects: []
 sort: 0
@@ -37,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1780308634956
-  modifiedTime: 1785441344118
+  modifiedTime: 1789150563506
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: kX0aW9sqXZBFCIVY
 _key: '!items!kX0aW9sqXZBFCIVY'

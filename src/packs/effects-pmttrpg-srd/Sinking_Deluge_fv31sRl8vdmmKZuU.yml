@@ -30,12 +30,20 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: |-
+  easyEffects: >-
     [On Sinking Burst]
+
     set flag "delugeMult" on event to 2;
-    require hasFlag "isPanicking" target == 1 then set flag "delugeMult" on event to 3;
-    require hasFlag "isStaggered" target == 1 then set flag "delugeMult" on event to 3;
-    require (target.sp.max) > 0 then require (target.sp) <= 0 then set flag "delugeMult" on event to 3;
+
+    require hasFlag "isPanicking" target == 1 then set flag "delugeMult" on
+    event to 3;
+
+    require hasFlag "isStaggered" target == 1 then set flag "delugeMult" on
+    event to 3;
+
+    require (target.sp.max) > 0 then require (target.sp) <= 0 then set flag
+    "delugeMult" on event to 3;
+
     deal (burst.amount * (event.flag.delugeMult)) hp damage to target;
 effects: []
 sort: 100000

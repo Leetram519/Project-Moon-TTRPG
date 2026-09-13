@@ -30,6 +30,18 @@ system:
   easyEffects: |-
     [On Clash Start]
     power up CHOICE (min(Bleed //f 2, 3));
+
+    [On Combat Start]
+    set flag "hasBleedVigor" on self to 1;
+
+    [On Equip]
+    set flag "hasBleedVigor" on self to 1;
+
+    [On Combat End]
+    clear flag "hasBleedVigor" on self;
+
+    [On Unequip]
+    clear flag "hasBleedVigor" on self;
 effects: []
 sort: 0
 ownership:
@@ -44,7 +56,7 @@ _stats:
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
   createdTime: 1785485127254
-  modifiedTime: 1787388434306
+  modifiedTime: 1789291956578
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: aSQJrC7vRelCZbZ8
 _key: '!items!aSQJrC7vRelCZbZ8'

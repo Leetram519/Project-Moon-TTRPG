@@ -5,7 +5,7 @@ img: >-
   systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Burn/Burn.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 1
   stackMax: 3
@@ -28,7 +28,22 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Clash Start]
+    set flag "burnBeforeTarget" on item to (target.status.Burn);
+    set flag "burnBeforeSelf" on item to (self.status.Burn);
+
+    [On Clash Win]
+    require (target.status.Burn) > (item.flag.burnBeforeTarget) then
+      inflict (min(N, 3)) Bleed on target;
+    require (self.status.Burn) > (item.flag.burnBeforeSelf) then
+      inflict (min(N, 3)) Bleed on self;
+
+    [On Clash Lose]
+    require (target.status.Burn) > (item.flag.burnBeforeTarget) then
+      inflict (min(N, 3)) Bleed on target;
+    require (self.status.Burn) > (item.flag.burnBeforeSelf) then
+      inflict (min(N, 3)) Bleed on self;
 effects: []
 sort: 0
 ownership:
@@ -41,9 +56,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1787171976159
-  modifiedTime: 1787172214989
+  modifiedTime: 1789291633844
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 3vpUQ3w6ZtC4UYvP
 _key: '!items!3vpUQ3w6ZtC4UYvP'

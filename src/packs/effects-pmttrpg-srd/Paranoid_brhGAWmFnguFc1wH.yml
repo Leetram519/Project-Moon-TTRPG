@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Terror.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 4
   stackMax: 1
@@ -25,7 +25,9 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Being Healed SP]
+    reduce heal by (heal.amount //f 2);
 effects: []
 sort: 0
 ownership:
@@ -38,9 +40,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485134516
-  modifiedTime: 1787170613306
+  modifiedTime: 1789291144209
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: brhGAWmFnguFc1wH
 _key: '!items!brhGAWmFnguFc1wH'

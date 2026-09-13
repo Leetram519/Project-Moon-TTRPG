@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Boost.webp
 system:
   name: ''
-  description: '<p><em>Note : This effect isn''t currently automated.</em></p>'
+  description: ''
   slug: ''
   cost: 4
   stackMax: 2
@@ -27,7 +27,22 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Before Dealing Damage]
+    create dialog "Choose Extra Damage Type":
+      slash as "Slash",
+      pierce as "Pierce",
+      blunt as "Blunt"
+      to self;
+
+    [On Dialog Answer slash]
+    convert damage to slash;
+
+    [On Dialog Answer pierce]
+    convert damage to pierce;
+
+    [On Dialog Answer blunt]
+    convert damage to blunt;
   allowMultiple: true
 effects: []
 sort: 0
@@ -41,9 +56,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779651087474
-  modifiedTime: 1787149499899
+  modifiedTime: 1789148652232
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: LyYkGGaHNqDXVnWE
 _key: '!items!LyYkGGaHNqDXVnWE'

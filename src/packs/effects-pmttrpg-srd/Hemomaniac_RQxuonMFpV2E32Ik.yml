@@ -27,20 +27,28 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: |-
+  easyEffects: >-
     [On Clash Win With Attack]
+
     create dialog "Hemomaniac: Transfer Bleed?":
       transferStT as "Transfer from Self to Target",
       transferTtS as "Transfer from Target to Self"
       to self;
 
     [On Dialog Answer transferStT]
+
     let $taken = (min(self.status.Bleed, N));
-    require ($taken) > 0 then inflict ($taken) Bleed on target and lose ($taken) Bleed on self;
+
+    require ($taken) > 0 then inflict ($taken) Bleed on target and lose ($taken)
+    Bleed on self;
+
 
     [On Dialog Answer transferTtS]
+
     let $taken = (min(target.status.Bleed, N));
-    require ($taken) > 0 then gain ($taken) Bleed on self and lose ($taken) Bleed on target;
+
+    require ($taken) > 0 then gain ($taken) Bleed on self and lose ($taken)
+    Bleed on target;
 effects: []
 sort: 100000
 ownership:

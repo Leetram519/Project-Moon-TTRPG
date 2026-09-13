@@ -5,10 +5,17 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Charge.webp
 system:
   name: ''
   description: ''
+  slug: ''
   cost: 2
-  allowMultiple: false
+  stackMax: 1
+  appliesTo: weapon
+  canPositive: true
+  canNegative: false
   procOn: alwaysActive
   procResult: none
+  procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -21,11 +28,48 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  appliesTo: weapon
-  canPositive: true
-  canNegative: false
-  stackMax: 1
-  procResultLocked: false
+  easyEffects: >-
+    [Start of Turn]
+
+    create dialog "Extension Grip":
+      rangeup as "Spend 4 Charge, Range up 1",
+      rangeup_overcharge as "Spend 1 Overcharge, Range up 2"
+      to self;
+
+    [On Dialog Answer rangeup]
+
+    set flag "extensiongrip_rangeup" on self to 1;
+
+    create message "Extension Grip: Will spend 4 Charge on every Clash Start to
+    gain 1 Range." on self;
+
+    range up 1;
+
+
+    [On Dialog Answer rangeup_overcharge]
+
+    set flag "extensiongrip_rangeup_overcharge" on self to 1;
+
+    create message "Extension Grip: Will spend 1 Overcharge on every Clash Start
+    to gain 2 Range." on self;
+
+    range up 2;
+
+
+    [On Clash Start]
+
+    require (self.flag.extensiongrip_rangeup) == 1 then
+      remove 4 Charge;
+    require (self.flag.extensiongrip_rangeup_overcharge) == 1 then
+      remove 1 Overcharge;
+
+    [End of Turn]
+
+    require (self.flag.extensiongrip_rangeup) == 1 then
+      range down 1;
+    require (self.flag.extensiongrip_rangeup_overcharge) == 1 then
+      range down 2;
+  allowMultiple: false
 effects: []
 sort: 0
 ownership:
@@ -36,11 +80,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.5mnBEBoR1bXvejJ5
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779651087474
-  modifiedTime: 1779651087474
+  modifiedTime: 1789149811815
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: a1KJPfv72d6EdPjs
 _key: '!items!a1KJPfv72d6EdPjs'

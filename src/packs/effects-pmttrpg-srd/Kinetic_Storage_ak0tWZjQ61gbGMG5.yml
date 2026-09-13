@@ -5,7 +5,7 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Haste.webp
 system:
   name: ''
   description: ''
-  slug: kinetic-storage
+  slug: ''
   cost: 4
   stackMax: 1
   appliesTo: augment
@@ -14,6 +14,8 @@ system:
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -25,7 +27,16 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [End of Turn]
+    require (self.flag.kineticstorage_remainingmovement) >= 0 then
+      lose (self.flag.kineticstorage_remainingmovement) movement;
+    clear flag "kineticstorage_remainingmovement" on self;
+    set flag "kineticstorage_remainingmovement" on self to (self.movement);
+
+    [Start of Turn]
+    require (self.flag.kineticstorage_remainingmovement) >= 0 then
+      gain (self.flag.kineticstorage_remainingmovement) movement;
 effects: []
 sort: 0
 ownership:
@@ -38,9 +49,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485124306
-  modifiedTime: 1785485124306
+  modifiedTime: 1789154484804
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ak0tWZjQ61gbGMG5
 _key: '!items!ak0tWZjQ61gbGMG5'

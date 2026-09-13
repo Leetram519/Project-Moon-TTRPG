@@ -5,10 +5,10 @@ _id: OHLbFNzcGHwGiACw
 img: systems/projectmoonttrpg/assets/icons/Statuses/Combo.webp
 system:
   name: ''
-  description: '<p><em>Note : This effect isn''t currently automated.</em></p>'
+  description: ''
   slug: ''
   cost: 1
-  stackMax: 4
+  stackMax: 5
   appliesTo: weapon
   canPositive: true
   canNegative: true
@@ -26,7 +26,12 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Always Active]
+    positive:
+    range up (N*2);
+    negative:
+    range down (N*2);
   allowMultiple: true
 effects: []
 sort: 0
@@ -40,8 +45,8 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1779651087474
-  modifiedTime: 1787149552940
+  modifiedTime: 1789148478550
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!OHLbFNzcGHwGiACw'

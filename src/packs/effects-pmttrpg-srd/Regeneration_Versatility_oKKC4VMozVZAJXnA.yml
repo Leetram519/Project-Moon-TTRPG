@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Heal%20Efficiency.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 4
   stackMax: 1
@@ -27,7 +27,25 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Being Healed]
+    require (self.flag.healFromRegenHP) == 1 then
+      create dialog "Detected Heal from Regen HP":
+        convertToST as "Convert Heal to Regen ST",
+        convertToHP as "Convert Heal to Regen HP"
+        on self;
+
+    require (self.flag.healFromRegenST) == 1 then
+      create dialog "Detected Heal from Regen ST":
+        convertToST as "Convert Heal to Regen ST",
+        convertToHP as "Convert Heal to Regen HP"
+        on self;
+
+    [On Dialog Answer convertToST]
+    convert heal to st;
+
+    [On Dialog Answer convertToHP]
+    convert heal to hp;
 effects: []
 sort: 0
 ownership:
@@ -40,9 +58,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485136628
-  modifiedTime: 1787167995847
+  modifiedTime: 1789155501924
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: oKKC4VMozVZAJXnA
 _key: '!items!oKKC4VMozVZAJXnA'

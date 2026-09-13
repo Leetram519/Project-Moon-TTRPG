@@ -4,7 +4,7 @@ type: effect
 img: systems/projectmoonttrpg/assets/icons/Statuses/Panic.webp
 system:
   name: ''
-  description: '<p><em>Note: This effect is not yet automated.</em></p>'
+  description: ''
   slug: ''
   cost: 2
   stackMax: 3
@@ -25,7 +25,10 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On Dealing Damage]
+    require (target.hp) <= 0 then
+      gain N Feeble next round;
 effects: []
 sort: 0
 ownership:
@@ -38,9 +41,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485134517
-  modifiedTime: 1787170641649
+  modifiedTime: 1789291211775
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 3KD1n3DV1Ui4D7wb
 _key: '!items!3KD1n3DV1Ui4D7wb'

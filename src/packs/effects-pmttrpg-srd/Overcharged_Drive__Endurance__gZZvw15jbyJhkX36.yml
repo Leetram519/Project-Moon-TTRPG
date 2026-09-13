@@ -5,7 +5,7 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Overcharge.webp
 system:
   name: ''
   description: ''
-  slug: overcharged-drive-endurance
+  slug: ''
   cost: 2
   stackMax: 1
   appliesTo: augment
@@ -14,6 +14,8 @@ system:
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -23,7 +25,9 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [On gainedOvercharge]
+    gain 1 Endurance next round;
 effects: []
 sort: 0
 ownership:
@@ -36,9 +40,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
+  systemVersion: 0.1.0
   createdTime: 1785485124307
-  modifiedTime: 1785485124307
+  modifiedTime: 1789153938255
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: gZZvw15jbyJhkX36
 _key: '!items!gZZvw15jbyJhkX36'

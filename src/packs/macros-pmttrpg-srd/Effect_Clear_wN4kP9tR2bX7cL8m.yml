@@ -3,16 +3,21 @@ type: script
 img: >-
   systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Protection/Protection.webp
 scope: global
-command: |-
+command: >-
   const tokens = canvas.tokens?.controlled ?? [];
+
   if (!tokens.length) {
     ui.notifications.warn("Select one or more tokens to clear effects.");
     return;
   }
 
+
   const seen = new Set();
+
   const cleared = [];
+
   const skipped = [];
+
 
   for (const token of tokens) {
     const actor = token.actor;
@@ -31,8 +36,12 @@ command: |-
     cleared.push(actor.name);
   }
 
-  if (cleared.length) ui.notifications.info(`Cleared effects: ${cleared.join(", ")}`);
-  if (skipped.length) ui.notifications.warn(`Could not clear effects: ${skipped.join(", ")}`);
+
+  if (cleared.length) ui.notifications.info(`Cleared effects: ${cleared.join(",
+  ")}`);
+
+  if (skipped.length) ui.notifications.warn(`Could not clear effects:
+  ${skipped.join(", ")}`);
 ownership:
   default: 0
 flags: {}
