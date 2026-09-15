@@ -45,6 +45,7 @@ import {
   isChatUpdatePayload,
 } from "./combat/clash-chat.js";
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
+import { MigrationList, MigrationRunner } from "./migration/index.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
@@ -138,6 +139,14 @@ Hooks.once("init", async function() {
   /**
    * Track the system version upon which point a migration was last applied
    */
+  game.settings.register("projectmoonttrpg", "worldSchemaVersion", {
+    name: "World Schema Version",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+
   game.settings.register("projectmoonttrpg", "systemMigrationVersion", {
     name: "System Migration Version",
     scope: "world",
@@ -188,6 +197,30 @@ Hooks.once("init", async function() {
 });
 
 Hooks.once("ready", async function() {
+  if (!game.user?.isGM) {
+    registerStatusTray();
+    registerChoiceDialogSocket();
+    registerGmRouteSocket();
+    return;
+  }
+
+  const migrationRunner = new MigrationRunner(MigrationList.constructAll());
+  if (migrationRunner.needsMigration()) {
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("PMTTRPG.Migrations.ConfirmTitle") },
+      content: `<p>${game.i18n.localize("PMTTRPG.Migrations.ConfirmText")}</p>`,
+      rejectClose: false,
+      modal: true,
+    });
+
+    if (!confirmed) return;
+
+    ui.notifications?.info?.(game.i18n.localize("PMTTRPG.Migrations.Starting"), {
+      format: { version: game.system.version },
+    });
+    await migrationRunner.runMigration();
+  }
+
   registerStatusTray();
   registerChoiceDialogSocket();
   registerGmRouteSocket();
