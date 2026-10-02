@@ -1,4 +1,5 @@
 import { evaluateNumericExpression } from "./easy-effects/numeric-expr.js";
+import { resolveTokenDocument } from "./acting-user.js";
 
 export class PMTTRPGUtility {
   static isEmpty(arg) {
@@ -168,16 +169,18 @@ export class PMTTRPGUtility {
  * @returns {{ token: TokenDocument|null, actor: Actor|null }}
  */
   static resolveTokenAndActor(combatant) {
-    const token = combatant.token ?? canvas.scene?.tokens.get(combatant.tokenId) ?? null;
-
-    if (!token) {
-      const fallbackActor = game.actors.get(combatant.actorId) ?? null;
-      return { token: null, actor: fallbackActor };
+    if (!combatant) return { token: null, actor: null };
+    const tokenId = combatant.tokenId ?? combatant.token?.id ?? null;
+    const token = combatant.token ?? resolveTokenDocument(tokenId) ?? null;
+    if (token?.actor) return { token, actor: token.actor };
+    if (tokenId) {
+      const actor = combatant.actor?.isToken ? combatant.actor : null;
+      return { token: token ?? actor?.token ?? null, actor };
     }
-
-    const actor = token.actor ?? null;
-
-    return { token, actor };
+    return {
+      token: null,
+      actor: combatant.actor ?? game.actors.get(combatant.actorId) ?? null,
+    };
   }
 
   static get nightmode() {

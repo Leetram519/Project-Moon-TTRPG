@@ -34,7 +34,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     gain (target.status.Smoke) Smoke;
     lose all Smoke on target;
 effects: []

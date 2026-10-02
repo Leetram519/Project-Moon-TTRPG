@@ -1,6 +1,8 @@
 import { PMTTRPGUtility } from "../utility.js";
 import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
 import { emitCombatEnd, emitCombatStart, emitEndOfRound, emitEndOfTurn, emitStartOfRound, emitTurnStart } from "../easy-effects/registry.js";
+import { actorIdentityKey } from "../easy-effects/burst-roles.js";
+import { hasAnotherCombatantForActor, uniqueActorEntries } from "./combatant-match.js";
 import { beginCombatLifecyclePass, endCombatLifecyclePass } from "../status/lifecycle-pass.js";
 import { rollInitiative } from "../targeting.js";
 import {
@@ -22,7 +24,7 @@ function combatHasBegun(combat) {
   return Boolean(combat?.started || Number(combat?.round ?? 0) >= 1);
 }
 
-function actorIdSet(map, combat) {
+function identitySet(map, combat) {
   let set = map.get(combat);
   if (!set) {
     set = new Set();
@@ -31,38 +33,38 @@ function actorIdSet(map, combat) {
   return set;
 }
 
-function rememberCombatStart(combat, actorId) {
-  if (!combat || !actorId) return false;
-  const set = actorIdSet(combatStartActors, combat);
-  if (set.has(actorId)) return false;
-  set.add(actorId);
+function rememberCombatStart(combat, key) {
+  if (!combat || !key) return false;
+  const set = identitySet(combatStartActors, combat);
+  if (set.has(key)) return false;
+  set.add(key);
   return true;
 }
 
-function forgetCombatStart(combat, actorId) {
-  if (!combat || !actorId) return;
-  combatStartActors.get(combat)?.delete(actorId);
+function forgetCombatStart(combat, key) {
+  if (!combat || !key) return;
+  combatStartActors.get(combat)?.delete(key);
 }
 
-function rememberCombatEnd(combat, actorId) {
-  if (!combat || !actorId) return false;
-  const set = actorIdSet(combatEndActors, combat);
-  if (set.has(actorId)) return false;
-  set.add(actorId);
+function rememberCombatEnd(combat, key) {
+  if (!combat || !key) return false;
+  const set = identitySet(combatEndActors, combat);
+  if (set.has(key)) return false;
+  set.add(key);
   return true;
 }
 
-function forgetCombatEnd(combat, actorId) {
-  if (!combat || !actorId) return;
-  combatEndActors.get(combat)?.delete(actorId);
+function forgetCombatEnd(combat, key) {
+  if (!combat || !key) return;
+  combatEndActors.get(combat)?.delete(key);
 }
 
-function otherCombatantForActor(combat, actorId, exceptCombatantId) {
-  for (const entry of combat?.combatants ?? []) {
-    if (exceptCombatantId && entry.id === exceptCombatantId) continue;
-    if (entry.actor?.id === actorId) return true;
-  }
-  return false;
+function actorFields(actor) {
+  return {
+    actor,
+    actorId: actor?.id ?? null,
+    actorUuid: actor?.uuid ?? null,
+  };
 }
 
 function resolveCombatUserId(userId) {
@@ -80,14 +82,14 @@ export async function emitCombatStartForCombatant(combat, combatant, userId) {
   if (!combatHasBegun(combat)) return;
   const actor = combatant?.actor;
   if (!actor) return;
-  forgetCombatEnd(combat, actor.id);
-  if (!rememberCombatStart(combat, actor.id)) return;
+  const key = actorIdentityKey(actor);
+  forgetCombatEnd(combat, key);
+  if (!rememberCombatStart(combat, key)) return;
 
   beginCombatLifecyclePass();
   try {
     await emitCombatStart({
-      actor,
-      actorId: actor.id,
+      ...actorFields(actor),
       combat,
       combatant,
     });
@@ -109,16 +111,16 @@ export async function emitCombatEndForCombatant(combat, combatant, userId) {
   if (combatant && combatEndCombatants.has(combatant)) return;
   const actor = combatant?.actor;
   if (!actor) return;
-  if (otherCombatantForActor(combat, actor.id, combatant.id)) return;
+  if (hasAnotherCombatantForActor(combat.combatants, actor, combatant.id)) return;
   if (combatant) combatEndCombatants.add(combatant);
-  forgetCombatStart(combat, actor.id);
-  if (!rememberCombatEnd(combat, actor.id)) return;
+  const key = actorIdentityKey(actor);
+  forgetCombatStart(combat, key);
+  if (!rememberCombatEnd(combat, key)) return;
 
   beginCombatLifecyclePass();
   try {
     await emitCombatEnd({
-      actor,
-      actorId: actor.id,
+      ...actorFields(actor),
       combat,
       combatant,
     });
@@ -141,16 +143,12 @@ export async function emitCombatEndForEncounter(combat, userId) {
 
   beginCombatLifecyclePass();
   try {
-    const seen = new Set();
-    for (const combatant of combat.combatants ?? []) {
-      const actor = combatant?.actor;
-      if (!actor || seen.has(actor.id)) continue;
-      seen.add(actor.id);
-      if (!rememberCombatEnd(combat, actor.id)) continue;
+    for (const combatant of uniqueActorEntries(combat.combatants)) {
+      const actor = combatant.actor;
+      if (!rememberCombatEnd(combat, actorIdentityKey(actor))) continue;
       try {
         await emitCombatEnd({
-          actor,
-          actorId: actor.id,
+          ...actorFields(actor),
           combat,
           combatant,
         });
@@ -526,12 +524,8 @@ export class CombatSidebarPMTTRPG {
       if (game.user.id !== userId) return;
       try {
         const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
-        const seen = new Set();
-        for (const combatant of combat.combatants ?? []) {
-          const actor = combatant?.actor;
-          if (!actor || seen.has(actor.id)) continue;
-          seen.add(actor.id);
-          await runAsOwnerOrGM(actor, "clearRecycledEvade");
+        for (const combatant of uniqueActorEntries(combat.combatants)) {
+          await runAsOwnerOrGM(combatant.actor, "clearRecycledEvade");
         }
       } catch (error) {
         console.warn("[PMTTRPG] recycled evade combat-end clear failed", error);
@@ -569,14 +563,9 @@ export class CombatSidebarPMTTRPG {
         const current = { turn: combat.turn, round: combat.round };
 
         const eachCombatActor = async (fn) => {
-          const seenActors = new Set();
-          for (const combatant of combat.combatants) {
-            const actor = combatant?.actor;
-            if (!actor || seenActors.has(actor.id)) continue;
-            seenActors.add(actor.id);
+          for (const combatant of uniqueActorEntries(combat.combatants)) {
             await fn({
-              actor,
-              actorId: actor.id,
+              ...actorFields(combatant.actor),
               combat,
               combatant,
               previous: snapshot,
@@ -591,8 +580,7 @@ export class CombatSidebarPMTTRPG {
         const previousActor = previousCombatant?.actor ?? null;
         if (prevRound >= 1 && previousActor && game.user.id === userId) {
           const endTurnPayload = {
-            actor: previousActor,
-            actorId: previousActor.id,
+            ...actorFields(previousActor),
             combat,
             combatant: previousCombatant,
             previous: snapshot,
@@ -651,8 +639,7 @@ export class CombatSidebarPMTTRPG {
         if (currentCombatant?.actor) {
           const turnActor = currentCombatant.actor;
           const turnPayload = {
-            actor: turnActor,
-            actorId: turnActor.id,
+            ...actorFields(turnActor),
             combat,
             combatant: currentCombatant,
             previous: snapshot,

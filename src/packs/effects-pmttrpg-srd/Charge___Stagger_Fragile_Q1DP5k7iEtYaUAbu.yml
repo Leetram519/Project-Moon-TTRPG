@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (N*4) Charge to inflict (N) "Stagger Fragile" next round;
 effects: []
 sort: 3500000

@@ -29,7 +29,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     inflict (N) Ruin and 
       gain (N) Poise;
 effects: []

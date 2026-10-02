@@ -1,4 +1,5 @@
 import { PMTTRPGUtility } from "../utility.js";
+import { actorTokenPlaceables } from "../acting-user.js";
 import { PMTTRPGRolls } from "../rolls.js";
 import { getRankFromLevel } from "../actor/progression.js";
 import { computeEffectSummary, normalizeEffectEntries } from "../effects/effect-summary.js";
@@ -15,7 +16,8 @@ import {
   buildDeclaredSkillTemplateData,
   promptDeclareSkillDialog,
 } from "./declare-skill.js";
-import { applyDiceMaxFloor, formatDiceFormula } from "../easy-effects/dice-formula.js";
+import { applyCombatDie } from "../easy-effects/dice-formula.js";
+import { resolveDiceFormula } from "../easy-effects/nouns.js";
 import {
   emitItemEquipped,
   emitItemUnequipped,
@@ -256,17 +258,22 @@ export class ItemPMTTRPG extends Item {
       const local = getItemAlwaysActiveCombatMods(itemData, actorData);
       data.alwaysActiveCombatMods = local;
       const eeAttackMax = Number(eeMods?.attackMax ?? 0) + Number(local.attackMax ?? 0);
+      const eeAttackAmount = Number(eeMods?.attackAmount ?? 0) + Number(local.attackAmount ?? 0);
       dicePowerFromAttack += Number(local.attackPower ?? 0);
-      const { sides: dieSides, powerAdjust: maxFloorPower } = applyDiceMaxFloor(
-        baseDieSides,
-        diceMaxBonus + eeAttackMax,
-      );
-      const dicePowerTotal = dicePowerFromHand + dicePowerFromAttack + maxFloorPower;
-      data.offensiveDiceComputed = formatDiceFormula(1, dieSides, dicePowerTotal);
+      const attackFormula = resolveDiceFormula("attack", local, eeMods);
+      const built = applyCombatDie({
+        baseCount: attackFormula?.count ?? 1,
+        baseSides: attackFormula?.sides ?? baseDieSides,
+        basePower: attackFormula?.power ?? 0,
+        amount: eeAttackAmount,
+        max: diceMaxBonus + eeAttackMax,
+        power: dicePowerFromHand + dicePowerFromAttack,
+      });
+      data.offensiveDiceComputed = built.formula;
       data.diceMaxBonus = diceMaxBonus + eeAttackMax;
       data.dicePowerFromHand = dicePowerFromHand;
       data.dicePowerFromAttack = dicePowerFromAttack;
-      data.dicePowerTotal = dicePowerTotal;
+      data.dicePowerTotal = built.power;
       data.range = baseRange + rangeBonus + eeRangeUp;
 
       const rank = Number(data.rank ?? 0);
@@ -331,17 +338,31 @@ export class ItemPMTTRPG extends Item {
       const blockMaxFromEffects = Number(eeMods?.blockMax ?? 0) + Number(local.blockMax ?? 0);
       const evadeMaxFromEffects = Number(eeMods?.evadeMax ?? 0) + Number(local.evadeMax ?? 0);
 
-      const blockMaxApplied = applyDiceMaxFloor(blockBaseSides, blockMaxFromEffects);
-      const evadeMaxApplied = applyDiceMaxFloor(evadeBaseSides, evadeMaxFromEffects);
-      const blockTotal = blockPower + tem + blockFromEffects + blockMaxApplied.powerAdjust;
-      const evadeTotal = evadePower + ins + evadeFromEffects + evadeMaxApplied.powerAdjust;
+      const blockFormula = resolveDiceFormula("block", local, eeMods);
+      const evadeFormula = resolveDiceFormula("evade", local, eeMods);
+      const blockBuilt = applyCombatDie({
+        baseCount: blockFormula?.count ?? 1,
+        baseSides: blockFormula?.sides ?? blockBaseSides,
+        basePower: blockFormula?.power ?? 0,
+        amount: Number(eeMods?.blockAmount ?? 0) + Number(local.blockAmount ?? 0),
+        max: blockMaxFromEffects,
+        power: blockPower + tem + blockFromEffects,
+      });
+      const evadeBuilt = applyCombatDie({
+        baseCount: evadeFormula?.count ?? 1,
+        baseSides: evadeFormula?.sides ?? evadeBaseSides,
+        basePower: evadeFormula?.power ?? 0,
+        amount: Number(eeMods?.evadeAmount ?? 0) + Number(local.evadeAmount ?? 0),
+        max: evadeMaxFromEffects,
+        power: evadePower + ins + evadeFromEffects,
+      });
 
       data.blockDicePower = blockPower;
       data.evadeDicePower = evadePower;
       data.dicePowerFromTemperance = tem;
       data.dicePowerFromInsight = ins;
-      data.blockDiceComputed = formatDiceFormula(1, blockMaxApplied.sides, blockTotal);
-      data.evadeDiceComputed = formatDiceFormula(1, evadeMaxApplied.sides, evadeTotal);
+      data.blockDiceComputed = blockBuilt.formula;
+      data.evadeDiceComputed = evadeBuilt.formula;
 
       data.resistanceTypes = {
         slash: 'PMTTRPG.DamageTypeSlash',
@@ -682,7 +703,7 @@ export class ItemPMTTRPG extends Item {
         const targeting = game.projectmoonttrpg?.targeting;
         const chosenTarget = targeting ? await targeting.promptTargetSelection({
           actor: this.actor,
-          token: this.actor.getActiveTokens(true)[0] ?? null,
+          token: actorTokenPlaceables(this.actor)[0] ?? null,
           title: this.name,
           sourceName: this.name,
           sourceImg: this.img,

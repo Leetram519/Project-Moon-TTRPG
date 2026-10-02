@@ -29,7 +29,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     inflict (N) Bind next round and 
       inflict (N) Frostbite;
 effects: []

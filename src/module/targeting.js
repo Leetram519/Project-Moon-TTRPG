@@ -89,7 +89,8 @@ function resolveSelfTokenDocument(actor, tokenDocument = null) {
   const sceneToken = canvas.scene?.tokens.find(t => t.actor === actor) ?? null;
   if (sceneToken) return sceneToken;
 
-  return actor?.getActiveTokens(false, true)[0] ?? null;
+  if (actor?.isToken) return null;
+  return actor?.getActiveTokens?.(true, true)?.[0] ?? null;
 }
 
 function buildCombatantTarget(combatant, { actorId = null, selfTokenDocument = null, weaponRange = 1 } = {}) {
@@ -393,6 +394,7 @@ export function buildAttackContextPayload({ actor = null, item = null, roll = nu
   const payload = {
     actor,
     actorId: actor?.id ?? null,
+    tokenId: actor?.token?.id ?? null,
     item,
     itemId: item?.id ?? null,
     roll,

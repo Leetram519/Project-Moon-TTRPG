@@ -10,6 +10,7 @@ import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
 import { applyStatusFromDrop } from "../apps/status-drop-dialog.js";
 import { buildEffectiveResistanceDisplay, DAMAGE_TYPES } from "../damage-application.js";
 import { getDiceType } from "../integrations/dice-so-nice.js";
+import { sameActor } from "../easy-effects/burst-roles.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -1308,7 +1309,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     const droppedItem = await Item.fromDropData(dropData);
     const targetItem = this.actor.items.get(targetRow.dataset.itemId);
     if (!droppedItem || !targetItem) return false;
-    if (droppedItem.parent?.id !== this.actor.id) return false;
+    if (!sameActor(droppedItem.parent, this.actor)) return false;
     if (!["weapon", "outfit", "skill", "tool"].includes(droppedItem.type)) return false;
     if (droppedItem.type !== targetItem.type) return false;
 
@@ -1318,7 +1319,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
   /** @override */
   async _onDropItem(event, item) {
     if (!item) return null;
-    if (item.parent?.id === this.actor.id) return null;
+    if (sameActor(item.parent, this.actor)) return null;
 
     if (item.type === "status") {
       return applyStatusFromDrop(this.actor, item, event);

@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
+    [On Clash Start with CHOICE]
     require (target.status.Burn) >= 2 then power up CHOICE 1;
 effects: []
 sort: 0

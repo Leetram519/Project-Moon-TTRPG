@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend N Smoke on target to inflict (N*2) Burn;
 effects: []
 sort: 0

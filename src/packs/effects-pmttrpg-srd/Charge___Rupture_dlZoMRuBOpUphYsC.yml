@@ -26,7 +26,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (N) Charge to inflict (N) Rupture next round;
 effects: []
 sort: 1800000

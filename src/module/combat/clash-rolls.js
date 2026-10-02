@@ -1,5 +1,5 @@
-import { applyDiceMaxFloor, formatDiceFormula} from "../easy-effects/dice-formula.js";
-import { addCombatDiceMods, pickCombatDiceMods } from "../easy-effects/nouns.js";
+import { applyCombatDie, formatDiceFormula } from "../easy-effects/dice-formula.js";
+import { addCombatDiceMods, pickCombatDiceMods, resolveDiceFormula } from "../easy-effects/nouns.js";
 import { getItemAlwaysActiveCombatMods } from "../easy-effects/registry.js";
 import { normalizeWeaponProperties } from "../item/weapon-properties.js";
 
@@ -89,6 +89,16 @@ function usedKitCombatDiceMods(actor, hostItem, skillItem) {
   return addCombatDiceMods(itemCombatDiceMods(actor, hostItem), itemCombatDiceMods(actor, skillItem));
 }
 
+function dieBase(die, sources, fallbackSides) {
+  const formula = resolveDiceFormula(die, ...sources);
+  return {
+    count: formula?.count ?? 1,
+    sides: formula?.sides ?? fallbackSides,
+    power: formula?.power ?? 0,
+    flavor: formula?.flavor ?? null,
+  };
+}
+
 /**
  * Returns the computed evade dice string from the actor's equipped outfit,
  * falling back to the system default.
@@ -98,7 +108,6 @@ function usedKitCombatDiceMods(actor, hostItem, skillItem) {
  */
 export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}, skillItem = null) {
   const rows = [];
-  const baseSides = 10;
   const { formProperty, handProperty } = normalizeWeaponProperties(weaponItem?.system);
   const formMax = formMaxBonus(formProperty);
   const handPower = handPowerBonus(handProperty);
@@ -107,12 +116,19 @@ export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}, sk
   const eeMods = actor?.system?.attributes?.easyEffectsMods ?? {};
   const local = usedKitCombatDiceMods(actor, weaponItem, skillItem);
   const always = addCombatDiceMods(eeMods, local);
+  const base = dieBase("attack", [
+    itemCombatDiceMods(actor, skillItem),
+    itemCombatDiceMods(actor, weaponItem),
+    eeMods,
+  ], 10);
   const alwaysPower = Number(always.attackPower ?? 0) || 0;
   const alwaysMax = Number(always.attackMax ?? 0) || 0;
+  const alwaysAmount = Number(always.attackAmount ?? 0) || 0;
   const clashPower = Number(clashBonuses.attackPower ?? 0) || 0;
   const clashMax = Number(clashBonuses.attackMax ?? 0) || 0;
+  const clashAmount = Number(clashBonuses.attackAmount ?? 0) || 0;
 
-  pushRow(rows, "base", "PMTTRPG.Clash.Breakdown.BaseDie", `1d${baseSides}`);
+  pushRow(rows, "base", "PMTTRPG.Clash.Breakdown.BaseDie", formatDiceFormula(base.count, base.sides, base.power));
   if (formMax) {
     pushRow(
       rows,
@@ -153,6 +169,14 @@ export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}, sk
       `${signed(alwaysMax)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceMax")}`,
     );
   }
+  if (alwaysAmount) {
+    pushRow(
+      rows,
+      "alwaysAmount",
+      "PMTTRPG.Clash.Breakdown.AlwaysActiveAmount",
+      `${signed(alwaysAmount)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceAmount")}`,
+    );
+  }
   if (clashPower) {
     pushRow(
       rows,
@@ -169,22 +193,41 @@ export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}, sk
       `${signed(clashMax)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceMax")}`,
     );
   }
+  if (clashAmount) {
+    pushRow(
+      rows,
+      "clashAmount",
+      "PMTTRPG.Clash.Breakdown.ClashStartAmount",
+      `${signed(clashAmount)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceAmount")}`,
+    );
+  }
 
-  const floored = applyDiceMaxFloor(baseSides, formMax + alwaysMax + clashMax);
-  if (floored.powerAdjust) {
+  const built = applyCombatDie({
+    baseCount: base.count,
+    baseSides: base.sides,
+    basePower: base.power,
+    amount: alwaysAmount + clashAmount,
+    max: formMax + alwaysMax + clashMax,
+    power: handPower + rank + alwaysPower + clashPower,
+  });
+  if (built.powerAdjust) {
     pushRow(
       rows,
       "maxFloor",
       "PMTTRPG.Clash.Breakdown.MaxFloor",
-      `${signed(floored.powerAdjust)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
+      `${signed(built.powerAdjust)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
     );
   }
 
-  const totalPower = handPower + rank + alwaysPower + clashPower + floored.powerAdjust;
-  const formula = formatDiceFormula(1, floored.sides, totalPower);
-  pushRow(rows, "formula", "PMTTRPG.Clash.Breakdown.Formula", formula, { final: true });
+  pushRow(rows, "formula", "PMTTRPG.Clash.Breakdown.Formula", built.formula, { final: true });
 
-  return { formula, breakdown: rows, sides: floored.sides, power: totalPower };
+  return {
+    formula: built.formula,
+    breakdown: rows,
+    sides: built.sides,
+    power: built.power,
+    flavor: base.flavor,
+  };
 }
 
 /**
@@ -208,12 +251,20 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}, skillItem 
   const eeMods = actor?.system?.attributes?.easyEffectsMods ?? {};
   const local = usedKitCombatDiceMods(actor, outfit, skillItem);
   const always = addCombatDiceMods(eeMods, local);
+  const die = isEvade ? "evade" : "block";
+  const base = dieBase(die, [
+    itemCombatDiceMods(actor, skillItem),
+    itemCombatDiceMods(actor, outfit),
+    eeMods,
+  ], baseSides);
   const alwaysPower = Number(isEvade ? always.evadePower : always.blockPower) || 0;
   const alwaysMax = Number(isEvade ? always.evadeMax : always.blockMax) || 0;
+  const alwaysAmount = Number(isEvade ? always.evadeAmount : always.blockAmount) || 0;
   const clashPower = Number(isEvade ? clashBonuses.evadePower : clashBonuses.blockPower) || 0;
   const clashMax = Number(isEvade ? clashBonuses.evadeMax : clashBonuses.blockMax) || 0;
+  const clashAmount = Number(isEvade ? clashBonuses.evadeAmount : clashBonuses.blockAmount) || 0;
 
-  pushRow(rows, "base", "PMTTRPG.Clash.Breakdown.BaseDie", `1d${baseSides}`);
+  pushRow(rows, "base", "PMTTRPG.Clash.Breakdown.BaseDie", formatDiceFormula(base.count, base.sides, base.power));
   if (propPower) {
     const propKey = prop === "swift" ? "PMTTRPG.OutfitPropertySwift" : "PMTTRPG.OutfitPropertyArmored";
     pushRow(
@@ -247,6 +298,14 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}, skillItem 
       `${signed(alwaysMax)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceMax")}`,
     );
   }
+  if (alwaysAmount) {
+    pushRow(
+      rows,
+      "alwaysAmount",
+      "PMTTRPG.Clash.Breakdown.AlwaysActiveAmount",
+      `${signed(alwaysAmount)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceAmount")}`,
+    );
+  }
   if (clashPower) {
     pushRow(
       rows,
@@ -263,22 +322,41 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}, skillItem 
       `${signed(clashMax)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceMax")}`,
     );
   }
+  if (clashAmount) {
+    pushRow(
+      rows,
+      "clashAmount",
+      "PMTTRPG.Clash.Breakdown.ClashStartAmount",
+      `${signed(clashAmount)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DiceAmount")}`,
+    );
+  }
 
-  const floored = applyDiceMaxFloor(baseSides, alwaysMax + clashMax);
-  if (floored.powerAdjust) {
+  const built = applyCombatDie({
+    baseCount: base.count,
+    baseSides: base.sides,
+    basePower: base.power,
+    amount: alwaysAmount + clashAmount,
+    max: alwaysMax + clashMax,
+    power: propPower + stat + alwaysPower + clashPower,
+  });
+  if (built.powerAdjust) {
     pushRow(
       rows,
       "maxFloor",
       "PMTTRPG.Clash.Breakdown.MaxFloor",
-      `${signed(floored.powerAdjust)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
+      `${signed(built.powerAdjust)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
     );
   }
 
-  const totalPower = propPower + stat + alwaysPower + clashPower + floored.powerAdjust;
-  const formula = formatDiceFormula(1, floored.sides, totalPower);
-  pushRow(rows, "formula", "PMTTRPG.Clash.Breakdown.Formula", formula, { final: true });
+  pushRow(rows, "formula", "PMTTRPG.Clash.Breakdown.Formula", built.formula, { final: true });
 
-  return { formula, breakdown: rows, sides: floored.sides, power: totalPower };
+  return {
+    formula: built.formula,
+    breakdown: rows,
+    sides: built.sides,
+    power: built.power,
+    flavor: base.flavor,
+  };
 }
 /**
  * Builds and evaluates a Roll, returning a RollResult.
@@ -410,7 +488,13 @@ function rollDataForActor(actor) {
 export async function rollAttack(actor, weaponItem, bonuses = {}, options = {}) {
   const built = buildOffensiveDiceParts(actor, weaponItem, bonuses, options.skillItem);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, weaponItem.system.damageType);
+  return evaluateWithRollMode(
+    built.formula,
+    rollDataForActor(actor),
+    built.breakdown,
+    mode,
+    built.flavor || weaponItem?.system?.damageType,
+  );
 }
 
 /**
@@ -423,7 +507,7 @@ export async function rollAttack(actor, weaponItem, bonuses = {}, options = {}) 
 export async function rollEvade(actor, bonuses = {}, options = {}) {
   const built = buildDefenseDiceParts(actor, "evade", bonuses, options.skillItem);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, "evade");
+  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, built.flavor || "evade");
 }
 
 /**
@@ -436,7 +520,7 @@ export async function rollEvade(actor, bonuses = {}, options = {}) {
 export async function rollBlock(actor, bonuses = {}, options = {}) {
   const built = buildDefenseDiceParts(actor, "block", bonuses, options.skillItem);
   const mode = resolveClashRollMode(bonuses, options);
-  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, "block");
+  return evaluateWithRollMode(built.formula, rollDataForActor(actor), built.breakdown, mode, built.flavor || "block");
 }
 
 /**

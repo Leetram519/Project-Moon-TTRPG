@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     positive:
     inflict N Rupture next round;
     negative:

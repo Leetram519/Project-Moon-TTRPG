@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: >-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
 
     create dialog "Galvanic Pulse":
       galvanicfeeble as "Consume 10 Charge: Inflict 1 Feeble",

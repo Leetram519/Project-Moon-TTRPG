@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     inflict (N) Feeble next round and 
       inflict (N) Disarm next round;
 effects: []

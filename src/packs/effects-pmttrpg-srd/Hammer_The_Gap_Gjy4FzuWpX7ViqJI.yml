@@ -29,7 +29,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     inflict (N*2) Rupture next round and 
       inflict (N) Tremor next round;
 effects: []

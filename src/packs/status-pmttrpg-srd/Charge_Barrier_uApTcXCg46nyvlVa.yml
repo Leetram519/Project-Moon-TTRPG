@@ -22,7 +22,7 @@ system:
   origin: ''
   customNotes: ''
   easyEffects: |-
-    [Turn Start]
+    [Start of Round]
     gain (3 * "Charge Barrier") tempHp;
     proc ChargeBarrierProc on self;
 

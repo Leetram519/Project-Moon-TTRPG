@@ -1,4 +1,5 @@
 import { groupStatuses, onStatusItemChange } from "../status/group-statuses.js";
+import { actorTokenPlaceables } from "../acting-user.js";
 import { applyStatusFromDrop } from "./status-drop-dialog.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -182,7 +183,7 @@ function tokenAtPoint(x, y) {
 
 function showStatusScrollingText(actor, statusName, added, amount = 1) {
   if (!canvas.ready || !actor) return;
-  const tokens = actor.getActiveTokens(true);
+  const tokens = actorTokenPlaceables(actor);
   if (!tokens.length) return;
 
   const n = Math.max(1, Math.trunc(Number(amount) || 1));

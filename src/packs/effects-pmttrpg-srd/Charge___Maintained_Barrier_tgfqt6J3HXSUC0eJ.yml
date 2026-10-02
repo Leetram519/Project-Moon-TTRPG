@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     gain 1 "Maintained Barrier";
 effects: []
 sort: 1700000

@@ -26,7 +26,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (N*2) Charge to inflict (N) Tremor next round;
 effects: []
 sort: 2000000

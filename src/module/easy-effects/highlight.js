@@ -42,6 +42,7 @@ const KEYWORDS = new Set([
   "round", "pendingroll", "flag",
   "status", "uuid", "name", "id", "origin",
   "true", "false",
+  "formula",
 ]);
 
 const WORD_RE = /^[A-Za-z_][A-Za-z0-9_]*/;
@@ -87,26 +88,42 @@ export function highlightEasyEffects(source) {
 
   let out = "";
   let i = 0;
+  let lineStart = true;
 
   while (i < text.length) {
     const ch = text[i];
+
+    if (ch === "\n") {
+      out += "\n";
+      i++;
+      lineStart = true;
+      continue;
+    }
+
+    if (ch === " " || ch === "\t" || ch === "\r") {
+      out += escapeHtml(ch);
+      i++;
+      continue;
+    }
 
     if (ch === "#") {
       let j = i + 1;
       while (j < text.length && text[j] !== "\n") j++;
       out += span("comment", text.slice(i, j));
       i = j;
+      lineStart = false;
       continue;
     }
 
     if (ch === "[") {
       const end = text.indexOf("]", i);
       if (end === -1) {
-        out += span("trigger", text.slice(i));
+        out += span(lineStart ? "trigger" : "tag", text.slice(i));
         break;
       }
-      out += span("trigger", text.slice(i, end + 1));
+      out += span(lineStart ? "trigger" : "tag", text.slice(i, end + 1));
       i = end + 1;
+      lineStart = false;
       continue;
     }
 
@@ -116,6 +133,7 @@ export function highlightEasyEffects(source) {
       if (j < text.length && text[j] === '"') j++;
       out += span("string", text.slice(i, j));
       i = j;
+      lineStart = false;
       continue;
     }
 
@@ -124,6 +142,7 @@ export function highlightEasyEffects(source) {
       if (rest) {
         out += span("variable", `$${rest[0]}`);
         i += 1 + rest[0].length;
+        lineStart = false;
         continue;
       }
     }
@@ -132,6 +151,7 @@ export function highlightEasyEffects(source) {
     if (num) {
       out += span("number", num[0]);
       i += num[0].length;
+      lineStart = false;
       continue;
     }
 
@@ -145,11 +165,13 @@ export function highlightEasyEffects(source) {
 
       out += cls ? span(cls, raw) : escapeHtml(raw);
       i += raw.length;
+      lineStart = false;
       continue;
     }
 
     out += escapeHtml(ch);
     i++;
+    lineStart = false;
   }
 
   return out.endsWith("\n") ? `${out}\n` : `${out}\n`;

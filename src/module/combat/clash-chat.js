@@ -5,6 +5,7 @@ import {
   deserialiseClashState,
 } from "./clash-state.js";
 import { showDiceForRoll } from "../utility.js";
+import { resolveTokenDocument } from "../acting-user.js";
 
 const SOCKET_EVENT = "system.projectmoonttrpg";
 const CHAT_UPDATE = "chatUpdate";
@@ -73,7 +74,7 @@ export async function postAttackCard(state, attackRoll = null, messageId = null)
     if (message) await _writeClashMessage(message, chatData);
   } else {
     chatData.author = game.user.id;
-    chatData.speaker = ChatMessage.getSpeaker({ actor: game.actors.get(state.attackerActorId) });
+    chatData.speaker = clashMessageSpeaker(state.attackerActorId, state.attackerTokenId, state.attackerName);
     message = await ChatMessage.create(chatData);
   }
 
@@ -143,7 +144,7 @@ export async function postResultCard(state, defenseRoll = null, messageId = null
     if (message) await _writeClashMessage(message, chatData);
   } else {
     chatData.author = game.user.id;
-    chatData.speaker = ChatMessage.getSpeaker({ actor: game.actors.get(state.attackerActorId) });
+    chatData.speaker = clashMessageSpeaker(state.attackerActorId, state.attackerTokenId, state.attackerName);
     message = await ChatMessage.create(chatData);
   }
 
@@ -283,15 +284,32 @@ export function getClashApplyTarget(state) {
 }
 
 export function resolveClashCombatant(actorId, tokenId) {
-  if (tokenId) {
-    const fromCanvas = canvas.tokens?.get(tokenId)?.actor;
-    if (fromCanvas) return fromCanvas;
-    for (const scene of game.scenes ?? []) {
-      const tokenDoc = scene.tokens?.get(tokenId);
-      if (tokenDoc?.actor) return tokenDoc.actor;
-    }
-  }
+  if (tokenId) return resolveTokenDocument(tokenId)?.actor ?? null;
   return actorId ? (game.actors.get(actorId) ?? null) : null;
+}
+
+function clashMessageSpeaker(actorId, tokenId, alias = null) {
+  if (!actorId && !tokenId) {
+    return { scene: null, actor: null, token: null, alias: alias ?? null };
+  }
+  const token = tokenId ? resolveTokenDocument(tokenId) : null;
+  if (tokenId && !token) {
+    return { scene: null, actor: null, token: tokenId, alias: alias ?? null };
+  }
+  const actor = token?.actor ?? (actorId ? (game.actors.get(actorId) ?? null) : null);
+  if (typeof ChatMessage?.getSpeaker === "function") {
+    return ChatMessage.getSpeaker({
+      actor: actor ?? undefined,
+      token: token ?? undefined,
+      alias: alias ?? undefined,
+    });
+  }
+  return {
+    scene: token?.parent?.id ?? null,
+    actor: actor?.id ?? null,
+    token: token?.id ?? null,
+    alias: alias ?? token?.name ?? actor?.name ?? null,
+  };
 }
 
 async function _writeClashMessage(message, chatData) {
@@ -313,10 +331,9 @@ async function _writeClashMessage(message, chatData) {
 }
 
 function _dsnSpeakerForCombatant(actorId, tokenId) {
-  const actor = resolveClashCombatant(actorId, tokenId);
-  const token = tokenId ? canvas.tokens?.get(tokenId) : null;
-  if (!actor && !token) return null;
-  return ChatMessage.getSpeaker({ actor, token });
+  const speaker = clashMessageSpeaker(actorId, tokenId);
+  if (!speaker?.actor && !speaker?.token) return null;
+  return speaker;
 }
 
 function _showClashDice(roll, actorId, tokenId) {

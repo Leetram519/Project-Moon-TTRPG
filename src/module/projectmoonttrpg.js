@@ -35,6 +35,7 @@ import { registerStatusTray, registerStatusTraySettings } from "./apps/status-tr
 import { registerWorldEasyEffectsSettings } from "./apps/easy-effects-editor.js";
 import { eeFlagsAPI } from "./apps/ee-flag-inspector.js";
 import { getActorWeaponDamageType, isSelectableDamageType } from "./damage-application.js";
+import { actorFromSpeaker } from "./acting-user.js";
 import {
   registerTokenStatusBadges,
   registerTokenStatusBadgeSettings,
@@ -288,8 +289,7 @@ Hooks.on('createChatMessage', async (message, options, id) => {
         const existingType = message.flags?.projectmoonttrpg?.damageType ?? null;
         let damageType = existingType;
         if (!isSelectableDamageType(damageType)) {
-          const speakerActor = ChatMessage.getSpeakerActor?.(message.speaker)
-            ?? game.actors.get(message.speaker?.actor);
+          const speakerActor = actorFromSpeaker(message.speaker);
           damageType = getActorWeaponDamageType(speakerActor) ?? "none";
         }
         // Render the damage buttons.
@@ -559,9 +559,7 @@ function rollItemMacro(itemData) {
   else {
     const speaker = ChatMessage.getSpeaker();
     const itemName = itemData;
-    let actor;
-    if (speaker.token) actor = game.actors.tokens[speaker.token];
-    if (!actor) actor = game.actors.get(speaker.actor);
+    const actor = actorFromSpeaker(speaker);
     const item = actor ? actor.items.find(i => i.name === itemName) : null;
     if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
 

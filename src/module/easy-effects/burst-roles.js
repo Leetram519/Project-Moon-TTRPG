@@ -17,6 +17,21 @@ export function sameActor(a, b) {
   return !!key && key === actorIdentityKey(b);
 }
 
+export function selectRelativeActors(actors, self, kind, isEnemy) {
+  const all = [];
+  for (const actor of actors ?? []) {
+    if (actor) all.push(actor);
+  }
+  if (kind === "all") return all;
+  if (kind === "enemies") {
+    return all.filter((actor) => !self || (!sameActor(actor, self) && isEnemy(actor, self)));
+  }
+  if (kind === "allies") {
+    return all.filter((actor) => Boolean(self) && !sameActor(actor, self) && !isEnemy(actor, self));
+  }
+  return null;
+}
+
 /**
  * Same embedded item id can exist on two different actors.
  */

@@ -1,8 +1,9 @@
 import { groupStatuses, onStatusItemChange } from "../status/group-statuses.js";
+import { actorTokenPlaceables } from "../acting-user.js";
 
 const VISIBLE_CAP = 5;
 
-export class TokenPMTTRPG extends Token {
+export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   /** @type {PIXI.Container|null} */
   statusBadges = null;
   
@@ -425,8 +426,7 @@ export function refreshAllTokenStatusBadges() {
 
 function refreshTokenStatusBadgesForItem(item) {
   const actor = item.parent ?? item.actor;
-  if (!actor?.getActiveTokens) return;
-  for (const token of actor.getActiveTokens(true)) {
+  for (const token of actorTokenPlaceables(actor)) {
     if (typeof token.drawStatusBadges === "function") void token.drawStatusBadges();
   }
 }

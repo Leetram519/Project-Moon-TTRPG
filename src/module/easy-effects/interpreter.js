@@ -1,8 +1,10 @@
 import {
+  applyDiceFormulaMod,
   applyResourceMod,
   applyResourceOverride,
   applyRuntimeResource,
   emptyAlwaysActiveMods,
+  getAmountFields,
   getMaxFields,
   getPowerFields,
   getRegenField,
@@ -28,7 +30,7 @@ import { runAsOwnerOrGM, runEEMetaPatch } from "./gm-route.js";
 import { parseAccessorExpression } from "./parser.js";
 import { applyMathOp, applyMathCall } from "./numeric-expr.js";
 import { clampPoolValue } from "../pool-clamp.js";
-import { resolveBurstBurster, sameActor } from "./burst-roles.js";
+import { resolveBurstBurster, sameActor, selectRelativeActors } from "./burst-roles.js";
 import { showDiceForRoll } from "../utility.js";
 
 // Me and the boi's hate infinite recursion
@@ -592,6 +594,10 @@ function resolvePath(segments, context) {
       blockMax:    sideBag.blockMax    ?? 0,
       evadeMax:    sideBag.evadeMax    ?? 0,
       damageMax:   sideBag.damageMax   ?? 0,
+      attackAmount: sideBag.attackAmount ?? 0,
+      blockAmount:  sideBag.blockAmount  ?? 0,
+      evadeAmount:  sideBag.evadeAmount  ?? 0,
+      damageAmount: sideBag.damageAmount ?? 0,
       rangeBonus:  sideBag.rangeBonus  ?? 0,
       regenHP:     sideBag.regenHP     ?? 0,
       regenST:     sideBag.regenST     ?? 0,
@@ -1316,12 +1322,13 @@ const ACTION_HANDLERS = {
 
   // ── Clash bonus verbs ─────────────────────────────────────────────────────
   //
-  // "power up attack 2"    → clash.bonuses.attackPower += 2
-  // "power down evade 1"   → clash.bonuses.evadePower  -= 1
-  // "dice max up damage 3" → clash.bonuses.damageMax   += 3
-  // "regen hp 5"           → clash.bonuses.regenHP     += 5
+  // "power up attack 2"        → clash.bonuses.attackPower  += 2
+  // "power down evade 1"       → clash.bonuses.evadePower   -= 1
+  // "dice max up damage 3"     → clash.bonuses.damageMax    += 3
+  // "dice amount up attack 1"  → clash.bonuses.attackAmount += 1
+  // "regen hp 5"               → clash.bonuses.regenHP      += 5
   //
-  // noun can be: attack | block | evade | defense | damage (for power/dice max)
+  // noun can be: attack | block | evade | defense | damage (for power/dice max/dice amount)
   //              hp | st | sp | light (for regen)
 
   "power up": async (action, context, amount) => {
@@ -1355,6 +1362,18 @@ const ACTION_HANDLERS = {
   "dice max down": async (action, context, amount) => {
     const fields = getMaxFields(action.noun);
     if (!fields.length) { console.warn(`[EasyEffects] Unknown noun for dice max up/down: '${action.noun}'`); return; }
+    for (const field of fields) _applyClashBonus(context, field, -amount, action.target ?? "self");
+  },
+
+  "dice amount up": async (action, context, amount) => {
+    const fields = getAmountFields(action.noun);
+    if (!fields.length) { console.warn(`[EasyEffects] Unknown noun for dice amount up/down: '${action.noun}'`); return; }
+    for (const field of fields) _applyClashBonus(context, field, +amount, action.target ?? "self");
+  },
+
+  "dice amount down": async (action, context, amount) => {
+    const fields = getAmountFields(action.noun);
+    if (!fields.length) { console.warn(`[EasyEffects] Unknown noun for dice amount up/down: '${action.noun}'`); return; }
     for (const field of fields) _applyClashBonus(context, field, -amount, action.target ?? "self");
   },
 
@@ -1634,20 +1653,27 @@ function resolveTargets(targetName, context) {
   const combat = game.combat;
   if (!combat) { console.warn("[EasyEffects] Multi-target used but no active combat."); return []; }
   const self = context.self;
-  const all  = combat.combatants.map(c => c.actor).filter(Boolean);
-  switch (targetName) {
-    case "enemies": return all.filter(a => !self || (a.id !== self.id && _isEnemy(a, self)));
-    case "allies":  return all.filter(a => self && a.id !== self.id && !_isEnemy(a, self));
-    case "all":     return all;
-    default: console.warn(`[EasyEffects] Unknown target '${targetName}'`); return [];
+  const all = combat.combatants.map(c => c.actor).filter(Boolean);
+  const grouped = selectRelativeActors(all, self, targetName, _isEnemy);
+  if (!grouped) {
+    console.warn(`[EasyEffects] Unknown target '${targetName}'`);
+    return [];
   }
+  return grouped;
+}
+
+function tokenDisposition(actor) {
+  if (!actor) return null;
+  if (actor.isToken) return actor.token?.disposition ?? null;
+  const token = actor.getActiveTokens?.(true)?.[0] ?? null;
+  return token?.document?.disposition ?? null;
 }
 
 function _isEnemy(other, self) {
-  const st = self.getActiveTokens(true)[0];
-  const ot = other.getActiveTokens(true)[0];
-  if (!st || !ot) return false;
-  return ot.document.disposition !== st.document.disposition;
+  const selfDisposition = tokenDisposition(self);
+  const otherDisposition = tokenDisposition(other);
+  if (selfDisposition == null || otherDisposition == null) return false;
+  return otherDisposition !== selfDisposition;
 }
 
 /**
@@ -1967,6 +1993,20 @@ export function executeAlwaysActive(ast, prepareContext) {
               } else console.warn(`[EasyEffects] Unknown noun for dice max down: '${action.noun}'`);
               break;
             }
+            case "dice amount up": {
+              const fields = getAmountFields(action.noun);
+              if (fields.length) {
+                for (const f of fields) mods[f] = (mods[f] ?? 0) + amount;
+              } else console.warn(`[EasyEffects] Unknown noun for dice amount up: '${action.noun}'`);
+              break;
+            }
+            case "dice amount down": {
+              const fields = getAmountFields(action.noun);
+              if (fields.length) {
+                for (const f of fields) mods[f] = (mods[f] ?? 0) - amount;
+              } else console.warn(`[EasyEffects] Unknown noun for dice amount down: '${action.noun}'`);
+              break;
+            }
             case "range up": {
               const fields = getPowerFields(action.noun);
               if (fields.length) {
@@ -1998,7 +2038,13 @@ export function executeAlwaysActive(ast, prepareContext) {
               }
               break;
             case "set":
-              if (action.noun === "resistance") {
+              if (action.noun === "diceFormula") {
+                const die = action.argument
+                  ?? (context.item?.type === "outfit" ? "defense" : "attack");
+                if (!applyDiceFormulaMod(mods, die, action.formula)) {
+                  console.warn(`[EasyEffects] [Always Active] cannot set dice formula for '${die}'`);
+                }
+              } else if (action.noun === "resistance") {
                 const map = action.resistanceOverrides;
                 if (map && typeof map === "object") {
                   if (!mods.resistanceOverrides) mods.resistanceOverrides = {};
@@ -2010,7 +2056,7 @@ export function executeAlwaysActive(ast, prepareContext) {
                 if (!applyResourceOverride(mods, action.argument, amount))
                   console.warn(`[EasyEffects] [Always Active] cannot set '${action.argument}' (use maxHp/maxSt/maxSp/maxLight)`);
               } else {
-                console.warn(`[EasyEffects] Verb 'set' in [Always Active] only supports resource maxes or resistances.`);
+                console.warn(`[EasyEffects] Verb 'set' in [Always Active] only supports resource maxes, resistances, or a dice formula.`);
               }
               break;
             case "regen": {

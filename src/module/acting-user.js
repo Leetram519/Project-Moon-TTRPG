@@ -44,7 +44,47 @@ export function resolveTokenDocument(tokenId) {
 export function tokenIdForActor(actor, explicitTokenId = null) {
   if (explicitTokenId) return explicitTokenId;
   if (actor?.token?.id) return actor.token.id;
-  return actor?.getActiveTokens?.(false)?.[0]?.id ?? null;
+  if (actor?.isToken) return null;
+  return actor?.getActiveTokens?.(true)?.[0]?.id ?? null;
+}
+
+/** Returns `actor.token.object` for a token actor, and `getActiveTokens(true)` for a world actor. */
+export function actorTokenPlaceables(actor) {
+  if (!actor) return [];
+  if (actor.isToken) {
+    const placeable = actor.token?.object ?? null;
+    return placeable ? [placeable] : [];
+  }
+  if (typeof actor.getActiveTokens !== "function") return [];
+  return actor.getActiveTokens(true) ?? [];
+}
+
+/** Returns `actor.token` for a token actor, and the first linked token document for a world actor. */
+export function actorTokenDocument(actor) {
+  if (!actor) return null;
+  if (actor.isToken) return actor.token ?? null;
+  if (typeof actor.getActiveTokens !== "function") return null;
+  return actor.getActiveTokens(true, true)?.[0] ?? null;
+}
+
+/**
+ * Returns the actor on `speaker.token` when that id is set.
+ * Returns null when that token is missing.
+ * Returns the actor for `speaker.actor` when the speaker has no token id.
+ */
+export function actorFromSpeaker(speaker) {
+  if (!speaker) return null;
+  if (speaker.token) {
+    const fromDoc = resolveTokenDocument(speaker.token);
+    if (fromDoc?.actor) return fromDoc.actor;
+    const synthetic = globalThis.game?.actors?.tokens?.[speaker.token];
+    if (synthetic) return synthetic;
+    return null;
+  }
+  const fromSpeaker = globalThis.ChatMessage?.getSpeakerActor?.(speaker);
+  if (fromSpeaker) return fromSpeaker;
+  const actorId = speaker.actor;
+  return actorId ? (globalThis.game?.actors?.get(actorId) ?? null) : null;
 }
 
 export function canActAs(actor, tokenId = null, user = globalThis.game?.user) {

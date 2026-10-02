@@ -1,30 +1,27 @@
 import { emitTokenMoved } from "../easy-effects/registry.js";
-import { compareCombatants } from "./turn-order.js";
+import { compareCombatants, readTiebreak } from "./turn-order.js";
+import { getInitiativeFormulaParts } from "../targeting.js";
+import { findCombatant } from "./combatant-match.js";
+
+const TIEBREAK_PATH = "flags.projectmoonttrpg.turnTiebreak";
 
 function combatantForToken(tokenDoc) {
   const combat = game.combat;
-  if (!combat?.started || !tokenDoc) return null;
-  const tokenId = tokenDoc.id;
-  const actorId = tokenDoc.actor?.id;
-  return combat.combatants.find((entry) => {
-    const entryTokenId = entry.tokenId ?? entry.token?.id;
-    const entryActorId = entry.actorId ?? entry.actor?.id;
-    return (tokenId && entryTokenId === tokenId) || (actorId && entryActorId === actorId);
-  }) ?? null;
+  if (!combat?.started || !tokenDoc?.id) return null;
+  return findCombatant({ combatants: combat.combatants, tokenId: tokenDoc.id });
 }
 
 export function actorCombatToken(actor) {
   if (!actor) return null;
   if (actor.token) return actor.token;
   const combat = game.combat;
-  if (combat?.started) {
-    const combatant = combat.combatants.find((entry) => {
-      const entryActorId = entry.actorId ?? entry.actor?.id;
-      return entryActorId && entryActorId === actor.id;
-    });
+  if (combat?.started && !actor.isToken) {
+    const combatant = findCombatant({ combatants: combat.combatants, actorId: actor.id });
     if (combatant?.token) return combatant.token;
   }
-  return actor.getActiveTokens?.(true, true)?.[0] ?? null;
+  if (actor.isToken) return null;
+  const linked = actor.getActiveTokens?.(true, true) ?? [];
+  return linked.length === 1 ? linked[0] : null;
 }
 
 function paidHistory(tokenDoc) {
@@ -117,9 +114,11 @@ export function actorSquaresExhausted(actor) {
 export async function exhaustRemainingSquares(actor) {
   if (!actor || !game.combat?.started) return actor;
   const tokenDoc = actorCombatToken(actor);
-  const combatant = combatantForToken(tokenDoc) ?? game.combat.combatants.find((entry) => {
-    const entryActorId = entry.actorId ?? entry.actor?.id;
-    return entryActorId && entryActorId === actor.id;
+  const tokenId = tokenDoc?.id ?? null;
+  const combatant = findCombatant({
+    combatants: game.combat.combatants,
+    tokenId,
+    actorId: tokenId || actor.isToken ? null : actor.id,
   });
   if (!combatant || game.combat.combatant?.id !== combatant.id) return actor;
 
@@ -253,6 +252,23 @@ function registerCombatDocument() {
     }
 
     /**
+     * Foundry writes initiative here and skips Combatant.rollInitiative.
+     * @override
+     */
+    async rollInitiative(ids, options = {}) {
+      const result = await super.rollInitiative(ids, options);
+      const idList = typeof ids === "string" ? [ids] : Array.isArray(ids) ? ids : [];
+      const updates = [];
+      for (const id of idList) {
+        const combatant = this.combatants.get(id);
+        if (!combatant?.isOwner || readTiebreak(combatant) === 0) continue;
+        updates.push({ _id: combatant.id, "flags.projectmoonttrpg.turnTiebreak": 0 });
+      }
+      if (updates.length) await this.updateEmbeddedDocuments("Combatant", updates);
+      return result;
+    }
+
+    /**
      * Someone was taken out while combat is still up.
      * @override
      */
@@ -272,8 +288,37 @@ function registerCombatDocument() {
   CONFIG.Combat.documentClass = CombatPMTTRPG;
 }
 
+function registerCombatantDocument() {
+  const Base = CONFIG.Combatant.documentClass;
+
+  class CombatantPMTTRPG extends Base {
+    /**
+     * Roll All / Roll NPCs use this.
+     * @override
+     */
+    _getInitiativeFormula() {
+      const actor = this.actor;
+      if (!actor) return super._getInitiativeFormula();
+      return getInitiativeFormulaParts(actor).formula;
+    }
+
+    /**
+     * super only writes initiative. A new roll resets turnTiebreak to 0.
+     * @override
+     */
+    async rollInitiative(formula) {
+      const result = await super.rollInitiative(formula);
+      if (readTiebreak(this) === 0) return result;
+      return this.update({ [TIEBREAK_PATH]: 0 });
+    }
+  }
+
+  CONFIG.Combatant.documentClass = CombatantPMTTRPG;
+}
+
 export function registerCombatMovement() {
   registerCombatDocument();
+  registerCombatantDocument();
 
   Hooks.on("moveToken", (tokenDoc, movement, operation, user) => {
     refreshActorFromToken(tokenDoc);

@@ -26,7 +26,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
+    [On Clash Start with CHOICE]
     require (Poise) >= 4 then power up CHOICE 1;
 effects: []
 sort: 0

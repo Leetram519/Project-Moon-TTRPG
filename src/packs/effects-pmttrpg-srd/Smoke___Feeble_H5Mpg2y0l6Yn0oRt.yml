@@ -29,7 +29,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (N*3) Smoke on target to inflict N Feeble next round;
 effects: []
 sort: 0

@@ -1,4 +1,5 @@
 import { squareTurnCap } from "../actor/progression.js";
+import { findCombatant } from "../combat/combatant-match.js";
 
 const OVER_COLOR = 0xE23D28;
 
@@ -6,14 +7,8 @@ function isCurrentTurn(token) {
   const combat = game.combat;
   if (!combat?.started || !token) return false;
   const doc = token.document ?? token;
-  const actor = token.actor ?? doc.actor;
-  const tokenId = doc.id;
-  const actorId = actor?.id;
-  const combatant = combat.combatants.find((entry) => {
-    const entryTokenId = entry.tokenId ?? entry.token?.id;
-    const entryActorId = entry.actorId ?? entry.actor?.id;
-    return (tokenId && entryTokenId === tokenId) || (actorId && entryActorId === actorId);
-  });
+  if (!doc?.id) return false;
+  const combatant = findCombatant({ combatants: combat.combatants, tokenId: doc.id });
   return Boolean(combatant && combat.combatant?.id === combatant.id);
 }
 

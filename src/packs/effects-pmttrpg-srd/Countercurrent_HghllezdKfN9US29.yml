@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     create dialog "Countercurrent":
       countercurrentPara as "Consume 4 Charge: Inflict 1 Paralysis",
       countercurrentOver as "Consume 1 Overcharge: Inflict 2 Paralysis",

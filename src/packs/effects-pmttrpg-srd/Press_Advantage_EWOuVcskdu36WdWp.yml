@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     positive:
     create dialog "Press Advantage : Inflict [Type] Fragile": 
       slash as "Slash Fragile equal to half Bind",

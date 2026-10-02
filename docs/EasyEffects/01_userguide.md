@@ -61,7 +61,7 @@ That's it. When the item's actor wins a clash, they gain 1 stack of Charge.
 
 Most of the scripts you will see are attached to an **item**: a weapon, outfit, augment, skill, tool, or status. Which items actually run depends on the trigger:
 
-- Always Active, turns, rounds, move, and On Action (clash or sheet): equipped loadout and live statuses. Tool use runs On Action on that tool only. Skill `[Always Active]` Power / Max apply when that skill is used, not as a standing Attack / Block / Evade bonus.
+- Always Active, turns, rounds, move, and On Action (clash or sheet): equipped loadout and live statuses. Tool use runs On Action on that tool only. Skill `[Always Active]` Power, Max, Amount, and dice formulas apply when that skill is used, not as a standing Attack / Block / Evade bonus.
 - Clash Start / Win / Lose / Clash Win Before Results: the **used** weapon, applied tool, skill, and ammo, plus outfits, active augments, and statuses. Other weapons on the same actor do not run.
 - On Hit / On Hit Before Results: the attacker's used kit (weapon, applied tool, skill, ammo), plus active augments and the attacker's statuses.
 - On Being Hit / On Being Hit Before Results: defender **statuses** only.
@@ -331,17 +331,18 @@ Not allowed in `[Always Active]`.
 
 The `[Always Active]` trigger is special. It doesn't wait for combat events, and applies the bonus ONCE when it's equipped, and inverts the bonus when unequipped (bringing it back to normal).
 
-Weapon and outfit Power / Max stay on their respective item. Skill Power / Max apply when that skill is used for the action. They do not change the actor's standing Attack, Block, or Evade modifiers.
+Weapon and outfit Power, Max, Amount, and dice formulas stay on their respective item. Skill Power, Max, Amount, and dice formulas apply when that skill is used for the action. They do not change the actor's standing Attack, Block, or Evade modifiers.
 
 You cannot use dice or randomness with `[Always Active]` effects. It is strictly intended for passive effects that do not depend on any other variables.
 
-Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, `power` / `dice max` passives, `range up` / `range down`, and `instant`. `gain` / `lose` on `Action` / `Reaction` / `movement` bump those **maxes** (event-time `gain 1 Action` still spends or restores the current pool). You can **read** stored flags (`(self.flag.x)`, `(item.flag.x)`, `(combat.flag.x)`). You cannot `set flag`, `clear flag`, `increase flag`, or `reduce flag`.
+Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, `power` / `dice max` / `dice amount` passives, `set dice formula`, `range up` / `range down`, and `instant`. `gain` / `lose` on `Action` / `Reaction` / `movement` bump those **maxes** (event-time `gain 1 Action` still spends or restores the current pool). You can **read** stored flags (`(self.flag.x)`, `(item.flag.x)`, `(combat.flag.x)`). You cannot `set flag`, `clear flag`, `increase flag`, or `reduce flag`.
 
 Example:
 
 ```
 [Always Active]
 dice max up attack 2;
+dice amount up attack 1;
 range up 1;
 gain 2 maxHp;
 set maxSp to 0;
@@ -665,7 +666,7 @@ If the heal started as HP and something `convert`s it to ST, `[On Heal HP]` stil
 
 ## Modificating your Combat Bonuses
 
-Clash-time Power / Max write into that clash's **per-side** bonus bags (`attacker` / `defender`).
+Clash-time Power, Max, and Amount write into that clash's **per-side** bonus bags (`attacker` / `defender`).
 `on self` (default) affects the item owner's side; `on target` affects the other side.
 
 ```
@@ -675,12 +676,23 @@ power down evade 1 on target;
 
 dice max up attack 1;
 dice max down evade 2;
+dice amount up attack 1;
 range up 1;
 power up damage 2;
 ```
 
 - `power up` / `power down`: Adds or removes flat Dice Power after the roll. `attack`, `block`, `evade`, and `defense` affect the clash die itself, with `defense` applying to both Block and Evade. `damage` only changes damage Power/Max and does not affect the clash die. When used with `[Always Active]`, weapon and outfit Power only applies to that specific item, while skill Power applies whenever that skill is used.
 - `dice max up` / `dice max down`: changes die faces (d10 +2 Max → d12). If faces would go below 1, each excess Max reduction becomes -1 Power instead. `dice max up damage` is damage Max.
+- `dice amount up` / `dice amount down`: changes how many dice are rolled. `1d10` with +1 Amount is `2d10`. The count stops at 1. `defense` applies to Block and Evade. `dice amount up damage` is stored like damage Max, and the clash die stays the same. On `[Always Active]`, a weapon or outfit Amount stays on that item. A skill Amount applies when that skill is used.
+- `set dice formula`: `[Always Active]` only. This replaces the base count, faces, and flat Power. Rank, hand, form, outfit property, Insight, Temperance, and Power, Max, and Amount from other effects still add. `to` is optional. With no die name, a weapon sets Attack and an outfit sets Defense (Block and Evade). `defense` writes that formula to Block and Evade. A skill formula applies when that skill is used. A formula on the weapon, outfit, or a status shows on the standing die. `[flavor]` sets the Dice So Nice color.
+
+```
+[Always Active]
+set dice formula to 2d10+8[slash];
+set block dice formula to 2d8+1;
+set evade dice formula 2d12[evade];
+```
+
 - `range up` / `range down`: weapon range. Same targeting as `power up`. Works in `[Always Active]` or on the clash bag.
 - Use `on target` for Enemy Power Down effects so the penalty applies to the other roll.
 
@@ -1259,6 +1271,8 @@ power down evade 1 on target;
 | `convert heal to <pool>`                                                                | Change where the pending heal goes (`heal.originalPool` stays the same)                                                                             |
 | `power <up/down> <attack/block/evade/defense/damage> <N> [on <target>]`                 | Dice Power (`defense` = Block and Evade; `damage` is damage Power, not the clash die)                                                               |
 | `dice max <up/down> <attack/block/evade/defense/damage> <N> [on <target>]`              | Dice Max (faces); `damage` is damage Max                                                                                                            |
+| `dice amount <up/down> <attack/block/evade/defense/damage> <N> [on <target>]`           | Dice Amount (how many dice). Count cannot go below 1. `damage` is stored and does not change the clash die                                          |
+| `set [attack\|block\|evade\|defense] dice formula [to] <NdX±P>[flavor]`                   | `[Always Active]` only. Replaces the base die. No die name means Attack, or Defense on an outfit. `[flavor]` colors the die and does not change damage type |
 | `advantage` / `disadvantage` `[on\|to <t>]`                                              | Clash-side Adv/Disadv (cancel if both; `[On Clash Start]` or `[On Action]`)                                                                         |
 | `regen <hp/st/sp/light> <N>`                                                            | Shorthand to gain HP/ST/SP/Light                                                                                                                    |
 | `range up` / `range down` `<N>`                                                         | Weapon range (Always Active or clash bag).                                                                                                          |

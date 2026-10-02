@@ -42,6 +42,7 @@ import {
   postAttackCard,
   updateAttackCard,
   postResultCard,
+  resolveClashCombatant,
 } from "./clash-chat.js";
 
 import {
@@ -130,7 +131,7 @@ export async function initiateAttack(attackPayload) {
 
   const state = createClashState({
     attackerActorId:   attackPayload.actorId,
-    attackerTokenId:   attackPayload.actor.getActiveTokens(true)[0]?.id ?? null,
+    attackerTokenId:   attackTokenId(attackPayload.actor, attackPayload.tokenId),
     attackerName:      attackPayload.actor.name,
     attackerImg:       attackPayload.actor.img,
     attackerItemId:    attackPayload.itemId,
@@ -262,7 +263,7 @@ export async function handleRetaliateClick(state, { isIntercept = false } = {}) 
  * @returns {Promise<void>}
  */
 async function _executeClash(state, retaliatorActor, choice) {
-  const attackerActor = canvas.tokens.get(state?.attackerTokenId ?? null)?.actor ?? game.actors.get(state.attackerActorId) ?? null;
+  const attackerActor = resolveClashCombatant(state.attackerActorId, state.attackerTokenId);
   let attackerItem   = attackerActor?.items.get(state.attackerItemId) ?? null;
   const appliedTool  = state.appliedToolId
     ? (attackerActor?.items.get(state.appliedToolId) ?? null)
@@ -751,15 +752,22 @@ function _unlockClashState(state) {
   state.retaliatorAmmoId = null;
 }
 
+function attackTokenId(actor, explicitTokenId = null) {
+  if (explicitTokenId) return explicitTokenId;
+  if (actor?.isToken) return actor.token?.id ?? null;
+  return actor?.getActiveTokens?.(true)?.[0]?.id ?? null;
+}
+
 /** Retaliate answers as the clash target. */
 function _getClashTargetRetaliator(state) {
-  const tokenDoc = resolveTokenDocument(state.targetTokenId);
-  if (tokenDoc?.actor) return { actor: tokenDoc.actor, tokenId: tokenDoc.id };
-
+  if (state.targetTokenId) {
+    const tokenDoc = resolveTokenDocument(state.targetTokenId);
+    return { actor: tokenDoc?.actor ?? null, tokenId: tokenDoc?.id ?? null };
+  }
   const actor = state.targetActorId ? game.actors.get(state.targetActorId) : null;
   return {
     actor: actor ?? null,
-    tokenId: state.targetTokenId ?? actor?.getActiveTokens(false)?.[0]?.id ?? null,
+    tokenId: actor?.isToken ? (actor.token?.id ?? null) : null,
   };
 }
 

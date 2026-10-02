@@ -1,5 +1,6 @@
 import { parse }   from "./parser.js";
 import { execute } from "./interpreter.js";
+import { actorIdentityKey } from "./burst-roles.js";
 
 export const SYSTEM_ID = "projectmoonttrpg";
 export const WORLD_SCRIPT_SETTING = "worldEasyEffects";
@@ -51,9 +52,13 @@ export function resolveActorEasyEffects(actor) {
 
 const _actorAstCache = new Map();
 
-export function clearActorScriptCache(actorId = null) {
-  if (actorId) _actorAstCache.delete(actorId);
-  else _actorAstCache.clear();
+export function clearActorScriptCache(actorOrKey = null) {
+  if (!actorOrKey) {
+    _actorAstCache.clear();
+    return;
+  }
+  const key = typeof actorOrKey === "string" ? actorOrKey : actorIdentityKey(actorOrKey);
+  if (key) _actorAstCache.delete(key);
 }
 
 export function getActorAST(actor) {
@@ -61,12 +66,13 @@ export function getActorAST(actor) {
   const source = resolveActorEasyEffects(actor);
   if (!source.trim()) return null;
 
-  const cached = _actorAstCache.get(actor.id);
+  const key = actorIdentityKey(actor);
+  const cached = key ? _actorAstCache.get(key) : null;
   if (cached?.source === source) return cached.ast;
 
   try {
     const ast = parse(source);
-    _actorAstCache.set(actor.id, { source, ast });
+    if (key) _actorAstCache.set(key, { source, ast });
     return ast;
   } catch (err) {
     console.error(`[EasyEffects] Parse error on actor script '${actor.name}':`, err.message);
@@ -82,8 +88,8 @@ export function actorHasTrigger(actor, triggerName) {
 }
 
 export function registerActorScriptHooks() {
-  Hooks.on("updateActor", (actor) => clearActorScriptCache(actor.id));
-  Hooks.on("deleteActor", (actor) => clearActorScriptCache(actor.id));
+  Hooks.on("updateActor", (actor) => clearActorScriptCache(actor));
+  Hooks.on("deleteActor", (actor) => clearActorScriptCache(actor));
 }
 
 // Status damage can recurse into actor script triggers (found out the hard way).
@@ -119,13 +125,14 @@ export async function runActorEasyEffects(actor, triggerName, context = {}) {
 }
 
 /**
- * One pass per unique actor id. `buildContext` returning falsy skips that actor.
+ * One pass per actor uuid. `buildContext` returning falsy skips that actor.
  */
 export async function runActorEasyEffectsFor(actors, triggerName, buildContext) {
   const seen = new Set();
   for (const actor of actors ?? []) {
-    if (!actor || seen.has(actor.id)) continue;
-    seen.add(actor.id);
+    const key = actorIdentityKey(actor);
+    if (!actor || !key || seen.has(key)) continue;
+    seen.add(key);
     const context = buildContext ? buildContext(actor) : {};
     if (!context) continue;
     await runActorEasyEffects(actor, triggerName, context);

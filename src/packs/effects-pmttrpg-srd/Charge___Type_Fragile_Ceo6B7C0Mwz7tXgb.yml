@@ -29,7 +29,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |+
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     require (N*4) Charge then
     create dialog "Charge : Inflict [Type] Fragile": 
       slash as "Slash Fragile",

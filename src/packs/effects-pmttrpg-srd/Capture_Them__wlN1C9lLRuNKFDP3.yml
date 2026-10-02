@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     inflict (N*2) Bind next round and 
       inflict (N) Paralysis next round;
 effects: []

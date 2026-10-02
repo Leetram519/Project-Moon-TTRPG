@@ -56,17 +56,13 @@ system:
 
     [On Lose]
     require (self.flag.overcharge_enabled) == 1 then
-      require (self.flag.charge_decay) == 0 then
-        increase flag "charge_consumed" on self by (-changed.amount);
-        require (self.flag.charge_consumed) >= 10 then
-          gain ((self.flag.charge_consumed) // 10) Overcharge and
-          reduce flag "charge_consumed" on self by (((self.flag.charge_consumed) // 10) * 10);
+      increase flag "charge_consumed" on self by (-changed.amount);
+    require (self.flag.charge_consumed) >= 10 then
+      gain ((self.flag.charge_consumed) // 10) Overcharge and
+      reduce flag "charge_consumed" on self by (((self.flag.charge_consumed) // 10) * 10);
 
     [End of Round]
-    require (Charge) > 15 then
-      set flag "charge_decay" on self to 1;
-      lose (3 * (((Charge - 1) // 15))) Charge;
-      clear flag "charge_decay" on self;
+    require (Charge) > 15 then lose (3 * (((Charge - 1) // 15))) Charge;
 effects: []
 folder: OMSNi4hdekwHrB1H
 sort: 0

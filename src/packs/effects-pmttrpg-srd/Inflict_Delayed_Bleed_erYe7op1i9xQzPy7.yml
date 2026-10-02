@@ -31,7 +31,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     positive:
     inflict N Bleed next round;
     negative:

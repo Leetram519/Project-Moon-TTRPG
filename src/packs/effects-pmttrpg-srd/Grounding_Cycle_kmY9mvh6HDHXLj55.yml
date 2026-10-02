@@ -31,7 +31,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     gain (N*3) Charge;
 effects: []
 sort: 0

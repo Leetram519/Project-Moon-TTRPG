@@ -2,6 +2,7 @@ import { PMTTRPGUtility } from "./utility.js";
 import { PMTTRPGTargetingAPI } from "./targeting.js";
 const { renderTemplate } = foundry.applications.handlebars;
 import { initiateAttack } from "./combat/clashing.js";
+import { findCombatant } from "./combat/combatant-match.js";
 import { promptRangedAmmo } from "./combat/clash-dialog.js";
 
 export class PMTTRPGRolls {
@@ -619,7 +620,12 @@ export class PMTTRPGRolls {
 
     // Update the combat flags.
     if (game.combat && game.combat.combatants) {
-      let combatant = game.combat.combatants.find(c => c.actor.id == this.actor.id);
+      const tokenId = this.actor?.token?.id ?? null;
+      let combatant = findCombatant({
+        combatants: game.combat.combatants,
+        tokenId,
+        actorId: tokenId || this.actor?.isToken ? null : this.actor?.id,
+      });
       if (combatant) {
         let moveCount = combatant.flags.projectmoonttrpg ? combatant.flags.projectmoonttrpg.moveCount : 0;
         moveCount = moveCount ? Number(moveCount) + 1 : 1;

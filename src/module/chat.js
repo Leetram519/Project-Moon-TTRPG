@@ -13,6 +13,7 @@ import {
   emitChatUpdate,
 } from "./combat/clash-chat.js";
 import { getClashDamageSourceRef } from "./combat/clash-state.js";
+import { actorFromSpeaker } from "./acting-user.js";
 
 export const displayChatActionButtons = function(message, html, data) {
   const chatCard = html.querySelector?.(".PMTTRPG.chat-card") ?? null;
@@ -45,7 +46,7 @@ export const displayChatActionButtons = function(message, html, data) {
 
   if ( chatCard && chatCard.length > 0 ) {
     // If the user is the message author or the actor owner, proceed.
-    let actor = game.actors.get(data.message.speaker.actor);
+    let actor = actorFromSpeaker(data.message.speaker);
     // Exit early from further operations if this is a GM user.
     if ( game.user.isGM ) return;
     if ((data.author.id === game.user.id) || ( actor && actor.isOwner )) return;
@@ -56,7 +57,7 @@ export const displayChatActionButtons = function(message, html, data) {
   }
 
   if (chatCard) {
-    const actor = game.actors.get(data.message.speaker.actor);
+    const actor = actorFromSpeaker(data.message.speaker);
     if (game.user.isGM) return;
     if (data.author.id === game.user.id || (actor && actor.isOwner)) return;
     chatCard.querySelectorAll("button[data-action], .button-disabled").forEach(btn => {
@@ -205,8 +206,7 @@ function _resolveDamageType(message, root) {
   const fromFlag = message?.flags?.projectmoonttrpg?.damageType;
   if (isSelectableDamageType(fromFlag)) return fromFlag;
 
-  const speakerActor = ChatMessage.getSpeakerActor?.(message.speaker)
-    ?? game.actors.get(message?.speaker?.actor);
+  const speakerActor = actorFromSpeaker(message.speaker);
   return getActorWeaponDamageType(speakerActor) ?? "none";
 }
 
@@ -318,7 +318,7 @@ async function _chatActionDamage(message, action, button) {
   const pools = _readSelectedPools(root);
   const damageType = _resolveDamageType(message, root);
   let rollTotal = Number($(message.content).find('.dice-total')?.first()?.text()?.trim()) || 0;
-  const attacker = ChatMessage.getSpeakerActor?.(message.speaker) ?? game.actors.get(message?.speaker?.actor) ?? null;
+  const attacker = actorFromSpeaker(message.speaker);
 
   const opByAction = {
     damage: "full",

@@ -134,37 +134,42 @@ export const NOUNS = {
   // Combat
   attack: {
     kind: "combat",
-    ops: ["power up", "power down", "dice max up", "dice max down"],
+    ops: ["power up", "power down", "dice max up", "dice max down", "dice amount up", "dice amount down"],
     powerField: "attackPower",
     maxField: "attackMax",
+    amountField: "attackAmount",
     pathShorthand: ["attributes", "attackModifier"],
   },
   block: {
     kind: "combat",
-    ops: ["power up", "power down", "dice max up", "dice max down"],
+    ops: ["power up", "power down", "dice max up", "dice max down", "dice amount up", "dice amount down"],
     powerField: "blockPower",
     maxField: "blockMax",
+    amountField: "blockAmount",
     pathShorthand: ["attributes", "blockModifier"],
   },
   evade: {
     kind: "combat",
-    ops: ["power up", "power down", "dice max up", "dice max down"],
+    ops: ["power up", "power down", "dice max up", "dice max down", "dice amount up", "dice amount down"],
     powerField: "evadePower",
     maxField: "evadeMax",
+    amountField: "evadeAmount",
     pathShorthand: ["attributes", "evadeModifier"],
   },
   defense: {
     kind: "combat",
-    ops: ["power up", "power down", "dice max up", "dice max down"],
+    ops: ["power up", "power down", "dice max up", "dice max down", "dice amount up", "dice amount down"],
     powerFields: ["blockPower", "evadePower"],
     maxFields: ["blockMax", "evadeMax"],
+    amountFields: ["blockAmount", "evadeAmount"],
     aliases: ["defensive"],
   },
   damage: {
     kind: "combat",
-    ops: ["power up", "power down", "dice max up", "dice max down", "deal"],
+    ops: ["power up", "power down", "dice max up", "dice max down", "dice amount up", "dice amount down", "deal"],
     powerField: "damagePower",
     maxField: "damageMax",
+    amountField: "damageAmount",
   },
   range: {
     kind: "combat",
@@ -327,6 +332,61 @@ export function getMaxField(name) {
   return getMaxFields(name)[0] ?? null;
 }
 
+export function getAmountFields(name) {
+  const def = lookupNoun(name)?.def;
+  if (!def) return [];
+  if (Array.isArray(def.amountFields) && def.amountFields.length) return def.amountFields;
+  return def.amountField ? [def.amountField] : [];
+}
+
+const DICE_FORMULA_DIES = ["attack", "block", "evade"];
+
+export function emptyDiceFormulas() {
+  return { attack: null, block: null, evade: null };
+}
+
+export function cloneDiceFormulas(src) {
+  const out = emptyDiceFormulas();
+  for (const die of DICE_FORMULA_DIES) {
+    const formula = src?.[die];
+    if (!formula) continue;
+    out[die] = {
+      count: Math.max(1, Math.round(Number(formula.count) || 1)),
+      sides: Math.max(1, Math.round(Number(formula.sides) || 1)),
+      power: Math.round(Number(formula.power) || 0),
+      flavor: formula.flavor ? String(formula.flavor).toLowerCase() : null,
+    };
+  }
+  return out;
+}
+
+export function resolveDiceFormula(die, ...sources) {
+  for (const mods of sources) {
+    const formula = mods?.diceFormulas?.[die];
+    if (formula) return formula;
+  }
+  return null;
+}
+
+export function applyDiceFormulaMod(mods, die, formula) {
+  if (!formula) return false;
+  if (!mods.diceFormulas) mods.diceFormulas = emptyDiceFormulas();
+  const dies = die === "defense" ? ["block", "evade"] : [die];
+  const stored = {
+    count: Math.max(1, Math.round(Number(formula.count) || 1)),
+    sides: Math.max(1, Math.round(Number(formula.sides) || 1)),
+    power: Math.round(Number(formula.power) || 0),
+    flavor: formula.flavor ? String(formula.flavor).toLowerCase() : null,
+  };
+  let wrote = false;
+  for (const key of dies) {
+    if (!DICE_FORMULA_DIES.includes(key)) continue;
+    mods.diceFormulas[key] = { ...stored };
+    wrote = true;
+  }
+  return wrote;
+}
+
 export function getRegenField(name) {
   return lookupNoun(name)?.def.regenField ?? null;
 }
@@ -373,17 +433,19 @@ export function resolvePathShorthand(actor, segment) {
 }
 
 export const COMBAT_DICE_KEYS = [
-  "attackPower", "attackMax",
-  "blockPower", "blockMax",
-  "evadePower", "evadeMax",
-  "damagePower", "damageMax",
+  "attackPower", "attackMax", "attackAmount",
+  "blockPower", "blockMax", "blockAmount",
+  "evadePower", "evadeMax", "evadeAmount",
+  "damagePower", "damageMax", "damageAmount",
 ];
 
 export function emptyAlwaysActiveMods() {
   const mods = {
     attackPower: 0, blockPower: 0, evadePower: 0, damagePower: 0,
     attackMax:   0, blockMax:   0, evadeMax:   0, damageMax:   0,
+    attackAmount: 0, blockAmount: 0, evadeAmount: 0, damageAmount: 0,
     lightBonus:  0, rangeBonus: 0,
+    diceFormulas: emptyDiceFormulas(),
     overrides: {},
     overrideSources: {},
     resistanceOverrides: {},
@@ -398,9 +460,11 @@ export function emptyAlwaysActiveMods() {
   return mods;
 }
 
-/** Only grab the combat power/max modifiers. Weapon and outfit [Always Active] effects keep these on the item. */
+/** Combat power, max, amount, and formula slots. Weapon and outfit [Always Active] effects keep these on the item. */
 export function pickCombatDiceMods(mods) {
-  const out = {};
+  const out = {
+    diceFormulas: cloneDiceFormulas(mods?.diceFormulas),
+  };
 
   for (const key of COMBAT_DICE_KEYS) {
     out[key] = Number(mods?.[key] ?? 0) || 0;
@@ -409,11 +473,12 @@ export function pickCombatDiceMods(mods) {
   return out;
 }
 
-/** Copy the modifiers, but reset all combat dice modifiers to 0. */
+/** Copy the modifiers, but reset combat dice modifiers and formula slots. */
 export function zeroCombatDiceMods(mods) {
   const out = { ...mods };
 
   for (const key of COMBAT_DICE_KEYS) out[key] = 0;
+  out.diceFormulas = emptyDiceFormulas();
 
   return out;
 }

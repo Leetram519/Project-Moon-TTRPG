@@ -1,6 +1,6 @@
 import { parse }                                    from "./parser.js";
 import { execute, executeAlwaysActive }             from "./interpreter.js";
-import { emptyAlwaysActiveMods, pickCombatDiceMods, zeroCombatDiceMods } from "./nouns.js";
+import { emptyAlwaysActiveMods, emptyDiceFormulas, pickCombatDiceMods, zeroCombatDiceMods } from "./nouns.js";
 import { isToolPresent }                            from "../inventory/slots.js";
 import { uniqueStatusItems }                        from "../status/group-statuses.js";
 import { isPendingStatus }                          from "../status/pending.js";
@@ -34,6 +34,10 @@ export function emptyClashSideBonuses() {
     blockMax:    0,
     evadeMax:    0,
     damageMax:   0,
+    attackAmount: 0,
+    blockAmount:  0,
+    evadeAmount:  0,
+    damageAmount: 0,
     regenHP:     0,
     regenST:     0,
     advantage: 0,
@@ -850,8 +854,9 @@ async function runActorScriptsForDef(def, payload, emission = null) {
   const seen = new Set();
   for (const entry of entries) {
     const actor = entry?.actor;
-    if (!actor || !entry.context || seen.has(actor.id)) continue;
-    seen.add(actor.id);
+    const key = actorIdentityKey(actor);
+    if (!actor || !entry.context || !key || seen.has(key)) continue;
+    seen.add(key);
     try {
       const context = emission ? attachEmitState(entry.context, emission) : entry.context;
       await runActorEasyEffects(actor, def.triggerName, context);
@@ -1747,6 +1752,15 @@ function mergeAlwaysActiveMods(merged, mods, sourceName) {
     }
     if (key === "overrideSources") continue;
     if (key === "resistanceOverrideSources") continue;
+    if (key === "diceFormulas") {
+      if (!merged.diceFormulas) merged.diceFormulas = emptyDiceFormulas();
+      for (const die of ["attack", "block", "evade"]) {
+        const next = mods.diceFormulas?.[die];
+        if (!next) continue;
+        merged.diceFormulas[die] = { ...next };
+      }
+      continue;
+    }
     if (key === "resistanceOverrides") {
       if (!merged.resistanceOverrides) merged.resistanceOverrides = {};
       if (!merged.resistanceOverrideSources) merged.resistanceOverrideSources = {};

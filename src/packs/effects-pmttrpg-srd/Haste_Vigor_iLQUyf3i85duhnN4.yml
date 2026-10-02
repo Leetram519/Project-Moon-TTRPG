@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
+    [On Clash Start with CHOICE]
     power up CHOICE (min(Haste //f 2, 3));
 
     [On Combat Start]

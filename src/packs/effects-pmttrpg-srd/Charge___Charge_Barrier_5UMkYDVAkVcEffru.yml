@@ -28,7 +28,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (N*2) Charge to gain (N) "Charge Barrier" next round;
 effects: []
 sort: 2400000

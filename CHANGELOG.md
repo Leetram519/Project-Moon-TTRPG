@@ -3,7 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [Leetram Versioning](https://leetramversioning.com).
+
+## [Unreleased]
+
+### Added
+
+- [EasyEffects] `dice amount up` / `dice amount down` changes the number of dice. The count cannot go below 1. On `[Always Active]`, Amount on a weapon or outfit applies only to that item. Skill Amount applies when that skill is used. The clash breakdown shows Dice Amount.
+- [EasyEffects] `set dice formula` on `[Always Active]` replaces the base count, faces, and flat Power. Rank, hand, form, outfit property, Insight, Temperance, and Power, Max, and Amount from other effects still add. With no die name, a weapon sets Attack and a outfit sets Block and Evade. A formula on a weapon, outfit, or status shows on the standing die. `[flavor]` sets the Dice So Nice color.
+
+### Changed
+
+- [EasyEffects] SRD `[On Clash Start]` and `[On Clash RESULT]` effects now say `with CHOICE`.
+- [EasyEffects] Charge lost at the end of the round counts toward Overcharge.
+- [EasyEffects] Charge Barrier grants its temporary HP on `[Start of Round]`.
+- A migration rewrites those Charge, Charge Barrier, and `with CHOICE` scripts on actors and items already in the world.
+
+### Fixed
+
+- Foundry combat tracker Roll All / Roll NPCs now use 1d6 + Justice + misc.
+- Each unlinked token has its own combatant. Combat start, combat end, turns, movement, targeting, and clash chat use that token. EasyEffects `enemies`, `allies`, and `all` use that token too.
 
 ## [0.1.3] - 2026-09-16
 

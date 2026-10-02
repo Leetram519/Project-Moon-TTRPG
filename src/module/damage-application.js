@@ -6,6 +6,7 @@ import {
   formatResistanceMultiplier,
 } from "./easy-effects/resistances.js";
 import { formatOverrideSourceNames } from "./easy-effects/nouns.js";
+import { actorTokenDocument } from "./acting-user.js";
 
 export {
   DAMAGE_TYPES,
@@ -421,7 +422,7 @@ export function formatDamageTakenParts(changes) {
 export async function postDamageTakenMessage(actor, appliedDamage) {
   if (!appliedDamage) return null;
 
-  const token = actor.getActiveTokens(true, true)[0] ?? null;
+  const token = actorTokenDocument(actor);
   const name = (token?.name ?? actor.name ?? "").replace(/[<>]/g, "");
   const changes = appliedDamage.changes ?? [];
   const hasChanges = changes.length > 0;

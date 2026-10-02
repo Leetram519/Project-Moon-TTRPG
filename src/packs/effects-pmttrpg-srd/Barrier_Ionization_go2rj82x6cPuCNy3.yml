@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT]
+    [Clash RESULT with CHOICE]
     create dialog "Barrier Ionization":
       barrier as "Consume 3 Charge: +1 Charge Barrier",
       barrierover as "Consume 1 Overcharge: +3 Charge Barrier",

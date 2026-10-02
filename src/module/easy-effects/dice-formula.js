@@ -25,6 +25,58 @@ export function parseSimpleDiceFormula(formula) {
   };
 }
 
+/**
+ * `2d10+8[slash]` and `2d10[slash]+8` both parse. Two flavors return null.
+ * A count or a face count below 1 also returns null.
+ */
+export function parseDiceFormulaOverride(formula) {
+  const raw = String(formula ?? "").trim();
+  // by the gods... a regex masterpiece
+  const m = raw.match(/^(\d*)d(\d+)(?:\[([^\]]+)\])?([+-]\d+)?(?:\[([^\]]+)\])?$/i);
+  if (!m) return null;
+  const count = Number(m[1] || 1);
+  const sides = Number(m[2]);
+  if (!Number.isInteger(count) || count < 1) return null;
+  if (!Number.isInteger(sides) || sides < 1) return null;
+  const flavorA = String(m[3] ?? "").trim();
+  const flavorB = String(m[5] ?? "").trim();
+  if (flavorA && flavorB) return null;
+  const flavor = (flavorB || flavorA).toLowerCase();
+  return {
+    count,
+    sides,
+    power: Number(m[4] || 0) || 0,
+    flavor: flavor || null,
+  };
+}
+
+/**
+ * `basePower` is the bonus written in the formula. `power` is added to it.
+ * The die count stops at 1.
+ */
+export function applyCombatDie({
+  baseCount = 1,
+  baseSides = 10,
+  basePower = 0,
+  amount = 0,
+  max = 0,
+  power = 0,
+} = {}) {
+  const count = Math.max(
+    1,
+    Math.round(Number(baseCount) || 1) + Math.round(Number(amount) || 0),
+  );
+  const { sides, powerAdjust } = applyDiceMaxFloor(baseSides, max);
+  const totalPower = Math.round(Number(basePower) || 0) + Math.round(Number(power) || 0) + powerAdjust;
+  return {
+    formula: formatDiceFormula(count, sides, totalPower),
+    count,
+    sides,
+    power: totalPower,
+    powerAdjust,
+  };
+}
+
 export function formatDiceFormula(count, sides, power) {
   const n = Math.max(1, Math.round(Number(count) || 1));
   const s = Math.max(1, Math.round(Number(sides) || 1));
@@ -44,15 +96,15 @@ export function expandSimpleDiceByMultiplier(formula, times) {
   return formatDiceFormula(parsed.count * n, parsed.sides, parsed.power);
 }
 
-/** Max changes die size; Power stays flat. */
 export function resolveDiceBonuses(baseFormula, bonuses = {}) {
   const power = Math.round(Number(bonuses.power) || 0);
   const max = Math.round(Number(bonuses.max) || 0);
+  const amount = Math.round(Number(bonuses.amount) || 0);
   const parsed = parseSimpleDiceFormula(baseFormula);
   if (!parsed) {
-    if (max) {
+    if (max || amount) {
       console.warn(
-        `[EasyEffects] Cannot apply dice max (${max}) to non-simple formula '${baseFormula}'; power only.`
+        `[EasyEffects] Cannot apply dice max (${max}) or dice amount (${amount}) to non-simple formula '${baseFormula}'; power only.`
       );
     }
     const formula = !power
@@ -60,6 +112,7 @@ export function resolveDiceBonuses(baseFormula, bonuses = {}) {
       : `${baseFormula}${power > 0 ? `+${power}` : `${power}`}`;
     return {
       formula,
+      count: 0,
       sides: parsed?.sides ?? 0,
       power: (parsed?.power ?? 0) + power,
       powerAdjust: 0,
@@ -67,13 +120,20 @@ export function resolveDiceBonuses(baseFormula, bonuses = {}) {
     };
   }
 
-  const { sides, powerAdjust } = applyDiceMaxFloor(parsed.sides, max);
-  const totalPower = parsed.power + power + powerAdjust;
+  const applied = applyCombatDie({
+    baseCount: parsed.count,
+    baseSides: parsed.sides,
+    basePower: parsed.power,
+    amount,
+    max,
+    power,
+  });
   return {
-    formula: formatDiceFormula(parsed.count, sides, totalPower),
-    sides,
-    power: totalPower,
-    powerAdjust,
+    formula: applied.formula,
+    count: applied.count,
+    sides: applied.sides,
+    power: applied.power,
+    powerAdjust: applied.powerAdjust,
     maxDelta: max,
   };
 }

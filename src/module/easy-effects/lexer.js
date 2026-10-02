@@ -25,8 +25,8 @@ export const KEYWORDS = new Set([
   "next", "round", "turn", "pause",
   // effect template polarity
   "positive", "negative",
-  // verb component keywords (power up/down, dice max up/down, range up/down, regen)
-  "power", "dice", "regen", "range", "up", "down", "max",
+  // verb component keywords (power up/down, dice max/amount up/down, range up/down, regen)
+  "power", "dice", "regen", "range", "up", "down", "max", "amount",
   "advantage", "disadvantage",
   "before", "after",
   "let",
@@ -126,11 +126,18 @@ export function tokenize(source) {
       continue;
     }
 
-    // TRIGGER [...]
-    if (iSinceLastLine === 1 && source[i] === "[") {
+    // TRIGGER [...] only when '[' is the first character of the line.
+    // Any other [...] is considered a die flavor, such as 2d10+8[slash].
+    if (source[i] === "[") {
       const end = source.indexOf("]", i);
-      if (end === -1) throw new LexError("Unclosed '[' in trigger", i);
-      tokens.push({ type: "TRIGGER", value: source.slice(i + 1, end).trim() });
+      if (end === -1) throw new LexError("Unclosed '['", i);
+      const inner = source.slice(i + 1, end).trim();
+      if (iSinceLastLine === 1) {
+        tokens.push({ type: "TRIGGER", value: inner });
+      } else {
+        if (!inner) throw new LexError("Empty brackets", i);
+        tokens.push({ type: "FLAVOR", value: inner });
+      }
       i = end + 1;
       continue;
     }

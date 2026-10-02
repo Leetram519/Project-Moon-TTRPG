@@ -1,5 +1,6 @@
 import { parse } from "../easy-effects/parser.js";
 import { bindEasyEffectsHighlighter } from "../easy-effects/highlight.js";
+import { actorIdentityKey } from "../easy-effects/burst-roles.js";
 import {
   SYSTEM_ID,
   WORLD_SCRIPT_SETTING,
@@ -25,8 +26,10 @@ export class EasyEffectsEditor extends HandlebarsApplicationMixin(ApplicationV2)
    */
   constructor(options = {}) {
     const { actor = null, ...appOptions } = options;
-    appOptions.id = actor?.id
-      ? `pmttrpg-easy-effects-editor-${actor.id}`
+    const identity = actor ? actorIdentityKey(actor) : "";
+    const safeId = identity ? identity.replace(/[^A-Za-z0-9_-]/g, "-") : "";
+    appOptions.id = safeId
+      ? `pmttrpg-easy-effects-editor-${safeId}`
       : "pmttrpg-easy-effects-editor-world";
     super(appOptions);
     this.#actor = actor ?? null;
@@ -147,7 +150,7 @@ export class EasyEffectsEditor extends HandlebarsApplicationMixin(ApplicationV2)
       "system.easyEffects": matchesWorld ? "" : text,
       "system.easyEffectsWorldSync": matchesWorld,
     });
-    clearActorScriptCache(this.actor.id);
+    clearActorScriptCache(this.actor);
     ui.notifications?.info(game.i18n.localize("PMTTRPG.EasyEffectsEditor.SavedActor"));
     await this.render();
   }
@@ -169,7 +172,7 @@ export class EasyEffectsEditor extends HandlebarsApplicationMixin(ApplicationV2)
       "system.easyEffects": "",
       "system.easyEffectsWorldSync": true,
     });
-    clearActorScriptCache(this.actor.id);
+    clearActorScriptCache(this.actor);
     this.#showError(null);
     await this.render();
   }

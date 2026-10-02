@@ -27,7 +27,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash RESULT]
+    [On Clash RESULT with CHOICE]
     spend (2*N) Charge to heal (N*3) hp damage on self;
 effects: []
 sort: 800000

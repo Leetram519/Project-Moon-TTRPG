@@ -23,6 +23,7 @@ import {
 } from "./proc.js";
 import { isAlwaysActiveResource, isApplyPoolNoun, isBonusNoun, isRegenNoun, isReservedNoun, isResourceNoun, lookupNoun, nounAllowsOp, resolveApplyPool} from "./nouns.js";
 import { tokenize, tokenizeExpression, LexError } from "./lexer.js";
+import { parseDiceFormulaOverride } from "./dice-formula.js";
 
 const SINGLE_TARGETS = new Set(["self", "target", "ally", "attacker", "originator", "burster", "burstee", "healer"]);
 const MULTI_TARGETS  = new Set(["enemies", "allies", "all"]);
@@ -407,6 +408,8 @@ class Parser {
     }
     if (trigger === "Always Active") {
       for (const stmt of statements) this._assertAlwaysActiveSafe(stmt);
+    } else {
+      for (const stmt of statements) this._rejectDiceFormulaOutsideAlwaysActive(stmt);
     }
     return {
       type: "Block",
@@ -419,6 +422,97 @@ class Parser {
       healFilter,
       statements,
     };
+  }
+
+  _rejectDiceFormulaOutsideAlwaysActive(stmt) {
+    for (const action of stmt?.actions ?? []) {
+      if (action?.verb === "set" && action?.noun === "diceFormula") {
+        throw new ParseError(
+          "'set dice formula' is only allowed in [Always Active]",
+          this.peek()
+        );
+      }
+    }
+  }
+
+  _isFormulaWord(tok) {
+    return !!tok && (tok.type === "IDENT" || tok.type === "KEYWORD") && tok.value === "formula";
+  }
+
+  _isDiceFormulaDie(tok) {
+    return !!tok
+      && (tok.type === "IDENT" || tok.type === "KEYWORD")
+      && ["attack", "block", "evade", "defense"].includes(tok.value);
+  }
+
+  _looksLikeSetDiceFormula() {
+    if (!this.check("IDENT", "set")) return false;
+    const t1 = this._peekOffset(1);
+    const t2 = this._peekOffset(2);
+    const t3 = this._peekOffset(3);
+    if (t1?.type === "KEYWORD" && t1.value === "dice" && this._isFormulaWord(t2)) return true;
+    return this._isDiceFormulaDie(t1)
+      && t2?.type === "KEYWORD"
+      && t2.value === "dice"
+      && this._isFormulaWord(t3);
+  }
+
+  _parseSetDiceFormulaAction() {
+    this.consume("IDENT", "set");
+    let die = null;
+    if (this._isDiceFormulaDie(this.peek())) {
+      const next = this._peekOffset(1);
+      const after = this._peekOffset(2);
+      if (next?.type === "KEYWORD" && next.value === "dice" && this._isFormulaWord(after)) {
+        die = this.advance().value;
+      }
+    }
+    this.consume("KEYWORD", "dice");
+    if (!this._isFormulaWord(this.peek())) {
+      throw new ParseError(`Expected 'formula' after 'dice', got '${this.peek().value}'`, this.peek());
+    }
+    this.advance();
+    if (this.check("KEYWORD", "to")) this.consume("KEYWORD", "to");
+    return {
+      type: "Action",
+      verb: "set",
+      noun: "diceFormula",
+      argument: die,
+      formula: this._parseDiceFormulaLiteral(),
+      amount: null,
+      per: null,
+      target: null,
+      pool: null,
+    };
+  }
+
+  _parseDiceFormulaLiteral() {
+    if (!this.check("DICE")) {
+      throw new ParseError(
+        `Expected a dice formula like 2d10+8[slash], got '${this.peek().value}'`,
+        this.peek()
+      );
+    }
+    let raw = this.consume("DICE").value;
+    if (this.check("MATHOP") && (this.peek().value === "+" || this.peek().value === "-")) {
+      const op = this.consume("MATHOP").value;
+      if (!this.check("NUMBER")) {
+        throw new ParseError(
+          `Expected a number after '${op}' in dice formula, got '${this.peek().value}'`,
+          this.peek()
+        );
+      }
+      raw += op + this.consume("NUMBER").value;
+    }
+    if (this.check("FLAVOR")) raw += `[${this.consume("FLAVOR").value}]`;
+    const parsed = parseDiceFormulaOverride(raw);
+    if (!parsed) {
+      throw new ParseError(
+        `Expected a simple dice formula (NdX, NdX+P, or NdX-P) with an optional [flavor], got '${raw}'`,
+        this.peek()
+      );
+    }
+    return parsed;
   }
 
   _assertAlwaysActiveSafe(stmt) {
@@ -441,7 +535,12 @@ class Parser {
         this.peek()
       );
     }
-    const okBonus = new Set(["power up", "power down", "dice max up", "dice max down", "range up", "range down"]);
+    const okBonus = new Set([
+      "power up", "power down",
+      "dice max up", "dice max down",
+      "dice amount up", "dice amount down",
+      "range up", "range down",
+    ]);
     for (const action of stmt.actions ?? []) {
       if (action.verb === "burst") {
         throw new ParseError(
@@ -504,10 +603,11 @@ class Parser {
       }
       if (action.verb === "instant") continue;
       if (action.verb === "set" && action.noun === "resistance") continue;
+      if (action.verb === "set" && action.noun === "diceFormula") continue;
       throw new ParseError(
         `[Always Active] does not allow '${action.verb}'`
         + (action.noun === "status" ? " (status stacks)" : "")
-        + "; use combat triggers for statuses/damage. Only max resources, power, dice max, and instant are allowed here",
+        + "; use combat triggers for statuses/damage. Only max resources, power, dice max, dice amount, set dice formula, and instant are allowed here",
         this.peek()
       );
     }
@@ -909,7 +1009,7 @@ class Parser {
     const t2 = this._peekOffset(2);
     if (!t0 || t0.type !== "KEYWORD") return false;
     if (t0.value === "power" && t1?.type === "KEYWORD" && (t1.value === "up" || t1.value === "down")) return true;
-    if (t0.value === "dice"  && t1?.type === "KEYWORD" && t1.value === "max" &&
+    if (t0.value === "dice" && t1?.type === "KEYWORD" && (t1.value === "max" || t1.value === "amount") &&
         t2?.type === "KEYWORD" && (t2.value === "up" || t2.value === "down")) return true;
     if (t0.value === "regen" && t1 && (t1.type === "KEYWORD" || t1.type === "IDENT") && isRegenNoun(t1.value))
       return true;
@@ -1042,7 +1142,7 @@ class Parser {
 
   /**
    * Parses a single action, handling multi-keyword verbs:
-   *   power [up/down] / dice max [up/down] / range [up/down] / regen / <IDENT>
+   *   power [up/down] / dice max [up/down] / dice amount [up/down] / range [up/down] / regen / <IDENT>
    *
    * Returns { type:"Action", verb, noun, argument, amount, per, target }
    */
@@ -1056,6 +1156,9 @@ class Parser {
     const t1 = this._peekOffset(1);
     const t2 = this._peekOffset(2);
 
+    if (t0?.type === "IDENT" && t0.value === "set" && this._looksLikeSetDiceFormula()) {
+      return this._parseSetDiceFormulaAction();
+    }
     if (t0?.type === "IDENT" && t0.value === "set" && this._isFlagWordTok(t1)) {
       return this.parseSetFlagAction();
     }
@@ -1080,6 +1183,19 @@ class Parser {
         verb = "power down";
       } else {
         throw new ParseError(`Expected 'up' or 'down' after 'power', got '${t1.value}'`, t1);
+      }
+      noun = this._parseBonusNoun();
+
+    } else if (t0?.type === "KEYWORD" && t0.value === "dice" &&
+               t1?.type === "KEYWORD" && t1.value === "amount") {
+      if (t2?.type === "KEYWORD" && t2.value === "up") {
+        this.consume("KEYWORD", "dice"); this.consume("KEYWORD", "amount"); this.consume("KEYWORD", "up");
+        verb = "dice amount up";
+      } else if (t2?.type === "KEYWORD" && t2.value === "down") {
+        this.consume("KEYWORD", "dice"); this.consume("KEYWORD", "amount"); this.consume("KEYWORD", "down");
+        verb = "dice amount down";
+      } else {
+        throw new ParseError(`Expected 'up' or 'down' after 'dice amount', got '${t2?.value}'`, t2 ?? t1);
       }
       noun = this._parseBonusNoun();
 
@@ -1126,7 +1242,7 @@ class Parser {
     // Optional status/resource name argument (only for standard verbs)
     let argument = null;
     let pool = dealPool ?? null;
-    if (!["power up","power down","dice max up","dice max down","range up","range down","regen","deal","heal"].includes(verb)) {
+    if (!["power up","power down","dice max up","dice max down","dice amount up","dice amount down","range up","range down","regen","deal","heal"].includes(verb)) {
       if (noun === "resource") argument = this.parseStatusName();
       else if (this.isStatusNameToken()) argument = this.parseStatusName();
     }
@@ -1542,6 +1658,7 @@ class Parser {
   }
 
   parseNaturalSetAction() {
+    if (this._looksLikeSetDiceFormula()) return this._parseSetDiceFormulaAction();
     this.consume("IDENT", "set");
 
     if (this._isFlagWord()) {
@@ -1869,10 +1986,10 @@ class Parser {
     for (;;) {
       const amount = this._parseAmountExpr({ required: true });
       this.consume("KEYWORD", "as");
-      if (!this.check("IDENT")) {
+      if (!(this.check("IDENT") || this.check("KEYWORD"))) {
         throw new ParseError(`Expected bind name after 'as', got '${this.peek().value}'`, this.peek());
       }
-      const name = this.consume("IDENT").value;
+      const name = this.advance().value;
       if (isReservedProcBindName(name)) {
         throw new ParseError(
           `'${name}' is reserved and cannot be a proc bind name`,
