@@ -5,10 +5,28 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Charge.webp
 system:
   name: ''
   description: ''
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
-  allowMultiple: false
+  stackMax: 1
+  appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
+  canPositive: true
+  canNegative: false
   procOn: onClash
   procResult: win
+  procResultLocked: true
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -21,11 +39,8 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  appliesTo: weapon
-  canPositive: true
-  canNegative: false
-  stackMax: 1
-  procResultLocked: true
+  easyEffects: ''
+  allowMultiple: false
 effects: []
 sort: 0
 ownership:
@@ -36,11 +51,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.8zErLlYNkUsqabtp
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1779651087474
-  modifiedTime: 1779651087474
+  systemVersion: 0.1.0
+  createdTime: 1790606643075
+  modifiedTime: 1790606643075
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: sCK0mR1MYflJKzdb
 _key: '!items!sCK0mR1MYflJKzdb'

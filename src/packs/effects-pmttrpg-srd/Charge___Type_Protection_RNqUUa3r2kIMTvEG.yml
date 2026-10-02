@@ -8,9 +8,19 @@ system:
     <p><em>Note: This effect is not yet fully automated. It only gives Type
     Protection to self, instead of an ally.</em></p>
   slug: charge-type-protection
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -58,8 +68,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1787561962346
-  modifiedTime: 1787561962346
+  createdTime: 1790606642803
+  modifiedTime: 1790606642803
   lastModifiedBy: yWsvx4DXrmYcZsue
   exportSource: null
   compendiumSource: null

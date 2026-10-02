@@ -1,10 +1,3 @@
-/**
- * A simple and flexible system for world-building using an arbitrary collection of character and item attributes
- * Author: Atropos
- * Software License: GNU GPLv3
- */
-
-// Import Modules
 import { PMTTRPG } from "./config.js";
 import { ActorPMTTRPG } from "./actor/actor.js";
 import { ItemPMTTRPG } from "./item/item.js";
@@ -48,7 +41,7 @@ import {
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
 import { MigrationList, MigrationRunner } from "./migration/index.js";
 import { HomebrewSettings } from "./settings/homebrew-settings.js";
-import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
+//import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
@@ -211,6 +204,10 @@ Hooks.once("ready", async function() {
         format: { version: game.system.version },
       });
       await migrationRunner.runMigration();
+      for( const pack of game.packs ) {
+        console.log(pack);
+        await migrationRunner.runCompendiumMigration(pack);
+      }
     }
   }
 

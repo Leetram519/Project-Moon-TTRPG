@@ -9,6 +9,12 @@ system:
     the end of the round, take ST Damage equal to the number of Frostbite
     stacks, then reduce the Frostbite stack by half. (Rounded down)</strong></p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 5
@@ -16,6 +22,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: >-
     [End of Round]
@@ -31,15 +47,6 @@ system:
 
     require ("Frostbite - Deep Chill") >= 1 then lose 1 "Frostbite - Deep Chill"
     on self;
-  proc:
-    turnStart: false
-    endOfRound: false
-    actionOrReaction: false
-    attackerBurst: false
-    onHitWhenActorHas: false
-    onHitWhenTargetHas: false
-    alwaysActive: false
-    skillEffect: false
 effects: []
 ownership:
   default: 0
@@ -51,9 +58,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1779621121159
-  modifiedTime: 1787225159144
+  systemVersion: 0.1.0
+  createdTime: 1790606642203
+  modifiedTime: 1790606642203
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: otekCDMsUCWFdGFl
 sort: 187500

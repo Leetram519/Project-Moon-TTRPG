@@ -70,7 +70,7 @@ Actor:
           notableHistory: ''
       homebrew:
         author: ''
-        source: ''
+        source: 'Community Ruleset'
   character:
     templates:
       - base
@@ -263,7 +263,7 @@ Item:
       subsubtype: regular
       homebrew:
         author: ''
-        source: ''
+        source: 'Community Ruleset'
   weapon:
     templates:
       - base

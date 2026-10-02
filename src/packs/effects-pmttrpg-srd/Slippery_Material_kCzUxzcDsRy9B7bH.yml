@@ -5,14 +5,27 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Endurance.webp
 system:
   name: ''
   description: ''
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 5
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -22,6 +35,7 @@ system:
   macro:
     uuid: ''
   customNotes: ''
+  easyEffects: ''
   allowMultiple: true
 effects: []
 sort: 0
@@ -33,11 +47,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.dYnFrDX2sf5IpEhN
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308620214
-  modifiedTime: 1780308620214
+  systemVersion: 0.1.0
+  createdTime: 1790606643068
+  modifiedTime: 1790606643068
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: kCzUxzcDsRy9B7bH
 _key: '!items!kCzUxzcDsRy9B7bH'

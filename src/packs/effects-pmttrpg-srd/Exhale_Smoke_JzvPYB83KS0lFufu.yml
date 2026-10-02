@@ -9,9 +9,19 @@ system:
     <p><em>Note: All the intricaties of this effect are not automated yet. This
     only automates the "Transfer all present Smoke" part.</em></p>
   slug: exhale-smoke
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -46,9 +56,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787235636266
-  modifiedTime: 1787235636266
+  systemVersion: 0.1.0
+  createdTime: 1790606642793
+  modifiedTime: 1790606642793
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.Vd97JVDv9HmAVojR

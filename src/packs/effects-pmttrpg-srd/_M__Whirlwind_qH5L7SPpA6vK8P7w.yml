@@ -9,9 +9,19 @@ system:
     <p><em>Note: This effect is not yet automated. <strong>Though, there is a
     text message telling you how to apply this.</strong></em></p>
   slug: m-whirlwind
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -59,9 +69,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787243655059
-  modifiedTime: 1787243655059
+  systemVersion: 0.1.0
+  createdTime: 1790606643073
+  modifiedTime: 1790606643073
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.glBzfdb7LFCPS7Xy

@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: transfer-sinking
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -41,9 +51,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787233598768
-  modifiedTime: 1787233598768
+  systemVersion: 0.1.0
+  createdTime: 1790606643063
+  modifiedTime: 1790606643063
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.m9Yth7zsbm3JdC9t

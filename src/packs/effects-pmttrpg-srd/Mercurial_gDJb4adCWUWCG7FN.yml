@@ -8,9 +8,19 @@ system:
     <p><strong>Note: This effect is not automated or supported in the current
     version. Emotions are WIP.</strong></p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -40,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485130072
-  modifiedTime: 1787169725217
+  systemVersion: 0.1.0
+  createdTime: 1790606643063
+  modifiedTime: 1790606643063
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: gDJb4adCWUWCG7FN
 _key: '!items!gDJb4adCWUWCG7FN'

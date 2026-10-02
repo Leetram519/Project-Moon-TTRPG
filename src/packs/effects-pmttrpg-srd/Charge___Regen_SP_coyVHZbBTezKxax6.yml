@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: charge-regen-sp
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -38,9 +48,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585540
-  modifiedTime: 1787561958505
+  systemVersion: 0.1.0
+  createdTime: 1790606642942
+  modifiedTime: 1790606642942
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.RUgemNVff0PLOvwe

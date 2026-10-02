@@ -5,14 +5,27 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Haste.webp
 system:
   name: ''
   description: ''
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -25,6 +38,7 @@ system:
   macro:
     uuid: ''
   customNotes: ''
+  easyEffects: ''
   allowMultiple: true
 effects: []
 sort: 0
@@ -36,11 +50,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.2VziutGGQ6y2HHG1
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308622217
-  modifiedTime: 1780308622217
+  systemVersion: 0.1.0
+  createdTime: 1790606643152
+  modifiedTime: 1790606643152
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: veBrb5Yul4H5dXhK
 _key: '!items!veBrb5Yul4H5dXhK'

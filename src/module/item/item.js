@@ -516,6 +516,8 @@ export class ItemPMTTRPG extends Item {
       data.showProcStat = ['onCondition', 'onUse', 'onAction'].includes(effectProcOn);
       data.showProcDice = ['onClash', 'onClashResult', 'onEitherClashResult', 'onBurst', 'onCritical', 'onDevastating'].includes(effectProcOn);
       data.showProcAction = ['onUse', 'onAction'].includes(effectProcOn);
+      data.subtypeWhitelist = data.subtypeWhitelist ?? ['regular'];
+      data.subsubtypeWhitelist = data.subsubtypeWhitelist ?? ['regular'];
     }
   }
 

@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: tremor-break
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 6
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onBurst
@@ -38,9 +48,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787232171757
-  modifiedTime: 1787232171757
+  systemVersion: 0.1.0
+  createdTime: 1790606642791
+  modifiedTime: 1790606642791
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.MpkXDbVfYV8WLNeE

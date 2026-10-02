@@ -72,7 +72,9 @@
     // Status Tooltip
     "systems/projectmoonttrpg/templates/hud/status-tooltip.hbs",
     // Settings partials
-    "systems/projectmoonttrpg/templates/settings/homebrew-menu.hbs"
+    "systems/projectmoonttrpg/templates/settings/homebrew-menu.hbs",
+    // Effect Autocomplet Partial
+    "systems/projectmoonttrpg/templates/parts/effect-autocomplete.hbs"
   ];
 
   // Load the template parts

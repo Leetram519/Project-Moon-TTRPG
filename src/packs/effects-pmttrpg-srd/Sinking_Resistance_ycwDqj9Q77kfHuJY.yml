@@ -5,14 +5,27 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Sinking.webp
 system:
   name: ''
   description: ''
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -22,13 +35,13 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  allowMultiple: true
   easyEffects: |
     [On Taking Sinking Damage]
     positive:
     reduce damage by N;
     negative:
     increase damage by N;
+  allowMultiple: true
 effects: []
 sort: 0
 ownership:
@@ -39,11 +52,11 @@ _stats:
   compendiumSource: null
   duplicateSource: Item.N3wk0YcxwVia8ZXJ
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308634956
-  modifiedTime: 1780308634956
+  systemVersion: 0.1.0
+  createdTime: 1790606643154
+  modifiedTime: 1790606643154
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ycwDqj9Q77kfHuJY
 _key: '!items!ycwDqj9Q77kfHuJY'

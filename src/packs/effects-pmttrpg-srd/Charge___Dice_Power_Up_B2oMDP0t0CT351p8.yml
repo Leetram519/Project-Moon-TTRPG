@@ -8,9 +8,19 @@ system:
   name: ''
   description: ''
   slug: charge-dice-power-up
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -42,9 +52,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585535
-  modifiedTime: 1787561958503
+  systemVersion: 0.1.0
+  createdTime: 1790606642642
+  modifiedTime: 1790606642642
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

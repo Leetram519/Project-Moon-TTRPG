@@ -8,9 +8,19 @@ system:
   name: ''
   description: ''
   slug: instant-tremor
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -42,9 +52,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787232171755
-  modifiedTime: 1787232171755
+  systemVersion: 0.1.0
+  createdTime: 1790606642799
+  modifiedTime: 1790606642799
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.PRMZb5NBXI4xsIK0

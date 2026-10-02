@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
@@ -41,8 +51,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1785485127257
-  modifiedTime: 1787388482206
+  createdTime: 1790606642924
+  modifiedTime: 1790606642924
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: RmFKFWkuxE2zA6B9
 _key: '!items!RmFKFWkuxE2zA6B9'

@@ -42,6 +42,7 @@ styles:
   - styles/lib/dialogs.css
   - styles/lib/canvas.css
   - styles/lib/settings.css
+  - styles/lib/autocomplete.css
 media:
   - type: setup
     url: "systems/projectmoonttrpg/assets/thumbnail.webp"

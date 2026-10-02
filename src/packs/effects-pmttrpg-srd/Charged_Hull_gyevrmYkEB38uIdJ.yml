@@ -6,14 +6,26 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -47,9 +59,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308622217
-  modifiedTime: 1786542723824
+  systemVersion: 0.1.0
+  createdTime: 1790606643064
+  modifiedTime: 1790606643064
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: gyevrmYkEB38uIdJ
 _key: '!items!gyevrmYkEB38uIdJ'

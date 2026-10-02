@@ -11,9 +11,29 @@ system:
     once. </p><p>If you Protect the Marked Target, they recover 5 HP per
     Reaction you use to intercept Clashes for the Marked.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 0
+  pending: false
+  arrival: ''
+  shelved: false
+  origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: ''
 effects: []
@@ -25,9 +45,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785431759770
-  modifiedTime: 1785432102591
+  systemVersion: 0.1.0
+  createdTime: 1790606642200
+  modifiedTime: 1790606642200
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

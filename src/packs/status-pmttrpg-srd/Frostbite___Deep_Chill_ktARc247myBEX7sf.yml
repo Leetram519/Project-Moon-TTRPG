@@ -12,6 +12,12 @@ system:
     <strong>When immediately activating Frostbite, do not halve Frostbite and
     instead remove 1 Stack of this status</strong>.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 8
@@ -19,6 +25,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: ''
 effects: []
@@ -30,9 +46,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785434703075
-  modifiedTime: 1787225245176
+  systemVersion: 0.1.0
+  createdTime: 1790606642201
+  modifiedTime: 1790606642201
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

@@ -1,0 +1,30 @@
+<div class="effect-autocomplete"
+    data-field="effects"
+    data-dtype="String">
+  <div class="effect-autocomplete__field">
+    <i class="effect-autocomplete__search-icon fas fa-search"></i>
+    <input
+      class="effect-autocomplete__input"
+      type="text"
+      placeholder="{{system.effectSearchPlaceholder}}"
+      autocomplete="off"
+      aria-label="Search effects"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      role="combobox"
+    />
+    <button class="effect-autocomplete__clear" type="button" aria-label="Clear" hidden>
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="effect-autocomplete__dropdown" role="listbox" hidden>
+    <div class="effect-autocomplete__meta">
+      <span class="effect-autocomplete__count"></span>
+    </div>
+    <ul class="effect-autocomplete__list"></ul>
+    <div class="effect-autocomplete__empty" hidden>
+      <i class="fas fa-ghost"></i>
+      <span>{{localize "PMTTRPG.EffectSearchEmpty"}}</span>
+    </div>
+  </div>
+</div>
