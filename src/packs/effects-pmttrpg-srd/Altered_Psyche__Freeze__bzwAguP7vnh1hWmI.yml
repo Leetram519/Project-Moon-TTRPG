@@ -9,9 +9,19 @@ system:
     on the kebab menu on the actor's character sheet, then Actor EE Script. From
     there, remove any unwanted Panic Types.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -43,9 +53,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485122323
-  modifiedTime: 1787167389429
+  systemVersion: 0.1.0
+  createdTime: 1790606642941
+  modifiedTime: 1790606642941
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: bzwAguP7vnh1hWmI
 _key: '!items!bzwAguP7vnh1hWmI'

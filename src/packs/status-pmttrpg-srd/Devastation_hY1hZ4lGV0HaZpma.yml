@@ -6,6 +6,12 @@ system:
   name: ''
   description: "<p dir=\"ltr\">You inflict Devastation on your target as a part of Ruin and other skills. When you trigger a Devastating Hit deal 1d8 extra HP Damage per Devastation the target has, then they lose all Devastation.\_<strong>\_</strong></p><p dir=\"ltr\">If you gain Devastation, but have no Ruin, gain 1 Ruin.</p>"
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 5
@@ -51,8 +57,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1779621119816
-  modifiedTime: 1789150418357
+  createdTime: 1790606642200
+  modifiedTime: 1790606642200
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: hY1hZ4lGV0HaZpma
 sort: 175000

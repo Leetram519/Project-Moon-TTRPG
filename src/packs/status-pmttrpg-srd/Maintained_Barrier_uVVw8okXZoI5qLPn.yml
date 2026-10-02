@@ -10,6 +10,12 @@ system:
     <p>At the End of Round, only lose 1/2 Charge Barrier instead of the
     totality.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 1
   priority: 12
@@ -17,6 +23,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: ''
 effects: []
@@ -30,9 +46,9 @@ flags:
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251118284
-  modifiedTime: 1787251208324
+  systemVersion: 0.1.0
+  createdTime: 1790606642204
+  modifiedTime: 1790606642204
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

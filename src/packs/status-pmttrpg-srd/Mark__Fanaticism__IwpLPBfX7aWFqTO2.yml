@@ -10,9 +10,29 @@ system:
     Status they can reduce is halved.</p><p>Your Marked Target cannot reduce
     Renewed Blaze/Deep Chill/Hemorrhage with the Reduce Status Action.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 0
+  pending: false
+  arrival: ''
+  shelved: false
+  origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: ''
 effects: []
@@ -24,9 +44,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785432587124
-  modifiedTime: 1785432602238
+  systemVersion: 0.1.0
+  createdTime: 1790606642197
+  modifiedTime: 1790606642197
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effet is not yet automated.</em></p>'
   slug: branding-strike
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 6
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -36,9 +46,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787245896992
-  modifiedTime: 1787245896992
+  systemVersion: 0.1.0
+  createdTime: 1790606642634
+  modifiedTime: 1790606642634
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

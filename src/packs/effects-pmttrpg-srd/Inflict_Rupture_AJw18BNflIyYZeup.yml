@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: inflict-rupture
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 6
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: onClashResult
@@ -44,9 +54,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787230920023
-  modifiedTime: 1787230920023
+  systemVersion: 0.1.0
+  createdTime: 1790606642641
+  modifiedTime: 1790606642641
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: AJw18BNflIyYZeup
 _key: '!items!AJw18BNflIyYZeup'

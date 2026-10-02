@@ -1,7 +1,7 @@
 import { MigrationRunnerBase } from "./base.js";
 
 export class MigrationRunner extends MigrationRunnerBase {
-  static LATEST_SCHEMA_VERSION = 0.026;
+  static LATEST_SCHEMA_VERSION = 0.027;
 
   /** Failure reasons from the most recent migration run, keyed by UUID */
   static lastRunFailures = new Map();
@@ -116,6 +116,48 @@ export class MigrationRunner extends MigrationRunnerBase {
     }
     if (updateGroup.length > 0) {
       await this.saveUpdateGroup(collection, updateGroup, pack, progress);
+    }
+  }
+
+  /** Migrates all documents in a compendium. Since getDocuments() already migrates, this merely loads and saves them */
+  async runCompendiumMigration(
+    compendium,
+  ) {
+    const pack = compendium.metadata.id;
+
+    ui.notifications.info("PMTTRPG.Migrations.Starting", { format: { version: game.system.version } });
+    const documents = await compendium.getDocuments();
+
+    // Clear stale failures from a previous run over this pack
+    for (const uuid of MigrationRunner.lastRunFailures.keys()) {
+      if (uuid.startsWith(`Compendium.${pack}.`)) MigrationRunner.lastRunFailures.delete(uuid);
+    }
+
+    const updates = documents.map((d) => {
+      const obj = d.toObject();
+      return Object.fromEntries(
+        Object.entries(obj).map(([k, v]) => [
+          k,
+          k === "_id" ? v : foundry.data.operators.ForcedReplacement.create(v),
+        ])
+      );
+    });
+
+    for (let i = 0; i < updates.length; i += 100) {
+      const batch = updates.slice(i, i + 100);
+      await this.saveUpdateGroup(compendium, batch, pack, undefined, { diff: false });
+    }
+    ui.notifications.info("PMTTRPG.Migrations.Finished", { format: { version: game.system.version } });
+
+    // Verify the results: a save can resolve without anything being persisted
+    const index = await compendium.getIndex({
+      fields: [foundry.utils.randomID(), "system._migration", "system.schema", "data.schema"],
+    });
+    const outdated = index.filter(
+      (e) => !(MigrationRunner.schemaVersionFromIndex(e) >= MigrationRunner.LATEST_SCHEMA_VERSION),
+    ).length;
+    if (outdated > 0) {
+      ui.notifications.warn("PMTTRPG.Migrations.StillOutdated", { format: { count: String(outdated) } });
     }
   }
 
@@ -335,7 +377,7 @@ export class MigrationRunner extends MigrationRunnerBase {
         .map(([uuid, message]) => `${uuid}: ${message}`)
         .join("; ");
       ui.notifications?.error?.(
-        `World migration failed. Theschema version was not updated. ${details}`
+        `World migration failed. The schema version was not updated. ${details}`
       );
     }
   }

@@ -6,14 +6,26 @@ system:
   name: ''
   description: ''
   slug: lone-fighter
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 3
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -43,9 +55,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485124306
-  modifiedTime: 1785485124306
+  systemVersion: 0.1.0
+  createdTime: 1790606642935
+  modifiedTime: 1790606642935
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ZmhrznDCv4lvPMpb
 _key: '!items!ZmhrznDCv4lvPMpb'

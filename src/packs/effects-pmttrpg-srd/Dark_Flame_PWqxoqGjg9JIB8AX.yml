@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 12
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -43,9 +53,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787171976159
-  modifiedTime: 1787225271295
+  systemVersion: 0.1.0
+  createdTime: 1790606642800
+  modifiedTime: 1790606642800
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: PWqxoqGjg9JIB8AX
 _key: '!items!PWqxoqGjg9JIB8AX'

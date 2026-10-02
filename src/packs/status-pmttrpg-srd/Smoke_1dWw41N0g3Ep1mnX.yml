@@ -10,6 +10,12 @@ system:
     from natural inflicts, 20 with certain skill effects. When above 10 Smoke,
     lose 4 Smoke at the end of each round. </p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 5
@@ -17,6 +23,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: |-
     [On Taking HP Attack Damage]
@@ -38,9 +54,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785318920602
-  modifiedTime: 1787225193679
+  systemVersion: 0.1.0
+  createdTime: 1790606642191
+  modifiedTime: 1790606642191
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

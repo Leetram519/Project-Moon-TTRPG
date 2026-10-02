@@ -6,14 +6,26 @@ system:
   name: ''
   description: ''
   slug: heightened-presence
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -36,9 +48,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485122326
-  modifiedTime: 1785485122326
+  systemVersion: 0.1.0
+  createdTime: 1790606642792
+  modifiedTime: 1790606642792
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: JuKl9lvbdTXnnmhW
 _key: '!items!JuKl9lvbdTXnnmhW'

@@ -6,9 +6,20 @@ system:
   name: ''
   description: '<p><em>Note : This effect isn''t currently automated.</em></p>'
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 3
   stackMax: 5
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
@@ -41,9 +52,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1779651087474
-  modifiedTime: 1787149526430
+  systemVersion: 0.1.0
+  createdTime: 1790606643068
+  modifiedTime: 1790606643068
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: lPc8GrCA85O1atYf
 _key: '!items!lPc8GrCA85O1atYf'

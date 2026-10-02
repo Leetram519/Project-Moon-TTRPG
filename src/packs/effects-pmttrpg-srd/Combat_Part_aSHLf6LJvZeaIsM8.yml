@@ -5,15 +5,27 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Overcharge.webp
 system:
   name: ''
   description: ''
-  slug: combat-part
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 4
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -39,9 +51,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485111462
-  modifiedTime: 1785485111462
+  systemVersion: 0.1.0
+  createdTime: 1790606642938
+  modifiedTime: 1790606642938
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: aSHLf6LJvZeaIsM8
 _key: '!items!aSHLf6LJvZeaIsM8'

@@ -6,14 +6,27 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 3
   stackMax: 5
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: onClashResult
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -42,9 +55,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1779651087474
-  modifiedTime: 1786513521330
+  systemVersion: 0.1.0
+  createdTime: 1790606643155
+  modifiedTime: 1790606643155
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: yxwlH6NbaIz8GJ7h
 _key: '!items!yxwlH6NbaIz8GJ7h'

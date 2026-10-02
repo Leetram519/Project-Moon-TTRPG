@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -43,9 +53,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787225861376
-  modifiedTime: 1787226308005
+  systemVersion: 0.1.0
+  createdTime: 1790606642624
+  modifiedTime: 1790606642624
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 0aqbEQB9jSiZf9Xj
 _key: '!items!0aqbEQB9jSiZf9Xj'

@@ -6,9 +6,20 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 2
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - null
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -57,8 +68,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1779651087474
-  modifiedTime: 1789148652232
+  createdTime: 1790606642795
+  modifiedTime: 1790606642795
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: LyYkGGaHNqDXVnWE
 _key: '!items!LyYkGGaHNqDXVnWE'

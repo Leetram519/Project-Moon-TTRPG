@@ -1,0 +1,285 @@
+.effect-autocomplete {
+  --sheet-panel: #2a2420;
+  --box: #3d2a1f;
+  --left-bg: #1f1b18;
+  --gold-border: #f3c267;
+  --gold-label: #8c6a3d;
+  --ink: #221712;
+  --gold-text: #c79a4b;
+  --gold-tab: #d7b66a;
+  --cream: #f4ead2;
+  --cream-bright: #f7f1e4;
+  --ice: #d6dde0;
+  --bone: #e5e4d3;
+  --name-text: #ede7de;
+  --tab-panel: #322a24;
+  --ph-surface: var(--sheet-panel);
+  --ph-border: color-mix(in srgb, var(--gold-border) 32%, transparent);
+  --ph-text-primary: var(--name-text);
+  --ph-text-muted: var(--gold-label);
+  --ph-accent: var(--gold-tab);
+  --font-display: "ExcelsiorSans", "Trebuchet MS", sans-serif;
+  --font-body: "Pretendard", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-display);
+  color: var(--cream);
+
+  position: relative;
+  width: 100%;
+  font-family: var(--font-body);
+}
+
+.effect-autocomplete__field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: var(--sheet-panel);
+  border: 1px solid color-mix(in srgb, var(--gold-border) 32%, transparent);
+  border-radius: 6px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.effect-autocomplete__field:focus-within {
+  border-color: var(--gold-border);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold-border) 18%, transparent);
+}
+
+.effect-autocomplete__search-icon {
+  color: var(--gold-label);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.effect-autocomplete__input {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: var(--name-text) !important;
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+  padding: 8px 0;
+}
+
+.effect-autocomplete__input::placeholder {
+  color: var(--gold-label);
+}
+
+.effect-autocomplete__clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold-label);
+  font-size: 0.7rem;
+  padding: 2px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  transition: color 140ms ease, background 140ms ease;
+}
+
+.effect-autocomplete__clear:hover {
+  color: var(--cream);
+  background: color-mix(in srgb, var(--gold-border) 15%, transparent);
+}
+
+.effect-autocomplete__dropdown {
+  position: absolute;
+  z-index: 9999;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: color-mix(in srgb, var(--sheet-panel) 97%, #000);
+  border: 1px solid color-mix(in srgb, var(--gold-border) 32%, transparent);
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  animation: eac-slide-in 140ms ease both;
+}
+
+.effect-autocomplete__meta {
+  padding: 5px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-border) 10%, transparent);
+}
+
+.effect-autocomplete__count {
+  font-size: 0.68rem;
+  color: var(--gold-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+}
+
+.effect-autocomplete__list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--gold-border) 28%, transparent) transparent;
+}
+
+.effect-autocomplete__list::-webkit-scrollbar       { width: 4px; }
+.effect-autocomplete__list::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--gold-border) 28%, transparent);
+  border-radius: 2px;
+}
+
+.effect-autocomplete__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 24px 12px;
+  color: var(--gold-label);
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+}
+
+.effect-autocomplete__empty i {
+  font-size: 1.3rem;
+  opacity: 0.45;
+}
+
+.effect-autocomplete__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-border) 7%, transparent);
+}
+
+.effect-autocomplete__item:last-child {
+  border-bottom: none;
+}
+
+.effect-autocomplete__item:hover,
+.effect-autocomplete__item.is-active {
+  background: color-mix(in srgb, var(--gold-border) 8%, transparent);
+}
+
+.effect-autocomplete__item:hover .eac-item__icon,
+.effect-autocomplete__item.is-active .eac-item__icon {
+  color: var(--gold-tab);
+}
+
+.eac-item__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  align-self: center;
+}
+
+.eac-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.eac-item__main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.eac-item__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--name-text);
+  font-family: var(--font-body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eac-item__name mark {
+  background: color-mix(in srgb, var(--gold-tab) 22%, transparent);
+  color: var(--gold-tab);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.eac-item__source {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--gold-label);
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
+.eac-item__source mark {
+  background: color-mix(in srgb, var(--gold-tab) 22%, transparent);
+  color: var(--gold-tab);
+  border-radius: 2px;
+  padding: 0 1px;
+  font-style: normal;
+}
+
+.eac-item__sub {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.eac-ep {
+  font-size: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--gold-text);
+  background: color-mix(in srgb, var(--gold-border) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-border) 28%, transparent);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.eac-ep abbr {
+  text-decoration: none;
+  cursor: default;
+}
+
+.eac-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.eac-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.67rem;
+  font-family: var(--font-body);
+  color: var(--gold-label);
+  background: color-mix(in srgb, var(--box) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-border) 16%, transparent);
+  border-radius: 3px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.eac-tag i {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+@keyframes eac-slide-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effect-autocomplete__dropdown { animation: none; }
+}

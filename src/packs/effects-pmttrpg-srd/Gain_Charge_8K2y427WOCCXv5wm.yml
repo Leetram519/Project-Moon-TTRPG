@@ -8,9 +8,19 @@ system:
   name: ''
   description: ''
   slug: gain-charge
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 6
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: onUse
@@ -42,9 +52,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585536
-  modifiedTime: 1787561958504
+  systemVersion: 0.1.0
+  createdTime: 1790606642638
+  modifiedTime: 1790606642638
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

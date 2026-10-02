@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: charge-dice-max-up
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -41,9 +51,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585536
-  modifiedTime: 1787561958504
+  systemVersion: 0.1.0
+  createdTime: 1790606643154
+  modifiedTime: 1790606643154
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.B2oMDP0t0CT351p8

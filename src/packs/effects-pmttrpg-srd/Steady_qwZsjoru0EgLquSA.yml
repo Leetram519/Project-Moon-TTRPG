@@ -6,9 +6,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 4
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
@@ -42,9 +52,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485138335
-  modifiedTime: 1787166135935
+  systemVersion: 0.1.0
+  createdTime: 1790606643073
+  modifiedTime: 1790606643073
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: qwZsjoru0EgLquSA
 _key: '!items!qwZsjoru0EgLquSA'

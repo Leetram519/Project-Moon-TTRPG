@@ -9,6 +9,12 @@ system:
     Round and all their Resistances are set to Fatal.</p><p>At the start of the
     Round after, recover all ST, and lose Staggered.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 1
   priority: 90
@@ -65,8 +71,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1785319503000
-  modifiedTime: 1789155690403
+  createdTime: 1790606642192
+  modifiedTime: 1790606642192
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

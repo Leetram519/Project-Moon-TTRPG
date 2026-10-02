@@ -9,6 +9,12 @@ system:
     <p>Decrease the Power of Offensive Dice by the number of Feeble
     stack.</p><p>At the end of the Round, lose all Feeble.</p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 0
@@ -16,6 +22,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
@@ -33,9 +49,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785318638916
-  modifiedTime: 1786446269334
+  systemVersion: 0.1.0
+  createdTime: 1790606642194
+  modifiedTime: 1790606642194
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

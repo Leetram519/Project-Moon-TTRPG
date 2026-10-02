@@ -6,14 +6,27 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Aggro.webp
 system:
   name: ''
   description: ''
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 8
   stackMax: 1
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -38,10 +51,10 @@ _stats:
   compendiumSource: null
   duplicateSource: null
   exportSource: null
-  coreVersion: '13.351'
+  coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308629122
-  modifiedTime: 1780308629122
+  systemVersion: 0.1.0
+  createdTime: 1790606642786
+  modifiedTime: 1790606642786
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!G3OM0jEVr2rjXwqM'

@@ -6,6 +6,12 @@ system:
   name: ''
   description: "<p dir=\"ltr\">On Hit when you have Poise (before Clash Results Effects are applied) roll [[/r 1d10]]. If the D10 rolls Equal to or Lower than your Poise Number, deal a Critical Hit and lose all Poise.\_</p><p dir=\"ltr\">If you have 0 Poise and gain Poise your Critical becomes 1, if your Poise becomes 0 your Critical is 0. If you would gain Poise and Critical in the same action, the Poise is applied first, then the Critical is increased on top of the now present 1 Critical.</p>"
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 7
@@ -79,8 +85,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1779621123777
-  modifiedTime: 1789150388684
+  createdTime: 1790606642205
+  modifiedTime: 1790606642205
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ydPGqz7mrTUDuduT
 sort: 300000

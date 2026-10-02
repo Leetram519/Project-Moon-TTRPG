@@ -41,6 +41,7 @@ styles:
   - styles/lib/combat-turn-order.css
   - styles/lib/dialogs.css
   - styles/lib/settings.css
+  - styles/lib/autocomplete.css
 media:
   - type: setup
     url: "systems/projectmoonttrpg/assets/thumbnail.webp"

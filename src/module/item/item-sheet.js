@@ -10,6 +10,7 @@ import { emitItemEquipped } from "../easy-effects/registry.js";
 import { sluggify } from "../slug.js";
 import { isPendingStatus } from "../status/pending.js";
 import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
+import { EffectAutocomplete } from "../effects/effect-autocomplete.js";
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -298,6 +299,10 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (this._supportsEffects()) {
       const effectContext = await this._prepareEffectHostContext();
       context.effectChoices = effectContext.effectChoices;
+
+      // TODO: Implement homebrew variations
+
+
       context.system.effects = effectContext.effects;
       context.system.effectSummaryGroups = effectContext.effectSummaryGroups;
       context.system.effectSummary = effectContext.effectSummary;
@@ -415,6 +420,11 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
       this.element.addEventListener('dragover', this._onEffectDragOver.bind(this), { signal });
       this.element.addEventListener('drop', this._onDrop.bind(this), { signal });
+
+      const eacContainer = this.element.querySelector('.effect-autocomplete');
+      if (eacContainer && this.isEditable) {
+        this._mountEffectAutocomplete(eacContainer, { signal });
+      }
     }
   }
 
@@ -630,6 +640,10 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     return this.document.type;
   }
 
+  _effectHostSubtype() {
+    return [this.document.system.subtype, this.document.system.subsubtype];
+  }
+
   _effectLabel(effect) {
     return PMTTRPGUtility.formatEffectProcLabel(effect);
   }
@@ -716,6 +730,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   async _getEffectCatalog() {
     const hostType = this._effectHostType();
+    const hostSubtype = this._effectHostSubtype();
     PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
     if (PMTTRPGItemSheet._effectCatalogCache[hostType]) {
       return PMTTRPGItemSheet._effectCatalogCache[hostType];
@@ -727,6 +742,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     for (const effect of game.items.filter(item => item.type === 'effect')) {
       const appliesTo = effect.system?.appliesTo ?? hostType;
       if (appliesTo !== hostType) continue;
+      if (!(effect.system.subtypeWhitelist.includes(hostSubtype[0])) || !(effect.system.subsubtypeWhitelist.includes(hostSubtype[1]))) continue;
       catalog.push({
         uuid: effect.uuid,
         name: effect.name,
@@ -756,7 +772,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         catalog.push({
           uuid: effect.uuid,
           name: effect.name,
-          label: `${effect.name} [${game.i18n.localize(`TYPES.Item.${appliesTo}`)}]`,
+          icon: effect.img,
           appliesTo,
           canPositive: effect.system?.canPositive !== false,
           canNegative: effect.system?.canNegative !== false,
@@ -768,10 +784,35 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       }
     }
 
-    catalog.sort((left, right) => left.label.localeCompare(right.label));
+    catalog.sort((left, right) => left.name.localeCompare(right.name));
     PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
     PMTTRPGItemSheet._effectCatalogCache[this._effectHostType()] = catalog;
     return catalog;
+  }
+
+  async _mountEffectAutocomplete(container, { signal } = {}) {
+    const catalog = await this._getEffectCatalog();
+
+    const effects = catalog.map(entry => ({
+      id: entry.uuid,
+      name: entry.name,
+      icon: entry.icon,
+      source: entry.effect?.system.homebrew.source ?? "Your World",
+      epCost: entry.effect?.system?.cost ?? null,
+      tags:(entry.effect?.system?.tags ?? []).map(t => typeof t === 'string' ? { name: t } : { name: t.value ?? t.name ?? String(t) }),
+      _catalogEntry: entry,
+    }));
+
+    new EffectAutocomplete(container, {
+      effects,
+      onSelect: async (picked) => {
+        await this._addEffectToHost(picked._catalogEntry);
+      },
+    });
+
+    signal?.addEventListener('abort', () => {
+      container.querySelector('.effect-autocomplete__input')?.blur();
+    });
   }
 
   async _prepareEffectHostContext() {

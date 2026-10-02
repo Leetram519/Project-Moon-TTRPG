@@ -9,9 +9,19 @@ system:
     <p><em>Note: This effect is not yet automated. <strong>Though, there is a
     text message telling you how to apply this.</strong></em></p>
   slug: charge-bombardment
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -58,9 +68,9 @@ flags:
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585547
-  modifiedTime: 1787561958504
+  systemVersion: 0.1.0
+  createdTime: 1790606642631
+  modifiedTime: 1790606642631
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: Compendium.projectmoonttrpg.effects-pmttrpg-srd.Item.GG8qH3KXwZV3KXjO
   duplicateSource: Item.aJudQ8vozasUxy9n

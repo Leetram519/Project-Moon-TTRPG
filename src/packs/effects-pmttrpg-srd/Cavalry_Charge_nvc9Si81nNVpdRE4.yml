@@ -6,14 +6,26 @@ system:
   name: ''
   description: ''
   slug: cavalry-charge
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
@@ -38,9 +50,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485124305
-  modifiedTime: 1785485124305
+  systemVersion: 0.1.0
+  createdTime: 1790606643070
+  modifiedTime: 1790606643070
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: nvc9Si81nNVpdRE4
 _key: '!items!nvc9Si81nNVpdRE4'

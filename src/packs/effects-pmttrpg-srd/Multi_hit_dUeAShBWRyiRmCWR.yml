@@ -10,9 +10,19 @@ system:
     <p><em>Note: This effect is not yet automated. <strong>Though, there is a
     text message telling you how to apply this.</strong></em></p>
   slug: multi-hit
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 6
   stackMax: 2
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -53,9 +63,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787249213102
-  modifiedTime: 1787249213102
+  systemVersion: 0.1.0
+  createdTime: 1790606642944
+  modifiedTime: 1790606642944
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

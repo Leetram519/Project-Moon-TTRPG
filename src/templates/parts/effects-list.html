@@ -1,12 +1,9 @@
 <div class="resource-group effect-picker-panel">
   <div class="resource">
     <label>{{localize "PMTTRPG.EffectSearch"}}</label>
-    <input class="effect-picker" type="text" list="effect-picker-options-{{item.id}}" placeholder="{{system.effectSearchPlaceholder}}" autocomplete="off"/>
-    <datalist id="effect-picker-options-{{item.id}}">
-      {{#each effectChoices as |choice|}}
-        <option value="{{choice.label}}"></option>
-      {{/each}}
-    </datalist>
+    {{#if supportsEffects}}
+      {{> "systems/projectmoonttrpg/templates/parts/effect-autocomplete.hbs"}}
+    {{/if}}
     <div class="help-text"><p>{{localize "PMTTRPG.EffectSearchHint"}}</p></div>
   </div>
 </div>

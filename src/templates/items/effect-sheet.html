@@ -56,6 +56,57 @@
               {{selectOptions selects.effectAppliesTo selected=system.appliesTo localize=true}}
             </select>
           </div>
+          {{#if hasSubtypeChoices}}
+          <div class="resource effect-whitelist">
+            <label>{{localize "PMTTRPG.EffectSubtypeWhitelist"}}</label>
+
+            <div class="effect-whitelist__options">
+              {{#each subtypeOptions as |subtype|}}
+                <label class="effect-whitelist__item">
+                  <input
+                    type="checkbox"
+                    name="system.subtypeWhitelist"
+                    value="{{subtype.key}}"
+                    data-dtype="String"
+                    {{checked subtype.selected}}
+                  />
+                  <span>{{localize subtype.label}}</span>
+                </label>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+
+          {{#if hasSubsubtypeChoices}}
+          <div class="resource effect-whitelist">
+            <label>{{localize "PMTTRPG.EffectSubsubtypeWhitelist"}}</label>
+
+            {{#each subtypeOptions as |subtype|}}
+              {{#if subtype.hasSubsubtypes}}
+                <div class="effect-subsubtype-group">
+                  <div class="effect-subsubtype-group__label">
+                    {{localize subtype.label}}
+                  </div>
+
+                  <div class="effect-subsubtype-group__options">
+                    {{#each subtype.subsubtypeOptions as |subsubtype|}}
+                      <label class="effect-whitelist__item">
+                        <input
+                          type="checkbox"
+                          name="system.subsubtypeWhitelist"
+                          value="{{subsubtype.key}}"
+                          data-dtype="String"
+                          {{checked subsubtype.selected}}
+                        />
+                        <span>{{localize subsubtype.label}}</span>
+                      </label>
+                    {{/each}}
+                  </div>
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
+          {{/if}}
           <div class="resource resource--flags">
             <label>{{localize "PMTTRPG.EffectAvailability"}}</label>
             <label class="status-proc-grid__item"><input type="checkbox" name="system.canPositive" data-dtype="Boolean" {{checked system.canPositive}}/> {{localize "PMTTRPG.EffectCanPositive"}}</label>

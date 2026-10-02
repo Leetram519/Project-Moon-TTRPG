@@ -6,6 +6,12 @@ system:
   name: ''
   description: "<p dir=\"ltr\">You gain Critical as a part of Poise and other skills. When you trigger a Critical Hit you deal [[/r 1d10]] extra HP Damage per Critical you have and lose all Critical.\_</p><p dir=\"ltr\">Critical can interact with Stance augments. Only one Stance can be active on the character at any one time, and it costs 1 Reaction to activate, deactivate, or swap between stances on your turn.</p><p dir=\"ltr\">If you gain Critical, but have no Poise, gain 1 Poise.</p>"
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 5
@@ -51,8 +57,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1779621117903
-  modifiedTime: 1789150188922
+  createdTime: 1790606642200
+  modifiedTime: 1790606642200
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: bsi06vGEb9F42Vmt
 sort: 150000
