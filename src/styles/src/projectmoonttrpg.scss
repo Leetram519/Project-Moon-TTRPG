@@ -87,15 +87,9 @@
   &.sheet {
     // Generic.
     @import 'global/base/input';
-    @import 'global/base/sheet-wrapper';
-    @import 'global/components/sheet/layout';
     @import 'global/base/cell';
     @import 'global/components/tabs';
     @import 'global/components/editor';
-    // Specific.
-    @import 'global/components/item-form/index';
-    // @import 'global/components/tags';
-    @import 'global/components/header';
     @import 'global/components/attributes/index';
     @import 'global/components/abilities';
     @import 'global/components/biography';
@@ -104,7 +98,6 @@
     @import 'global/components/augment/index';
     @import 'global/components/weapons/index';
     @import 'global/components/outfits/index';
-    @import 'global/components/moves/index';
     @import 'global/components/npc';
     @import 'global/components/pmttrpg-level-up';
   }
@@ -126,5 +119,3 @@
     }
   }
 }
-
-@import 'global/theme/nightmode';

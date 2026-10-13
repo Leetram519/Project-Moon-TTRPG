@@ -1,26 +1,15 @@
-<div class="{{cssClass}} item-form flexcol">
-  <div class="sheet-wrapper flexcol">
-    <header class="sheet-header flexrow">
-      {{#if isOutdated}}
-      <div class="compendium-outdated-banner">
-        <span>{{localize "PMTTRPG.OutdatedWarning"}}</span>
-        <button type="button" data-action="sync-from-compendium">
-          {{localize "PMTTRPG.OutdatedUpdate"}}
-        </button>
-        <button type="button"
-                data-action="dismiss-outdated"
-                data-modified-time="{{compendiumModifiedTime}}">
-          {{localize "PMTTRPG.OutdatedDismiss"}}
-        </button>
-      </div>
-      {{/if}}
-      <div class="cell cell--image">
-        <img class="profile-img" src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
+<div class="{{cssClass}} item-form">
+  <div class="sheet-wrapper">
+    <header class="sheet-header">
+      <div class="item-image">
+        <img src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
       </div>
       <div class="header-fields">
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PMTTRPG.Common.Name"}}"/></h1>
       </div>
     </header>
+
+    <hr class="separator--tabs-header">
 
     <nav class="sheet-tabs tabs" data-group="primary">
       <a class="item{{#if (eq activeTab 'description')}} active{{/if}}" data-action="tab" data-group="primary" data-tab="description">{{localize "PMTTRPG.Common.Description"}}</a>
@@ -37,27 +26,36 @@
       </div>
 
       <div class="tab{{#if (eq activeTab 'effect')}} active{{/if}}" data-group="primary" data-tab="effect">
-        <div class="resource-group">
+        <div class="resource-header">
           <div class="resource">
-            <label>{{localize "PMTTRPG.EffectSheetHint"}}</label>
-            <div class="help-text"><p>{{localize "PMTTRPG.EffectSheetHintText"}}</p></div>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.EffectCost"}}</label>
+            <label class="title">{{localize "PMTTRPG.EffectCost"}}</label>
             <input type="text" name="system.cost" value="{{system.cost}}" data-dtype="Number"/>
           </div>
           <div class="resource">
-            <label>{{localize "PMTTRPG.EffectStackMax"}}</label>
+            <label class="title">{{localize "PMTTRPG.EffectStackMax"}}</label>
             <input type="text" name="system.stackMax" value="{{system.stackMax}}" data-dtype="Number" min="1"/>
           </div>
           <div class="resource">
+            <label class="title">{{localize "PMTTRPG.EffectAvailability"}}</label>
+            <div class="checkbox-option">
+              <span>{{localize "PMTTRPG.EffectCanPositive"}}</span>
+              <input class="checkbox" type="checkbox" name="system.canPositive" data-dtype="Boolean" {{checked system.canPositive}}/> 
+            </div>
+            <div class="checkbox-option">
+              <span>{{localize "PMTTRPG.EffectCanNegative"}}</span>
+              <input class="checkbox" type="checkbox" name="system.canNegative" data-dtype="Boolean" {{checked system.canNegative}}/> 
+            </div>
+          </div>
+        </div>
+        <div class="resource-list">
+          <div class="resource horizontal">
             <label>{{localize "PMTTRPG.EffectAppliesTo"}}</label>
             <select name="system.appliesTo" data-dtype="String">
               {{selectOptions selects.effectAppliesTo selected=system.appliesTo localize=true}}
             </select>
           </div>
           {{#if hasSubtypeChoices}}
-          <div class="resource effect-whitelist">
+          <div class="resource vertical effect-whitelist">
             <label>{{localize "PMTTRPG.EffectSubtypeWhitelist"}}</label>
 
             <div class="effect-whitelist__options">
@@ -78,7 +76,7 @@
           {{/if}}
 
           {{#if hasSubsubtypeChoices}}
-          <div class="resource effect-whitelist">
+          <div class="resource vertical effect-whitelist">
             <label>{{localize "PMTTRPG.EffectSubsubtypeWhitelist"}}</label>
 
             {{#each subtypeOptions as |subtype|}}
@@ -107,19 +105,14 @@
             {{/each}}
           </div>
           {{/if}}
-          <div class="resource resource--flags">
-            <label>{{localize "PMTTRPG.EffectAvailability"}}</label>
-            <label class="status-proc-grid__item"><input type="checkbox" name="system.canPositive" data-dtype="Boolean" {{checked system.canPositive}}/> {{localize "PMTTRPG.EffectCanPositive"}}</label>
-            <label class="status-proc-grid__item"><input type="checkbox" name="system.canNegative" data-dtype="Boolean" {{checked system.canNegative}}/> {{localize "PMTTRPG.EffectCanNegative"}}</label>
-          </div>
-          <div class="resource">
+          <div class="resource horizontal">
             <label>{{localize "PMTTRPG.EffectProcOn"}}</label>
             <select name="system.procOn" data-dtype="String">
               {{selectOptions selects.effectProcOn selected=system.procOn localize=true}}
             </select>
           </div>
           {{#if system.showProcDice}}
-          <div class="resource">
+          <div class="resource horizontal">
             <label>{{localize "PMTTRPG.EffectProcDice"}}</label>
             <select name="system.procDice" data-dtype="String">
               {{selectOptions selects.effectProcDice selected=system.procDice localize=true}}
@@ -127,29 +120,20 @@
           </div>
           {{/if}}
           {{#if system.showProcAction}}
-          <div class="resource">
+          <div class="resource horizontal">
             <label>{{localize "PMTTRPG.EffectProcAction"}}</label>
             <select name="system.procAction" data-dtype="String">
               {{selectOptions selects.effectProcAction selected=system.procAction localize=true}}
             </select>
           </div>
           {{/if}}
-          <div class="resource">
-            <label>{{localize "PMTTRPG.EffectProcCondition"}}</label>
-            <input type="text" name="system.procCondition" value="{{system.procCondition}}" data-dtype="String"/>
-          </div>
-          <div class="resource">
+          <div class="resource vertical">
             <label>{{localize "PMTTRPG.EffectPositive"}}</label>
             <prose-mirror name="system.positive" value="{{system.positive}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.positiveEnriched}}}</prose-mirror>
           </div>
-          <div class="resource">
+          <div class="resource vertical">
             <label>{{localize "PMTTRPG.EffectNegative"}}</label>
             <prose-mirror name="system.negative" value="{{system.negative}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.negativeEnriched}}}</prose-mirror>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.EffectMacroSlot"}}</label>
-            <input type="text" name="system.macro.uuid" value="{{system.macro.uuid}}" data-dtype="String" placeholder="{{localize "PMTTRPG.EffectMacroUUID"}}"/>
-            <div class="help-text"><p>{{localize "PMTTRPG.EffectMacroSlotHint"}}</p></div>
           </div>
         </div>
       </div>

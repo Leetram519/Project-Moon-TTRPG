@@ -732,8 +732,8 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const hostType = this._effectHostType();
     const hostSubtype = this._effectHostSubtype();
     PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
-    if (PMTTRPGItemSheet._effectCatalogCache[hostType]) {
-      return PMTTRPGItemSheet._effectCatalogCache[hostType];
+    if (PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`]) {
+      return PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`];
     }
 
     const catalog = [];
@@ -769,6 +769,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       for (const effect of docs.filter(doc => doc.type === 'effect')) {
         const appliesTo = effect.system?.appliesTo ?? hostType;
         if (appliesTo !== hostType) continue;
+        if (!(effect.system.subtypeWhitelist.includes(hostSubtype[0])) || !(effect.system.subsubtypeWhitelist.includes(hostSubtype[1]))) continue;
         catalog.push({
           uuid: effect.uuid,
           name: effect.name,
@@ -786,7 +787,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     catalog.sort((left, right) => left.name.localeCompare(right.name));
     PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
-    PMTTRPGItemSheet._effectCatalogCache[this._effectHostType()] = catalog;
+    PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`] = catalog;
     return catalog;
   }
 

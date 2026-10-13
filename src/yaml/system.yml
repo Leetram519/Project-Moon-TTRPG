@@ -43,6 +43,7 @@ styles:
   - styles/lib/canvas.css
   - styles/lib/settings.css
   - styles/lib/autocomplete.css
+  - styles/lib/item-sheet.css
 media:
   - type: setup
     url: "systems/projectmoonttrpg/assets/thumbnail.webp"

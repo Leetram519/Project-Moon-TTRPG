@@ -42,6 +42,7 @@ import { PMTTRPGClashAPI } from "./combat/clashing.js";
 import { MigrationList, MigrationRunner } from "./migration/index.js";
 import { HomebrewSettings } from "./settings/homebrew-settings.js";
 //import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
+import { HomebrewRegistry } from "./homebrew/homebrew-registry.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
@@ -187,6 +188,7 @@ Hooks.once("init", async function() {
 
   CompendiumBrowserOverride.init();
   HomebrewSettings.register();
+  HomebrewRegistry.registerAll();
 });
 
 Hooks.once("ready", async function() {

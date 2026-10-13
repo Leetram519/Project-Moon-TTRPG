@@ -1,4 +1,5 @@
 import { PMTTRPGItemSheet } from "./item-sheet.js";
+import { subTypes } from "./item-types.js";
 
 export class PMTTRPGEffectItemSheet extends PMTTRPGItemSheet {
 
@@ -6,7 +7,7 @@ export class PMTTRPGEffectItemSheet extends PMTTRPGItemSheet {
     PMTTRPGItemSheet.DEFAULT_OPTIONS,
     {
       classes: ["projectmoonttrpg", "sheet", "item", "effect"],
-      position: { width: 560, height: 620 },
+      position: { width: 620, height: 800 },
     },
     { inplace: false }
   );
@@ -31,33 +32,12 @@ export class PMTTRPGEffectItemSheet extends PMTTRPGItemSheet {
       ammunition: "TYPES.Item.ammunition",
     };
 
-    context.selects.effectSubtypeWhitelist = {
-      weapon: {
-        melee: "PMTTRPG.Sheet.EffectSubtype.Melee",
-        ranged: "PMTTRPG.Sheet.EffectSubType.Ranged"
-      },
+    context.selects.effectSubtypeWhitelist = subTypes;
 
-      outfit: {
-        regular: "PMTTRPG.Sheet.EffectSubtype.Regular",
-      },
-
-      skill: {
-        regular: "PMTTRPG.Sheet.EffectSubtype.Regular",
-      },
-
-      augment: {
-        regular: "PMTTRPG.Sheet.EffectSubtype.Regular",
-      },
-
-      ammunition: {
-        regular: "PMTTRPG.Sheet.EffectSubtype.Regular",
-      },
-    };
+    await Hooks.callAll("pmttrpg.sheet.effect.onContextPrepare", context);
 
     this._normalizeEffectWhitelists(context);
     this._prepareEffectWhitelistContext(context);
-
-    Hooks.callAll("pmttrpg.sheet.effect.onContextPrepare", context);
 
     return context;
   }

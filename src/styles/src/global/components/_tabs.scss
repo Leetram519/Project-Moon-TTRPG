@@ -1,48 +1,11 @@
 .tabs {
-  gap: 6px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  background: var(--sheet-card);
-  padding: 6px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+  gap: unset;
+  background: unset;
+  padding: unset;
+  border-radius: unset;
+  margin-bottom: unset;
 
   .item {
-    background: linear-gradient(180deg, var(--sheet-brown-dark) 0%, var(--sheet-brown) 100%);
-    border-radius: 10px 10px 0 0;
-    padding: 6px 12px;
-    line-height: 1.4;
-    flex: 1;
-    color: var(--sheet-ink);
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    min-width: 80px;
-    text-align: center;
-
-    &:hover,
-    &:focus {
-      background: linear-gradient(180deg, var(--sheet-brown) 0%, var(--sheet-accent) 100%);
-      text-shadow: none;
-      box-shadow: 0 4px 10px rgba(214, 162, 74, 0.2);
-    }
-
-    &.active {
-      background: linear-gradient(180deg, var(--sheet-gold) 0%, var(--sheet-gold-bright) 100%);
-      color: var(--sheet-brown-dark);
-      text-shadow: none;
-      font-weight: bold;
-      box-shadow: 0 6px 14px rgba(214, 162, 74, 0.3);
-    }
+    line-height: normal;
   }
-}
-
-.sheet-tabs {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 0;
-  flex: 0 0 auto;
 }

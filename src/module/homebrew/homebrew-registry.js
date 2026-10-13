@@ -1,39 +1,54 @@
-/**
- * @typedef {Object} HomebrewPackDefinition
- * @property {string}   id              - Unique setting key (also used as game.settings key)
- * @property {string}   label           - Display name
- * @property {string}   hint            - Short description shown in the menu
- * @property {boolean}  implemented     - Whether the pack is fully implemented
- * @property {string[]} compendiumPacks - Array of compendium pack keys this homebrew owns
- *                                         (e.g. "module-name.pack-name")
- */
+import { BoiHomebrew } from "./boi-homebrew.js";
+
+const LOG = "[HomebrewRegistry]";
 
 export const HOMEBREW_REGISTRY = [
-    {
-        id: "overclaw",
-        label: "OverCLAW",
-        hint: "Optimized, variated, enhanced and rebalanced Community-Led Additional Works.",
-        implemented: false,
-        compendiumPacks: [
-            //"projectmoonttrpg.overclaw-homebrew"
-        ],
-    },
-    {
-        id: "maxoAmr",
-        label: "Maxo's Abnormal Mystery Research",
-        hint: "Mysteries, Distortions, Abnormalities and more.",
-        implemented: false,
-        compendiumPacks: [
-            //"projectmoonttrpg.maxos-homebrew"
-        ],
-    },
-    {
-        id: "boiHomebrew",
-        label: "Boi's Homebrew",
-        hint: "Shin (心), Mang (望), Ammo, Vengeance's Mark.",
-        implemented: true,
-        compendiumPacks: [
-            "projectmoonttrpg.boi-homebrew"
-        ],
-    },
+  {
+    id: "overclaw",
+    label: "OverCLAW",
+    hint: "Optimized, variated, enhanced and rebalanced Community-Led Additional Works.",
+    implemented: false,
+    compendiumPacks: [],
+  },
+  {
+    id: "maxoAmr",
+    label: "Maxo's Abnormal Mystery Research",
+    hint: "Mysteries, Distortions, Abnormalities and more.",
+    implemented: false,
+    compendiumPacks: [],
+  },
+  {
+    id: "boiHomebrew",
+    label: "Boi's Homebrew",
+    hint: "Shin (心), Mang (望), Ammo, Vengeance's Mark.",
+    implemented: true,
+    associatedClass: BoiHomebrew,
+    compendiumPacks: [
+      "projectmoonttrpg.boi-homebrew"
+    ],
+  },
 ];
+
+export class HomebrewRegistry {
+
+  static registerAll() {
+    console.groupCollapsed(`${LOG} Registering all homebrews`);
+
+    for (const def of HOMEBREW_REGISTRY) {
+      if (def.implemented && def.associatedClass) {
+        console.log(`${LOG} Registering: ${def.id}`);
+        def.associatedClass.register();
+      }
+    }
+
+    console.groupEnd();
+  }
+
+  static getHomebrew(id) {
+    return HOMEBREW_REGISTRY.find(h => h.id === id);
+  }
+
+  static getImplemented() {
+    return HOMEBREW_REGISTRY.filter(h => h.implemented);
+  }
+}
