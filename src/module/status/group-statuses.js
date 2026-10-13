@@ -63,6 +63,7 @@ export function groupStatuses(actor, { sort = "display" } = {}) {
         arrival: normalizeArrival(item.system?.arrival),
         fillRatio: entryMax > 0 ? entryStacks / entryMax : 1,
         showCount: entryMax !== 1,
+        showHoverDetails: item.system.showHoverDetails??true
       });
       continue;
     }
@@ -86,6 +87,7 @@ export function groupStatuses(actor, { sort = "display" } = {}) {
         hasStacksField: item.system?.stacks != null,
         pending: false,
         arrival: null,
+        showHoverDetails: item.system.showHoverDetails??true
       });
       continue;
     }

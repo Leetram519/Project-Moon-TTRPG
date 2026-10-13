@@ -386,6 +386,7 @@ Item:
     arrival: ''
     shelved: false
     origin: ''
+    showHoverDetails: true
     proc:
       turnStart: false
       startOfRound: false

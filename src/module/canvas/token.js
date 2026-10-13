@@ -1,5 +1,6 @@
 import { groupStatuses, onStatusItemChange } from "../status/group-statuses.js";
 import { actorTokenPlaceables } from "../acting-user.js";
+import { showStatusTooltip, hideStatusTooltip } from "./status-tooltip.js";
 
 const VISIBLE_CAP = 5;
 
@@ -14,6 +15,9 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   #badgeDrawId = 0;
   #pendingBreathTicks = new Set();
 
+  #badgeHits = [];
+  #hoveredBadge = null;
+
   /** @override */
   async _draw(options) {
     await super._draw(options);
@@ -21,8 +25,11 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     await this.drawStatusBadges();
   }
 
-  /** @override */
+  /** @override */ 
   _destroy(options) {
+    canvas.stage?.off("globalpointermove", this.#onStagePointerMove);
+    this.#hoveredBadge = null;
+    hideStatusTooltip();
     this.#clearPendingBreath();
     this.#destroyRangeVisualizer();
     this.statusBadges = null;
@@ -39,6 +46,7 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   _onHoverIn(event, options) {
     const result = super._onHoverIn(event, options);
     this.#statusHover = true;
+    canvas.stage.on("globalpointermove", this.#onStagePointerMove);
     void this.drawStatusBadges();
     return result;
   }
@@ -46,6 +54,8 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   /** @override */
   _onHoverOut(event) {
     this.#statusHover = false;
+    canvas.stage.off("globalpointermove", this.#onStagePointerMove);
+    this.#setHoveredBadge(null);
     void this.drawStatusBadges();
     return super._onHoverOut(event);
   }
@@ -184,6 +194,9 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
 
   async drawStatusBadges() {
     if (!this.statusBadges || this.destroyed) return;
+    hideStatusTooltip();
+    this.#hoveredBadge = null;
+    this.#badgeHits = [];
 
     const drawId = ++this.#badgeDrawId;
     this.#clearPendingBreath();
@@ -288,6 +301,14 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
       entry.x = cursorX;
       entry.y = cursorY;
       this.statusBadges.addChild(entry);
+      this.#badgeHits.push({
+        entry,
+        status: entry._pmStatus,
+        x: this.statusBadges.x + cursorX,
+        y: this.statusBadges.y + cursorY,
+        w: iconSize,
+        h: slotH,
+      });
       if (entry._pmPending) this.#attachPendingBreath(entry);
       cursorX += slotW + entryGap;
       rowWidth = cursorX - entryGap;
@@ -298,12 +319,18 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     this.statusBadges.x = Math.max(pad, (this.w - maxWidth) / 2);
     this.statusBadges.y = Math.max(pad, this.h - totalHeight - pad);
     this.statusBadges.visible = true;
+    for (const h of this.#badgeHits) {
+      h.x = this.statusBadges.x + h.entry.x;
+      h.y = this.statusBadges.y + h.entry.y;
+    }
   }
 
   async #buildBadgeEntry(status, iconSize, textStyle, PreciseText) {
     const entry = new PIXI.Container();
     entry.eventMode = "none";
     entry._pmPending = !!status.pending;
+    entry._pmStatus = status;
+    entry.iconSize = iconSize;
 
     const src = status.img || "icons/svg/mystery-man.svg";
     let texture = null;
@@ -322,6 +349,7 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     icon.height = iconSize;
     icon.eventMode = "none";
     if (status.pending) icon.tint = 0x9a9a9a;
+    entry.icon = icon;
     entry.addChild(icon);
 
     // Max stack of 1 statuses only need the icon.
@@ -333,6 +361,24 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
       label.y = iconSize + Math.max(2, Math.round(iconSize * 0.06));
       entry.addChild(label);
     }
+
+    const baseScale = icon.scale.x;
+    const grow = iconSize * 0.09;
+
+    entry.on("pointerover", () => {
+      if(!game.settings.get("projectmoonttrpg", "showStatusInfoBoxWorld") || !game.settings.get("projectmoonttrpg", "showStatusInfoBoxClient")) return;
+
+      icon.scale.set(baseScale * 1.18);
+      icon.position.set(-grow, -grow);
+      void showStatusTooltip(status, entry);
+    });
+    entry.on("pointerout", () => {
+      if(!game.settings.get("projectmoonttrpg", "showStatusInfoBoxWorld") || !game.settings.get("projectmoonttrpg", "showStatusInfoBoxClient")) return;
+
+      icon.scale.set(baseScale);
+      icon.position.set(0, 0);
+      hideStatusTooltip();
+    });
 
     return entry;
   }
@@ -381,6 +427,52 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     badge.y = -badgeH * 0.35;
     entry.addChild(badge);
   }
+
+  #onStagePointerMove = (event) => {
+    if (!this.statusBadges?.visible || this.destroyed) {
+      this.#setHoveredBadge(null);
+      return;
+    }
+    const p = this.toLocal(event.global);
+    const hit = this.#badgeHits.find(h =>
+      p.x >= h.x && p.x < h.x + h.w && p.y >= h.y && p.y < h.y + h.h
+    );
+    this.#setHoveredBadge(hit ?? null);
+  };
+
+  #setHoveredBadge(hit) {
+    const prev = this.#hoveredBadge;
+    if (prev?.entry === hit?.entry) return;
+
+    if (prev) this.#styleBadge(prev.entry, false);
+    this.#hoveredBadge = hit ?? null;
+
+    if (hit) {
+      this.#styleBadge(hit.entry, true);
+      const tl = this.toGlobal(new PIXI.Point(hit.x, hit.y));
+      const br = this.toGlobal(new PIXI.Point(hit.x + hit.w, hit.y + hit.h));
+      const c = canvas.app.screen.getBounds();
+      void showStatusTooltip(hit.status, {
+        left: c.left + tl.x,
+        top: c.top + tl.y,
+        width: br.x - tl.x,
+        height: br.y - tl.y,
+      });
+    } else {
+      hideStatusTooltip();
+    }
+  }
+
+  #styleBadge(entry, hovered) {
+    const icon = entry.icon;
+    if (!icon || icon.destroyed) return;
+    const base = entry.iconSize;
+    const size = hovered ? base * 1.18 : base;
+    const offset = hovered ? -base * 0.09 : 0;
+    icon.width = size;
+    icon.height = size;
+    icon.position.set(offset, offset);
+  }
 }
 
 export function registerTokenStatusBadges() {
@@ -396,6 +488,24 @@ export function registerTokenStatusBadgeSettings() {
     type: Boolean,
     default: true,
     onChange: () => refreshAllTokenStatusBadges(),
+  });
+
+  game.settings.register("projectmoonttrpg", "showStatusInfoBoxWorld", {
+    name: "PMTTRPG.Settings.showStatusInfoBoxWorld.name",
+    hint: "PMTTRPG.Settings.showStatusInfoBoxWorld.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register("projectmoonttrpg", "showStatusInfoBoxClient", {
+    name: "PMTTRPG.Settings.showStatusInfoBoxClient.name",
+    hint: "PMTTRPG.Settings.showStatusInfoBoxClient.hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
   });
 }
 

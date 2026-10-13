@@ -62,6 +62,11 @@
             </div>
 
             <div class="resource">
+              <label data-tooltip="{{localize "PMTTRPG.ShowHoverDetailsHint"}}">{{localize "PMTTRPG.ShowHoverDetails"}}</label>
+              <input type="checkbox" name="system.showHoverDetails" {{checked system.showHoverDetails}}/>
+            </div>
+
+            <div class="resource">
               <label>{{localize "PMTTRPG.StatusProcActivities"}}</label>
               <div class="status-proc-grid">
                 <label class="status-proc-grid__item"><input type="checkbox" name="system.proc.turnStart" {{checked system.proc.turnStart}}/> {{localize "PMTTRPG.StatusProcTurnStart"}}</label>

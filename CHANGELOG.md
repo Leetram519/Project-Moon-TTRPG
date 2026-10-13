@@ -11,6 +11,7 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 
 - [EasyEffects] `dice amount up` / `dice amount down` changes the number of dice. The count cannot go below 1. On `[Always Active]`, Amount on a weapon or outfit applies only to that item. Skill Amount applies when that skill is used. The clash breakdown shows Dice Amount.
 - [EasyEffects] `set dice formula` on `[Always Active]` replaces the base count, faces, and flat Power. Rank, hand, form, outfit property, Insight, Temperance, and Power, Max, and Amount from other effects still add. With no die name, a weapon sets Attack and a outfit sets Block and Evade. A formula on a weapon, outfit, or status shows on the standing die. `[flavor]` sets the Dice So Nice color.
+- Added a new system that allows players to hover and see statuses on any token.
 
 ### Changed
 

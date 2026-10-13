@@ -1,0 +1,41 @@
+.pmttrpg-status-tooltip {
+  position: fixed;
+  z-index: calc(var(--z-index-tooltip, 10000) + 1);
+  width: 320px;
+  padding: 0;
+  border-radius: 14px;
+  background: #4a3b33;
+  color: #fff;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.5);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  overflow: hidden;
+}
+.pmttrpg-status-tooltip.visible { opacity: 1; transform: none; }
+.pmttrpg-status-tooltip.pending { filter: grayscale(0.5); }
+
+.pm-tip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 2px solid rgb(255 255 255 / 0.15);
+}
+.pm-tip-icon { width: 32px; height: 32px; border: none; flex: none; }
+.pm-tip-name {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: none;
+  color: #fff;
+}
+.pm-tip-count { font-size: 1.4rem; font-weight: 700; }
+
+.pm-tip-body { padding: 10px 14px 12px; font-size: 0.9rem; line-height: 1.4; }
+.pm-tip-body p { margin: 0 0 0.4em; }
+.pm-tip-body strong { color: #fff; }
