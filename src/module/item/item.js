@@ -294,6 +294,7 @@ export class ItemPMTTRPG extends Item {
       const normalizedEffects = normalizeEffectEntries(data.effects);
       data.effects = normalizedEffects;
       data.effectsSummary = computeEffectSummary(normalizedEffects, Number(data.epMax ?? 0));
+      data.subtype = data.weaponType;
     }
 
     if (itemData.type == 'ammunition') {
