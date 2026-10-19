@@ -1,0 +1,2075 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="System documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../02_devguide/">
+      
+      
+        <link rel="next" href="../04_cheatsheet/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Internals - PMTTRPG FoundryVTT Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#easyeffects-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-header__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMTTRPG FoundryVTT Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01_userguide/" class="md-tabs__link">
+          
+  
+  
+  EasyEffects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/actor/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-nav__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMTTRPG FoundryVTT Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EasyEffects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_userguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_devguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-1-lexer-lexerjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 1 — Lexer (lexer.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 1 — Lexer (lexer.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-pass-accessor-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-pass accessor handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokenizeexpressionsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tokenizeExpression(source)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-2-parser-parserjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2 — Parser (parser.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 2 — Parser (parser.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#top-level-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-level grammar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parseaccessorexpressionraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parseAccessorExpression(raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#natural-language-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Natural-language desugaring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spend-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        spend desugaring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-3-interpreter-interpreterjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 3 — Interpreter (interpreter.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 3 — Interpreter (interpreter.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executeast-trigger-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execute(ast, trigger, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluateexprnode-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluateExpr(node, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolvepathsegments-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolvePath(segments, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolvetargetstargetname-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolveTargets(targetName, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-4-registry-registryjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 4 — Registry (registry.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 4 — Registry (registry.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ast-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hook-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook registration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-file-to-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new file to the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat Sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/actor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Actor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/combat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/easy-effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Effects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/item/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/damage-application/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Damage Application
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/handlebars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handlebars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/pool-clamp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pool Clamp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/projectmoonttrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/rolls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rolls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/slug/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status-macro-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macro API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/targeting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Targeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/utilities.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-1-lexer-lexerjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 1 — Lexer (lexer.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 1 — Lexer (lexer.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-pass-accessor-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two-pass accessor handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tokenizeexpressionsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tokenizeExpression(source)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-2-parser-parserjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 2 — Parser (parser.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 2 — Parser (parser.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#top-level-grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-level grammar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parseaccessorexpressionraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parseAccessorExpression(raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#natural-language-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Natural-language desugaring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spend-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        spend desugaring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-3-interpreter-interpreterjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 3 — Interpreter (interpreter.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 3 — Interpreter (interpreter.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executeast-trigger-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execute(ast, trigger, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluateexprnode-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluateExpr(node, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolvepathsegments-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolvePath(segments, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolvetargetstargetname-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolveTargets(targetName, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stage-4-registry-registryjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stage 4 — Registry (registry.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stage 4 — Registry (registry.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ast-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hook-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hook registration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-file-to-the-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new file to the pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="easyeffects-internals">EasyEffects — Internals</h1>
+<p>This document explains how the EasyEffects pipeline works under the hood — useful if you're debugging a parse error, modifying a core file, or just want to understand what happens between a script string and a Foundry actor update.</p>
+<hr />
+<h2 id="pipeline-overview">Pipeline Overview</h2>
+<pre><code>Source string
+    │
+    ▼  lexer.tokenize()
+Token stream (flat array)
+    │
+    ├──► [ACCESSOR raw string] ──► lexer.tokenizeExpression()
+    │                                    │
+    │                                    ▼  parser.ExprParser
+    │                              Expression AST (ExprNode)
+    │
+    ▼  parser.Parser
+Script AST
+    │
+    ▼  (cached in registry.js per item.id)
+    │
+    ▼  interpreter.execute(ast, trigger, context)
+Side effects on ActorPMTTRPG
+</code></pre>
+<hr />
+<h2 id="stage-1-lexer-lexerjs">Stage 1 — Lexer (<code>lexer.js</code>)</h2>
+<h3 id="responsibilities">Responsibilities</h3>
+<p>The lexer converts raw source text into a flat array of typed tokens. It has <strong>no understanding of grammar</strong> — it only knows what individual tokens look like.</p>
+<h3 id="token-types">Token types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TRIGGER</code></td>
+<td><code>[Clash Win]</code></td>
+<td>Content between <code>[</code> and <code>]</code>, trimmed</td>
+</tr>
+<tr>
+<td><code>KEYWORD</code></td>
+<td><code>if</code>, <code>do</code>, <code>gain</code>, <code>spend</code></td>
+<td>Fixed set defined in <code>KEYWORDS</code></td>
+</tr>
+<tr>
+<td><code>IDENT</code></td>
+<td><code>Poise</code>, <code>add</code>, <code>status</code></td>
+<td>Alphanumeric, not in KEYWORDS</td>
+</tr>
+<tr>
+<td><code>STRING</code></td>
+<td><code>"Stagger Fragile"</code></td>
+<td>Double-quoted; value stored without quotes</td>
+</tr>
+<tr>
+<td><code>NUMBER</code></td>
+<td><code>3</code></td>
+<td>Integer</td>
+</tr>
+<tr>
+<td><code>DICE</code></td>
+<td><code>1d6</code></td>
+<td>Checked before NUMBER — starts with digit, contains <code>d</code></td>
+</tr>
+<tr>
+<td><code>ACCESSOR</code></td>
+<td><code>(self.hp + 2)</code></td>
+<td>Entire content captured raw (nested parens handled)</td>
+</tr>
+<tr>
+<td><code>OPERATOR</code></td>
+<td><code>&gt;=</code>, <code>!=</code></td>
+<td>Two-char operators checked before one-char</td>
+</tr>
+<tr>
+<td><code>SEMICOLON</code></td>
+<td><code>;</code></td>
+<td>Statement terminator (optional if newline ends the statement)</td>
+</tr>
+<tr>
+<td><code>NEWLINE</code></td>
+<td><code>\n</code></td>
+<td>Statement terminator when <code>;</code> is omitted</td>
+</tr>
+<tr>
+<td><code>EOF</code></td>
+<td>—</td>
+<td>Sentinel appended at end</td>
+</tr>
+</tbody>
+</table>
+<h3 id="two-pass-accessor-handling">Two-pass accessor handling</h3>
+<p>Accessor content <code>(...)</code> is <strong>not tokenized inline</strong> — the raw text is captured as a single <code>ACCESSOR</code> token and re-tokenized later by <code>tokenizeExpression()</code>. This keeps the top-level grammar simple (accessors are always one token) and lets the expression sub-grammar be completely separate.</p>
+<p>Nested parentheses inside an accessor are handled by a depth counter, so <code>(self.hp + (2 * 3))</code> is captured correctly as one token.</p>
+<h3 id="tokenizeexpressionsource"><code>tokenizeExpression(source)</code></h3>
+<p>A second, separate tokenizer for the content of accessor strings. Produces a different token set:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IDENT</code></td>
+<td><code>self</code>, <code>status</code>, <code>Charge</code></td>
+</tr>
+<tr>
+<td><code>NUMBER</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>DICE</code></td>
+<td><code>1d6</code></td>
+</tr>
+<tr>
+<td><code>MATHOP</code></td>
+<td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>//</code></td>
+</tr>
+<tr>
+<td><code>DOT</code></td>
+<td><code>.</code></td>
+</tr>
+<tr>
+<td><code>LPAREN</code> / <code>RPAREN</code></td>
+<td><code>(</code> <code>)</code></td>
+</tr>
+<tr>
+<td><code>STRING</code></td>
+<td><code>"Stagger Fragile"</code></td>
+</tr>
+<tr>
+<td><code>EOF</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Floor division <code>//</code> is matched before single <code>/</code> to avoid ambiguity.</p>
+<hr />
+<h2 id="stage-2-parser-parserjs">Stage 2 — Parser (<code>parser.js</code>)</h2>
+<p>The parser consumes the flat token stream and produces a nested AST. It uses <strong>recursive descent</strong> — one method per grammar rule, each calling others as needed.</p>
+<h3 id="top-level-grammar">Top-level grammar</h3>
+<pre><code>script     → block* EOF
+block      → TRIGGER statement*
+statement  → spend_statement
+           | natural_statement
+           | do_statement
+</code></pre>
+<p>Statement dispatch happens by peeking at the first keyword:</p>
+<ul>
+<li><code>spend</code> → <code>parseSpendStatement()</code></li>
+<li><code>require</code> / <code>gain</code> / <code>lose</code> → <code>parseNaturalStatement()</code></li>
+<li>anything else → <code>parseDoStatement()</code> (which may start with <code>if</code>)</li>
+</ul>
+<h3 id="parseaccessorexpressionraw"><code>parseAccessorExpression(raw)</code></h3>
+<p>Called whenever an <code>ACCESSOR</code> token is consumed. Calls <code>tokenizeExpression(raw)</code> and runs a separate <code>ExprParser</code> instance on the result.</p>
+<p><code>ExprParser</code> implements <strong>precedence climbing</strong>:</p>
+<pre><code>parseExpr()   → parseTerm() { (+ | -) parseTerm() }*
+parseTerm()   → parseFactor() { (* | / | % | //) parseFactor() }*
+parseFactor() → &quot;-&quot; parseFactor()        (unary minus → BinOp(0 - x))
+              | &quot;(&quot; parseExpr() &quot;)&quot;      (grouping)
+              | NUMBER                   → Num node
+              | DICE                     → Dice node
+              | IDENT (&quot;.&quot; IDENT|STRING)* → Path node
+</code></pre>
+<p>This ensures <code>2 + 3 * 4</code> is parsed as <code>2 + (3 * 4)</code>, not <code>(2 + 3) * 4</code>.</p>
+<h3 id="natural-language-desugaring">Natural-language desugaring</h3>
+<p>Natural forms parse into identical AST nodes as the standard form. The desugar happens <strong>inside the parser</strong> — by the time the AST leaves <code>parser.js</code>, there is no distinction. Example:</p>
+<pre><code>gain 1 Poise on self;
+</code></pre>
+<p>Produces exactly:</p>
+<pre><code class="language-js">{
+  type: &quot;Action&quot;,
+  verb: &quot;add&quot;, noun: &quot;status&quot;, argument: &quot;Poise&quot;,
+  amount: { type: &quot;NUMBER&quot;, value: 1 },
+  per: null, target: &quot;self&quot;
+}
+</code></pre>
+<h3 id="spend-desugaring"><code>spend</code> desugaring</h3>
+<p><code>spend N Status to &lt;actions&gt;</code> is the most complex desugar. The parser:</p>
+<ol>
+<li>Records <code>spendAmount</code> and <code>statusName</code> and <code>spendTarget</code></li>
+<li>Builds a <code>Condition</code> node: <code>spendTarget.status.statusName &gt;= spendAmount</code></li>
+<li>Parses the <code>to</code> clause as a natural action chain</li>
+<li>Appends a synthetic <code>remove status</code> action with the same amount and target</li>
+<li>Returns a normal <code>Statement</code> node</li>
+</ol>
+<p>The interpreter is completely unaware this happened.</p>
+<hr />
+<h2 id="stage-3-interpreter-interpreterjs">Stage 3 — Interpreter (<code>interpreter.js</code>)</h2>
+<p>The interpreter walks the <code>Script</code> AST and executes matching blocks against live Foundry actors.</p>
+<h3 id="executeast-trigger-context"><code>execute(ast, trigger, context)</code></h3>
+<pre><code>for each Block in ast.blocks:
+  if block.trigger !== trigger → skip
+
+  for each Statement in block.statements:
+    if condition present:
+      evaluate condition → boolean
+      if false → skip statement
+
+    inheritedTarget = &quot;self&quot;
+
+    for each Action in statement.actions:
+      effectiveTarget = action.target ?? inheritedTarget
+      if action.target set → update inheritedTarget
+
+      resolvedAmount = await resolveAmount(action.amount, context)
+      if action.per → resolvedAmount *= await evaluateExpr(action.per, context)
+      resolvedAmount = Math.max(0, Math.round(resolvedAmount))
+
+      handler = ACTION_HANDLERS[action.verb]
+      await handler(action with effectiveTarget, context, resolvedAmount)
+</code></pre>
+<h3 id="evaluateexprnode-context"><code>evaluateExpr(node, context)</code></h3>
+<p>Fully async recursive evaluator for <code>ExprNode</code> trees:</p>
+<pre><code class="language-js">switch node.type:
+  &quot;Num&quot;   → node.value
+  &quot;Dice&quot;  → (await new Roll(node.formula).roll()).total
+  &quot;Path&quot;  → resolvePath(node.segments, context)
+  &quot;BinOp&quot; → applyMathOp(op, await evaluateExpr(left), await evaluateExpr(right))
+</code></pre>
+<p>Because <code>BinOp</code> awaits both children, dice anywhere in a tree are fully supported:</p>
+<pre><code>(1d6 + self.rank)   →  BinOp(+, Dice(&quot;1d6&quot;), Path([&quot;self&quot;,&quot;rank&quot;]))
+</code></pre>
+<p>Both the dice roll and the path resolution happen concurrently via <code>Promise.all</code> semantics (they're <code>await</code>ed in sequence here, which is fine for correctness — parallelising them is a possible future optimization).</p>
+<h3 id="resolvepathsegments-context"><code>resolvePath(segments, context)</code></h3>
+<p>Maps dotted path segments to actor data. The first segment is the root: <code>self</code>, <code>target</code>, <code>ally</code>, or <code>clash</code>.</p>
+<p>For actor roots, the remaining segments are matched against a shorthand table first, then fall through to <code>system.attributes.&lt;name&gt;</code> or <code>system.abilities.&lt;name&gt;</code> for <code>attr.*</code> and <code>stat.*</code> respectively.</p>
+<h3 id="resolvetargetstargetname-context"><code>resolveTargets(targetName, context)</code></h3>
+<p>Returns an <code>Actor[]</code>. For single targets (<code>self</code>/<code>target</code>/<code>ally</code>), returns <code>[context[targetName]]</code> or <code>[]</code> if null.</p>
+<p>For multi-targets, pulls <code>game.combat.combatants</code>, maps to actors, then filters by <code>_isEnemy()</code> (token disposition comparison).</p>
+<hr />
+<h2 id="stage-4-registry-registryjs">Stage 4 — Registry (<code>registry.js</code>)</h2>
+<p>The registry is the only file that touches Foundry globals directly.</p>
+<h3 id="ast-cache">AST cache</h3>
+<pre><code class="language-js">const _astCache = new Map();  // item.id → { source, ast }
+</code></pre>
+<p><code>getAST(item)</code> checks whether the cached source matches the current <code>item.system.easyEffects</code>. If not, re-parses and updates the cache. Parse errors are caught here and surfaced as <code>ui.notifications.warn</code> — they never crash the hook.</p>
+<p>Cache entries are invalidated via:</p>
+<pre><code class="language-js">Hooks.on(&quot;updateItem&quot;, (item) =&gt; _astCache.delete(item.id));
+</code></pre>
+<h3 id="hook-registration">Hook registration</h3>
+<p><code>registerEasyEffectsHooks()</code> iterates <code>TRIGGER_HOOKS</code> and calls <code>Hooks.on()</code> for each entry. Multiple entries can share the same Foundry hook (e.g. <code>pmttrpg.clashResolved</code> drives both <code>[Clash Win]</code> and <code>[Clash Lose]</code>).</p>
+<p>For each hook fire:
+1. <code>buildContext(...hookArgs)</code> constructs the execution context
+2. <code>getItems(...hookArgs)</code> returns the items whose scripts should run
+3. For each item: <code>getAST(item)</code> → <code>execute(ast, triggerName, context)</code></p>
+<hr />
+<h2 id="error-handling">Error handling</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Error type</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lexer</td>
+<td><code>LexError</code></td>
+<td>Thrown with position info; caught in registry's <code>getAST()</code></td>
+</tr>
+<tr>
+<td>Parser</td>
+<td><code>ParseError</code></td>
+<td>Thrown with offending token; caught in <code>getAST()</code></td>
+</tr>
+<tr>
+<td>Interpreter</td>
+<td><code>InterpretError</code></td>
+<td>Thrown for unknown verbs/nouns; caught per-statement in <code>execute()</code></td>
+</tr>
+<tr>
+<td>All</td>
+<td>Runtime JS errors</td>
+<td>Caught per-statement; logged + <code>ui.notifications.error</code></td>
+</tr>
+</tbody>
+</table>
+<p>Individual statement errors never abort the rest of the block — the loop continues after logging.</p>
+<hr />
+<h2 id="adding-a-new-file-to-the-pipeline">Adding a new file to the pipeline</h2>
+<p>If you need to add a pre-processing step (e.g. a macro-expansion pass or a type-checker), the cleanest place is between the parser and the interpreter:</p>
+<pre><code class="language-js">// In registry.js getAST():
+const ast = parse(source);
+const checkedAst = typeCheck(ast);   // your new step
+_astCache.set(item.id, { source, ast: checkedAst });
+</code></pre>
+<p>This keeps the cache invalidation and error surface in one place.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

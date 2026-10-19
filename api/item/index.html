@@ -1,0 +1,3221 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="System documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../inventory/">
+      
+      
+        <link rel="next" href="../status/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Item - PMTTRPG FoundryVTT Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#item" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-header__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMTTRPG FoundryVTT Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Item
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../EasyEffects/01_userguide/" class="md-tabs__link">
+          
+  
+  
+  EasyEffects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../actor/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-nav__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMTTRPG FoundryVTT Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EasyEffects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/01_userguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/02_devguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/03_internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/04_cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat Sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Actor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../combat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../easy-effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Effects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemweapon-propertiesjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/weapon-properties.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/weapon-properties.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-melee_forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const MELEE_FORMS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_weapon_hand_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_WEAPON_HAND_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_melee_form_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_MELEE_FORM_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_ranged_form_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_RANGED_FORM_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweapontypeweapontype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponType(weaponType)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-defaultformpropertyweapontype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defaultFormProperty(weaponType)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponformpropertyweapontype-formproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponFormProperty(weaponType, formProperty)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponhandpropertyweapontype-handproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponHandProperty(weaponType, handProperty)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponpropertiessystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponProperties(system = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemweapon-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/weapon-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/weapon-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgweaponitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGWeaponItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemtool-usejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/tool-use.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/tool-use.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-gettoolusesremainingtool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getToolUsesRemaining(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-istoolusabletool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isToolUsable(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-toolconsumesbydefaulttool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: toolConsumesByDefault(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canusetooltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canUseTool(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-consumetoolusetool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: consumeToolUse(tool, { consume = true } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getpreferredtooltargetactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getPreferredToolTargetActor()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemtool-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/tool-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/tool-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgtoolitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGToolItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemstandalone-tooljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/standalone-tool.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/standalone-tool.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-getactorstatvalueactor-statkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getActorStatValue(actor, statKey)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-abilitylabelstatkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: abilityLabel(statKey)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-effectlinestool-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: effectLines(tool, mode)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemskill-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/skill-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/skill-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgskillitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGSkillItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemoutfit-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/outfit-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/outfit-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgoutfititemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGOutfitItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemitemjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/item.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/item.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-geteffectsignatureentry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getEffectSignature(entry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-itempmttrpg-extends-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: ItemPMTTRPG (extends Item)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-formatmultiplierm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: formatMultiplier(m)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemitem-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgitemsheet-extends-handlebarsapplicationmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGItemSheet (extends HandlebarsApplicationMixin)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemeffect-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/effect-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/effect-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgeffectitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGEffectItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemdeclare-skilljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/declare-skill.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/declare-skill.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-getdeclareskilloptionsactor-skilltype-attack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getDeclareSkillOptions(actor, skillType = "attack")
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-builddeclaredskilltemplatedataskill-consumelight-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildDeclaredSkillTemplateData(skill, consumeLight = true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemaugment-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/augment-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/augment-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgaugmentitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGAugmentItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemapplied-tooljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/applied-tool.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/applied-tool.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-isappliedtooleligibletool-applyto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isAppliedToolEligible(tool, applyTo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getappliedtooloptionsactor-applyto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getAppliedToolOptions(actor, applyTo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-buildappliedtooltemplatedatatool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildAppliedToolTemplateData(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-maybeconsumeappliedtooltool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: maybeConsumeAppliedTool(tool, { consume = true } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canconsumeappliedtooltool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canConsumeAppliedTool(tool, consume = true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-damagetypelabeltype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: damageTypeLabel(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemammunition-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/ammunition-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/ammunition-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgammunitionitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGAmmunitionItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../damage-application/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Damage Application
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handlebars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handlebars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pool-clamp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pool Clamp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projectmoonttrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rolls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rolls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slug/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status-macro-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macro API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../targeting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Targeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utilities.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemweapon-propertiesjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/weapon-properties.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/weapon-properties.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-melee_forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const MELEE_FORMS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_weapon_hand_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_WEAPON_HAND_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_melee_form_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_MELEE_FORM_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-default_ranged_form_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DEFAULT_RANGED_FORM_PROPERTY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweapontypeweapontype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponType(weaponType)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-defaultformpropertyweapontype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defaultFormProperty(weaponType)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponformpropertyweapontype-formproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponFormProperty(weaponType, formProperty)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponhandpropertyweapontype-handproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponHandProperty(weaponType, handProperty)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizeweaponpropertiessystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeWeaponProperties(system = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemweapon-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/weapon-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/weapon-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgweaponitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGWeaponItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemtool-usejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/tool-use.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/tool-use.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-gettoolusesremainingtool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getToolUsesRemaining(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-istoolusabletool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isToolUsable(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-toolconsumesbydefaulttool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: toolConsumesByDefault(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canusetooltool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canUseTool(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-consumetoolusetool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: consumeToolUse(tool, { consume = true } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getpreferredtooltargetactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getPreferredToolTargetActor()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemtool-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/tool-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/tool-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgtoolitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGToolItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemstandalone-tooljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/standalone-tool.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/standalone-tool.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-getactorstatvalueactor-statkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getActorStatValue(actor, statKey)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-abilitylabelstatkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: abilityLabel(statKey)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-effectlinestool-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: effectLines(tool, mode)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemskill-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/skill-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/skill-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgskillitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGSkillItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemoutfit-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/outfit-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/outfit-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgoutfititemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGOutfitItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemitemjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/item.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/item.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-geteffectsignatureentry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getEffectSignature(entry)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-itempmttrpg-extends-item" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: ItemPMTTRPG (extends Item)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-formatmultiplierm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: formatMultiplier(m)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemitem-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgitemsheet-extends-handlebarsapplicationmixin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGItemSheet (extends HandlebarsApplicationMixin)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemeffect-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/effect-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/effect-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgeffectitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGEffectItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemdeclare-skilljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/declare-skill.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/declare-skill.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-getdeclareskilloptionsactor-skilltype-attack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getDeclareSkillOptions(actor, skillType = "attack")
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-builddeclaredskilltemplatedataskill-consumelight-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildDeclaredSkillTemplateData(skill, consumeLight = true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemaugment-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/augment-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/augment-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgaugmentitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGAugmentItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemapplied-tooljs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/applied-tool.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/applied-tool.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-isappliedtooleligibletool-applyto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isAppliedToolEligible(tool, applyTo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getappliedtooloptionsactor-applyto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getAppliedToolOptions(actor, applyTo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-buildappliedtooltemplatedatatool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildAppliedToolTemplateData(tool)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-maybeconsumeappliedtooltool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: maybeConsumeAppliedTool(tool, { consume = true } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canconsumeappliedtooltool-consume-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canConsumeAppliedTool(tool, consume = true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-damagetypelabeltype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: damageTypeLabel(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleitemammunition-item-sheetjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/item/ammunition-item-sheet.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/item/ammunition-item-sheet.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-pmttrpgammunitionitemsheet-extends-pmttrpgitemsheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class: PMTTRPGAmmunitionItemSheet (extends PMTTRPGItemSheet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="item">item</h1>
+<blockquote>
+<p><strong>JSDoc coverage: -339/37 symbols (-916%)</strong></p>
+</blockquote>
+<h2 id="srcmoduleitemweapon-propertiesjs"><code>src/module/item/weapon-properties.js</code></h2>
+<h3 id="const-melee_forms"><code>const MELEE_FORMS</code></h3>
+<p>Weapon dropdowns should always have a valid value.</p>
+<p>If a form or hand property is blank, or doesn't belong to the current
+weapon type, the UI can look correct while the stored value is still wrong.
+That can also prevent the expected bonus from being applied.</p>
+<p>These helpers keep weapon type, form, and hand values in sync so
+prepareData, clash rolls, and melee/ranged switching all behave the same way.</p>
+<hr />
+<h3 id="const-default_weapon_hand_property"><code>const DEFAULT_WEAPON_HAND_PROPERTY</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-default_melee_form_property"><code>const DEFAULT_MELEE_FORM_PROPERTY</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-default_ranged_form_property"><code>const DEFAULT_RANGED_FORM_PROPERTY</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-normalizeweapontypeweapontype">Function: <code>normalizeWeaponType(weaponType)</code></h3>
+<p>Normalizes a weapon type.</p>
+<p>Melee is the default, so only an explicit <code>"ranged"</code> value is treated
+as ranged. Blank, null, or unknown values fall back to melee.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weaponType</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> <code>"melee"|"ranged"</code> — —</p>
+<hr />
+<h3 id="function-defaultformpropertyweapontype">Function: <code>defaultFormProperty(weaponType)</code></h3>
+<p>Returns the default form property for a weapon type.</p>
+<p>Melee weapons default to Small, while ranged weapons default to Low Caliber.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weaponType</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> <code>string</code> — —</p>
+<hr />
+<h3 id="function-normalizeweaponformpropertyweapontype-formproperty">Function: <code>normalizeWeaponFormProperty(weaponType, formProperty)</code></h3>
+<p>Makes sure the form property is valid for the current weapon type.</p>
+<p>If it isn't, the weapon falls back to the default form for that type.
+This also prevents stale values when switching between melee and ranged,
+such as keeping Small stored after changing a weapon to ranged.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weaponType</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>formProperty</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> <code>string</code> — —</p>
+<hr />
+<h3 id="function-normalizeweaponhandpropertyweapontype-handproperty">Function: <code>normalizeWeaponHandProperty(weaponType, handProperty)</code></h3>
+<p>Makes sure the hand property is valid for the current weapon type.</p>
+<p>Ranged weapons currently only support Offensive 1H and Offensive 2H. If a weapon
+has an invalid or blank hand value, it falls back to Offensive 1H.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weaponType</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>handProperty</code></td>
+<td><code>string|null|undefined</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> <code>string</code> — —</p>
+<hr />
+<h3 id="function-normalizeweaponpropertiessystem">Function: <code>normalizeWeaponProperties(system = {})</code></h3>
+<p>Normalizes all weapon properties in one pass.</p>
+<p>This keeps the weapon type, form, and hand values valid together.
+Used by prepareData, migrateData, clash rolls, and _preUpdate when
+switching a weapon between melee and ranged.</p>
+<p><strong>@param</strong> — {{
+  weaponType?: string|null,
+  formProperty?: string|null,
+  handProperty?: string|null
+}|null|undefined} system</p>
+<p><strong>Returns</strong> <code>{
+  weaponType: "melee"|"ranged",
+  formProperty: string,
+  handProperty: string</code> — }</p>
+<hr />
+<h2 id="srcmoduleitemweapon-item-sheetjs"><code>src/module/item/weapon-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgweaponitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGWeaponItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemtool-usejs"><code>src/module/item/tool-use.js</code></h2>
+<h3 id="function-gettoolusesremainingtool">Function: <code>getToolUsesRemaining(tool)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-istoolusabletool">Function: <code>isToolUsable(tool)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-toolconsumesbydefaulttool">Function: <code>toolConsumesByDefault(tool)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-canusetooltool">Function: <code>canUseTool(tool)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-consumetoolusetool-consume-true">Function: <code>consumeToolUse(tool, { consume = true } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ consume = true } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-getpreferredtooltargetactor">Function: <code>getPreferredToolTargetActor()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemtool-item-sheetjs"><code>src/module/item/tool-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgtoolitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGToolItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemstandalone-tooljs"><code>src/module/item/standalone-tool.js</code></h2>
+<h3 id="function-getactorstatvalueactor-statkey">Function: <code>getActorStatValue(actor, statKey)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>statKey</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-abilitylabelstatkey">Function: <code>abilityLabel(statKey)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>statKey</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-effectlinestool-mode">Function: <code>effectLines(tool, mode)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmoduleitemskill-item-sheetjs"><code>src/module/item/skill-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgskillitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGSkillItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemoutfit-item-sheetjs"><code>src/module/item/outfit-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgoutfititemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGOutfitItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemitemjs"><code>src/module/item/item.js</code></h2>
+<h3 id="function-geteffectsignatureentry">Function: <code>getEffectSignature(entry)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entry</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="class-itempmttrpg-extends-item">Class: <code>ItemPMTTRPG</code> <em>(extends <code>Item</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-formatmultiplierm">Function: <code>formatMultiplier(m)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmoduleitemitem-sheetjs"><code>src/module/item/item-sheet.js</code></h2>
+<h3 id="class-pmttrpgitemsheet-extends-handlebarsapplicationmixin">Class: <code>PMTTRPGItemSheet</code> <em>(extends <code>HandlebarsApplicationMixin</code>)</em></h3>
+<p>Extend the basic ItemSheet with some very simple modifications</p>
+<p><strong>@extends</strong> — {ItemSheetV2}</p>
+<hr />
+<h2 id="srcmoduleitemeffect-item-sheetjs"><code>src/module/item/effect-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgeffectitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGEffectItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemdeclare-skilljs"><code>src/module/item/declare-skill.js</code></h2>
+<h3 id="function-getdeclareskilloptionsactor-skilltype-attack">Function: <code>getDeclareSkillOptions(actor, skillType = "attack")</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>skillType = "attack"</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-builddeclaredskilltemplatedataskill-consumelight-true">Function: <code>buildDeclaredSkillTemplateData(skill, consumeLight = true)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skill</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>consumeLight = true</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmoduleitemaugment-item-sheetjs"><code>src/module/item/augment-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgaugmentitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGAugmentItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleitemapplied-tooljs"><code>src/module/item/applied-tool.js</code></h2>
+<h3 id="function-isappliedtooleligibletool-applyto">Function: <code>isAppliedToolEligible(tool, applyTo)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>applyTo</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-getappliedtooloptionsactor-applyto">Function: <code>getAppliedToolOptions(actor, applyTo)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>applyTo</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-buildappliedtooltemplatedatatool">Function: <code>buildAppliedToolTemplateData(tool)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-maybeconsumeappliedtooltool-consume-true">Function: <code>maybeConsumeAppliedTool(tool, { consume = true } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ consume = true } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-canconsumeappliedtooltool-consume-true">Function: <code>canConsumeAppliedTool(tool, consume = true)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>consume = true</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-damagetypelabeltype">Function: <code>damageTypeLabel(type)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmoduleitemammunition-item-sheetjs"><code>src/module/item/ammunition-item-sheet.js</code></h2>
+<h3 id="class-pmttrpgammunitionitemsheet-extends-pmttrpgitemsheet">Class: <code>PMTTRPGAmmunitionItemSheet</code> <em>(extends <code>PMTTRPGItemSheet</code>)</em></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

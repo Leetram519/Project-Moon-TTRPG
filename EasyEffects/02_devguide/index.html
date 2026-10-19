@@ -1,0 +1,2890 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="System documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../01_userguide/">
+      
+      
+        <link rel="next" href="../03_internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Dev Guide - PMTTRPG FoundryVTT Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#easyeffects-developer-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-header__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMTTRPG FoundryVTT Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dev Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01_userguide/" class="md-tabs__link">
+          
+  
+  
+  EasyEffects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/actor/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-nav__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMTTRPG FoundryVTT Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EasyEffects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_userguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-full-non-sugar-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Full Non-Sugar Syntax
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Full Non-Sugar Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action chains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Amounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-clause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        per clause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-expressions-and-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Expressions and Math
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Expressions and Math">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dice-math-interop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dice + math interop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path segments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-natural-language-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Natural-Language Desugaring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-extending-the-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Extending the System
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Extending the System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-verb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new verb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-path-shorthand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new path shorthand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-wiring-new-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Wiring New Triggers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Wiring New Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-adding-on-panic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example — adding [On Panic]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#built-in-custom-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in custom hooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parsesource-string-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse(source: string): Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executeast-trigger-context-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execute(ast, trigger, context): Promise&lt;void&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registereasyeffectshooks-void" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registerEasyEffectsHooks(): void
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor-status-methods-from-actor-status-methodsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actor status methods (from actor-status-methods.js)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-shape-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST Shape Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AST Shape Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Condition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exprnode-math-expression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExprNode (math expression)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flagnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlagNode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat Sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/actor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Actor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/combat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/easy-effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Effects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/item/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/damage-application/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Damage Application
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/handlebars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handlebars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/pool-clamp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pool Clamp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/projectmoonttrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/rolls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rolls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/slug/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/status-macro-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macro API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/targeting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Targeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/utilities.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-full-non-sugar-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Full Non-Sugar Syntax
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Full Non-Sugar Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action chains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Amounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-clause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        per clause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-expressions-and-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Expressions and Math
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Expressions and Math">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dice-math-interop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dice + math interop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path segments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-natural-language-desugaring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Natural-Language Desugaring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-extending-the-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Extending the System
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Extending the System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-verb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new verb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-path-shorthand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new path shorthand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a new trigger
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-wiring-new-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Wiring New Triggers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Wiring New Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-adding-on-panic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example — adding [On Panic]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#built-in-custom-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in custom hooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parsesource-string-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parse(source: string): Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executeast-trigger-context-promisevoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execute(ast, trigger, context): Promise&lt;void&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registereasyeffectshooks-void" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        registerEasyEffectsHooks(): void
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actor-status-methods-from-actor-status-methodsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actor status methods (from actor-status-methods.js)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ast-shape-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AST Shape Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AST Shape Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Condition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exprnode-math-expression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExprNode (math expression)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flagnode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlagNode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="easyeffects-developer-guide">EasyEffects — Developer Guide</h1>
+<p>This guide covers the <strong>full non-sugar syntax</strong>, the internal pipeline, how to extend the system, and how to wire EasyEffects into new parts of your codebase.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-architecture-overview">Architecture overview</a></li>
+<li><a href="#2-full-non-sugar-syntax">Full non-sugar syntax</a></li>
+<li><a href="#3-expressions-and-math">Expressions and math</a></li>
+<li><a href="#4-natural-language-desugaring">Natural-language desugaring</a></li>
+<li><a href="#5-extending-the-system">Extending the system</a></li>
+<li><a href="#6-wiring-new-triggers">Wiring new triggers</a></li>
+<li><a href="#7-api-reference">API reference</a></li>
+</ol>
+<hr />
+<h2 id="1-architecture-overview">1. Architecture Overview</h2>
+<p>EasyEffects is split into four independent files:</p>
+<pre><code>module/easy-effects/
+├── lexer.js        # Source text → token array
+├── parser.js       # Token array → AST
+├── interpreter.js  # AST × context → side effects (async)
+└── registry.js     # Registers AST execution to Foundry hooks
+</code></pre>
+<p>The dependency graph is strictly one-directional:</p>
+<pre><code>registry.js
+  └── interpreter.js
+        └── parser.js
+              └── lexer.js
+</code></pre>
+<p>Only <code>registry.js</code> imports Foundry globals. The other three files are pure JavaScript and are fully unit-testable outside of Foundry.</p>
+<h3 id="execution-flow">Execution flow</h3>
+<pre><code>item.system.easyEffects (string)
+    │
+    ▼ lexer.tokenize()
+token array
+    │
+    ▼ parser.parse()
+Script AST
+    │  (cached per item.id, invalidated on updateItem)
+    ▼ interpreter.execute(ast, triggerName, context)
+side effects on ActorPMTTRPG documents
+</code></pre>
+<hr />
+<h2 id="2-full-non-sugar-syntax">2. Full Non-Sugar Syntax</h2>
+<p>The canonical (non-sugar) form of every statement is:</p>
+<pre><code>[Trigger Name]
+if &lt;condLhs&gt; &lt;operator&gt; &lt;condRhs&gt; do &lt;verb&gt; &lt;noun&gt; &lt;argument&gt; &lt;amount&gt; per (&lt;accessor&gt;) on &lt;target&gt;;
+</code></pre>
+<p>Every part except the trigger and the action verb+noun is optional.</p>
+<h3 id="triggers">Triggers</h3>
+<pre><code>[Clash Win]
+[Clash Lose]
+[On Hit]
+[On Stagger]
+[Turn Start]
+</code></pre>
+<p>Defined as strings in <code>registry.js</code> — see <a href="#6-wiring-new-triggers">Wiring new triggers</a>.</p>
+<h3 id="conditions">Conditions</h3>
+<pre><code>if &lt;lhs&gt; &lt;op&gt; &lt;rhs&gt;
+</code></pre>
+<p><code>lhs</code> is either a parenthesised accessor expression or a flag keyword:</p>
+<pre><code>if (self.status.Charge) &gt;= 3
+if isStaggered target == 1
+if hasStatus &quot;Stagger Fragile&quot; self == 0
+if isPanicking target != 1
+</code></pre>
+<p>Operators: <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>==</code> <code>!=</code></p>
+<h3 id="actions">Actions</h3>
+<pre><code>do &lt;verb&gt; &lt;noun&gt; [&lt;argument&gt;] [&lt;amount&gt;] [per (&lt;accessor&gt;)] [on &lt;target&gt;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th>Noun</th>
+<th>Argument</th>
+<th>Amount</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add</code></td>
+<td><code>status</code></td>
+<td>Status name</td>
+<td>Stack count</td>
+<td>Add stacks via <code>actor.addStatusStacks()</code></td>
+</tr>
+<tr>
+<td><code>remove</code></td>
+<td><code>status</code></td>
+<td>Status name</td>
+<td>Stack count</td>
+<td>Remove stacks via <code>actor.removeStatusStacks()</code></td>
+</tr>
+<tr>
+<td><code>deal</code></td>
+<td><code>damage</code></td>
+<td>—</td>
+<td>HP amount</td>
+<td><code>actor.applyDamage(n, { op: 'full' })</code></td>
+</tr>
+<tr>
+<td><code>heal</code></td>
+<td><em>(any)</em></td>
+<td>—</td>
+<td>HP amount</td>
+<td><code>actor.applyDamage(n, { op: 'heal' })</code></td>
+</tr>
+<tr>
+<td><code>set</code></td>
+<td><code>stat</code></td>
+<td>Stat name</td>
+<td>Value</td>
+<td><code>actor.update({ system.attributes/abilities.&lt;name&gt;.value })</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="action-chains">Action chains</h3>
+<pre><code>do add status Charge 1 on self and remove status &quot;Stagger Fragile&quot; 1 on target;
+</code></pre>
+<p><code>and</code> chains any number of actions. Each action may have its own <code>on &lt;target&gt;</code>; if omitted, it inherits the last explicit target in the chain (defaulting to <code>self</code>).</p>
+<h3 id="amounts">Amounts</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NUMBER</code></td>
+<td><code>3</code></td>
+<td>Plain integer</td>
+</tr>
+<tr>
+<td><code>DICE</code></td>
+<td><code>1d6</code></td>
+<td>Rolled via <code>new Roll(formula).roll()</code></td>
+</tr>
+<tr>
+<td><code>ACCESSOR</code></td>
+<td><code>(self.rank)</code></td>
+<td>Evaluated as a math expression</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-clause"><code>per</code> clause</h3>
+<pre><code>do deal damage 2 per (target.status.Bleed) on target;
+</code></pre>
+<p>The resolved amount is multiplied by the per-accessor value. Evaluated after the base amount.</p>
+<h3 id="targets">Targets</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Resolves to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self</code></td>
+<td><code>context.self</code></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>context.target</code></td>
+</tr>
+<tr>
+<td><code>ally</code></td>
+<td><code>context.ally</code></td>
+</tr>
+<tr>
+<td><code>enemies</code></td>
+<td>All combatants with opposing token disposition</td>
+</tr>
+<tr>
+<td><code>allies</code></td>
+<td>All combatants with matching disposition, excluding self</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>All combatants</td>
+</tr>
+</tbody>
+</table>
+<p>Multi-targets loop over <code>game.combat.combatants</code>.</p>
+<h3 id="status-names">Status names</h3>
+<p>Status names are either a bare <code>IDENT</code> (single word, no quotes) or a <code>STRING</code> (double-quoted, may contain spaces). Quote reserved EE keywords too (<code>"Double"</code>, <code>"half"</code>, …):</p>
+<pre><code>do add status Burn 1 on target;
+do add status &quot;Stagger Fragile&quot; 1 on target;
+</code></pre>
+<h3 id="flags">Flags</h3>
+<pre><code>if isStaggered self == 1
+if isPanicking target == 0
+if hasStatus Burn target == 1
+if hasStatus &quot;Stagger Fragile&quot; self == 0
+</code></pre>
+<p>Flags resolve to <code>1</code> (true) or <code>0</code> (false). They are compared with <code>==</code> or <code>!=</code>.</p>
+<hr />
+<h2 id="3-expressions-and-math">3. Expressions and Math</h2>
+<p>Anywhere a numeric value is expected — amounts, <code>per</code> clauses, condition operands — you can write a full math expression inside <code>( )</code>.</p>
+<h3 id="operators">Operators</h3>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Meaning</th>
+<th>Precedence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code> <code>-</code></td>
+<td>Addition, subtraction</td>
+<td>Low</td>
+</tr>
+<tr>
+<td><code>*</code> <code>/</code> <code>%</code> <code>//</code> <code>//f</code> <code>//c</code></td>
+<td>Multiply, divide, modulo, floor-div, ceil-div</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<p>Standard operator precedence applies. Parens nest normally.</p>
+<h3 id="leaves">Leaves</h3>
+<table>
+<thead>
+<tr>
+<th>Leaf</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Num</code></td>
+<td><code>3</code></td>
+<td>Literal integer</td>
+</tr>
+<tr>
+<td><code>Dice</code></td>
+<td><code>1d6</code></td>
+<td>Rolled async at evaluation time</td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td><code>self.rank</code></td>
+<td>Dotted path resolved against context</td>
+</tr>
+<tr>
+<td><code>BinOp</code></td>
+<td><code>self.rank * 2</code></td>
+<td>Recursive binary operation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dice-math-interop">Dice + math interop</h3>
+<p>Dice are valid leaves inside <code>BinOp</code> trees:</p>
+<pre><code>do deal damage (1d6 + self.rank) on target;
+do deal damage (2d8 * 2) on target;
+</code></pre>
+<p>Evaluation is fully <code>async</code> throughout — <code>evaluateExpr()</code> in <code>interpreter.js</code> returns a <code>Promise&lt;number&gt;</code>.</p>
+<h3 id="path-segments">Path segments</h3>
+<p>A path is a dot-separated sequence of identifiers. Quoted strings are valid as path segments for multi-word status names inside expressions:</p>
+<pre><code>(self.status.&quot;Stagger Fragile&quot; + 1)
+</code></pre>
+<h3 id="supported-paths">Supported paths</h3>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Resolves to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self.hp</code> / <code>sp</code> / <code>st</code> / <code>light</code> / <code>xp</code> / <code>slots</code></td>
+<td><code>system.attributes.&lt;name&gt;.value</code></td>
+</tr>
+<tr>
+<td><code>self.rank</code></td>
+<td><code>system.attributes.level.value</code></td>
+</tr>
+<tr>
+<td><code>self.attack</code></td>
+<td><code>system.attributes.attackModifier.value</code></td>
+</tr>
+<tr>
+<td><code>self.evade</code></td>
+<td><code>system.attributes.evadeModifier.value</code></td>
+</tr>
+<tr>
+<td><code>self.block</code></td>
+<td><code>system.attributes.blockModifier.value</code></td>
+</tr>
+<tr>
+<td><code>self.speed</code></td>
+<td><code>system.attributes.speed.bonus</code></td>
+</tr>
+<tr>
+<td><code>self.stat.&lt;name&gt;</code></td>
+<td><code>system.abilities.&lt;name&gt;.value</code></td>
+</tr>
+<tr>
+<td><code>self.attr.&lt;name&gt;</code></td>
+<td><code>system.attributes.&lt;name&gt;.value</code> (generic)</td>
+</tr>
+<tr>
+<td><code>self.status.&lt;Name&gt;</code></td>
+<td><code>actor.getStatusStacks(Name)</code></td>
+</tr>
+<tr>
+<td><code>clash.margin</code></td>
+<td><code>attackerRoll - defenderRoll</code></td>
+</tr>
+<tr>
+<td><code>clash.attackerRoll</code> / <code>clash.defenderRoll</code></td>
+<td>Raw roll totals from hook payload</td>
+</tr>
+</tbody>
+</table>
+<p>Root can be <code>self</code>, <code>target</code>, or <code>ally</code>. <code>clash</code> is available only in <code>[Clash Win]</code> and <code>[Clash Lose]</code> blocks.</p>
+<hr />
+<h2 id="4-natural-language-desugaring">4. Natural-Language Desugaring</h2>
+<p>The natural-language forms are <strong>syntactic sugar</strong> — they parse into the same AST nodes as the non-sugar forms. The interpreter has no awareness of which syntax was used.</p>
+<table>
+<thead>
+<tr>
+<th>Sugar</th>
+<th>Desugars to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gain N Status [on T]</code></td>
+<td><code>do add status Status N [on T]</code></td>
+</tr>
+<tr>
+<td><code>lose N Status [on T]</code></td>
+<td><code>do remove status Status N [on T]</code></td>
+</tr>
+<tr>
+<td><code>halve Status [on T]</code></td>
+<td><code>do remove status Status (T.status.Status //c 2) on T</code></td>
+</tr>
+<tr>
+<td><code>double Status [on T]</code></td>
+<td><code>do add status Status (T.status.Status) on T</code></td>
+</tr>
+<tr>
+<td><code>lose half [of] Status [on T]</code></td>
+<td>same as <code>halve</code></td>
+</tr>
+<tr>
+<td><code>gain double [of] Status [on T]</code></td>
+<td>same as <code>double</code></td>
+</tr>
+<tr>
+<td>bare <code>Status</code> in <code>(…)</code> / amounts</td>
+<td><code>self.status.&lt;StatusName&gt;</code></td>
+</tr>
+<tr>
+<td><code>convert [amount] damage to pool\|type</code></td>
+<td>mutates pending <code>context.damage</code> (pool / damageType / amount)</td>
+</tr>
+<tr>
+<td><code>set maxHp\|maxSt\|maxSp\|maxLight to N</code></td>
+<td>Always Active absolute max -&gt; <code>eeMods.overrides</code></td>
+</tr>
+<tr>
+<td><code>require N T Status then X</code></td>
+<td><code>if (T.status.Status) &gt;= N do X</code></td>
+</tr>
+<tr>
+<td><code>require (expr) op rhs then X</code></td>
+<td><code>if (expr) op rhs do X</code></td>
+</tr>
+<tr>
+<td><code>spend N Status [on T] to X</code></td>
+<td><code>if (T.status.Status) &gt;= N do X and remove status Status N on T</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>spend</code> specifically appends the <code>remove</code> action automatically — the condition and the stack removal are derived from the same <code>N</code> and <code>Status</code> tokens so they can never drift out of sync.</p>
+<hr />
+<h2 id="5-extending-the-system">5. Extending the System</h2>
+<h3 id="adding-a-new-verb">Adding a new verb</h3>
+<p>Open <code>interpreter.js</code> and add an entry to <code>ACTION_HANDLERS</code>:</p>
+<pre><code class="language-js">const ACTION_HANDLERS = {
+  // existing verbs…
+
+  /**
+   * do push &lt;amount&gt; on &lt;target&gt;
+   * Applies forced movement (placeholder — wire to your movement system).
+   */
+  push: async (action, context, resolvedAmount) =&gt; {
+    for (const actor of resolveTargets(action.target, context)) {
+      // your logic here
+      console.log(`[EasyEffects] Pushed ${actor.name} ${resolvedAmount} squares`);
+    }
+  },
+};
+</code></pre>
+<p>The handler receives:
+- <code>action</code> — the full <code>Action</code> AST node (<code>verb</code>, <code>noun</code>, <code>argument</code>, <code>amount</code>, <code>per</code>, <code>target</code>)
+- <code>context</code> — <code>{ self, target, ally, clash }</code>
+- <code>resolvedAmount</code> — the already-evaluated, already-<code>per</code>-scaled integer amount</p>
+<h3 id="adding-a-new-path-shorthand">Adding a new path shorthand</h3>
+<p>Open <code>interpreter.js</code>, find <code>resolvePath()</code>, and add a branch:</p>
+<pre><code class="language-js">// Example: self.sp.max → system.attributes.sp.max
+if (sub[0] === &quot;spmax&quot; &amp;&amp; sub.length === 1) {
+  return actor.system.attributes?.sp?.max ?? 0;
+}
+</code></pre>
+<h3 id="adding-a-new-flag">Adding a new flag</h3>
+<p>Open <code>interpreter.js</code>, find <code>resolveFlag()</code>, and add a case:</p>
+<pre><code class="language-js">case &quot;isBleedingOut&quot;:
+  return actor.system.attributes?.bleedOut?.active ? 1 : 0;
+</code></pre>
+<p>Then add the keyword to the <code>KEYWORDS</code> set in <code>lexer.js</code>:</p>
+<pre><code class="language-js">const KEYWORDS = new Set([
+  // …existing…
+  &quot;isBleedingOut&quot;,
+]);
+</code></pre>
+<h3 id="adding-a-new-trigger">Adding a new trigger</h3>
+<p>See <a href="#6-wiring-new-triggers">Wiring new triggers</a> below.</p>
+<hr />
+<h2 id="6-wiring-new-triggers">6. Wiring New Triggers</h2>
+<p>All trigger → hook bindings live in <code>registry.js</code> in the <code>TRIGGER_HOOKS</code> array.</p>
+<p>Each entry has three fields:</p>
+<pre><code class="language-js">{
+  hook: &quot;foundryHookName&quot;,       // Foundry hook or custom pmttrpg.* hook
+  triggerName: &quot;Display Name&quot;,   // Matches [Display Name] in EasyEffects source
+  getItems: (...hookArgs) =&gt; Item[],           // Which items' scripts to run
+  buildContext: (...hookArgs) =&gt; object|null,  // Build the execution context
+}
+</code></pre>
+<h3 id="example-adding-on-panic">Example — adding <code>[On Panic]</code></h3>
+<p><strong>Step 1.</strong> Add the entry to <code>TRIGGER_HOOKS</code> in <code>registry.js</code>:</p>
+<pre><code class="language-js">{
+  hook: &quot;pmttrpg.actorPanicked&quot;,
+  triggerName: &quot;On Panic&quot;,
+  getItems: ({ actor }) =&gt; getEquippedItems(actor),
+  buildContext: ({ actor }) =&gt; ({
+    self:   actor,
+    target: null,
+    ally:   null,
+    clash:  null,
+  }),
+},
+</code></pre>
+<p><strong>Step 2.</strong> Fire the hook from your panic logic:</p>
+<pre><code class="language-js">// Inside your panic trigger code:
+Hooks.callAll(&quot;pmttrpg.actorPanicked&quot;, { actor });
+</code></pre>
+<p><strong>Step 3.</strong> Document it in the user guide trigger table.</p>
+<p>That's all — no changes to the lexer, parser, or interpreter.</p>
+<h3 id="built-in-custom-hooks">Built-in custom hooks</h3>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Payload</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pmttrpg.clashResolved</code></td>
+<td><code>{ winner, loser, attackerItem, defenderItem, attackerRoll, defenderRoll }</code></td>
+<td><code>[Clash Win]</code>, <code>[Clash Lose]</code></td>
+</tr>
+<tr>
+<td><code>pmttrpg.attackConnected</code></td>
+<td><code>{ attacker, defender, item }</code></td>
+<td><code>[On Hit]</code></td>
+</tr>
+<tr>
+<td><code>pmttrpg.actorStaggered</code></td>
+<td><code>{ actor, attacker }</code></td>
+<td><code>[On Stagger]</code></td>
+</tr>
+<tr>
+<td><code>pmttrpg.statusApplied</code></td>
+<td><code>{ actor, item, statusName, stacks }</code></td>
+<td><code>[On Applied]</code></td>
+</tr>
+<tr>
+<td><code>pmttrpg.statusRemoved</code></td>
+<td><code>{ actor, item, statusName }</code></td>
+<td><code>[On Removed]</code></td>
+</tr>
+<tr>
+<td><code>pmttrpg.turnStart</code></td>
+<td><code>{ actor }</code></td>
+<td><code>[Turn Start]</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-api-reference">7. API Reference</h2>
+<h3 id="parsesource-string-script"><code>parse(source: string): Script</code></h3>
+<p>Tokenizes and parses a full EasyEffects source string. Returns a <code>Script</code> AST. Throws <code>LexError</code> or <code>ParseError</code> on invalid input.</p>
+<pre><code class="language-js">import { parse } from &quot;./easy-effects/parser.js&quot;;
+const ast = parse(`[Clash Win]\ngain 1 Charge;`);
+</code></pre>
+<h3 id="executeast-trigger-context-promisevoid"><code>execute(ast, trigger, context): Promise&lt;void&gt;</code></h3>
+<p>Executes all blocks in the script that match <code>trigger</code>. Safe to call with a trigger that has no matching block — it silently no-ops.</p>
+<pre><code class="language-js">import { execute } from &quot;./easy-effects/interpreter.js&quot;;
+await execute(ast, &quot;Clash Win&quot;, {
+  self:   winnerActor,
+  target: loserActor,
+  ally:   null,
+  clash:  { margin: 4, attackerRoll: 12, defenderRoll: 8 },
+});
+</code></pre>
+<p><strong>Context shape:</strong></p>
+<pre><code class="language-ts">{
+  self:   ActorPMTTRPG,
+  target: ActorPMTTRPG | null,
+  ally:   ActorPMTTRPG | null,
+  clash:  {
+    margin:       number,
+    attackerRoll: number,
+    defenderRoll: number,
+  } | null,
+}
+</code></pre>
+<h3 id="registereasyeffectshooks-void"><code>registerEasyEffectsHooks(): void</code></h3>
+<p>Registers all trigger→hook bindings. Call once during system init:</p>
+<pre><code class="language-js">import { registerEasyEffectsHooks } from &quot;./easy-effects/registry.js&quot;;
+Hooks.once(&quot;init&quot;, () =&gt; registerEasyEffectsHooks());
+</code></pre>
+<h3 id="actor-status-methods-from-actor-status-methodsjs">Actor status methods (from <code>actor-status-methods.js</code>)</h3>
+<p>These are methods on <code>ActorPMTTRPG</code>. Stack count = number of owned items with <code>type === 'status'</code> and matching name.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getStatusStacks</code></td>
+<td><code>(name: string) → number</code></td>
+<td>Count stacks</td>
+</tr>
+<tr>
+<td><code>addStatusStacks</code></td>
+<td><code>(name: string, amount?: number) → Promise&lt;Item[]&gt;</code></td>
+<td>Add stacks; auto-creates from compendium if missing</td>
+</tr>
+<tr>
+<td><code>removeStatusStacks</code></td>
+<td><code>(name: string, amount?: number) → Promise&lt;string[]&gt;</code></td>
+<td>Remove stacks; clamps at 0</td>
+</tr>
+<tr>
+<td><code>setStatusStacks</code></td>
+<td><code>(name: string, target: number) → Promise&lt;void&gt;</code></td>
+<td>Set exact stack count</td>
+</tr>
+<tr>
+<td><code>_fetchStatusFromCompendium</code></td>
+<td><code>(name: string) → Promise&lt;object\|null&gt;</code></td>
+<td>Static; searches all Item packs</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ast-shape-reference">AST Shape Reference</h2>
+<h3 id="script"><code>Script</code></h3>
+<pre><code class="language-js">{
+  type: &quot;Script&quot;,
+  blocks: Block[]
+}
+</code></pre>
+<h3 id="block"><code>Block</code></h3>
+<pre><code class="language-js">{
+  type: &quot;Block&quot;,
+  trigger: string,       // e.g. &quot;Clash Win&quot;
+  statements: Statement[]
+}
+</code></pre>
+<h3 id="statement"><code>Statement</code></h3>
+<pre><code class="language-js">{
+  type: &quot;Statement&quot;,
+  condition: Condition | null,
+  actions: Action[]
+}
+</code></pre>
+<h3 id="condition"><code>Condition</code></h3>
+<pre><code class="language-js">{
+  type: &quot;Condition&quot;,
+  lhs: AccessorNode | FlagNode,
+  operator: &quot;&gt;&quot; | &quot;&lt;&quot; | &quot;&gt;=&quot; | &quot;&lt;=&quot; | &quot;==&quot; | &quot;!=&quot;,
+  rhs: { type: &quot;NUMBER&quot;, value: number }
+      | { type: &quot;ACCESSOR&quot;, expr: ExprNode }
+      | { type: &quot;DICE&quot;, value: string }
+      | { type: &quot;IDENT&quot;, value: string }
+}
+</code></pre>
+<h3 id="action"><code>Action</code></h3>
+<pre><code class="language-js">{
+  type: &quot;Action&quot;,
+  verb:     string,             // &quot;add&quot; | &quot;remove&quot; | &quot;deal&quot; | &quot;heal&quot; | &quot;set&quot;
+  noun:     string,             // &quot;status&quot; | &quot;damage&quot; | &quot;stat&quot; | …
+  argument: string | null,      // status name, stat name, etc.
+  amount:   AmountNode | null,  // NUMBER | DICE | ACCESSOR
+  per:      ExprNode | null,    // expression for per-scaling
+  target:   string | null,      // null = inherit from chain
+}
+</code></pre>
+<h3 id="exprnode-math-expression"><code>ExprNode</code> (math expression)</h3>
+<pre><code class="language-js">{ type: &quot;Num&quot;,   value: number }
+{ type: &quot;Dice&quot;,  formula: string }
+{ type: &quot;Path&quot;,  segments: string[] }
+{ type: &quot;BinOp&quot;, op: &quot;+&quot; | &quot;-&quot; | &quot;*&quot; | &quot;/&quot; | &quot;%&quot; | &quot;//&quot;, left: ExprNode, right: ExprNode }
+</code></pre>
+<h3 id="flagnode"><code>FlagNode</code></h3>
+<pre><code class="language-js">{
+  type:       &quot;FLAG&quot;,
+  flag:       &quot;isStaggered&quot; | &quot;isPanicking&quot; | &quot;hasStatus&quot;,
+  statusName: string | null,   // set for hasStatus only
+  target:     string,          // &quot;self&quot; | &quot;target&quot; | &quot;ally&quot;
+}
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
