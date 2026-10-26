@@ -1,5 +1,5 @@
 import { PMTTRPGUtility } from "../utility.js";
-import { buildEffectSummaryGroups, computeEffectSummary, effectShowsProcChoice } from "../effects/effect-summary.js";
+import { buildEffectSummaryGroups, buildInlineEffectSummary, computeEffectSummary, effectShowsProcChoice } from "../effects/effect-summary.js";
 import {
   buildEasyEffectsFromHostEffects,
   isEasyEffectsSyncDirty,
@@ -33,7 +33,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static DEFAULT_OPTIONS = {
     classes: ["projectmoonttrpg", "sheet", "item"],
-    position: { width: 540, height: 560 },
+    position: { width: 620, height: 800 },
     window: { resizable: true },
     form: {
       submitOnChange: true,
@@ -51,6 +51,8 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       "sync-easy-effects": PMTTRPGItemSheet.prototype._onSyncEasyEffects,
       syncEasyEffects: PMTTRPGItemSheet.prototype._onSyncEasyEffects,
       eeFlags: PMTTRPGItemSheet.prototype._onOpenEEFlags,
+      addTag: PMTTRPGItemSheet.prototype._onAddTag,
+      removeTag: PMTTRPGItemSheet.prototype._onRemoveTag,
     },
   };
 
@@ -113,6 +115,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (itemData.type === 'effect') {
       system.positiveEnriched = await TextEditor.enrichHTML(system.positive ?? '', enrichmentOptions);
       system.negativeEnriched = await TextEditor.enrichHTML(system.negative ?? '', enrichmentOptions);
+      system.inlineEffectSummary = await buildInlineEffectSummary(system, enrichmentOptions);
     }
 
     if (itemData.type === 'equipment') {
@@ -384,12 +387,6 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     bindEasyEffectsHighlighter(this.element, { signal });
 
     if (!this.isEditable) return;
-
-    for (const el of this.element.querySelectorAll('.class-fields')) {
-      el.addEventListener('click', (e) => {
-        if (e.target.closest('.class-control')) this._onClickClassControl(e);
-      }, { signal });
-    }
 
     if (this._supportsEffects()) {
       for (const el of this.element.querySelectorAll('.effect-control')) {
@@ -800,7 +797,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       icon: entry.icon,
       source: entry.effect?.system.homebrew.source ?? "Your World",
       epCost: entry.effect?.system?.cost ?? null,
-      tags:(entry.effect?.system?.tags ?? []).map(t => typeof t === 'string' ? { name: t } : { name: t.value ?? t.name ?? String(t) }),
+      tags: entry.effect?.system?.tags ?? [],
       _catalogEntry: entry,
     }));
 
@@ -818,35 +815,49 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   async _prepareEffectHostContext() {
     const catalog = await this._getEffectCatalog();
-    const effects = foundry.utils.duplicate(this.document.system.effects ?? []).map(effect => {
-      const stack = this._getEffectStack(effect);
-      const showProcResult = ['onClash', 'onClashResult', 'onEitherClashResult'].includes(effect.procOn);
-      const showProcChoice = effectShowsProcChoice(effect.procOn);
-      const showProcStat = ['onUse', 'onAction'].includes(effect.procOn);
-      const showProcAction = ['onUse', 'onAction'].includes(effect.procOn);
-      return {
-        ...effect,
-        stack,
-        count: stack,
-        stackMax: Math.max(1, Number(effect.stackMax ?? 5) || 5),
-        signedCost: (effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0)),
-        displayCost: (effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0)),
-        totalCost: ((effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0))) * stack,
-        allowModeToggle: effect.canPositive !== false && effect.canNegative !== false,
-        showProcResult,
-        showProcChoice,
-        showProcStat,
-        showProcAction,
-        procResultLocked: effect.procResultLocked ?? (['onClash', 'onClashResult', 'onEitherClashResult'].includes(effect.procOn) && effect.procResult !== 'none'),
-        procChoiceLocked: effect.procChoiceLocked ?? false,
-        modeLabel: effect.mode === 'negative' ? game.i18n.localize('PMTTRPG.EffectModeNegative') : game.i18n.localize('PMTTRPG.EffectModePositive')
-      };
-    });
+
+    const effects = await Promise.all(
+      foundry.utils.duplicate(this.document.system.effects ?? []).map(async effect => {
+        const stack = this._getEffectStack(effect);
+        const showProcResult = ['onClash', 'onClashResult', 'onEitherClashResult'].includes(effect.procOn);
+        const showProcChoice = effectShowsProcChoice(effect.procOn);
+        const showProcStat = ['onUse', 'onAction'].includes(effect.procOn);
+        const showProcAction = ['onUse', 'onAction'].includes(effect.procOn);
+
+        return {
+          ...effect,
+          stack,
+          count: stack,
+          stackMax: Math.max(1, Number(effect.stackMax ?? 5) || 5),
+          signedCost: (effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0)),
+          displayCost: (effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0)),
+          totalCost: ((effect.mode === 'negative' ? -1 : 1) * Math.abs(Number(effect.cost ?? 0))) * stack,
+          allowModeToggle: effect.canPositive !== false && effect.canNegative !== false,
+          showProcResult,
+          showProcChoice,
+          showProcStat,
+          showProcAction,
+          procResultLocked: effect.procResultLocked ?? (
+            ['onClash', 'onClashResult', 'onEitherClashResult'].includes(effect.procOn) &&
+            effect.procResult !== 'none'
+          ),
+          procChoiceLocked: effect.procChoiceLocked ?? false,
+          modeLabel: effect.mode === 'negative'
+            ? game.i18n.localize('PMTTRPG.EffectModeNegative')
+            : game.i18n.localize('PMTTRPG.EffectModePositive'),
+
+          inlineSummary: await buildInlineEffectSummary({ ...effect, stack })
+        };
+      })
+    );
 
     return {
       effectChoices: catalog,
       effects,
-      effectSummary: computeEffectSummary(effects, Number(this.document.system?.epMax ?? 0)),
+      effectSummary: computeEffectSummary(
+        effects,
+        Number(this.document.system?.epMax ?? 0)
+      ),
       effectSummaryGroups: this._buildEffectSummaryGroups(effects),
       effectSearchPlaceholder: game.i18n.localize('PMTTRPG.EffectSearchPlaceholder')
     };
@@ -882,54 +893,6 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         closeOnSelect: false
       }
     });
-  }
-
-  async _onClickClassControl(event) {
-    event.preventDefault();
-    const a = event.target.closest('.class-control');
-    if (!a) return;
-    const action = a.dataset.action;
-    const field_type = a.dataset.type;
-
-    const field_types = {
-      races: 'race',
-      alignments: 'alignment'
-    };
-
-    if (action === "create") {
-      if (Object.keys(field_types).includes(field_type)) {
-        const field_values = this.document.system[field_type] ?? {};
-        const nk = Object.keys(field_values).length + 1;
-        const update = {};
-        update[`system.${field_type}.${nk}`] = { label: '', description: '' };
-        await this.document.update(update);
-      }
-      else if (field_type === 'equipment-groups') {
-        const field_values = this.document.system.equipment ?? {};
-        const nk = Object.keys(field_values).length + 1;
-        const systemCopy = foundry.utils.duplicate(this.document.system);
-        systemCopy.equipment[nk] = { label: '', mode: 'radio', items: [], objects: [] };
-        await this.document.update({ system: systemCopy });
-      }
-    }
-    else if (action === "delete") {
-      if (field_type === 'equipment-groups') {
-        const elem = a.closest('.equipment-group');
-        const nk = elem?.dataset?.index;
-        if (!nk) return;
-        const update = {};
-        update[`system.equipment.${nk}`] = foundry.data.operators.ForcedDeletion;
-        await this.document.update(update);
-      }
-      else {
-        const li = a.closest(".item");
-        const nk = li?.dataset?.index;
-        if (!nk) return;
-        const update = {};
-        update[`system.${field_type}.${nk}`] = foundry.data.operators.ForcedDeletion;
-        await this.document.update(update);
-      }
-    }
   }
 
   async _onEffectControl(event) {
@@ -988,10 +951,17 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const effects = foundry.utils.duplicate(previousEffects);
     if (!effects[index]) return;
 
-    effects[index].stack = stack;
-    effects[index].count = stack;
-    await this.document.update({ 'system.effects': effects });
-    await this._maybeAutoSyncEasyEffects(previousEffects);
+    if(stack == 0) {
+      const previousEffects = foundry.utils.duplicate(this.document.system.effects ?? []);
+      effects.splice(index, 1);
+      await this.document.update({ 'system.effects': effects });
+      await this._maybeAutoSyncEasyEffects(previousEffects);
+    } else {
+      effects[index].stack = stack;
+      effects[index].count = stack;
+      await this.document.update({ 'system.effects': effects });
+      await this._maybeAutoSyncEasyEffects(previousEffects);
+    }
   }
 
   async _onEffectProcResultChange(event) {
@@ -1162,5 +1132,38 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.document.update({ 'system.effects': effects });
     await this._maybeAutoSyncEasyEffects(previousEffects);
     return false;
+  }
+
+  async _onAddTag(event, target) {
+    event.preventDefault();
+
+    const form = target.closest(".effect-tags");
+    const nameInput = form.querySelector("[data-tag-name]");
+
+    const name = nameInput.value.trim();
+    if (!name) return;
+
+    const tags = foundry.utils.deepClone(this.item.system.tags ?? []);
+
+    tags.push({
+      name
+    });
+
+    await this.item.update({
+      "system.tags": tags
+    });
+  }
+
+  async _onRemoveTag(event, target) {
+    event.preventDefault();
+    const index = Number(target.dataset.index);
+    if (!Number.isInteger(index) || index < 0) return;
+
+    const tags = foundry.utils.deepClone(this.item.system.tags ?? []);
+    if (index >= tags.length) return;
+    tags.splice(index, 1);
+    await this.item.update({
+      "system.tags": tags
+    });
   }
 }

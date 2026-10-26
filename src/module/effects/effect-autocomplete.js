@@ -8,7 +8,7 @@
  *   icon:        string,          // must be a src link
  *   source:      string,
  *   epCost:      number | null,   // null is displayed as "not specified" and has a value of 0.
- *   tags: [{ name: string, icon?: string }] // icon is a "fas" icon
+ *   tags: [{ name: string, icon?: string }]
  * }
  *
  * Usage:
@@ -122,7 +122,6 @@ export class EffectAutocomplete {
         ? `<span class="eac-tags">
             ${effect.tags.map(t =>
               `<span class="eac-tag">
-                ${t.icon ? `<i class="${t.icon}"></i>` : ''}
                 ${t.name}
               </span>`
             ).join('')}

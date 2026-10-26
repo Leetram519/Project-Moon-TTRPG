@@ -47,6 +47,7 @@ import { HomebrewRegistry } from "./homebrew/homebrew-registry.js";
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
 import { CompendiumBrowserOverride } from "./homebrew/compendium/compendium-browser.js";
+import { addEnrichers } from "./enrichers/text-enrich.js";
 
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -189,6 +190,8 @@ Hooks.once("init", async function() {
   CompendiumBrowserOverride.init();
   HomebrewSettings.register();
   HomebrewRegistry.registerAll();
+
+  addEnrichers();
 });
 
 Hooks.once("ready", async function() {

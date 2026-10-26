@@ -1,27 +1,15 @@
-<div class="{{cssClass}} item-form flexcol">
-  <div class="sheet-wrapper flexcol">
-    <header class="sheet-header flexrow">
-
-      {{#if isOutdated}}
-      <div class="compendium-outdated-banner">
-        <span>{{localize "PMTTRPG.OutdatedWarning"}}</span>
-        <button type="button" data-action="sync-from-compendium">
-          {{localize "PMTTRPG.OutdatedUpdate"}}
-        </button>
-        <button type="button"
-                data-action="dismiss-outdated"
-                data-modified-time="{{compendiumModifiedTime}}">
-          {{localize "PMTTRPG.OutdatedDismiss"}}
-        </button>
-      </div>
-      {{/if}}
-      <div class="cell cell--image">
-        <img class="profile-img" src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
+<div class="{{cssClass}} item-form">
+  <div class="sheet-wrapper">
+    <header class="sheet-header">
+      <div class="item-image">
+        <img src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
       </div>
       <div class="header-fields">
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PMTTRPG.Common.Name"}}"/></h1>
       </div>
     </header>
+
+    <hr class="separator--tabs-header">
 
     <nav class="sheet-tabs tabs" data-group="primary">
       <a class="item{{#if (eq activeTab 'description')}} active{{/if}}" data-action="tab" data-group="primary" data-tab="description">{{localize "PMTTRPG.Common.Description"}}</a>
@@ -34,12 +22,29 @@
     </nav>
 
     <section class="sheet-body">
-      <div class="tab{{#if (eq activeTab 'description')}} active{{/if}}" data-group="primary" data-tab="description">
-        <prose-mirror name="system.description" value="{{system.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.descriptionEnriched}}}</prose-mirror>
-      </div>
+        <div class="tab{{#if (eq activeTab 'description')}} active{{/if}}" data-group="primary" data-tab="description">
+          <div class="description-container">
+            <label class="description-label">{{localize "PMTTRPG.Common.Description"}}</label>
+            <prose-mirror name="system.description" value="{{system.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.descriptionEnriched}}}</prose-mirror>
+          </div>
+        </div>
 
       <div class="tab{{#if (eq activeTab 'properties')}} active{{/if}}" data-group="primary" data-tab="properties">
-        <div class="resource-group">
+        <div class="resource-header">
+          <div class="resource">
+            <label>{{localize "PMTTRPG.SkillRank"}}</label>
+            <input type="text" name="system.rank" value="{{system.rank}}" data-dtype="Number"/>
+          </div>
+          <div class="resource">
+            <label>{{localize "PMTTRPG.SkillLightCost"}}</label>
+            <input type="text" name="system.lightCost" value="{{system.lightCost}}" data-dtype="Number"/>
+          </div>
+          <div class="resource">
+            <label>{{localize "PMTTRPG.EP"}}</label>
+            <input class="disabled" type="text" value="{{system.epMax}}" readonly/>
+          </div>
+        </div>
+        <div class="resource-list">
           <div class="resource">
             <label>{{localize "PMTTRPG.SkillType"}}</label>
             <select name="system.skillType" data-dtype="String">
@@ -55,20 +60,8 @@
           </div>
           {{/if}}
           <div class="resource">
-            <label>{{localize "PMTTRPG.SkillRank"}}</label>
-            <input type="text" name="system.rank" value="{{system.rank}}" data-dtype="Number"/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.SkillLightCost"}}</label>
-            <input type="text" name="system.lightCost" value="{{system.lightCost}}" data-dtype="Number"/>
-          </div>
-          <div class="resource">
             <label>{{localize "PMTTRPG.Innate"}}</label>
             <input type="checkbox" name="system.innate" data-dtype="Boolean" {{#if system.innate}}checked{{/if}}/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.EP"}}</label>
-            <input class="disabled" type="text" value="{{system.epMax}}" readonly/>
           </div>
         </div>
       </div>
@@ -84,11 +77,11 @@
       {{/if}}
 
       <div class="tab{{#if (eq activeTab 'advanced')}} active{{/if}}" data-group="primary" data-tab="advanced">
-        <div class="resource-group">
+        <div class="resource-list">
           {{> "systems/projectmoonttrpg/templates/parts/item-slug-field.hbs"}}
-          <div class="resource">
+          <div class="resource vertical">
             <label>{{localize "PMTTRPG.CustomNotes"}}</label>
-            <textarea name="system.customNotes" rows="6" data-dtype="String">{{system.customNotes}}</textarea>
+            <textarea class="custom-notes" name="system.customNotes" rows="6" data-dtype="String">{{system.customNotes}}</textarea>
           </div>
         </div>
       </div>

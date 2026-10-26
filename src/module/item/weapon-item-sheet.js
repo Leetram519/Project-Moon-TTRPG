@@ -6,7 +6,7 @@ export class PMTTRPGWeaponItemSheet extends PMTTRPGItemSheet {
     PMTTRPGItemSheet.DEFAULT_OPTIONS,
     {
       classes: ["projectmoonttrpg", "sheet", "item", "weapon"],
-      position: { width: 560, height: 620 },
+      position: { width: 620, height: 800 },
     },
     { inplace: false }
   );
