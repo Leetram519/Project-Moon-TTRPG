@@ -32,8 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character has [N] or more Sinking Stacks, gain [N*2] Protection
-    and Stagger Protection before damage is resolved.</p>
+    <p>If the character has [N] or more [[/status Sinking]] Stacks, gain [N*2]
+    [[/status Protection]] and [[/status Stagger Protection]] before damage is
+    resolved.</p>
   negative: ''
   macro:
     uuid: ''

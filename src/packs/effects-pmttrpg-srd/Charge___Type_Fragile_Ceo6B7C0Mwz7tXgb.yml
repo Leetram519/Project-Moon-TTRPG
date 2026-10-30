@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*4] Charge to inflict [N] Type Fragile to the target next
-    round. The Type of Fragile is chosen on use.</p>
+    <p>Consume [N*4] [[/status Charge]] to inflict [N] Type Fragile to the
+    target next round. The Type of Fragile is chosen on use.</p>
   negative: ''
   macro:
     uuid: ''

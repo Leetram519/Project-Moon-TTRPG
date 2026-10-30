@@ -1,13 +1,13 @@
 name: Pierce Protection
 type: status
 img: >-
-  systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Protection/Blunt%20Protection.webp
+  systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Protection/Pierce%20Protection.webp
 system:
   name: ''
   description: >-
     <p>Take 1 less [HP & ST Damage Before Resistance] from Pierce Attacks per
-    Protection stack.</p><p>At the end of the Round, lose all Pierce
-    Protection.</p>
+    [[/status Pierce Protection]] stack.</p><p>At the end of the Round, lose all
+    Pierce [[/status Pierce Protection]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

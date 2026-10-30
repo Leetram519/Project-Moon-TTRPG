@@ -31,7 +31,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Tremor Burst, inflict 3 Bind to the target next round.</p>
+  positive: >-
+    <p>On [[/status Tremor]] Burst, inflict 3 [[/status Bind]] to the target
+    next round.</p>
   negative: ''
   macro:
     uuid: ''

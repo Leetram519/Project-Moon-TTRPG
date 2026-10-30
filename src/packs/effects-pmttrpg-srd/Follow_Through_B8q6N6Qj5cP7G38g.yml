@@ -31,9 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>You must have at least [N*2] Haste to activate this effect.</p><p>If you
-    moved at least [N*2] SQRs directly towards the target before performing this
-    attack, the target takes [N] dice of Force Damage. </p>
+    <p>You must have at least [N*2] [[/status Haste]] to activate this
+    effect.</p><p>If you moved at least [N*2] SQRs directly towards the target
+    before performing this attack, the target takes [N] dice of Force Damage.
+    </p>
   negative: ''
   macro:
     uuid: ''

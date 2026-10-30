@@ -34,8 +34,8 @@ system:
   procAction: any
   procCondition: Upon entering panic
   positive: >-
-    <p>You will be forced to take the "Fight" Panic type regardless of your
-    roll.</p>
+    <p>You will be forced to take the [[/status Panic [Fight]]] type regardless
+    of your roll.</p>
   negative: ''
   macro:
     uuid: ''

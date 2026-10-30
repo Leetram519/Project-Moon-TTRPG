@@ -7,8 +7,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>extra</strong> [HP & ST Damage Before Resistance] from
-    Pierce Attacks per Fragile stack.</p><p>At the end of the Round, lose all
-    Pierce Fragile.</p>
+    Pierce Attacks per [[/status Pierce Fragile]] stack.</p><p>At the end of the
+    Round, lose all [[/status Pierce Fragile]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

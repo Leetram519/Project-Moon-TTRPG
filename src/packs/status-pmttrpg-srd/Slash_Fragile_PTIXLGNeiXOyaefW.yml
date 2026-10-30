@@ -7,8 +7,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>extra</strong> [HP & ST Damage Before Resistance] from
-    Slash Attacks per Fragile stack.</p><p>At the end of the Round, lose all
-    Slash Fragile.</p>
+    Slash Attacks per [[/status Slash Fragile]] stack.</p><p>At the end of the
+    Round, lose all [[/status Slash Fragile]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

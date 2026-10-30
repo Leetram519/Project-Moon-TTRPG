@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Rupture Burst. If the enemy had 4+ Rupture, deal an extra Rupture/2 HP
-    Damage.</p>
+    <p>On [[/status Rupture]] Burst. If the enemy had 4+ [[/status Rupture]],
+    deal an extra [[/status Rupture]]/2 HP Damage.</p>
   negative: ''
   macro:
     uuid: ''

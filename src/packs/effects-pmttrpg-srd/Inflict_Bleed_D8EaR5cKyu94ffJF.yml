@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>Apply [N] Bleed to the target.</p>
+  positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
   negative: ''
   macro:
     uuid: ''

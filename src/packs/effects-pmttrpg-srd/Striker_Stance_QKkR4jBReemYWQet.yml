@@ -34,11 +34,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>By spending 1 Reaction, you may activate/swap to Striker
-    Stance.</p><p>[On Crit] with this Stance active, you may perform an
-    additional Attack, once per round.</p><p>This additional Attack must use the
-    same weapon, cannot use Skills, and rolls with -2 Dice Power. If the
-    Critical Hit was a result of a Defensive Reaction, this Attack may be
+    <p>By spending 1 Reaction, you may activate/swap to [[/status Striker
+    Stance]].</p><p>[On Crit] with [[/status Striker Stance]] active, you may
+    perform an additional Attack, once per round.</p><p>This additional Attack
+    must use the same weapon, cannot use Skills, and rolls with -2 Dice Power.
+    If the Critical Hit was a result of a Defensive Reaction, this Attack may be
     performed with any applicable held weapon.</p>
   negative: ''
   macro:

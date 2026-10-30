@@ -32,11 +32,11 @@ system:
   procCondition: In the first round of combat
   positive: >-
     <p>All successful Attacks/Counters made by the character inflict +[N]
-    Burn.</p>
+    [[/status Burn]].</p>
   negative: >-
-    <p>All successful Attacks/Counters made by the character inflict [N] Burn to
-    the character. The character's Burn Resisntance is reduced by [N] for the
-    round.</p>
+    <p>All successful Attacks/Counters made by the character inflict [N]
+    [[/status Burn]] to the character. The character's [[/status Burn]]
+    Resisntance is reduced by [N] for the round.</p>
   macro:
     uuid: ''
   customNotes: ''

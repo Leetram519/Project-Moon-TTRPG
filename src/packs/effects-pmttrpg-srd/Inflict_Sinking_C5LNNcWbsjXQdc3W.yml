@@ -31,8 +31,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Sinking to the target
-  negative: Apply [N] Sinking to the character next round
+  positive: Apply [N] [[/status Sinking]] to the target
+  negative: Apply [N] [[/status Sinking]] to the character next round
   macro:
     uuid: ''
   customNotes: ''

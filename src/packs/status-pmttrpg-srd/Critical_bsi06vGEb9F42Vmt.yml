@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Critical.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">You gain Critical as a part of Poise and other skills. When you trigger a Critical Hit you deal [[/r 1d10]] extra HP Damage per Critical you have and lose all Critical.\_</p><p dir=\"ltr\">Critical can interact with Stance augments. Only one Stance can be active on the character at any one time, and it costs 1 Reaction to activate, deactivate, or swap between stances on your turn.</p><p dir=\"ltr\">If you gain Critical, but have no Poise, gain 1 Poise.</p>"
+  description: "<p dir=\"ltr\">You gain [[/status Critical]] as a part of [[/status Poise]] and other skills. When you trigger a Critical Hit you deal [[/r 1d10]] extra HP Damage per [[/status Critical]] you have and lose all [[/status Critical]].\_</p><p dir=\"ltr\">[[/status Critical]] can interact with Stance augments. Only one Stance can be active on the character at any one time, and it costs 1 Reaction to activate, deactivate, or swap between stances on your turn.</p><p dir=\"ltr\">If you gain [[/status Critical]], but have no [[/status Poise]], gain 1 [[/status Poise]].</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

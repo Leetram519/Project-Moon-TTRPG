@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Tremor Burst, gain Charge equal to Tremor on Target.</p>
+  positive: >-
+    <p>On [[/status Tremor]] Burst, gain [[/status Charge]] equal to [[/status
+    Tremor]] on Target.</p>
   negative: ''
   macro:
     uuid: ''

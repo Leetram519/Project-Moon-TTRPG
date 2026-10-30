@@ -32,9 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character would have 10 Poise as a result of this clash, apply the
-    character's Poise, reduce Poise to 1, and increase Critical on character by
-    1. This applies before rolling to Critically Hit.</p>
+    <p>If the character would have 10 [[/status Poise]] as a result of this
+    clash, apply the character's [[/status Poise]], reduce [[/status Poise]] to
+    1, and increase [[/status Critical]] on character by 1. This applies before
+    rolling to Critically Hit.</p>
   negative: ''
   macro:
     uuid: ''

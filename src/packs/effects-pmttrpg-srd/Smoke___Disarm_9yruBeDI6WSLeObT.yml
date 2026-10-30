@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*3] Smoke on the target to inflict [N] Disarm on the target
-    next round.</p>
+    <p>Consume [N*3] [[/status Smoke]] on the target to inflict [N] [[/status
+    Disarm]] on the target next round.</p>
   negative: ''
   macro:
     uuid: ''

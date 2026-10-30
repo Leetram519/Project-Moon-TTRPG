@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Apply Bind to the Target next round equal to the sum of their remaining
-    reactions.</p>
+    <p>Apply [[/status Bind]] to the Target next round equal to the sum of their
+    remaining reactions.</p>
   negative: ''
   macro:
     uuid: ''

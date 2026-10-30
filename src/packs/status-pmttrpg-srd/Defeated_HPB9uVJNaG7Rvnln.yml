@@ -5,9 +5,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Defeated.webp
 system:
   name: ''
   description: >-
-    <p>When Defeated, the character becomes incapable of action and leaves
-    combat. Aside from special recovery measures, this status remains until the
-    end of combat.</p>
+    <p>When [[/status Defeated]], the character becomes incapable of action and
+    leaves combat. Aside from special recovery measures, this status remains
+    until the end of combat.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

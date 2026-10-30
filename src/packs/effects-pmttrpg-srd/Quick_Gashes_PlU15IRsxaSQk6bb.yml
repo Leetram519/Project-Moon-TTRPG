@@ -34,9 +34,9 @@ system:
     <p>All successful Attacks/Counters made by the character inflict +[N]
     Bleed.</p>
   negative: >-
-    <p>All successful Attacks/Counters made by the character inflict [N] Bleed
-    to the character. The character's Bleed Resisntance is reduced by [N] for
-    the round.</p>
+    <p>All successful Attacks/Counters made by the character inflict [N]
+    [[/status Bleed]] to the character. The character's [[/status Bleed]]
+    Resistance is reduced by [N] for the round.</p>
   macro:
     uuid: ''
   customNotes: ''

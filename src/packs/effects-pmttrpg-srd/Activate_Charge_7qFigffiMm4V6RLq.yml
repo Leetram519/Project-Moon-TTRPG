@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: At the start of each round,
-  positive: <p>Gain 2 Charge for every 25% of Max HP Lost (Max of 6).</p>
+  positive: <p>Gain 2 [[/status Charge]] for every 25% of Max HP Lost (Max of 6).</p>
   negative: ''
   macro:
     uuid: ''

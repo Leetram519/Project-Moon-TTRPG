@@ -34,8 +34,8 @@ system:
     <p>"Inflict Frostbite" effects on the same attack occur before this effect
     triggers.</p>
 
-    <p>Any Frostbite on the target is activated immediately, then reduces by
-    half as if Round End occurred.</p>
+    <p>Any [[/status Frostbite]] on the target is activated immediately, then
+    reduces by half as if Round End occurred.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,11 +32,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Block can roll Poise to check for Critical Hit. The character doesn't
-    deal Critical Damage with this skill.</p>
+    <p>Block can roll [[/status Poise]] to check for [[/status Critical]] Hit.
+    The character doesn't deal [[/status Critical]] Damage with this skill.</p>
 
     <p>[On Crit] Reduce HP &amp; ST Damage taken this clash by the result of
-    your Critical Hit.</p>
+    your [[/status Critical]] Hit.</p>
   negative: ''
   macro:
     uuid: ''

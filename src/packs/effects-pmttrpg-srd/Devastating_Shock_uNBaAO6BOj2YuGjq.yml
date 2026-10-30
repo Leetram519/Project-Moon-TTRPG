@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N*2] Bind to the target next Round.</p>
+  positive: <p>Apply [N*2] [[/status Bind]] to the target next Round.</p>
   negative: ''
   macro:
     uuid: ''

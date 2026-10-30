@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: At the start of each round,
   positive: >-
-    <p>Apply 1 Haste to the character for every 25% Max Sanity Lost (Max of 3).
-    Do not activate when in Panic.</p>
+    <p>Apply 1 [[/status Haste]] to the character for every 25% Max Sanity Lost
+    (Max of 3). Do not activate when in Panic.</p>
   negative: ''
   macro:
     uuid: ''

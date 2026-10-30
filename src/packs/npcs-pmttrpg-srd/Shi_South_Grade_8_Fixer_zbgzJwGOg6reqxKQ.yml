@@ -251,8 +251,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Poise to the character
-          negative: Apply [N] Poise to the target
+          positive: Apply [N] [[/status Poise]] to the character
+          negative: Apply [N] [[/status Poise]] to the target
           macro:
             uuid: ''
         - effectUuid: >-
@@ -273,8 +273,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Rupture to the target next round
-          negative: Apply [N] Rupture to the character next round
+          positive: Apply [N] [[/status Rupture]] to the target next round
+          negative: Apply [N] [[/status Rupture]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -295,8 +295,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -317,8 +317,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Poise to the character
-          negative: Apply [N] Poise to the target
+          positive: Apply [N] [[/status Poise]] to the character
+          negative: Apply [N] [[/status Poise]] to the target
           macro:
             uuid: ''
         - effectUuid: >-
@@ -339,8 +339,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Rupture to the target next round
-          negative: Apply [N] Rupture to the character next round
+          positive: Apply [N] [[/status Rupture]] to the target next round
+          negative: Apply [N] [[/status Rupture]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -361,8 +361,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -383,8 +383,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Bleed to the target
-          negative: Apply [N] Bleed to the character
+          positive: Apply [N] [[/status Bleed]] to the target
+          negative: Apply [N] [[/status Bleed]] to the character
           macro:
             uuid: ''
       equipped: true
@@ -468,8 +468,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Bleed to the target
-          negative: Apply [N] Bleed to the character
+          positive: Apply [N] [[/status Bleed]] to the target
+          negative: Apply [N] [[/status Bleed]] to the character
           macro:
             uuid: ''
       resistances:
@@ -650,7 +650,7 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Critical to the character.</p>
+          positive: <p>Apply [N] [[/status Critical]] to the character.</p>
           negative: ''
           macro:
             uuid: ''
@@ -671,8 +671,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Poise to the character.</p>
-          negative: <p>Apply [N] Poise to the target.</p>
+          positive: <p>Apply [N] [[/status Poise]] to the character.</p>
+          negative: <p>Apply [N] [[/status Poise]] to the target.</p>
           macro:
             uuid: ''
         - effectUuid: Item.qJCZpcsugAIjIeO4
@@ -715,8 +715,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Bleed to the target.</p>
-          negative: <p>Apply [N] Bleed to the character.</p>
+          positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
+          negative: <p>Apply [N] [[/status Bleed]] to the character.</p>
           macro:
             uuid: ''
       customNotes: ''

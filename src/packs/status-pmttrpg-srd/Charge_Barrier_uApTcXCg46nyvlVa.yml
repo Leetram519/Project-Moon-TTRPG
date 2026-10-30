@@ -6,12 +6,13 @@ img: >-
 system:
   name: ''
   description: >-
-    <p><strong>NOTE : You need to manually track Temp HP gained from Charge
-    Barrier.</strong></p><hr><p>At the start of the Round, gain Temp. HP equal
-    to Charge Barrier x 3. For every 3 Temp. HP lost that was sourced from this
-    status, reduce Charge Barrier by 1.</p><p>At the end of the Round, gain
-    Charge equal to Charge Barrier, then lose all Charge Barrier & Temp. HP
-    gained from this status.</p>
+    <p><strong>NOTE : You need to manually track Temp HP gained from [[/status
+    Charge Barrier]].</strong></p> <hr> <p>At the start of the Round, gain Temp.
+    HP equal to [[/status Charge Barrier]] x 3. For every 3 Temp. HP lost that
+    was sourced from this status, reduce [[/status Charge Barrier]] by
+    1.</p><p>At the end of the Round, gain [[/status Charge]] equal to [[/status
+    Charge Barrier]], then lose all [[/status Charge Barrier]] & Temp. HP gained
+    from this status.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

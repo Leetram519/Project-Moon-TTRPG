@@ -35,7 +35,8 @@ system:
   procCondition: ''
   positive: >-
     <p>This skill must be used against your Marked Target.</p><p>Gain [N*3]
-    Charge. Charge does not reduce at the end of this round if applicable.</p>
+    [[/status Charge]]. [[/status Charge]] does not reduce at the end of this
+    round if applicable.</p>
   negative: ''
   macro:
     uuid: ''

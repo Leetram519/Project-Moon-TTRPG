@@ -7,8 +7,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>less</strong> [HP & ST Damage Before Resistance] from
-    Slash Attacks per Protection stack.</p><p>At the end of the Round, lose all
-    Slash Protection.</p>
+    Slash Attacks per [[/status Slash Protection]] stack.</p><p>At the end of
+    the Round, lose all [[/status Slash Protection]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

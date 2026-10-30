@@ -32,7 +32,7 @@ system:
   procCondition: If the Target has Bind
   positive: >-
     <p>Inflict [Type] Fragile to the Target next round equal to half the stacks
-    of Bind, rounded down. The Type of Fragile is chosen on use.</p>
+    of [[/status Bind]], rounded down. The Type of Fragile is chosen on use.</p>
   negative: ''
   macro:
     uuid: ''

@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Poise.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">On Hit when you have Poise (before Clash Results Effects are applied) roll [[/r 1d10]]. If the D10 rolls Equal to or Lower than your Poise Number, deal a Critical Hit and lose all Poise.\_</p><p dir=\"ltr\">If you have 0 Poise and gain Poise your Critical becomes 1, if your Poise becomes 0 your Critical is 0. If you would gain Poise and Critical in the same action, the Poise is applied first, then the Critical is increased on top of the now present 1 Critical.</p>"
+  description: "<p dir=\"ltr\">On Hit when you have [[/status Poise]] (before Clash Results Effects are applied) roll [[/r 1d10]]. If the D10 rolls Equal to or Lower than your [[/status Poise]] Number, deal a Critical Hit and lose all [[/status Poise]].\_</p><p dir=\"ltr\">If you have 0 [[/status Poise]] and gain [[/status Poise]] your [[/status Critical]] becomes 1, if your [[/status Poise]] becomes 0 your [[/status Critical]] is 0. If you would gain [[/status Poise]] and [[/status Critical]] in the same action, the [[/status Poise]] is applied first, then the [[/status Critical]] is increased on top of the now present 1 [[/status Critical]].</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

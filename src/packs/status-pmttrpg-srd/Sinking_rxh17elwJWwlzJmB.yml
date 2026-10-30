@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Sinking.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">When hit by an Attack, the attacker may choose to proc this status. Take SP Damage equal to the number of Sinking stacks, then remove all Sinking. This is considered a Sinking Burst for effects that refer to it. If this Sinking Burst results in the target’s Panic, the attacker can choose what Panic type the target enters.</p><p><strong>\_</strong></p><p dir=\"ltr\">If you do not have SP (this does not count for characters at 0 SP), take HP Damage instead during a Sinking Burst.</p><p><strong>\_</strong></p><p dir=\"ltr\">At the end of Round, remove all Sinking.</p><p>\_</p>"
+  description: "<p dir=\"ltr\">When hit by an Attack, the attacker may choose to proc this status. Take SP Damage equal to the number of [[/status Sinking]] stacks, then remove all [[/status Sinking]]. This is considered a [[/status Sinking]] Burst for effects that refer to it. If this [[/status Sinking]] Burst results in the target’s Panic, the attacker can choose what Panic type the target enters.</p><p><strong>\_</strong></p><p dir=\"ltr\">If you do not have SP (this does not count for characters at 0 SP), take HP Damage instead during a [[/status Sinking]] Burst.</p><p><strong>\_</strong></p><p dir=\"ltr\">At the end of Round, remove all [[/status Sinking]].</p><p>\_</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

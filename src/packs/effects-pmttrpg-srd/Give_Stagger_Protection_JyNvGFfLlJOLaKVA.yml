@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N*2] Stagger Protection to another character next round.</p>
+  positive: >-
+    <p>Apply [N*2] [[/status Stagger Protection]] to another character next
+    round.</p>
   negative: ''
   macro:
     uuid: ''

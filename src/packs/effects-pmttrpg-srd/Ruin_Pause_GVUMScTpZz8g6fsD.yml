@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>The target cannot have their Ruin rolled for the rest of the round.</p>
+  positive: >-
+    <p>The target cannot have their [[/status Ruin]] rolled for the rest of the
+    round.</p>
   negative: ''
   macro:
     uuid: ''

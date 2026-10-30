@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Rupture Burst, if the enemy had 4+ Rupture, inflict 1 Ruin and 3
-    Devastation to the target.</p>
+    <p>On [[/status Rupture]] Burst, if the enemy had 4+ [[/status Rupture]],
+    inflict 1 [[/status Ruin]] and 3 [[/status Devastation]] to the target.</p>
   negative: ''
   macro:
     uuid: ''

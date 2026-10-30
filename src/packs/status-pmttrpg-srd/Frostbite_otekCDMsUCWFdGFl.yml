@@ -5,9 +5,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Frostbite.webp
 system:
   name: ''
   description: >-
-    <p><strong id="docs-internal-guid-51630f5f-7fff-f5ca-1018-822ed04fea4c">At
-    the end of the round, take ST Damage equal to the number of Frostbite
-    stacks, then reduce the Frostbite stack by half. (Rounded down)</strong></p>
+    <p>At the end of the round, take ST Damage equal to the number of [[/status
+    Frostbite]] stacks, then reduce the [[/status Frostbite]] stack by half.
+    (Rounded down)</strong></p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

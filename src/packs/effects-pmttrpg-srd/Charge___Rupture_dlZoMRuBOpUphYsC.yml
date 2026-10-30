@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N] Charge to inflict [N] Rupture to the target next round.</p>
+  positive: >-
+    <p>Consume [N] [[/status Charge]] to inflict [N] [[/status Rupture]] to the
+    target next round.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,10 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Transfer all active Sinking from the target to the character before
-    Burst.</p><p>This Sinking is considered as applying next round. Gain 1
-    Strength and 1 Endurance next round for every 2 Sinking gained this way (max
-    [N]).</p>
+    <p>Transfer all active [[/status Sinking]] from the target to the character
+    before Burst.</p><p>This [[/status Sinking]] is considered as applying next
+    round. Gain 1 [[/status Strength]] and 1 [[/status Endurance]] next round
+    for every 2 [[/status Sinking]] gained this way (max [N]).</p>
   negative: ''
   macro:
     uuid: ''

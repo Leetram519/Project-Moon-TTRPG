@@ -32,7 +32,8 @@ system:
   procCondition: ''
   positive: >-
     <p>Apply [N*2] [Type] Fragile to the target next round.<br>The type is
-    chosen between Blunt, Slash and Pierce on use.</p>
+    chosen between [[/status Blunt Fragile]], [[/status Slash Fragile]] and
+    [[/status Pierce Fragile]] on use.</p>
   negative: ''
   macro:
     uuid: ''

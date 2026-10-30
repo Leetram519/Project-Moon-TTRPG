@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: If the target has Poise
   positive: >-
-    <p>Remove the target's Poise and add it to your own before rolling to
-    Critically Hit.</p>
+    <p>Remove the target's [[/status Poise]] and add it to your own before
+    rolling to Critically Hit.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Gain 1 Dice Power Up for every 3 Burn the character has at the moment of
-    [Attack/Defense] (Max 3).</p>
+    <p>Gain 1 Dice Power Up for every 3 [[/status Burn]] the character has at
+    the moment of [Attack/Defense] (Max 3).</p>
   negative: ''
   macro:
     uuid: ''

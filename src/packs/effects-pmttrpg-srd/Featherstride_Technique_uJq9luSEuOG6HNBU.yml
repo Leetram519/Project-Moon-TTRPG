@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: When you would take an Opportunity Attack from an enemy
   positive: >-
-    <p>If you have additional movement remaining granted by Haste, you may use
-    this movement to move out of the enemy's range and nullify the Opportunity
-    Attack. This does not waste the Reaction of the attacker. This can be
-    activated [Haste/2] times in a round.</p>
+    <p>If you have additional movement remaining granted by [[/status Haste]],
+    you may use this movement to move out of the enemy's range and nullify the
+    Opportunity Attack. This does not waste the Reaction of the attacker. This
+    can be activated ([[/status Haste]]/2) times in a round.</p>
   negative: ''
   macro:
     uuid: ''

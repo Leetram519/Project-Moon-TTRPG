@@ -31,8 +31,9 @@ system:
   procAction: any
   procCondition: At the start of each Round
   positive: >-
-    <p>If you have Charge Barrier, you take the Reduce Status Action, but you
-    can only reduce [Charge Barrier * 2] stacks this way.</p>
+    <p>If you have [[/status Charge Barrier]], you take the Reduce Status
+    Action, but you can only reduce ([[/status Charge Barrier]] * 2) stacks this
+    way.</p>
   negative: ''
   macro:
     uuid: ''

@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>If the target has Bleed, gain 1 Dice Power Up.</p>
+  positive: <p>If the target has [[/status Bleed]], gain 1 Dice Power Up.</p>
   negative: ''
   macro:
     uuid: ''

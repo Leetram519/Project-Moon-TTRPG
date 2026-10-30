@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>When inflict Tremor, inflit an additional [N] Tremor.</p>
+  positive: >-
+    <p>When inflict [[/status Tremor]], inflit an additional [N] [[/status
+    Tremor]].</p>
   negative: ''
   macro:
     uuid: ''

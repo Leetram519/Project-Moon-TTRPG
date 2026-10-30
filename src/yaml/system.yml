@@ -68,13 +68,16 @@ packs:
     path: packs/macros-pmttrpg-srd
     type: Macro
     system: projectmoonttrpg
-    private: false
+  - name: patreon-pmttrpg
+    label: Patreon Supporters Homebrew
+    path: packs/patreon-pmttrpg
+    system: projectmoonttrpg
+    type: Item
   - name: boi-homebrew
     label: Boi's Homebrew Effects List
     path: packs/boi-homebrew
     system: projectmoonttrpg
     type: Item
-    private: true
 languages:
   - lang: en
     name: English

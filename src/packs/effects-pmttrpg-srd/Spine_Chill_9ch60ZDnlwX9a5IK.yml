@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Sinking Burst, inflict (Sinking/2) Frostbite to the target next
-    round.</p>
+    <p>On [[/status Sinking]] Burst, inflict ([[/status Sinking]]/2) [[/status
+    Frostbite]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

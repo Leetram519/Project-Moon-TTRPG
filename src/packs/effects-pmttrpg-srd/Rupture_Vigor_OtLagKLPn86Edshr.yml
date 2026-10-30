@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character has [N*2+2] or more Rupture stacks, increase Dice Power
-    by [N].</p>
+    <p>If the character has [N*2+2] or more [[/status Rupture]] stacks, increase
+    Dice Power by [N].</p>
   negative: ''
   macro:
     uuid: ''

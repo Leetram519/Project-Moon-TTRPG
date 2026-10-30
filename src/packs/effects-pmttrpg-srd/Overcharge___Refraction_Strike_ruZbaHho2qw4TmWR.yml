@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 1 Overcharge and forfeit any number of Reactions, minimum
-    1.</p><p>Increase the Dice Power by the number of Reactions forfeited, with
-    a max of 6 Power.</p>
+    <p>Consume 1 [[/status Overcharge]] and forfeit any number of Reactions,
+    minimum 1.</p><p>Increase the Dice Power by the number of Reactions
+    forfeited, with a max of 6 Power.</p>
   negative: ''
   macro:
     uuid: ''

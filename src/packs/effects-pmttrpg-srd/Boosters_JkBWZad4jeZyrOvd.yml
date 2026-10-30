@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: When Combat Begins, gain [N] Haste
+  positive: When Combat Begins, gain [N] [[/status Haste]]
   negative: ''
   macro:
     uuid: ''

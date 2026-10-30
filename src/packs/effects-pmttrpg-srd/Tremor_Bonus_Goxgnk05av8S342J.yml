@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the target has [N+3] or more Tremor stacks, increase Dice Power by
-    [N].</p>
+    <p>If the target has [N+3] or more [[/status Tremor]] stacks, increase Dice
+    Power by [N].</p>
   negative: ''
   macro:
     uuid: ''

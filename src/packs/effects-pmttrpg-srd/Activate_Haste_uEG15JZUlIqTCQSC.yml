@@ -30,8 +30,12 @@ system:
   procDice: any
   procAction: any
   procCondition: At the start of each round,
-  positive: <p>Apply 1 Haste to the character for every 25% Max HP Lost (Max of 3).</p>
-  negative: <p>Apply 1 Bind to the character for every 25% Max HP Lost (Max of 3).</p>
+  positive: >-
+    <p>Apply 1 [[/status Haste]] to the character for every 25% Max HP Lost (Max
+    of 3).</p>
+  negative: >-
+    <p>Apply 1 [[/status Bind]] to the character for every 25% Max HP Lost (Max
+    of 3).</p>
   macro:
     uuid: ''
   customNotes: ''

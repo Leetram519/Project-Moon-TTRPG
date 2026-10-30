@@ -33,7 +33,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: ''
+  positive: >-
+    <p>Apply [N] [Type] Fragile to the target next round. The Fragile Type is
+    chosen on use.</p>
   negative: ''
   macro:
     uuid: ''

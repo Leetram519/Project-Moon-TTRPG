@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Evade can roll Poise to check for Critical Hit. The character doesn't
-    deal Critical Damage with this skill.</p>
+    <p>Evade can roll [[/status Poise]] to check for [[/status Critical]] Hit.
+    The character doesn't deal Critical Damage with this skill.</p>
 
     <p>[On Crit] Give the character [N] SQRs of Movement without provoking
     Opportunity Attacks. Gain extra SQRs of movement by the result of the

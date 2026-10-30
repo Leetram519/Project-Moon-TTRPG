@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Inflict 1 Fragile &amp; 1 Stagger Fragile to the target and targets
-    adjacent to them (excluding self/allies) next round.</p>
+    <p>Inflict 1 [[/status Fragile]] &amp; 1 [[/status Stagger Fragile]] to the
+    target and targets adjacent to them (excluding self/allies) next round.</p>
   negative: ''
   macro:
     uuid: ''

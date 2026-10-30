@@ -32,8 +32,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Charge to the character.</p>
-  negative: <p>Consume [N] Charge to use this skill.</p>
+  positive: <p>Apply [N] [[/status Charge]] to the character.</p>
+  negative: <p>Consume [N] [[/status Charge]] to use this skill.</p>
   macro:
     uuid: ''
   customNotes: ''

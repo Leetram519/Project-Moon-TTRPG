@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the target has [N+2] or more Bleed stacks, increase the Dice Power by
-    [N].&nbsp;</p>
+    <p>If the target has [N+2] or more [[/status Bleed]] stacks, increase the
+    Dice Power by [N].&nbsp;</p>
   negative: ''
   macro:
     uuid: ''

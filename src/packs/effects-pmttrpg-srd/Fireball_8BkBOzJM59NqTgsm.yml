@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Any Burn on this target is activated immediately both to the target and
-    as Burn Damage to any characters [N] SQRs near the target. The Burn stacks
-    are then reduced by half.</p>
+    <p>Any [[/status Burn]] on this target is activated immediately both to the
+    target and as [[/status Burn]] Damage to any characters [N] SQRs near the
+    target. The [[/status Burn]] stacks are then reduced by half.</p>
   negative: ''
   macro:
     uuid: ''

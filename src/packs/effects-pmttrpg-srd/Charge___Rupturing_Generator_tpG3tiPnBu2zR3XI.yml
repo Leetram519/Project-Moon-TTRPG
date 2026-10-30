@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Rupture Burst, gain Charge equal to Rupture on Target.</p>
+  positive: >-
+    <p>On [[/status Rupture]] Burst, gain [[/status Charge]] equal to [[/status
+    Rupture]] on Target.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>"Gain Poise" and "Gain Critical" from other Effects and this Skill are
-    applied before rolling to Critically Hit.</p>
+    <p>"Gain [[/status Poise]]" and "Gain [[/status Critical]]" from other
+    Effects and this Skill are applied before rolling to Critically Hit.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Push the target backwards in SQRs equal to the character's Charge
-    Barrier, to a max of N SQRs. This uses the value of the character’s Charge
-    Barrier before any damage/loss. </p><p>(This movement does not trigger
-    Opportunity Attacks)</p>
+    <p>Push the target backwards in SQRs equal to the character's [[/status
+    Charge Barrier]], to a max of N SQRs. This uses the value of the character’s
+    [[/status Charge Barrier]] before any damage/loss. </p><p>(This movement
+    does not trigger Opportunity Attacks)</p>
   negative: ''
   macro:
     uuid: ''

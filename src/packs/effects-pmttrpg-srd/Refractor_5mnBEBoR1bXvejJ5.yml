@@ -32,8 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to consume 4 Charge to gain applicable [Status + 1] for this
-    attack. If you spend 1 Overcharge instead, this effect is tripled.
+    You can choose to consume 4 [[/status Charge]] to gain applicable [Status +
+    1] for this attack. If you spend 1 [[/status Overcharge]] instead, this
+    effect is tripled.
   negative: ''
   macro:
     uuid: ''

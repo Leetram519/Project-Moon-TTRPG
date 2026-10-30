@@ -30,7 +30,7 @@ system:
   procDice: offensive
   procAction: action
   procCondition: At the start of the first round of combat
-  positive: <p>Gain [N*3] Charge.</p>
+  positive: <p>Gain [N*3] [[/status Charge]].</p>
   negative: ''
   macro:
     uuid: ''

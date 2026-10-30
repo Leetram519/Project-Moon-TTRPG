@@ -7,8 +7,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>extra</strong> [HP & ST Damage Before Resistance] from
-    Blunt Attacks per Fragile stack.</p><p>At the end of the Round, lose all
-    Blunt Fragile.</p>
+    Blunt Attacks per [[/status Blunt Fragile]] stack.</p><p>At the end of the
+    Round, lose all [[/status Blunt Fragile]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

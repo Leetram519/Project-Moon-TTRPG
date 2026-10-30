@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Transfer up to [N] already present stacks of Bleed from self to the
-    target OR from target to self.</p>
+    <p>Transfer up to [N] already present stacks of [[/status Bleed]] from self
+    to the target OR from target to self.</p>
   negative: ''
   macro:
     uuid: ''

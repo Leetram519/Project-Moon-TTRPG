@@ -270,8 +270,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Bleed to the target
-          negative: Apply [N] Bleed to the character
+          positive: Apply [N] [[/status Bleed]] to the target
+          negative: Apply [N] [[/status Bleed]] to the character
           macro:
             uuid: ''
         - effectUuid: >-
@@ -292,7 +292,7 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Bind to the target next round.
+          positive: Apply [N] [[/status Bind]] to the target next round.
           negative: ''
           macro:
             uuid: ''
@@ -314,8 +314,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Bleed to the target
-          negative: Apply [N] Bleed to the character
+          positive: Apply [N] [[/status Bleed]] to the target
+          negative: Apply [N] [[/status Bleed]] to the character
           macro:
             uuid: ''
       equipped: true
@@ -399,8 +399,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Ruin to the target
-          negative: Apply [N] Ruin to the character
+          positive: Apply [N] [[/status Ruin]] to the target
+          negative: Apply [N] [[/status Ruin]] to the character
           macro:
             uuid: ''
         - effectUuid: >-
@@ -542,8 +542,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Bleed to the target.</p>
-          negative: <p>Apply [N] Bleed to the character.</p>
+          positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
+          negative: <p>Apply [N] [[/status Bleed]] to the character.</p>
           macro:
             uuid: ''
       easyEffects: ''
@@ -640,7 +640,7 @@ items:
           procDice: any
           procAction: action
           procCondition: ''
-          positive: <p>Apply [N] Bleed to the target.</p>
+          positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
           negative: ''
           macro:
             uuid: ''
@@ -697,11 +697,11 @@ items:
           procAction: any
           procCondition: ''
           positive: >-
-            <p>Apply [N] Bleed to the target next round. This is not affected by
-            "Bleed+".</p>
+            <p>Apply [N] [[/status Bleed]] to the target next round. This is not
+            affected by "Bleed+".</p>
           negative: >-
-            <p>Apply [N] Bleed to the character next round. This is not affected
-            by "Bleed+".</p>
+            <p>Apply [N] [[/status Bleed]] to the character next round. This is
+            not affected by "Bleed+".</p>
           macro:
             uuid: ''
         - effectUuid: Item.E4HpJQh7hckViUs6
@@ -721,8 +721,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Ruin to the target.</p>
-          negative: <p>Apply [N] Ruin to the character.</p>
+          positive: <p>Apply [N] [[/status Ruin]] to the target.</p>
+          negative: <p>Apply [N] [[/status Ruin]] to the character.</p>
           macro:
             uuid: ''
         - effectUuid: Item.KOreDwry93veccjV
@@ -765,8 +765,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Bleed to the target.</p>
-          negative: <p>Apply [N] Bleed to the character.</p>
+          positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
+          negative: <p>Apply [N] [[/status Bleed]] to the character.</p>
           macro:
             uuid: ''
       customNotes: ''
@@ -875,11 +875,11 @@ items:
           procAction: any
           procCondition: ''
           positive: >-
-            <p>Apply [N] Bleed to the target next round. This is not affected by
-            "Bleed+".</p>
+            <p>Apply [N] [[/status Bleed]] to the target next round. This is not
+            affected by "Bleed+".</p>
           negative: >-
-            <p>Apply [N] Bleed to the character next round. This is not affected
-            by "Bleed+".</p>
+            <p>Apply [N] [[/status Bleed]] to the character next round. This is
+            not affected by "Bleed+".</p>
           macro:
             uuid: ''
         - effectUuid: Item.E4HpJQh7hckViUs6
@@ -899,8 +899,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Ruin to the target.</p>
-          negative: <p>Apply [N] Ruin to the character.</p>
+          positive: <p>Apply [N] [[/status Ruin]] to the target.</p>
+          negative: <p>Apply [N] [[/status Ruin]] to the character.</p>
           macro:
             uuid: ''
         - effectUuid: Item.TluAhd1pBKWaLSme
@@ -920,8 +920,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Bleed to the target.</p>
-          negative: <p>Apply [N] Bleed to the character.</p>
+          positive: <p>Apply [N] [[/status Bleed]] to the target.</p>
+          negative: <p>Apply [N] [[/status Bleed]] to the character.</p>
           macro:
             uuid: ''
       customNotes: ''

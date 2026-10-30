@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the target would have 10 Ruin as a result of this clash, apply the
-    target's Ruin, reduce Ruin to 1, and increase Devastation on target by
-    1.</p>
+    <p>If the target would have 10 [[/status Ruin]] as a result of this clash,
+    apply the target's [[/status Ruin]], reduce [[/status Ruin]] to 1, and
+    increase [[/status Devastation]] on target by 1.</p>
 
     <p>This applies before rolling to Devastatingly Hit.</p>
   negative: ''

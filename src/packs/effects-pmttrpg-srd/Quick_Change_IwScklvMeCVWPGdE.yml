@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>You must have at least 2 Haste to activate this effect.</p><p>On Clash
-    Win, stow your current outfit and don a new outfit. This does not cost the
-    round’s Reactions.</p>
+    <p>You must have at least 2 [[/status Haste]] to activate this
+    effect.</p><p>On Clash Win, stow your current outfit and don a new outfit.
+    This does not cost the round’s Reactions.</p>
   negative: ''
   macro:
     uuid: ''

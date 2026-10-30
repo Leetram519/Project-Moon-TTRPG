@@ -31,7 +31,7 @@ system:
   procAction: any
   procCondition: The first time you become Staggered in combat
   positive: >-
-    <p>Recover all your Stagger immediately, and avoid Stagger (Once per
+    <p>Recover all ST immediately, and avoid [[/status Stagger]] (Once per
     Combat).</p>
   negative: ''
   macro:

@@ -34,10 +34,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] Consume 6 Charge to replace this Attack with an Area
-    of Effect Attack. This attack follows a straight line until obstructed, up
-    to [Weapon Range *2] SQRs, with a main target designated as the first target
-    in the line.</p>
+    <p>[Attack Replacement] Consume 6 [[/status Charge]] to replace this Attack
+    with an Area of Effect Attack. This attack follows a straight line until
+    obstructed, up to [Weapon Range *2] SQRs, with a main target designated as
+    the first target in the line.</p>
   negative: ''
   macro:
     uuid: ''

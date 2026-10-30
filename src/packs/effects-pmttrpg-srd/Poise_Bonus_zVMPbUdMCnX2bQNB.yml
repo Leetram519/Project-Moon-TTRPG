@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>If the character has 4 or more Poise, gain 1 Dice Power Up.</p>
+  positive: >-
+    <p>If the character has 4 or more [[/status Poise]], gain 1 Dice Power
+    Up.</p>
   negative: ''
   macro:
     uuid: ''

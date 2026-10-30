@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Inflict 2 Frostbite to the target. When Frostbite is halved at the end of
-    this Round, inflict Burn equal to the amount of Frostbite remaining on the
-    target.</p>
+    <p>Inflict 2 [[/status Frostbite]] to the target. When [[/status Frostbite]]
+    is halved at the end of this Round, inflict [[/status Burn]] equal to the
+    amount of [[/status Frostbite]] remaining on the target.</p>
   negative: ''
   macro:
     uuid: ''

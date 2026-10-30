@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Transfer all active Sinking from the character to the target. This
-    Sinking is considered as applying next round. </p>
+    <p>Transfer all active [[/status Sinking]] from the character to the target.
+    This [[/status Sinking]] is considered as applying next round. </p>
   negative: ''
   macro:
     uuid: ''

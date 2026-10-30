@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: If you are inflicting Rupture
   positive: >-
-    <p>Apply an additional [N] Rupture on any Clash Result. This effect only
-    activates once per target, including the user.</p>
+    <p>Apply an additional [N] [[/status Rupture]] on any Clash Result. This
+    effect only activates once per target, including the user.</p>
   negative: ''
   macro:
     uuid: ''

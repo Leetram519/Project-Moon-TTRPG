@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>(Throwing Attack Only) You must have at least [N] Haste to activate this
-    effect.</p><p>If you move at least [N] SQRs directly towards the target
-    before performing this attack, your throwing range increases by [N] for the
-    purpose of this attack.</p>
+    <p>(Throwing Attack Only) You must have at least [N] [[/status Haste]] to
+    activate this effect.</p><p>If you move at least [N] SQRs directly towards
+    the target before performing this attack, your throwing range increases by
+    [N] for the purpose of this attack.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: At the start of each round
   positive: >-
-    <p>Spend up to [N*3] Charge; gain 1 Charge Barrier for every 3 Charge spent
-    this way.</p>
+    <p>Spend up to [N*3] [[/status Charge]]; gain 1 [[/status Charge Barrier]]
+    for every 3 [[/status Charge]] spent this way.</p>
   negative: ''
   macro:
     uuid: ''

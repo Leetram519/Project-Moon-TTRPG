@@ -5,12 +5,12 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Staggered.webp
 system:
   name: ''
   description: >-
-    <p><strong>Staggered by oneself. Functionally identical to a Stagger, but
-    you may choose not to lose SP from this, and you may apply any self-stagger
-    effects thanks to this.</strong></p><p>When Staggered, the character is
-    unable to act until the end of the Next Round and all their Resistances are
-    set to Fatal.</p><p>At the start of the Round after, recover all ST, and
-    lose Staggered.</p>
+    <p><strong>Staggered by oneself. Functionally identical to a [[/status
+    Stagger]], but you may choose not to lose SP from this, and you may apply
+    any self-stagger effects thanks to this.</strong></p><p>When Staggered, the
+    character is unable to act until the end of the Next Round and all their
+    Resistances are set to Fatal.</p><p>At the start of the Round after, recover
+    all ST, and lose Staggered.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

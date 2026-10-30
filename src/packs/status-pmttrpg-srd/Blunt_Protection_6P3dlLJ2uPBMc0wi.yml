@@ -6,8 +6,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 less [HP & ST Damage Before Resistance] from blunt attacks per
-    Protection stack. </p><p>At the end of the Round, lose all Blunt
-    Protection.</p>
+    [[/status Blunt Protection]] stack. </p><p>At the end of the Round, lose all
+    [[/status Blunt Protection]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

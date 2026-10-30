@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*4] Charge to inflict [N] Paralysis to the target next
-    round.</p>
+    <p>Consume [N*4] [[/status Charge]] to inflict [N] [[/status Paralysis]] to
+    the target next round.</p>
   negative: ''
   macro:
     uuid: ''

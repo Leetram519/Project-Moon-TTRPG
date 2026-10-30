@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Tremor Burst, recover ST equivalent to the Tremor burst on the
-    target.</p>
+    <p>On [[/status Tremor]] Burst, recover ST equivalent to the [[/status
+    Tremor]] burst on the target.</p>
   negative: ''
   macro:
     uuid: ''

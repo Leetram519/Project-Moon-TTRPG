@@ -35,10 +35,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume all of the user's Smoke stacks to deal Before Resistance HP
-    Damage equal to the amount consumed.</p><p>This effect is applied after
-    Puffy Brume. If used with a Block or Evade, this effect deals After
-    Resistance HP Damage instead.</p>
+    <p>Consume all of the user's [[/status Smoke]] stacks to deal Before
+    Resistance HP Damage equal to the amount consumed.</p><p>This effect is
+    applied after Puffy Brume. If used with a Block or Evade, this effect deals
+    After Resistance HP Damage instead.</p>
   negative: ''
   macro:
     uuid: ''

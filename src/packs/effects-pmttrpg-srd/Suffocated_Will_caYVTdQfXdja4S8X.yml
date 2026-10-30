@@ -31,7 +31,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Sinking Burst, inflict (Sinking) Smoke to the target next round.</p>
+  positive: >-
+    <p>On [[/status Sinking]] Burst, inflict ([[/status Sinking]]) [[/status
+    Smoke]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

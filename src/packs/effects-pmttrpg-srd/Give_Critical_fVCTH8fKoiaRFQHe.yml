@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Critical to another character.</p>
+  positive: <p>Apply [N] [[/status Critical]] to another character.</p>
   negative: ''
   macro:
     uuid: ''

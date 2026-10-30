@@ -34,7 +34,7 @@ system:
   positive: >-
     You can choose to consume [N*3] Charge to pull the target up to [N] SQRs
     towards you. This Forced Movement can deal Force Damage per unspent SQR. If
-    you spend [N] Overcharge, this effect is tripled.
+    you spend [N] [[/status Overcharge]], this effect is tripled.
   negative: ''
   macro:
     uuid: ''

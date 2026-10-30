@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Disarm to the target next round.</p>
+  positive: <p>Apply [N] [[/status Disarm]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

@@ -34,10 +34,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] Consume 6 Charge to replace Attack with 3 Attacks.
-    These attacks may be directed at any target within [Weapon Range+1] SQRs,
-    max 1 per target, with a main target designated as the first attacked. If
-    not enough targets are within range, any remaining attacks are lost.</p>
+    <p>[Attack Replacement] Consume 6 [[/status Charge]] to replace Attack with
+    3 Attacks. These attacks may be directed at any target within [Weapon
+    Range+1] SQRs, max 1 per target, with a main target designated as the first
+    attacked. If not enough targets are within range, any remaining attacks are
+    lost.</p>
   negative: ''
   macro:
     uuid: ''

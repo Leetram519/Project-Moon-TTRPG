@@ -7,8 +7,8 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>At the End of Round, only lose 1/2 Charge Barrier instead of the
-    totality.</p>
+    <p>At the End of Round, only lose 1/2 [[/status Charge Barrier]] instead of
+    the totality.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

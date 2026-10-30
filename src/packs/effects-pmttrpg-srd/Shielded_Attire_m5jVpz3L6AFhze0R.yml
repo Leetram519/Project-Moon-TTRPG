@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Increase Temporary HP earned through Charge Barrier to [N+3]
+  positive: Increase Temporary HP earned through [[/status Charge Barrier]] to [N+3]
   negative: ''
   macro:
     uuid: ''

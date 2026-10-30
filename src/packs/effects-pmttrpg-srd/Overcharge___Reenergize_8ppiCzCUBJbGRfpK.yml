@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume any amount of Overcharge on self. For each Overcharge consumed,
-    gain 8 Charge.</p>
+    <p>Consume any amount of [[/status Overcharge]] on self. For each [[/status
+    Overcharge]] consumed, gain 8 Charge.</p>
   negative: ''
   macro:
     uuid: ''

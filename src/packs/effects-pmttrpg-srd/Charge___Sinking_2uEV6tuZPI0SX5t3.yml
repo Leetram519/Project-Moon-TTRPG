@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*3] Charge to inflict [N] Sinking to the target next round.</p>
+  positive: >-
+    <p>Consume [N*3] [[/status Charge]] to inflict [N] [[/status Sinking]] to
+    the target next round.</p>
   negative: ''
   macro:
     uuid: ''

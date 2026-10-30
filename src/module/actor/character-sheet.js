@@ -305,6 +305,11 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     context.assetPath = ASSET_PATH;
     context.profileHeader = this._buildProfileHeader(context.system.attributes ?? {});
 
+    // TODO: Make this better!
+    context.pointsRemaining = 4 + (context.system.level.value * 2) - (context.system.abilities.cha.value + context.system.abilities.for.value + context.system.abilities.ins.value + context.system.abilities.jus.value + context.system.abilities.pru.value + context.system.abilities.tem.value);
+
+    console.log(context.system);
+
     const recycled = this.actor.getFlag("projectmoonttrpg", "recycledEvade");
     const recycledActive = recycled?.active === true && game.combat;
     context.recycledEvade = recycledActive

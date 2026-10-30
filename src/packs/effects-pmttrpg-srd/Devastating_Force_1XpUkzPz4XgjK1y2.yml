@@ -31,8 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Push the target back 1 SQR per Devastation dice rolled (max [N]). This
-    counts as Forced Movement and can deal Force Damage per unspent SQR.</p>
+    <p>Push the target back 1 SQR per [[/status Devastation]] dice rolled (max
+    [N]). This counts as Forced Movement and can deal Force Damage per unspent
+    SQR.</p>
   negative: ''
   macro:
     uuid: ''

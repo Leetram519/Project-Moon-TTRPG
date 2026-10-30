@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*2] Charge to gain [N] Poise on self.</p>
+  positive: >-
+    <p>Consume [N*2] [[/status Charge]] to gain [N] [[/status Poise]] on
+    self.</p>
   negative: ''
   macro:
     uuid: ''

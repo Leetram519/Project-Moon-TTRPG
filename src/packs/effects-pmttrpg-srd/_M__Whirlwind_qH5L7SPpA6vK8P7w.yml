@@ -34,12 +34,12 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] You must have at least 4 Haste to activate this
-    effect. </p><p>Replaces Attack with an Area of Effect Attack. This attack
-    targets a 3x3 SQR with the center in the weapon’s range, with a main target
-    designated by either the target at the center, or otherwise the first target
-    attacked. This may be centered on the user, and the user may move to any
-    unoccupied SQR in the targeted range.</p>
+    <p>[Attack Replacement] You must have at least 4 [[/status Haste]] to
+    activate this effect. </p><p>Replaces Attack with an Area of Effect Attack.
+    This attack targets a 3x3 SQR with the center in the weapon’s range, with a
+    main target designated by either the target at the center, or otherwise the
+    first target attacked. This may be centered on the user, and the user may
+    move to any unoccupied SQR in the targeted range.</p>
   negative: ''
   macro:
     uuid: ''

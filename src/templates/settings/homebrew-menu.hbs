@@ -67,7 +67,7 @@
       <p class="hint">
         Fine-tune visibility and merge behaviour for every compendium pack. 
         <strong>Hidden</strong> packs do not appear in the Compendium Browser.
-        <strong>Inactive</strong> packs are excluded from name-merge resolution.
+        <strong>Active</strong> packs are included from name-merge resolution.
         <strong>Priority</strong> determines which pack wins when two active packs
         share an item name (higher = wins).
       </p>
@@ -77,7 +77,7 @@
           <tr>
             <th>Pack</th>
             <th title="Hidden from Compendium Browser">Hidden</th>
-            <th title="Excluded from content merges">Inactive</th>
+            <th title="Excluded from content merges">Active</th>
             <th title="Higher wins on name collision">Priority</th>
           </tr>
         </thead>
@@ -92,8 +92,8 @@
             </td>
             <td class="center">
               <input type="checkbox"
-                     name="pack.{{key}}.active"
-                     {{#unless active}}checked{{/unless}}>
+                     name="pack.{{key}}.active" 
+                     {{#if active}}checked{{/if}}>
             </td>
             <td>
               <input type="number"

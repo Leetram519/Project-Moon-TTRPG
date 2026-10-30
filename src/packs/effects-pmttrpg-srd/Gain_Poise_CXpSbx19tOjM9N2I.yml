@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Poise to the character
-  negative: Apply [N] Poise to the target
+  positive: Apply [N] [[/status Poise]] to the character
+  negative: Apply [N] [[/status Poise]] to the target
   macro:
     uuid: ''
   customNotes: ''

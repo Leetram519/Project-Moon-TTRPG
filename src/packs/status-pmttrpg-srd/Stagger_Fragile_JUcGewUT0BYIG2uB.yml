@@ -6,8 +6,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>extra</strong> [ST Damage After Resistance] from attacks
-    per Stagger Fragile stack.</p><p>At the end of the Round, lose all Stagger
-    Fragile.</p>
+    per [[/status Stagger Fragile]] stack.</p><p>At the end of the Round, lose
+    all [[/status Stagger Fragile]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N] Smoke on the target to gain [N*2] Poise on self.</p>
+  positive: >-
+    <p>Consume [N] [[/status Smoke]] on the target to gain [N*2] [[/status
+    Poise]] on self.</p>
   negative: ''
   macro:
     uuid: ''

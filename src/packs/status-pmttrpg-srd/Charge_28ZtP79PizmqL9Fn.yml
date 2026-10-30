@@ -6,11 +6,12 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Resource used by certain Skill Effects. There is no limit to Charge
-    stacks. </p><p>You may not use skills with Charge Effects with insufficient
-    Charge for the entire skill– no partial effects, no selective choices of
-    effects if present on the skill. </p><p>The Charge is consumed with skill
-    use, regardless of result.</p>
+    <p>Resource used by certain Skill Effects. There is no limit to [[/status
+    Charge]] stacks. </p><p>You may not use skills with [[/status Charge]]
+    Effects with insufficient [[/status Charge]] for the entire skill– no
+    partial effects, no selective choices of effects if present on the skill.
+    </p><p>The [[/status Charge]] is consumed with skill use, regardless of
+    result.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

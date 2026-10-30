@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Tremor Burst, if the enemy had 4+ Tremor, inflict 2 Feeble and 2
-    Disarm next round.</p>
+    <p>On [[/status Tremor]] Burst, if the enemy had 4+ [[/status Tremor]],
+    inflict 2 [[/status Feeble]] and 2 [[/status Disarm]] next round.</p>
   negative: ''
   macro:
     uuid: ''

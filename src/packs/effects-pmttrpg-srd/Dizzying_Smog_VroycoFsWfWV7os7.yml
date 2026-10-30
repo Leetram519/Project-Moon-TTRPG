@@ -31,9 +31,9 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>When the character strikes a target with Smoke, deal additional ST Damage
-    equal to half of the additional HP Damage granted by Smoke (Rounded
-    Down).</p>
+    <p>When the character strikes a target with [[/status Smoke]], deal
+    additional ST Damage equal to half of the additional HP Damage granted by
+    [[/status Smoke]] (Rounded Down).</p>
   negative: ''
   macro:
     uuid: ''

@@ -33,9 +33,9 @@ system:
   procAction: any
   procCondition: ''
   positive: |-
-    On Clash Win, Inflict 2 Bleed to the target.
+    On Clash Win, Inflict 2 [[/status Bleed]] to the target.
 
-    On Clash Lose, The character takes 2 Bleed.
+    On Clash Lose, The character takes 2 [[/status Bleed]].
   negative: ''
   macro:
     uuid: ''

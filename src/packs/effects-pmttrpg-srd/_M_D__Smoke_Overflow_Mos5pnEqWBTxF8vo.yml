@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character has [N*2] or more Smoke stacks, increase Dice Power by
-    [N]. If you have an effect of the same name of your Augment, increase the
-    amount of Smoke required by [2*X] (where X is the amount of this effect on
-    Augment).</p>
+    <p>If the character has [N*2] or more [[/status Smoke]] stacks, increase
+    Dice Power by [N]. If you have an effect of the same name of your Augment,
+    increase the amount of [[/status Smoke]] required by [2*X] (where X is the
+    amount of this effect on Augment).</p>
   negative: ''
   macro:
     uuid: ''

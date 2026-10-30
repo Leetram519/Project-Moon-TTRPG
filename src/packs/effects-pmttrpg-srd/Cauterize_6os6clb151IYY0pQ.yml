@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Inflict Burn equal to half of the amount of Bleed the target had at the
-    time of clash.</p>
+    <p>Inflict [[/status Burn]] equal to half of the amount of [[/status Bleed]]
+    the target had at the time of clash.</p>
   negative: ''
   macro:
     uuid: ''

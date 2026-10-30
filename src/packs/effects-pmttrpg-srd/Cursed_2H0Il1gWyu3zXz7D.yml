@@ -33,11 +33,12 @@ system:
   procCondition: ''
   positive: ''
   negative: >-
-    <p>Your minimum Ruin is [N*2] and minimum Devastation is [N] instead of
-    0.</p>
+    <p>Your minimum [[/status Ruin]] is [N*2] and minimum [[/status
+    Devastation]] is [N] instead of 0.</p>
 
-    <p>Whenever you would be below this amount, gain Ruin/Devastation until you
-    are at [N*2] Ruin and [N] Devastation.</p>
+    <p>Whenever you would be below this amount, gain [[/status Ruin]] and/or
+    [[/status Devastation]] until you are at [N*2] [[/status Ruin]] and [N]
+    [[/status Devastation]].</p>
   macro:
     uuid: ''
   customNotes: ''

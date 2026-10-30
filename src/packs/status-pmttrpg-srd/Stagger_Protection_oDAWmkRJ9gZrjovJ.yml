@@ -5,9 +5,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Stagger%20Protection.webp
 system:
   name: ''
   description: >-
-    <p>Take 1 less [ST Damage After Resistance] from attacks per Stagger
-    Protection stack.</p><p>At the end of the Round, lose all Stagger
-    Protection.</p>
+    <p>Take 1 less [ST Damage After Resistance] from attacks per [[/status
+    Stagger Protection]] stack.</p><p>At the end of the Round, lose all
+    [[/status Stagger Protection]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

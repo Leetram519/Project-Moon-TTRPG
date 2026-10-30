@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N] Overcharge.</p><p>Place [N*2] [Exposed Fire/Broken
-    Glass/Exhaust Fumes/Chilling Frost] Hazards in SQRs adjacent to the
-    character. These Hazards last until the end of the next Round, and they do
-    not affect the character. (Max 4)</p>
+    <p>Consume [N] [[/status Overcharge]].</p><p>Place [N*2] [Exposed
+    Fire/Broken Glass/Exhaust Fumes/Chilling Frost] Hazards in SQRs adjacent to
+    the character. These Hazards last until the end of the next Round, and they
+    do not affect the character. (Max 4)</p>
   negative: ''
   macro:
     uuid: ''

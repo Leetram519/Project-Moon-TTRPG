@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Do not Rupture Burst. Consider all Rupture as applying next round.</p>
+  positive: >-
+    <p>Do not [[/status Rupture]] Burst. Consider all [[/status Rupture]] as
+    applying next round.</p>
   negative: ''
   macro:
     uuid: ''

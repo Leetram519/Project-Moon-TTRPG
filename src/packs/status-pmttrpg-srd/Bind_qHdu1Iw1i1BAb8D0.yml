@@ -5,8 +5,8 @@ img: systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Bind.we
 system:
   name: ''
   description: >-
-    <p>Decrease Sqr(s) of movement equal to the number of Bind stack.</p><p>At
-    the end of the Round, lose all Bind.</p>
+    <p>Decrease Sqr(s) of movement equal to the number of [[/status Bind]]
+    stack.</p><p>At the end of the Round, lose all [[/status Bind]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

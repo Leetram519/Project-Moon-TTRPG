@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 2 Overcharge.</p><p>Mark the Target. This can apply any Mark
-    without the applicable Augment Effects, and counts as a single separate
-    source of Mark (per user, not per use).</p>
+    <p>Consume 2 [[/status Overcharge]].</p><p>Mark the Target. This can apply
+    any Mark without the applicable Augment Effects, and counts as a single
+    separate source of Mark (per user, not per use).</p>
   negative: ''
   macro:
     uuid: ''

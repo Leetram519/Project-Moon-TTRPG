@@ -32,8 +32,8 @@ system:
   procCondition: ''
   positive: >-
     <p>This skill must be used when protecting your Marked Target.</p><p>Inflict
-    [N*2] Protection and Inflict [N] Stagger Protection to your protected target
-    next round.</p>
+    [N*2] [[/status Protection]] and Inflict [N] [[/status Stagger Protection]]
+    to your protected target next round.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,9 +32,11 @@ system:
   procAction: any
   procCondition: At the start of each round,
   positive: >-
-    <p>Apply 1 Strength to the character for every 25% Max HP Lost (Max of
-    3).</p>
-  negative: <p>Apply 1 Feeble to the character for every 25% Max HP Lost (Max of 3).</p>
+    <p>Apply 1 [[/status Strength]] to the character for every 25% Max HP Lost
+    (Max of 3).</p>
+  negative: >-
+    <p>Apply 1 [[/status Feeble]] to the character for every 25% Max HP Lost
+    (Max of 3).</p>
   macro:
     uuid: ''
   customNotes: ''

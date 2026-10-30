@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Haste to the character next round.</p>
-  negative: <p>Apply [N] Bind to the character next round.</p>
+  positive: <p>Apply [N] [[/status Haste]] to the character next round.</p>
+  negative: <p>Apply [N] [[/status Bind]] to the character next round.</p>
   macro:
     uuid: ''
   customNotes: ''

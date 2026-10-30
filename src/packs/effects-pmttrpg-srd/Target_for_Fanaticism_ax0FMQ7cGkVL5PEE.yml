@@ -38,8 +38,9 @@ system:
     <p>When your Marked Target takes the Reduce Status Action, the amount of
     Status they can reduce is halved.</p>
 
-    <p>Your Marked Target cannot reduce Renewed Blaze, Deep Chill or Hemorrhage
-    with the Reduce Status Action.</p>
+    <p>Your Marked Target cannot reduce [[/status Burn - Renewed Blaze]],
+    [[/status Frostbite - Deep Chill]] or [[/status Bleed - Hemorrhage]] with
+    the Reduce Status Action.</p>
 
     <p>This counts as [N] source(s) of Mark.</p>
   negative: ''

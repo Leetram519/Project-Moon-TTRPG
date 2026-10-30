@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Tremor to the target next round
-  negative: Apply [N] Tremor to the character next round
+  positive: Apply [N] [[/status Tremor]] to the target next round
+  negative: Apply [N] [[/status Tremor]] to the character next round
   macro:
     uuid: ''
   customNotes: ''

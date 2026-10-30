@@ -31,8 +31,9 @@ system:
   procAction: any
   procCondition: At the start of each round,
   positive: >-
-    <p>Apply 1 Protection and 1 Stagger Protection to the character for every
-    25% Max Sanity Lost (Max of 3 each). Do not activate when in Panic.</p>
+    <p>Apply 1 [[/status Protection]] and 1 [[/status Stagger Protection]] to
+    the character for every 25% Max Sanity Lost (Max of 3 each). Do not activate
+    when in Panic.</p>
   negative: ''
   macro:
     uuid: ''

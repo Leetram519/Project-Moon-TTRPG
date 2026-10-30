@@ -35,9 +35,9 @@ system:
   procCondition: ''
   positive: >-
     <p>[Attack Replacement] Replaces Attack with 3 Attacks. These attacks may be
-    directed at any target within [Haste] SQRs, max 1 per target, with a main
-    target designated as the first attacked. If not enough targets are within
-    range, any remaining attacks are lost.</p>
+    directed at any target within ([[/status Haste]]) SQRs, max 1 per target,
+    with a main target designated as the first attacked. If not enough targets
+    are within range, any remaining attacks are lost.</p>
   negative: ''
   macro:
     uuid: ''

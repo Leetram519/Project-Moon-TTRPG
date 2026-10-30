@@ -33,9 +33,9 @@ system:
   procCondition: ''
   positive: >-
     <p>"Inflict Burn" effects on the same Attack occur before this effect
-    triggers.</p><p>Any Burn on the target is activated immediately, then
-    reduces by half as if Round End occured. Then, Inflict Smoke equal to the
-    amount of Burn remaining.</p>
+    triggers.</p><p>Any [[/status Burn]] on the target is activated immediately,
+    then reduces by half as if Round End occured. Then, Inflict [[/status
+    Smoke]] equal to the amount of [[/status Burn]] remaining.</p>
   negative: ''
   macro:
     uuid: ''

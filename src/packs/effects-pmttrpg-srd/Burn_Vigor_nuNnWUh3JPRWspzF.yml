@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character has [N+2] or more Burn stacks, increase the Dice Power
-    by [N]. If you have an effect on the same name on your Augment, increase the
-    amount of Burn required by 3.</p>
+    <p>If the character has [N+2] or more [[/status Burn]] stacks, increase the
+    Dice Power by [N]. If you have an effect on the same name on your Augment,
+    increase the amount of [[/status Burn]] required by 3.</p>
   negative: ''
   macro:
     uuid: ''

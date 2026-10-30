@@ -35,8 +35,8 @@ system:
     <p>"Inflict Burn" effects on the same Attack occur before this effect
     triggers.</p>
 
-    <p>Any Burn on the target is activated immediately, then reduces by half as
-    if Round End occured.</p>
+    <p>Any [[/status Burn]] on the target is activated immediately, then reduces
+    by half as if Round End occured.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,7 +31,7 @@ system:
   procAction: any
   procCondition: When the character defeats an opponent
   positive: ''
-  negative: <p>Apply [N] Feeble to the character next round.</p>
+  negative: <p>Apply [N] [[/status Feeble]] to the character next round.</p>
   macro:
     uuid: ''
   customNotes: ''

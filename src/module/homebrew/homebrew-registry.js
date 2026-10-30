@@ -21,10 +21,19 @@ export const HOMEBREW_REGISTRY = [
     id: "boiHomebrew",
     label: "Boi's Homebrew",
     hint: "Shin (心), Mang (望), Ammo, Vengeance's Mark.",
-    implemented: true,
+    implemented: false,
     associatedClass: BoiHomebrew,
     compendiumPacks: [
       "projectmoonttrpg.boi-homebrew"
+    ],
+  },
+  {
+    id: "patreonHomebrew",
+    label: "Patreon Supporters Homebrew",
+    hint: "Various effects and statuses that were suggested by Patreon Supporters of the Port.",
+    implemented: true,
+    compendiumPacks: [
+      "projectmoonttrpg.patreon-pmttrpg"
     ],
   },
 ];

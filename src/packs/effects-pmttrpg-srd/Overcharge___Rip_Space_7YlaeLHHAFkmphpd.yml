@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 4 Overcharge.</p><p>All Damage dealt by an Attack using this
-    Skill is treated as being dealt against Weak Resistance, unless the Target’s
-    Resistance is already Fatal to the Damage Type.</p>
+    <p>Consume 4 [[/status Overcharge]].</p><p>All Damage dealt by an Attack
+    using this Skill is treated as being dealt against Weak Resistance, unless
+    the Target’s Resistance is already Fatal to the Damage Type.</p>
   negative: ''
   macro:
     uuid: ''

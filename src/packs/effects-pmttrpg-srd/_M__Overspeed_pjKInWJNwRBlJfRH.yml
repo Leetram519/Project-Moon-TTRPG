@@ -35,9 +35,9 @@ system:
   procCondition: ''
   positive: >-
     <p>[Attack Replacement] Replaces Attack with an AoE Attack. This attack
-    follows a straight line until obstructed, up to [Haste] SQRs. The user may
-    move along this line without triggering Opportunity Attacks, and may stop
-    their movement at any point.</p>
+    follows a straight line until obstructed, up to ([[/status Haste]]) SQRs.
+    The user may move along this line without triggering Opportunity Attacks,
+    and may stop their movement at any point.</p>
   negative: ''
   macro:
     uuid: ''

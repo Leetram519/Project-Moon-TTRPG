@@ -6,13 +6,13 @@ system:
   name: ''
   description: >-
     <p dir="ltr">When hit by an Attack, the attacker may choose to proc this
-    status. Take HP Damage equal to the number of Rupture stacks, then remove
-    all Rupture. This is considered a Rupture Burst for effects that refer to
-    it.</p>
+    status. Take HP Damage equal to the number of [[/status Rupture]] stacks,
+    then remove all [[/status Rupture]]. This is considered a [[/status
+    Rupture]] Burst for effects that refer to it.</p>
 
     <p><strong>&nbsp;</strong></p>
 
-    <p dir="ltr">At the end of Round, remove all Rupture.</p>
+    <p dir="ltr">At the end of Round, remove all [[/status Rupture]].</p>
 
     <p>&nbsp;</p>
   slug: ''

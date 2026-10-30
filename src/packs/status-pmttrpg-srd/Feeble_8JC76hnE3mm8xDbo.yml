@@ -6,8 +6,8 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Decrease the Power of Offensive Dice by the number of Feeble
-    stack.</p><p>At the end of the Round, lose all Feeble.</p>
+    <p>Decrease the Power of Offensive Dice by the number of [[/status Feeble]]
+    stack.</p><p>At the end of the Round, lose all [[/status Feeble]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

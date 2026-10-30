@@ -7,8 +7,9 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>When target has (Stack) Bleed or more and rolling to Critically Hit,
-    treat your roll as (Stack) lower when checking against your Poise.</p>
+    <p>When target has (Stack) [[/status Bleed]] or more and rolling to
+    Critically Hit, treat your roll as (Stack) lower when checking against your
+    [[/status Poise]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

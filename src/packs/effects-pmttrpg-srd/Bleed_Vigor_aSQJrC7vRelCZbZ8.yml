@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Gain 1 Dice Power Up for every 2 Bleed the character has at the moment of
-    [Attack/Defense] (Max 3).</p>
+    <p>Gain 1 Dice Power Up for every 2 [[/status Bleed]] the character has at
+    the moment of [Attack/Defense] (Max 3).</p>
   negative: ''
   macro:
     uuid: ''

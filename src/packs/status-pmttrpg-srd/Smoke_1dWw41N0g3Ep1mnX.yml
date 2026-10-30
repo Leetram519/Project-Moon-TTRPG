@@ -5,10 +5,11 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Smoke.webp
 system:
   name: ''
   description: >-
-    <p>Take [Smoke stack/2] extra [HP Damage After Resistance] from attacks.
-    (Rounded down) </p><p>Lose 2 Smoke at the end of each round. Max stack is 10
-    from natural inflicts, 20 with certain skill effects. When above 10 Smoke,
-    lose 4 Smoke at the end of each round. </p>
+    <p>Take [[[/status Smoke]] stack/2] extra [HP Damage After Resistance] from
+    attacks. (Rounded down) </p><p>Lose 2 [[/status Smoke]] at the end of each
+    round. Max stack is 10 from natural inflicts, 20 with certain skill effects.
+    When above 10 [[/status Smoke]], lose 4 [[/status Smoke]] at the end of each
+    round. </p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: When using a targeted Haste effect
   positive: >-
-    <p>You may combine your Haste and the target's Bind for the purpose of
-    meeting the Haste effect's condition. You must have at least 1 Haste for
-    this effect to function.</p>
+    <p>You may combine your [[/status Haste]] and the target's [[/status Bind]]
+    for the purpose of meeting the [[/status Haste]] effect's condition. You
+    must have at least 1 [[/status Haste]] for this effect to function.</p>
   negative: ''
   macro:
     uuid: ''

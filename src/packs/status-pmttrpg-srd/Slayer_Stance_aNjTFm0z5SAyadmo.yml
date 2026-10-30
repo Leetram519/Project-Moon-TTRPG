@@ -6,8 +6,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Slayer%20Stance.webp
 system:
   name: ''
   description: >-
-    <p><strong>[On Crit]</strong> with this Stance active, <strong>roll your
-    Critical damage twice, then take the higher result</strong>.</p>
+    <p><strong>[On Crit]</strong> with [[/status Slayer Stance]] active,
+    <strong>roll your [[/status Critical]] damage twice, then take the higher
+    result</strong>.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

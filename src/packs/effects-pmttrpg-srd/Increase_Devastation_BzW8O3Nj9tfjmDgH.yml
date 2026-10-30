@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Devastation to the target.</p>
-  negative: <p>Apply [N] Devastation to the character.</p>
+  positive: <p>Apply [N] [[/status Devastation]] to the target.</p>
+  negative: <p>Apply [N] [[/status Devastation]] to the character.</p>
   macro:
     uuid: ''
   customNotes: ''

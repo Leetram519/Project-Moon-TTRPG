@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>The next time the target takes non-forced movement, their Bleed
-    activates.</p>
+    <p>The next time the target takes non-forced movement, their [[/status
+    Bleed]] activates.</p>
   negative: ''
   macro:
     uuid: ''

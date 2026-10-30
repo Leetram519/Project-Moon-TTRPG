@@ -6,11 +6,12 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Hemorrage.webp
 system:
   name: ''
   description: >-
-    <p><strong>Any Bleed on the target is not reduced the next time it
-    activates.</strong></p><p>This also prevents Bleed from being reduced by
-    Reduce Status or other effects that immediately activate Bleed. <strong>When
-    immediately activating Bleed</strong>, do not halve Bleed and instead
-    <strong>remove 1 stack of this effect</strong>.</p>
+    <p><strong>Any [[/status Bleed]] on the target is not reduced the next time
+    it activates.</strong></p><p>This also prevents [[/status Bleed]] from being
+    reduced by Reduce Status or other effects that immediately activate
+    [[/status Bleed]]. <strong>When immediately activating [[/status
+    Bleed]]</strong>, do not halve [[/status Bleed]] and instead <strong>remove
+    1 stack of this effect</strong>.</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

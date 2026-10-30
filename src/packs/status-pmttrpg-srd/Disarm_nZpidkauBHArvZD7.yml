@@ -6,8 +6,8 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Decrease the Power of Defensive Dice by the number of Disarm
-    stack.</p><p>At the end of the Round, lose all Disarm.</p>
+    <p>Decrease the Power of Defensive Dice by the number of [[/status Disarm]]
+    stack.</p><p>At the end of the Round, lose all [[/status Disarm]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

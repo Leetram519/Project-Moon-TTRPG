@@ -31,7 +31,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*3] Charge to increase the Dice Max by [N].</p>
+  positive: <p>Consume [N*3] [[/status Charge]] to increase the Dice Max by [N].</p>
   negative: ''
   macro:
     uuid: ''

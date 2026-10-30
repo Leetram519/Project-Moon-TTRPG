@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Instead of Charge Barrier expiring at the end of the Round, you only lose
-    half.</p>
+    <p>Instead of [[/status Charge Barrier]] expiring at the end of the Round,
+    you only lose half.</p>
   negative: ''
   macro:
     uuid: ''

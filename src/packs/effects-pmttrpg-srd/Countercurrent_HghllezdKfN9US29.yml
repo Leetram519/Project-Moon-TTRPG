@@ -32,10 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to consume 4 Charge to inflict 1 Paralysis next round. If you
-    spend 1 Overcharge instead, this effect is doubled. If this weapon already
-    has Inflict Paralysis, both it and this effect must be set on the same Clash
-    [Result].
+    You can choose to consume 4 [[/status Charge]] to inflict 1 [[/status
+    Paralysis]] next round. If you spend 1 [[/status Overcharge]] instead, this
+    effect is doubled. If this weapon already has Inflict Paralysis, both it and
+    this effect must be set on the same Clash [Result].
   negative: ''
   macro:
     uuid: ''

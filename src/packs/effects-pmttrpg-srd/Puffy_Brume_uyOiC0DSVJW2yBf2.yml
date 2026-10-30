@@ -32,7 +32,7 @@ system:
   procCondition: ''
   positive: >-
     <p>When the character strikes a target, deal additional HP Damage equal to
-    half of the character's Smoke stack (Rounded Down).</p>
+    half of the character's [[/status Smoke]] stack (Rounded Down).</p>
   negative: ''
   macro:
     uuid: ''

@@ -34,9 +34,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] Consume [N*6] Charge to replace Attack with [N+1]
-    consecutive Attacks. This stacks with any effects of the same name, to a max
-    of 2 overall.</p>
+    <p>[Attack Replacement] Consume [N*6] [[/status Charge]] to replace Attack
+    with [N+1] consecutive Attacks. This stacks with any effects of the same
+    name, to a max of 2 overall.</p>
   negative: ''
   macro:
     uuid: ''

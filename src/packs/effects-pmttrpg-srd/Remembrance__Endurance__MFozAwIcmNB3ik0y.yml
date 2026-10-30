@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: At the end of round, if any allies are out of combat due to reaching 0 HP
-  positive: <p>Apply 2 Endurance to the character next round.</p>
-  negative: <p>Apply 2 Disarm to the character next round.</p>
+  positive: <p>Apply 2 [[/status Endurance]] to the character next round.</p>
+  negative: <p>Apply 2 [[/status Disarm]] to the character next round.</p>
   macro:
     uuid: ''
   customNotes: ''

@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    Apply [N] Charge to the character. If this reaction is Recycled, the gain is
-    halved.
+    Apply [N] [[/status Charge]] to the character. If this reaction is Recycled,
+    the gain is halved.
   negative: ''
   macro:
     uuid: ''

@@ -33,7 +33,7 @@ system:
   procCondition: ''
   positive: >-
     <p>This skill must be used against your Marked Target.</p><p>Apply [N]
-    Sinking next round and [N] Smoke to the target.</p>
+    [[/status Sinking]] next round and [N] [[/status Smoke]] to the target.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,8 +32,9 @@ system:
   procAction: any
   procCondition: If you inflict Burn
   positive: >-
-    <p>Apply an additional [N] Burn to the target. This only activates once per
-    target, including the user in case of self-burn.</p>
+    <p>Apply an additional [N] [[/status Burn]] to the target. This only
+    activates once per target, including the user in case of self-[[/status
+    Burn]].</p>
   negative: ''
   macro:
     uuid: ''

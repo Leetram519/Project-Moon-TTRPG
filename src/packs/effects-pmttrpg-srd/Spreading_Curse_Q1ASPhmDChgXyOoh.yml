@@ -31,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Inflict 3 Ruin to the target and targets adjacent to them (excluding
-    self/allies) next round.</p>
+    <p>Inflict 3 [[/status Ruin]] to the target and targets adjacent to them
+    (excluding self/allies) next round.</p>
   negative: ''
   macro:
     uuid: ''

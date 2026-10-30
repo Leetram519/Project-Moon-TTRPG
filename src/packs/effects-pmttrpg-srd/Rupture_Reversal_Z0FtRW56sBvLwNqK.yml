@@ -33,8 +33,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Rupture Burst, recover HP equivalent to Rupture burst on the
-    target.</p>
+    <p>On [[/status Rupture]] Burst, recover HP equivalent to [[/status
+    Rupture]] burst on the target.</p>
   negative: ''
   macro:
     uuid: ''

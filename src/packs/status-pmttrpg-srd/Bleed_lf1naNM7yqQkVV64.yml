@@ -4,10 +4,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Bleed.webp
 system:
   name: ''
   description: >-
-    <p><strong id="docs-internal-guid-2d6e8922-7fff-ee42-5360-20137c4efb81">Each
-    time the character takes an Action or Reaction, they take HP Damage equal to
-    the number of Bleed stacks, then reduce the Bleed stack by half. (Rounded
-    down)</strong></p>
+    <p>Each time the character takes an Action or Reaction, they take HP Damage
+    equal to the number of [[/status Bleed]] stacks, then reduce the [[/status
+    Bleed]] stack by half. (Rounded down)</strong></p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

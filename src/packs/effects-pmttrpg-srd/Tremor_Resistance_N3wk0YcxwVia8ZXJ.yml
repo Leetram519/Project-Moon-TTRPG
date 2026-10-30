@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Reduce ST Damage taken from Tremor by [N]
-  negative: Increase ST Damage taken from Tremor by [N]
+  positive: Reduce ST Damage taken from [[/status Tremor]] by [N]
+  negative: Increase ST Damage taken from [[/status Tremor]] by [N]
   macro:
     uuid: ''
   customNotes: ''

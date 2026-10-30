@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>Apply [N] Ruin to the target next round.</p>
+  positive: <p>Apply [N] [[/status Ruin]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

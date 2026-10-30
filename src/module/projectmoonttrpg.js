@@ -48,6 +48,7 @@ import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
 import { CompendiumBrowserOverride } from "./homebrew/compendium/compendium-browser.js";
 import { addEnrichers } from "./enrichers/text-enrich.js";
+import { PMTTRPGGamePause } from "./apps/game-pause.js";
 
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -193,6 +194,18 @@ Hooks.once("init", async function() {
 
   addEnrichers();
 });
+
+Hooks.on("renderGamePause", function(app, html) {
+  const icon = html.querySelector("#pause > img");
+
+  if (!icon) return;
+
+  // Mark it for our custom styling.
+  icon.classList.remove("fa-spin");
+  icon.classList.add("system-pause-logo");
+
+  icon.src = "systems/projectmoonttrpg/assets/pmttrpg-foundry-logo.webp";
+})
 
 Hooks.once("ready", async function() {
   const migrationRunner = new MigrationRunner(MigrationList.constructAll());

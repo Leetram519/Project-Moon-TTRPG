@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>You move (Haste)/2 SQRs after your attack. This movement does not provoke
-    Opportunity Attacks.</p>
+    <p>You move ([[/status Haste]])/2 SQRs after your attack. This movement does
+    not provoke Opportunity Attacks.</p>
   negative: ''
   macro:
     uuid: ''

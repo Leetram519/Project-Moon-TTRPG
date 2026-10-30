@@ -263,7 +263,7 @@ Item:
       subsubtype: regular
       homebrew:
         author: ''
-        source: 'Community Ruleset'
+        source: 'Your World'
   weapon:
     templates:
       - base

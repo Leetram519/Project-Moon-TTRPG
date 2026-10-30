@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Sinking Burst, if the target panics as a result of this Skill, upgrade
-    the Panic to a Goaded Panic. If target is Panicking, upgrade it to Goaded.
-    This effect ignores Altered Psyche.</p>
+    <p>On [[/status Sinking]] Burst, if the target panics as a result of this
+    Skill, upgrade the Panic to a Goaded Panic. If target is Panicking, upgrade
+    it to Goaded. This effect ignores Altered Psyche.</p>
   negative: ''
   macro:
     uuid: ''

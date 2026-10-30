@@ -7,9 +7,9 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>When Burn is halved at the end of this round, deal SP Damage equal to the
-    amount of Burn remaining on target.</p><p><strong>Activated after
-    Burn.</strong></p>
+    <p>When [[/status Burn]] is halved at the end of this round, deal SP Damage
+    equal to the amount of [[/status Burn]] remaining on
+    target.</p><p><strong>Activated after [[/status Burn]].</strong></p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

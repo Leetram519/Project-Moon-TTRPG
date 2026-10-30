@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>This skill cannot roll for Critical Hits.</p><p>You do not roll for
-    Critical Hits for the rest of the round.</p>
+    <p>This skill cannot roll for [[/status Critical]] Hits.</p><p>You do not
+    roll for [[/status Critical]] Hits for the rest of the round.</p>
   negative: ''
   macro:
     uuid: ''

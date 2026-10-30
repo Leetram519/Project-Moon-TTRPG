@@ -33,8 +33,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Tremor Burst, push the target back 1 SQR per 2 burst Tremor stacks,
-    max [N] SQRs.</p>
+    <p>On [[/status Tremor]] Burst, push the target back 1 SQR per 2 burst
+    [[/status Tremor]] stacks, max [N] SQRs.</p>
   negative: ''
   macro:
     uuid: ''

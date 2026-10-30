@@ -32,12 +32,13 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Frostbite stacks on this target do not reduce at the end of this
-    turn.</p>
+    <p>[[/status Frostbite]] stacks on this target do not reduce at the end of
+    this turn.</p>
 
-    <p>This also prevents Frostbite from being reduced by Reduce Status or other
-    effects that immediately activate Frostbite. When immediately activating
-    Frostbite, do not halve Frostbite and remove this effect.</p>
+    <p>This also prevents [[/status Frostbite]] from being reduced by Reduce
+    Status or other effects that immediately activate [[/status Frostbite]].
+    When immediately activating [[/status Frostbite]], do not halve [[/status
+    Frostbite]] and remove this effect.</p>
   negative: ''
   macro:
     uuid: ''

@@ -33,9 +33,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>By spending 1 Reaction, you may activate/swap to Slayer Stance.</p><p>[On
-    Crit] with this Stance active, roll your Critical Damage twice, then apply
-    the higher result.</p>
+    <p>By spending 1 Reaction, you may activate/swap to [[/status Slayer
+    Stance]].</p><p>[On Crit] with this Stance active, roll your [[/status
+    Critical]] Damage twice, then apply the higher result.</p>
   negative: ''
   macro:
     uuid: ''

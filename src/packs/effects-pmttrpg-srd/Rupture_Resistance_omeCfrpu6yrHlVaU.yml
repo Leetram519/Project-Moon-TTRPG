@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Reduce HP Damage taken from Rupture by [N]</p>
-  negative: <p>Increases HP Damage taken from Rupture by [N]</p>
+  positive: <p>Reduce HP Damage taken from [[/status Rupture]] by [N]</p>
+  negative: <p>Increases HP Damage taken from [[/status Rupture]] by [N]</p>
   macro:
     uuid: ''
   customNotes: ''

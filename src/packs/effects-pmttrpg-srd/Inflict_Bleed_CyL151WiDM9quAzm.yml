@@ -31,8 +31,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Bleed to the target
-  negative: Apply [N] Bleed to the character
+  positive: Apply [N] [[/status Bleed]] to the target
+  negative: Apply [N] [[/status Bleed]] to the character
   macro:
     uuid: ''
   customNotes: ''

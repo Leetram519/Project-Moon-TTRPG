@@ -32,10 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Sinking Burst, deal HP Damage equal to 2x of the burst Sinking stacks.
-    If the target is Staggered/Panicking or if they Panic as a result of the
-    Sinking Burst, instead deal HP Damage equal to 3x the burst Sinking
-    stacks.</p>
+    <p>On [[/status Sinking]] Burst, deal HP Damage equal to 2x of the burst
+    [[/status Sinking]] stacks. If the target is Staggered/Panicking or if they
+    Panic as a result of the [[/status Sinking]] Burst, instead deal HP Damage
+    equal to 3x the burst [[/status Sinking]] stacks.</p>
   negative: ''
   macro:
     uuid: ''

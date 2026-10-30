@@ -31,8 +31,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Reduce HP Damage taken from Burn by [N]
-  negative: Increase HP Damage taken from Burn by [N]
+  positive: Reduce HP Damage taken from [[/status Burn]] by [N]
+  negative: Increase HP Damage taken from [[/status Burn]] by [N]
   macro:
     uuid: ''
   customNotes: ''

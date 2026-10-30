@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*2] Charge to inflict [N] Tremor to the target next round.</p>
+  positive: >-
+    <p>Consume [N*2] [[/status Charge]] to inflict [N] [[/status Tremor]] to the
+    target next round.</p>
   negative: ''
   macro:
     uuid: ''

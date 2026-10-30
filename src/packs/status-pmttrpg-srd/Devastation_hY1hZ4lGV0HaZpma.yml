@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Devastation.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">You inflict Devastation on your target as a part of Ruin and other skills. When you trigger a Devastating Hit deal 1d8 extra HP Damage per Devastation the target has, then they lose all Devastation.\_<strong>\_</strong></p><p dir=\"ltr\">If you gain Devastation, but have no Ruin, gain 1 Ruin.</p>"
+  description: "<p dir=\"ltr\">You inflict [[/status Devastation]] on your target as a part of [[/status Ruin]] and other skills. When you trigger a Devastating Hit deal 1d8 extra HP Damage per [[/status Devastation]] the target has, then they lose all [[/status Devastation]].\_<strong>\_</strong></p><p dir=\"ltr\">If you gain [[/status Devastation]], but have no [[/status Ruin]], gain 1 [[/status Ruin]].</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

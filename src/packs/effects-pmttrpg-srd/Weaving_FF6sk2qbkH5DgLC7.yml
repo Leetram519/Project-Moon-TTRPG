@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>You must have at least 4 Haste to activate this effect.</p><p>On Clash
-    Win, use a Consumable or throw an Explosive. Skills cannot be used with
-    either.</p>
+    <p>You must have at least 4 [[/status Haste]] to activate this
+    effect.</p><p>On Clash Win, use a Consumable or throw an Explosive. Skills
+    cannot be used with either.</p>
   negative: ''
   macro:
     uuid: ''

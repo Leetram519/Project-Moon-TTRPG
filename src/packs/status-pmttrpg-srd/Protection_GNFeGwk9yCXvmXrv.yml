@@ -6,8 +6,9 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Take 1 less [HP Damage After Resistance] from attacks per Protection
-    stack.</p><p>At the end of the Round, lose all Protection.</p>
+    <p>Take 1 less [HP Damage After Resistance] from attacks per [[/status
+    Protection]] stack.</p><p>At the end of the Round, lose all [[/status
+    Protection]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

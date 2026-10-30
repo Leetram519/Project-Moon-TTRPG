@@ -32,11 +32,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Apply [N] Bleed to the target next round. This is not affected by
-    "Bleed+".</p>
+    <p>Apply [N] [[/status Bleed]] to the target next round. This is not
+    affected by "Bleed+".</p>
   negative: >-
-    <p>Apply [N] Bleed to the character next round. This is not affected by
-    "Bleed+".</p>
+    <p>Apply [N] [[/status Bleed]] to the character next round. This is not
+    affected by "Bleed+".</p>
   macro:
     uuid: ''
   customNotes: ''

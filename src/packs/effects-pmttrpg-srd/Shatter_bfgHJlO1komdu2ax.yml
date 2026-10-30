@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Clear all Frostbite from the target, dealing 1d8 Force Damage per 2
-    cleared.</p>
+    <p>Clear all [[/status Frostbite]] from the target, dealing 1d8 Force Damage
+    per 2 cleared.</p>
   negative: ''
   macro:
     uuid: ''

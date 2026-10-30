@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Smoke to the target
-  negative: Apply [N] Smoke to the character
+  positive: Apply [N] [[/status Smoke]] to the target
+  negative: Apply [N] [[/status Smoke]] to the character
   macro:
     uuid: ''
   customNotes: ''

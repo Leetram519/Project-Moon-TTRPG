@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Frostbite to the target.</p>
-  negative: <p>Apply [N] Frostbite to the character.</p>
+  positive: <p>Apply [N] [[/status Frostbite]] to the target.</p>
+  negative: <p>Apply [N] [[/status Frostbite]] to the character.</p>
   macro:
     uuid: ''
   customNotes: ''

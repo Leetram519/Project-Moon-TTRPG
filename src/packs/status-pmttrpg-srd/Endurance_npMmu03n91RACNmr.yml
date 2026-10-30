@@ -6,8 +6,9 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Increase the Power of Defensive Dice by the number of Endurance
-    stack.</p><p>At the end of the Round, lose all Endurance.</p>
+    <p>Increase the Power of Defensive Dice by the number of [[/status
+    Endurance]] stack.</p><p>At the end of the Round, lose all [[/status
+    Endurance]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

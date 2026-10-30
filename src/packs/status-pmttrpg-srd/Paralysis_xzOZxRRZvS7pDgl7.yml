@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Paralyze.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">When the character takes an Action or Reaction, they have disadvantage on the dice roll, then reduce the Paralysis stack by one.</p><p dir=\"ltr\">At the end of the Round, the character loses all Paralysis.</p><p>\_</p>"
+  description: "<p dir=\"ltr\">When the character takes an Action or Reaction, they have disadvantage on the dice roll, then reduce the [[/status Paralysis]] stack by one.</p><p dir=\"ltr\">At the end of the Round, the character loses all [[/status Paralysis]].</p><p>\_</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

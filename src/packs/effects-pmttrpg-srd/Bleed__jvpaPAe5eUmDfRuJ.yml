@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: If you are inflicting Bleed
   positive: >-
-    <p>Apply an additional [N] Bleed. This only activates once per target,
-    including self.</p>
+    <p>Apply an additional [N] [[/status Bleed]]. This only activates once per
+    target, including self.</p>
   negative: ''
   macro:
     uuid: ''

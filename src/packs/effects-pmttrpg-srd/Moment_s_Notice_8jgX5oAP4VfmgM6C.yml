@@ -32,10 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>(Reaction Only) You must have at least 4 Haste to activate this
-    effect.</p><p>You may declare a skill with this effect in response to an
-    enemy that has already rolled for the clash. Your reaction becomes the type
-    this skill is assigned to.</p>
+    <p>(Reaction Only) You must have at least 4 [[/status Haste]] to activate
+    this effect.</p><p>You may declare a skill with this effect in response to
+    an enemy that has already rolled for the clash. Your reaction becomes the
+    type this skill is assigned to.</p>
   negative: ''
   macro:
     uuid: ''

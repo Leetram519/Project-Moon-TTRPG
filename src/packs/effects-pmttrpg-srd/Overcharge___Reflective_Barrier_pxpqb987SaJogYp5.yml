@@ -31,9 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 3 Overcharge.</p><p>Negates the target's [Inflict] Effects to the
-    character. Any of the target’s [Inflict] Effects that would have applied to
-    the character as a result of the Clash instead apply to the Target.</p>
+    <p>Consume 3 [[/status Overcharge]].</p><p>Negates the target's [Inflict]
+    Effects to the character. Any of the target’s [Inflict] Effects that would
+    have applied to the character as a result of the Clash instead apply to the
+    Target.</p>
   negative: ''
   macro:
     uuid: ''

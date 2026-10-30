@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Paralysis to the target next round
-  negative: Apply [N] Paralysis to the character next round
+  positive: Apply [N] [[/status Paralysis]] to the target next round
+  negative: Apply [N] [[/status Paralysis]] to the character next round
   macro:
     uuid: ''
   customNotes: ''

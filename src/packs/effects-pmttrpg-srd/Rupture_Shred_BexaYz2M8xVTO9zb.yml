@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Rupture Burst, the target retains half of the burst Rupture stacks
-    (rounded down).</p>
+    <p>On [[/status Rupture]] Burst, the target retains half of the burst
+    [[/status Rupture]] stacks (rounded down).</p>
   negative: ''
   macro:
     uuid: ''

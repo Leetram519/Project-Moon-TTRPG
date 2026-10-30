@@ -306,8 +306,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Paralysis to the target next round
-          negative: Apply [N] Paralysis to the character next round
+          positive: Apply [N] [[/status Paralysis]] to the target next round
+          negative: Apply [N] [[/status Paralysis]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -328,8 +328,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -350,8 +350,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
       equipped: true
@@ -439,8 +439,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Paralysis to the target next round
-          negative: Apply [N] Paralysis to the character next round
+          positive: Apply [N] [[/status Paralysis]] to the target next round
+          negative: Apply [N] [[/status Paralysis]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -461,8 +461,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
         - effectUuid: >-
@@ -483,8 +483,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Tremor to the target
-          negative: Apply [N] Tremor to the character next round
+          positive: Apply [N] [[/status Tremor]] to the target
+          negative: Apply [N] [[/status Tremor]] to the character next round
           macro:
             uuid: ''
       equipped: true
@@ -748,8 +748,8 @@ items:
             <p>In the first round of combat, gain [N] Offensive &amp; Defensive
             Dice Power Up.</p>
 
-            <p>Whenever the character defeats an opponent, apply [N] Strength to
-            the character next round.</p>
+            <p>Whenever the character defeats an opponent, apply [N] [[/status
+            Strength]] to the character next round.</p>
           negative: ''
           macro:
             uuid: ''
@@ -920,8 +920,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Paralysis to the target next round.</p>
-          negative: <p>Apply [N] Paralysis to the character next round.</p>
+          positive: <p>Apply [N] [[/status Paralysis]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Paralysis]] to the character next round.</p>
           macro:
             uuid: ''
         - effectUuid: Item.8IsI9UrvhkzYgnjn
@@ -941,8 +941,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Tremor to the target next round.</p>
-          negative: <p>Apply [N] Tremor to the character next round.</p>
+          positive: <p>Apply [N] [[/status Tremor]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Tremor]] to the character next round.</p>
           macro:
             uuid: ''
       customNotes: ''
@@ -1019,8 +1019,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Paralysis to the target next round.</p>
-          negative: <p>Apply [N] Paralysis to the character next round.</p>
+          positive: <p>Apply [N] [[/status Paralysis]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Paralysis]] to the character next round.</p>
           macro:
             uuid: ''
         - effectUuid: Item.8IsI9UrvhkzYgnjn
@@ -1040,8 +1040,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Tremor to the target next round.</p>
-          negative: <p>Apply [N] Tremor to the character next round.</p>
+          positive: <p>Apply [N] [[/status Tremor]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Tremor]] to the character next round.</p>
           macro:
             uuid: ''
       customNotes: ''
@@ -1126,8 +1126,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Paralysis to the target next round.</p>
-          negative: <p>Apply [N] Paralysis to the character next round.</p>
+          positive: <p>Apply [N] [[/status Paralysis]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Paralysis]] to the character next round.</p>
           macro:
             uuid: ''
         - effectUuid: Item.8IsI9UrvhkzYgnjn
@@ -1147,8 +1147,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Tremor to the target next round.</p>
-          negative: <p>Apply [N] Tremor to the character next round.</p>
+          positive: <p>Apply [N] [[/status Tremor]] to the target next round.</p>
+          negative: <p>Apply [N] [[/status Tremor]] to the character next round.</p>
           macro:
             uuid: ''
       customNotes: ''

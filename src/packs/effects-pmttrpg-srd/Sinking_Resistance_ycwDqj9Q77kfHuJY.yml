@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Reduce SP Damage taken from Sinking by [N]
-  negative: Increase SP Damage taken from Sinking by [N]
+  positive: Reduce SP Damage taken from [[/status Sinking]] by [N]
+  negative: Increase SP Damage taken from [[/status Sinking]] by [N]
   macro:
     uuid: ''
   customNotes: ''

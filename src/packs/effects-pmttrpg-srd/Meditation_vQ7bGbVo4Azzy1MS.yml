@@ -32,8 +32,8 @@ system:
   procDice: any
   procAction: any
   procCondition: >-
-    You can use an Action to Stagger yourself, treating it as a normal stagger.
-    You may choose to not lose SP from this
+    You can use an Action to [[/status Stagger]] yourself, treating it as a
+    normal [[/status Stagger]]. You may choose to not lose SP from this
   positive: >-
     <p>Immediately Gain 8 Emotion after Staggering yourself this way. Any other
     Effect with this conditional also activates this.</p>

@@ -34,11 +34,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] Consume 6 Charge to replace the Attack with an Area
-    of Effect Attack. This attack targets a 3x3 SQR with the center in the
-    weapon’s range, with a main target designated by either the target at the
-    center, or otherwise the first target attacked. This may be centered on the
-    user.</p>
+    <p>[Attack Replacement] Consume 6 [[/status Charge]] to replace the Attack
+    with an Area of Effect Attack. This attack targets a 3x3 SQR with the center
+    in the weapon’s range, with a main target designated by either the target at
+    the center, or otherwise the first target attacked. This may be centered on
+    the user.</p>
   negative: ''
   macro:
     uuid: ''

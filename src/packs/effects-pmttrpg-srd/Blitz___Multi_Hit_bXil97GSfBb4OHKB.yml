@@ -35,8 +35,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] You must have at least [N*2] Haste to activate this
-    effect.</p><p>Replaces Attack with [N+1] Attacks, to a max of 3 overall.</p>
+    <p>[Attack Replacement] You must have at least [N*2] [[/status Haste]] to
+    activate this effect.</p><p>Replaces Attack with [N+1] Attacks, to a max of
+    3 overall.</p>
   negative: ''
   macro:
     uuid: ''

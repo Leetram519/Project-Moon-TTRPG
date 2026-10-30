@@ -6,7 +6,8 @@ system:
   name: ''
   description: >-
     <p>Take 1 <strong>extra</strong> [HP Damage After Resistance] from attacks
-    per Fragile stack.</p><p>At the end of the Round, lose all Fragile.</p>
+    per [[/status Fragile]] stack.</p><p>At the end of the Round, lose all
+    [[/status Fragile]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

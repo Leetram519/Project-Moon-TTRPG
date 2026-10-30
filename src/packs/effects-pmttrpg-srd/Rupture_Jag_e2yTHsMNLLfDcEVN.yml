@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Rupture Burst, Inflict (Rupture/3) Fragile next round. </p>
+  positive: >-
+    <p>On [[/status Rupture]] Burst, Inflict ([[/status Rupture]]/3) Fragile
+    next round. </p>
   negative: ''
   macro:
     uuid: ''

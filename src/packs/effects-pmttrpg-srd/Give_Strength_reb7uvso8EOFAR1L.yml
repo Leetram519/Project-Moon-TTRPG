@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Strength to another character next round.</p>
+  positive: <p>Apply [N] [[/status Strength]] to another character next round.</p>
   negative: ''
   macro:
     uuid: ''

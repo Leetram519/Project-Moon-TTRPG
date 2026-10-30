@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>On Rupture Burst, Inflict 4 Bleed.</p>
+  positive: <p>On [[/status Rupture]] Burst, Inflict 4 [[/status Bleed]].</p>
   negative: ''
   macro:
     uuid: ''

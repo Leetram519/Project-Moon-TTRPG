@@ -33,7 +33,7 @@ system:
   procCondition: ''
   positive: >-
     <p>If the character recovered [N*2] or more HP as a result of this Action,
-    apply [N] Bleed to the target.</p>
+    apply [N] [[/status Bleed]] to the target.</p>
   negative: ''
   macro:
     uuid: ''

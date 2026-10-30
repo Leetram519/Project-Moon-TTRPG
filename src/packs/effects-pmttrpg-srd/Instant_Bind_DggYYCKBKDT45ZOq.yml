@@ -33,8 +33,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Bind from Effects and this Skill are applied to the target and are
-    activated immediately. This occurs before any Bind skill effect is used.</p>
+    <p>[[/status Bind]] from Effects and this Skill are applied to the target
+    and are activated immediately. This occurs before any [[/status Bind]] skill
+    effect is used.</p>
   negative: ''
   macro:
     uuid: ''

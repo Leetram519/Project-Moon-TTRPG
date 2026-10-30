@@ -33,10 +33,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>By spending 1 Reaction, you may activate/swap to Slasher
-    Stance.</p><p>[On Crit] with this Stance active, gain 2 Critical after
-    spending your current Critical (and 1 Poise, as per status).</p><p>Your
-    Critical Strike becomes a D6.</p>
+    <p>By spending 1 Reaction, you may activate/swap to [[/status Slasher
+    Stance]].</p><p>[On Crit] with this Stance active, gain 2 [[/status
+    Critical]] after spending your current [[/status Critical]] (and 1 [[/status
+    Poise]], as per status).</p><p>Your [[/status Critical]] Strike becomes a
+    D6.</p>
   negative: ''
   macro:
     uuid: ''

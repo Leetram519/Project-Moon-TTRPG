@@ -5,9 +5,9 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Burn.webp
 system:
   name: ''
   description: >-
-    <p><strong id="docs-internal-guid-1f65252e-7fff-a74a-e24f-9db7bd983729">At
-    the end of the round, take HP Damage equal to the number of Burn stacks,
-    then reduce the Burn stack by half. (Rounded down)</strong></p>
+    <p>At the end of the round, take HP Damage equal to the number of [[/status
+    Burn]] stacks, then reduce the [[/status Burn]] stack by half. (Rounded
+    down)</strong></p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

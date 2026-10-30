@@ -5,8 +5,8 @@ img: systems/projectmoonttrpg/assets/icons/limbus_assets/Basic%20Effects/Haste.w
 system:
   name: ''
   description: >-
-    <p>Increase Sqr(s) of movement equal to the number of Haste stack.</p><p>At
-    the end of the Round, lose all Haste.</p>
+    <p>Increase Sqr(s) of movement equal to the number of [[/status Haste]]
+    stack.</p><p>At the end of the Round, lose all [[/status Haste]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

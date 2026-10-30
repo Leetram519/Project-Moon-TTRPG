@@ -34,11 +34,12 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Transfer all already present Smoke stacks from the character to the
-    target. If this skill also contains an effect that consumes Smoke from the
-    target, transferred Smoke may immediately be used for that effect. Any smoke
-    inflicted from this specific effect may go over the cap of
-    10.</p><p>Incompatible with Inhale Smoke.</p>
+    <p>Transfer all already present [[/status Smoke]] stacks from the character
+    to the target. If this skill also contains an effect that consumes [[/status
+    Smoke]] from the target, transferred [[/status Smoke]] may immediately be
+    used for that effect. Any [[/status Smoke]] inflicted from this specific
+    effect may go over the cap of 10.</p><p>Incompatible with Inhale [[/status
+    Smoke]].</p>
   negative: ''
   macro:
     uuid: ''

@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Deal an additional [N*3] Critical Damage.</p>
+  positive: <p>Deal an additional [N*3] [[/status Critical]] Damage.</p>
   negative: ''
   macro:
     uuid: ''

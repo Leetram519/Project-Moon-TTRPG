@@ -281,8 +281,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Haste to the character next round.
-          negative: Apply [N] Bind to the character next round.
+          positive: Apply [N] [[/status Haste]] to the character next round.
+          negative: Apply [N] [[/status Bind]] to the character next round.
           macro:
             uuid: ''
         - effectUuid: >-
@@ -303,7 +303,7 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Charge to the character.
+          positive: Apply [N] [[/status Charge]] to the character.
           negative: ''
           macro:
             uuid: ''
@@ -325,8 +325,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Smoke to the target
-          negative: Apply [N] Smoke to the character
+          positive: Apply [N] [[/status Smoke]] to the target
+          negative: Apply [N] [[/status Smoke]] to the character
           macro:
             uuid: ''
       equipped: true
@@ -390,7 +390,7 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Charge to the character.
+          positive: Apply [N] [[/status Charge]] to the character.
           negative: ''
           macro:
             uuid: ''
@@ -412,8 +412,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Haste to the character next round.
-          negative: Apply [N] Bind to the character next round.
+          positive: Apply [N] [[/status Haste]] to the character next round.
+          negative: Apply [N] [[/status Bind]] to the character next round.
           macro:
             uuid: ''
         - effectUuid: >-
@@ -458,8 +458,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: Apply [N] Smoke to the target
-          negative: Apply [N] Smoke to the character
+          positive: Apply [N] [[/status Smoke]] to the target
+          negative: Apply [N] [[/status Smoke]] to the character
           macro:
             uuid: ''
       equipped: true
@@ -527,8 +527,8 @@ items:
           procAction: any
           procCondition: ''
           positive: >-
-            Apply [N] Charge to the character. If this reaction is Recycled, the
-            gain is halved.
+            Apply [N] [[/status Charge]] to the character. If this reaction is
+            Recycled, the gain is halved.
           negative: ''
           macro:
             uuid: ''
@@ -764,8 +764,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Charge to the character.</p>
-          negative: <p>Consume [N] Charge to use this skill.</p>
+          positive: <p>Apply [N] [[/status Charge]] to the character.</p>
+          negative: <p>Consume [N] [[/status Charge]] to use this skill.</p>
           macro:
             uuid: ''
         - effectUuid: Item.ek88S9hxUUz1uHfB
@@ -785,8 +785,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Smoke to the target.</p>
-          negative: <p>Apply [N] Smoke to the character.</p>
+          positive: <p>Apply [N] [[/status Smoke]] to the target.</p>
+          negative: <p>Apply [N] [[/status Smoke]] to the character.</p>
           macro:
             uuid: ''
       customNotes: ''
@@ -865,8 +865,8 @@ items:
           procDice: any
           procAction: any
           procCondition: ''
-          positive: <p>Apply [N] Smoke to the target.</p>
-          negative: <p>Apply [N] Smoke to the character.</p>
+          positive: <p>Apply [N] [[/status Smoke]] to the target.</p>
+          negative: <p>Apply [N] [[/status Smoke]] to the character.</p>
           macro:
             uuid: ''
         - effectUuid: Item.iKbee3Ltmq9NonBJ

@@ -34,8 +34,8 @@ system:
     <p>In the first round of combat, gain [N] Offensive &amp; Defensive Dice
     Power Up.</p>
 
-    <p>Whenever the character defeats an opponent, apply [N] Strength to the
-    character next round.</p>
+    <p>Whenever the character defeats an opponent, apply [N] [[/status
+    Strength]] to the character next round.</p>
   negative: ''
   macro:
     uuid: ''

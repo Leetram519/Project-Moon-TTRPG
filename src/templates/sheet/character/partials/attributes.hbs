@@ -1,9 +1,14 @@
+{{#unless @root.locked}}
+<span>Attribute Points (Level {{@root.actor.system.level.value}}) : {{@root.pointsRemaining}} Points Remaining...</span>
+{{/unless}}
 <div class="stats-row">
+
   {{#each rollableAttributes as |attr|}}
   <div class="attr attr--{{attr.id}}" id="attr-{{attr.id}}" title="{{localize attr.label}}">
     <span class="frame"></span>
     <img src="{{attr.icon}}" alt="">
     <div class="val">
+      <span class="ability-stat--name">{{localize attr.label}}</span>
       <input class="num ability-stat{{#if @root.locked}} ability-roll ability-rollable rollable{{else}} ability-value{{/if}}"
              type="text" name="{{attr.name}}"
              value="{{#if attr.value}}{{numberFormat attr.value decimals=0 sign=true}}{{else}}0{{/if}}"

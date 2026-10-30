@@ -31,9 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>You must have at least 2 Haste to activate this effect.</p><p>On Clash
-    Win, sheathe your current weapon and pull out a new weapon or tool (provided
-    you have the hands).</p>
+    <p>You must have at least 2 [[/status Haste]] to activate this
+    effect.</p><p>On Clash Win, sheathe your current weapon and pull out a new
+    weapon or tool (provided you have the hands).</p>
   negative: ''
   macro:
     uuid: ''

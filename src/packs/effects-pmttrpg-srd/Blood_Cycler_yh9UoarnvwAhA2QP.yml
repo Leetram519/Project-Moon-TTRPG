@@ -32,7 +32,7 @@ system:
   procCondition: ''
   positive: >-
     <p>Whenever another character within 3 SQRs of the character procs an
-    instance of Bleed, recover 2 HP.</p>
+    instance of [[/status Bleed]], recover 2 HP.</p>
   negative: ''
   macro:
     uuid: ''

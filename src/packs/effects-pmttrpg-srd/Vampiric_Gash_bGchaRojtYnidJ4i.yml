@@ -34,11 +34,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Restore HP equal to the amount of Bleed the target had at the time of the
-    clash.</p>
+    <p>Restore HP equal to the amount of [[/status Bleed]] the target had at the
+    time of the clash.</p>
 
-    <p>If the target did not clash with this skill, any Bleed on the target is
-    activated immediately, reducing by half as normal.</p>
+    <p>If the target did not clash with this skill, any [[/status Bleed]] on the
+    target is activated immediately, reducing by half as normal.</p>
   negative: ''
   macro:
     uuid: ''

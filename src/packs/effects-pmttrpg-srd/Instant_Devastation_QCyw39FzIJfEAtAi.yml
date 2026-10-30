@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>"Inflict Ruin" and "Increase Devastation" from Effects and this Skill are
-    applied before rolling to Devastatingly Hit.</p>
+    <p>"Inflict [[/status Ruin]]" and "Increase [[/status Devastation]]" from
+    Effects and this Skill are applied before rolling to Devastatingly Hit.</p>
   negative: ''
   macro:
     uuid: ''

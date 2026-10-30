@@ -31,7 +31,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>[Reduce Status] on self and gain half of what's reduced as Smoke.</p>
+  positive: >-
+    <p>[Reduce Status] on self and gain half of what's reduced as [[/status
+    Smoke]].</p>
   negative: ''
   macro:
     uuid: ''

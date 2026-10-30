@@ -32,7 +32,7 @@ system:
   procAction: any
   procCondition: ''
   positive: |-
-    On Use, Consume 2 Charge to be able to shoot this weapon.
+    On Use, Consume 2 [[/status Charge]] to be able to shoot this weapon.
     This weapon can't use regular bullets.
     This weapon has a fixed Type of Damage, like a Melee weapon.
   negative: ''

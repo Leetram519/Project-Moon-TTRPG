@@ -32,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to increase the weapon's Range by 1 SQR, consuming 4 Charge
-    per attack made this way. If you spend 1 Overcharge instead, this effect is
-    doubled.
+    You can choose to increase the weapon's Range by 1 SQR, consuming 4
+    [[/status Charge]] per attack made this way. If you spend 1 [[/status
+    Overcharge]] instead, this effect is doubled.
   negative: ''
   macro:
     uuid: ''

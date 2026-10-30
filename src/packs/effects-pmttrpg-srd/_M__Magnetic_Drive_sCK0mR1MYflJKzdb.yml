@@ -33,8 +33,9 @@ system:
   procCondition: ''
   positive: >-
     You can choose to push the target by 1 SQR. This forced movement can deal
-    Force Damage per unspent SQR. Consume 6 Charge per attack made this way. If
-    you spend 1 Overcharge instead, this effect is doubled.
+    Force Damage per unspent SQR. Consume 6 [[/status Charge]] per attack made
+    this way. If you spend 1 [[/status Overcharge]] instead, this effect is
+    doubled.
   negative: ''
   macro:
     uuid: ''

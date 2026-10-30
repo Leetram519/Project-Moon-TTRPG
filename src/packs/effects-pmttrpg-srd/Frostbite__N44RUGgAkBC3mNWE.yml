@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: If you are applying Frostbite
   positive: >-
-    <p>Apply an additional [N] Frostbite to the target. This activates once per
-    target, including the user.</p>
+    <p>Apply an additional [N] [[/status Frostbite]] to the target. This
+    activates once per target, including the user.</p>
   negative: ''
   macro:
     uuid: ''

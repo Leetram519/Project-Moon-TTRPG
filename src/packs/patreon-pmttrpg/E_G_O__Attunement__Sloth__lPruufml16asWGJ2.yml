@@ -1,0 +1,122 @@
+folder: 0ZNhUclGIU5coFbU
+name: E.G.O. Attunement [Sloth]
+type: effect
+_id: lPruufml16asWGJ2
+img: >-
+  systems/projectmoonttrpg/assets/icons/Custom/HomebrewRequests_EgoResonance_Pigritia.webp
+system:
+  name: ''
+  description: >-
+    <p><em>Suggested by <strong>butteredtoast601</strong></em></p><p>This is
+    currently not ENTIRELY automated. <strong>Please set the actual values
+    yourself in EE</strong>, the values assume you have 0 rank difference!</p>
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: 'butteredtoast601'
+    source: Patreon Homebrew
+  cost: 2
+  stackMax: 3
+  appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
+  tags: []
+  canPositive: true
+  canNegative: false
+  procOn: alwaysActive
+  procResult: none
+  procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
+  procStat: any
+  procDice: any
+  procAction: any
+  procCondition: ''
+  positive: >-
+    <p>Gain [N] + [Rank Difference between Weapon and Holder] [[/status
+    Protection]] and [[/status Stagger Protection]]. If the rank difference is
+    negative (Weapon rank is higher than Holder rank), for every rank
+    difference, your minimum [[/status Tremor]] is [N], and you lose [N] SP when
+    you first use an action or reaction made each round.</p>
+  negative: ''
+  macro:
+    uuid: ''
+  customNotes: ''
+  easyEffects: >-
+    [On Equip]
+
+    # REPLACE 0 BY RANK DIFFERENCE, and take the absolute value (-2 becomes 2)
+
+    set flag "rank_difference" on item to 0;
+
+    # REPLACE 0 BY 1 IF RANK DIFFERENCE IS NEGATIVE!
+
+    set flag "is_rank_difference_negative" on item to 0;
+
+    proc Pigritia_Attunement;
+
+
+    [On Pigritia_Attunement]
+
+    require (Tremor) < ((N) * (item.flag.rank_difference)) and
+    (item.flag."is_rank_difference_negative") == 1 then 
+      set Tremor to ((N) * (item.flag.rank_difference));
+
+    [On Clash Start]
+
+    proc Pigritia_Attunement;
+
+
+    [On Being Hit]
+
+    proc Pigritia_Attunement;
+
+
+    [On Reaction]
+
+    require (item.flag."has_used_action_or_reaction") == 0 and
+    (item.flag."is_rank_difference_negative") == 1 then
+      deal ((N) * (item.flag.rank_difference)) sp damage to self and
+      set flag "has_used_action_or_reaction" on item to 1;
+    proc Pigritia_Attunement;
+
+
+    [On Action]
+
+    require (item.flag."has_used_action_or_reaction") == 0 and
+    (item.flag."is_rank_difference_negative") == 1 then
+      deal ((N) * (item.flag.rank_difference)) sp damage to self and
+      set flag "has_used_action_or_reaction" on item to 1;
+    proc Pigritia_Attunement;
+
+
+    [Start of Round]
+
+    set flag "has_used_action_or_reaction" on item to 0;
+
+    gain (N) * (item.flag.rank_difference) "Protection" and gain (N) *
+    (item.flag.rank_difference) "Stagger Protection";
+
+    proc Pigritia_Attunement;
+effects: []
+sort: 106250
+ownership:
+  default: 0
+  yWsvx4DXrmYcZsue: 3
+flags: {}
+_stats:
+  coreVersion: '14.364'
+  systemId: projectmoonttrpg
+  systemVersion: 0.1.0
+  createdTime: 1793368298039
+  modifiedTime: 1793369027499
+  lastModifiedBy: yWsvx4DXrmYcZsue
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!items!lPruufml16asWGJ2'

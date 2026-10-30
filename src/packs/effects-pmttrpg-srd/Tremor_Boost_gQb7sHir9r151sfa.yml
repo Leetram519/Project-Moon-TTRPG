@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Burst Tremor. If the enemy has 4+ Tremor, deal an extra (Tremor/2) ST
-    Damage.</p>
+    <p>Burst [[/status Tremor]]. If the enemy has 4+ [[/status Tremor]], deal an
+    extra ([[/status Tremor]]/2) ST Damage.</p>
   negative: ''
   macro:
     uuid: ''

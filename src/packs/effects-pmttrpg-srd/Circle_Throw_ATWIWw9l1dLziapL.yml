@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character has [N]+ Haste stacks, push the enemy [N] tiles in any
-    direction. This counts as Forced Movement.</p>
+    <p>If the character has [N]+ [[/status Haste]] stacks, push the enemy [N]
+    tiles in any direction. This counts as Forced Movement.</p>
   negative: ''
   macro:
     uuid: ''

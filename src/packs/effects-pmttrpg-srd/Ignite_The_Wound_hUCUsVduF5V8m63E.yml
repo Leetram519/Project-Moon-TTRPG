@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>This skill must be used against your Marked Target.</p><p>Apply [N] Burn
-    and [N] Bleed to the target.</p>
+    <p>This skill must be used against your Marked Target.</p><p>Apply [N]
+    [[/status Burn]] and [N] [[/status Bleed]] to the target.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,7 +32,7 @@ system:
   procCondition: In the first round of combat
   positive: >-
     <p>All successful Attacks/Counters made by the character inflict +[N]
-    Sinking.</p>
+    [[/status Sinking]].</p>
   negative: ''
   macro:
     uuid: ''

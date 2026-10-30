@@ -31,8 +31,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Haste] from Effects and this Skill are applied to the character and are
-    activated immediately. This occurs before any Haste effect is used.</p>
+    <p>[[/status Haste]] from Effects and this Skill are applied to the
+    character and are activated immediately. This occurs before any [[/status
+    Haste]] effect is used.</p>
   negative: ''
   macro:
     uuid: ''

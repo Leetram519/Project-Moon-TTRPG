@@ -32,8 +32,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Burn to the target
-  negative: Apply [N] burn to the character
+  positive: Apply [N] [[/status Burn]] to the target
+  negative: Apply [N] [[/status Burn]] to the character
   macro:
     uuid: ''
   customNotes: ''

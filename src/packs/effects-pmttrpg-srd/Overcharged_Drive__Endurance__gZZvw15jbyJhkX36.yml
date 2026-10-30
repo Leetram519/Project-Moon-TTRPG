@@ -29,8 +29,8 @@ system:
   procStat: any
   procDice: any
   procAction: any
-  procCondition: When you gain Overcharge
-  positive: <p>Gain 1 Endurance next Round, max once per round.</p>
+  procCondition: When you gain [[/status Overcharge]]
+  positive: <p>Gain 1 [[/status Endurance]] next Round, max once per round.</p>
   negative: ''
   macro:
     uuid: ''

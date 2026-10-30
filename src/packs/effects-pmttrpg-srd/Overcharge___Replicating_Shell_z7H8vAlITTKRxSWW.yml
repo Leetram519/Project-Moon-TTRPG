@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N] Overcharge.</p><p>Give 5 Charge Barrier next round to [N]
-    allies in a radius of 3 SQR around you.</p>
+    <p>Consume [N] [[/status Overcharge]].</p><p>Give 5 [[/status Charge
+    Barrier]] next round to [N] allies in a radius of 3 SQR around you.</p>
   negative: ''
   macro:
     uuid: ''

@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>If the target has 2 or more Frostbite, gain 1 Dice Power Up.</p>
+  positive: >-
+    <p>If the target has 2 or more [[/status Frostbite]], gain 1 Dice Power
+    Up.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,8 +31,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Ruin to the target
-  negative: Apply [N] Ruin to the character
+  positive: Apply [N] [[/status Ruin]] to the target
+  negative: Apply [N] [[/status Ruin]] to the character
   macro:
     uuid: ''
   customNotes: ''

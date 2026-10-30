@@ -31,8 +31,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Fragile to the target
-  negative: Apply [N] Fragile to the character next round
+  positive: Apply [N] [[/status Fragile]] to the target
+  negative: Apply [N] [[/status Fragile]] to the character next round
   macro:
     uuid: ''
   customNotes: ''

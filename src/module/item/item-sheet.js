@@ -11,6 +11,9 @@ import { sluggify } from "../slug.js";
 import { isPendingStatus } from "../status/pending.js";
 import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
 import { EffectAutocomplete } from "../effects/effect-autocomplete.js";
+import { HomebrewRegistry } from "../homebrew/homebrew-registry.js";
+import { CompendiumFlags } from "../homebrew/compendium/compendium-flags.js";
+import { CompendiumManager } from "../homebrew/compendium/compendium-manager.js";
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -762,6 +765,8 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       catch (error) { 
         continue; 
       }
+
+      if(!CompendiumManager.getPack(pack.metadata.id).isActive) continue;
 
       for (const effect of docs.filter(doc => doc.type === 'effect')) {
         const appliesTo = effect.system?.appliesTo ?? hostType;

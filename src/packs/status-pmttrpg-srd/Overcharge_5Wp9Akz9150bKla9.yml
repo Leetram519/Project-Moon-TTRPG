@@ -6,16 +6,18 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Resource used by certain Skill Effects. There is no limit to Overcharge
-    stacks.</p><p>You may not use Skills with Overcharge Effects with
-    insufficient Overcharge for the entire Skill - no partial Effects, no
-    selective choices of Effects present in the Skill.</p><p>The Overcharge is
-    consumed with Skill use, regardless of result.</p><p>At the start of combat,
-    a character that gains Charge may choose to also gain Overcharge by the
-    following modifications to Charge. This cannot be altered
-    mid-combat.</p><ul><li><p>Each time you consume a total of 10 Charge, gain 1
-    Overcharge.</p></li><li><p>When above 15 Charge, lose 3 Charge at the end of
-    the Round, increasing by 3 per 15 additional Charge on self.</p></li></ul>
+    <p>Resource used by certain Skill Effects. There is no limit to [[/status
+    Overcharge]] stacks.</p><p>You may not use Skills with [[/status
+    Overcharge]] Effects with insufficient [[/status Overcharge]] for the entire
+    Skill - no partial Effects, no selective choices of Effects present in the
+    Skill.</p><p>The [[/status Overcharge]] is consumed with Skill use,
+    regardless of result.</p><p>At the start of combat, a character that gains
+    [[/status Charge]] may choose to also gain [[/status Overcharge]] by the
+    following modifications to [[/status Charge]]. This cannot be altered
+    mid-combat.</p><ul><li><p>Each time you consume a total of 10 [[/status
+    Charge]], gain 1 [[/status Overcharge]].</p></li><li><p>When above 15
+    [[/status Charge]], lose 3 [[/status Charge]] at the end of the Round,
+    increasing by 3 per 15 additional [[/status Charge]] on self.</p></li></ul>
   slug: ''
   homebrewDependencies: []
   subtype: regular

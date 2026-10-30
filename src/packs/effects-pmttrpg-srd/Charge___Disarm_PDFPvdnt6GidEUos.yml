@@ -30,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*6] Charge to inflict [N] Disarm to the target next round.</p>
+  positive: >-
+    <p>Consume [N*6] [[/status Charge]] to inflict [N] [[/status Disarm]] to the
+    target next round.</p>
   negative: ''
   macro:
     uuid: ''

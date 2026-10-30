@@ -31,7 +31,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>When inflicting Sinking, apply an additional [N] Sinking.</p>
+  positive: >-
+    <p>When inflicting [[/status Sinking]], apply an additional [N] [[/status
+    Sinking]].</p>
   negative: ''
   macro:
     uuid: ''

@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Reduce ST Damage taken from Frostbite by [N]</p>
-  negative: <p>Increases ST Damage taken from Frostbite by [N]</p>
+  positive: <p>Reduce ST Damage taken from [[/status Frostbite]] by [N]</p>
+  negative: <p>Increases ST Damage taken from [[/status Frostbite]] by [N]</p>
   macro:
     uuid: ''
   customNotes: ''

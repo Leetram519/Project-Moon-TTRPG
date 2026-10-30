@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: action
   procCondition: ''
-  positive: <p>Apply [N] Tremor to the target next round.</p>
+  positive: <p>Apply [N] [[/status Tremor]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

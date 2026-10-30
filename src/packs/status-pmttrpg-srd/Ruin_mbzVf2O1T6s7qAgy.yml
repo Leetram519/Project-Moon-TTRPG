@@ -4,7 +4,7 @@ type: status
 img: systems/projectmoonttrpg/assets/icons/Statuses/Ruin.webp
 system:
   name: ''
-  description: "<p dir=\"ltr\">On Hit when the Target has Ruin (before Clash Results are applied) roll [[/r 1d10]]. If the D10 rolls Equal to or Lower than the target’s Ruin Number, deal a Devastating Hit and lose all Ruin.\_</p><p dir=\"ltr\">If the target has 0 Ruin and gains Ruin their Devastation becomes 1, if their Ruin becomes 0 their Devastation is 0. If they would gain Ruin and Devastation in the same action, the Ruin is applied first, then the Devastation is increased on top of the now present 1 Devastation.</p><p>\_</p>"
+  description: "<p dir=\"ltr\">On Hit when the Target has [[/status Ruin]] (before Clash Results are applied) roll [[/r 1d10]]. If the D10 rolls Equal to or Lower than the target’s [[/status Ruin]] Number, deal a Devastating Hit and lose all [[/status Ruin]].\_</p><p dir=\"ltr\">If the target has 0 [[/status Ruin]] and gains [[/status Ruin]] their [[/status Devastation]] becomes 1, if their [[/status Ruin]] becomes 0 their [[/status Devastation]] is 0. If they would gain [[/status Ruin]] and [[/status Devastation]] in the same action, the [[/status Ruin]] is applied first, then the [[/status Devastation]] is increased on top of the now present 1 [[/status Devastation]].</p><p>\_</p>"
   slug: ''
   homebrewDependencies: []
   subtype: regular

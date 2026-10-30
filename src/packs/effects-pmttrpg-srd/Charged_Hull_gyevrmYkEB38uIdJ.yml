@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    When hit by an Attack, you may consume 1 Overcharge to reduce incoming HP/ST
-    damage by 3 each, before Resistances.
+    When hit by an Attack, you may consume 1 [[/status Overcharge]] to reduce
+    incoming HP/ST damage by 3 each, before Resistances.
   negative: ''
   macro:
     uuid: ''

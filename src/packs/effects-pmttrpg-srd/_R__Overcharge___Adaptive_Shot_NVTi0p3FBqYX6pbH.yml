@@ -31,7 +31,7 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 2 Overcharge.</p><p>This effect counts as "Shooting
+    <p>Consume 2 [[/status Overcharge]].</p><p>This effect counts as "Shooting
     Star".</p><p>On Hit, you may change the trajectory of your Shooting Star
     line, up to two times. This attack cannot be used against the same target
     multiple times, and the distance is still limited according to the [Weapon

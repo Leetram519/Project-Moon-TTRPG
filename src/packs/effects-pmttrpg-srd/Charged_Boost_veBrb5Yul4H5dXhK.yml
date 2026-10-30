@@ -31,9 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to consume up to [N*3] Charge to gain an additional [N] SQRs
-    of movement during your next round. If you spend [N] Overcharge instead,
-    this movement will not provoke Opportunity Attacks.
+    You can choose to consume up to [N*3] [[/status Charge]] to gain an
+    additional [N] SQRs of movement during your next round. If you spend [N]
+    [[/status Overcharge]] instead, this movement will not provoke Opportunity
+    Attacks.
   negative: ''
   macro:
     uuid: ''

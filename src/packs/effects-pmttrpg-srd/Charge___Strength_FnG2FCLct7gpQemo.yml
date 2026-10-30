@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*6] Charge to gain [N] Strength on self or an ally next
-    round.</p>
+    <p>Consume [N*6] [[/status Charge]] to gain [N] [[/status Strength]] on self
+    or an ally next round.</p>
   negative: ''
   macro:
     uuid: ''

@@ -31,7 +31,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Roll another D10 to check if the attack is a Critical Hit.</p>
+  positive: >-
+    <p>Roll another D10 to check if the attack is a [[/status Critical]]
+    Hit.</p>
   negative: ''
   macro:
     uuid: ''

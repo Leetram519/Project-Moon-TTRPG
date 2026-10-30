@@ -36,7 +36,7 @@ system:
     <p>As an Action you may Mark 1 Target.</p>
 
     <p>Any allied character (including the user) that ends the round within 2
-    SQRs of the Marked Target gains 2 Haste next Round.</p>
+    SQRs of the Marked Target gains 2 [[/status Haste]] next Round.</p>
 
     <p>This counts as [N] source(s) of Mark.</p>
   negative: ''

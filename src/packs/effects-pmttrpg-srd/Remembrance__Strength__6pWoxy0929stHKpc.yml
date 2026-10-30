@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: At the end of round, if any allies are out of combat due to reaching 0 HP
-  positive: <p>Apply 2 Strength to the character next round.</p>
-  negative: <p>Apply 2 Feeble to the character next round.</p>
+  positive: <p>Apply 2 [[/status Strength]] to the character next round.</p>
+  negative: <p>Apply 2 [[/status Feeble]] to the character next round.</p>
   macro:
     uuid: ''
   customNotes: ''

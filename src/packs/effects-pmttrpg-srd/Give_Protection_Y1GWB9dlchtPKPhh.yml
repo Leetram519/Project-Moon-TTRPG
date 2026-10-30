@@ -31,7 +31,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N*2] Protection to another character next round.</p>
+  positive: <p>Apply [N*2] [[/status Protection]] to another character next round.</p>
   negative: ''
   macro:
     uuid: ''

@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Do not Sinking Burst, and consider all Sinking as instead applying next
-    round.</p>
+    <p>Do not [[/status Sinking]] Burst, and consider all [[/status Sinking]] as
+    instead applying next round.</p>
   negative: ''
   macro:
     uuid: ''

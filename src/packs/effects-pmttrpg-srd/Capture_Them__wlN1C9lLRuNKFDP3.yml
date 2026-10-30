@@ -32,7 +32,8 @@ system:
   procCondition: ''
   positive: >-
     <p>This skill must be used against your Marked Target.</p><p>Inflict [N*2]
-    Bind and Inflict [N] Paralysis to the target next round.</p>
+    [[/status Bind]] and Inflict [N] [[/status Paralysis]] to the target next
+    round.</p>
   negative: ''
   macro:
     uuid: ''

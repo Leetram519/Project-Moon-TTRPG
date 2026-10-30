@@ -30,8 +30,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Rupture to the target next round
-  negative: Apply [N] Rupture to the character next round
+  positive: Apply [N] [[/status Rupture]] to the target next round
+  negative: Apply [N] [[/status Rupture]] to the character next round
   macro:
     uuid: ''
   customNotes: ''

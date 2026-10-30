@@ -33,8 +33,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*2] Charge to give [N*2] Type Protection to self or an ally
-    next round.</p>
+    <p>Consume [N*2] [[/status Charge]] to give [N*2] Type Protection to self or
+    an ally next round.</p>
   negative: ''
   macro:
     uuid: ''

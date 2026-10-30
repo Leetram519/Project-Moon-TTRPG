@@ -32,7 +32,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Charge to the character.
+  positive: Apply [N] [[/status Charge]] to the character.
   negative: ''
   macro:
     uuid: ''

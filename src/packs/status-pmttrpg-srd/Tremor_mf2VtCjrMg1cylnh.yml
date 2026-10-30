@@ -6,12 +6,13 @@ system:
   name: ''
   description: >-
     <p dir="ltr">When hit by an Attack, the attacker may choose to proc this
-    status. Take ST Damage equal to the number of Tremor stacks, then remove all
-    Tremor. This is considered a Tremor Burst for effects that refer to it.</p>
+    status. Take ST Damage equal to the number of [[/status Tremor]] stacks,
+    then remove all [[/status Tremor]]. This is considered a [[/status Tremor]]
+    Burst for effects that refer to it.</p>
 
     <p><strong>&nbsp;</strong></p>
 
-    <p dir="ltr">At the end of Round, remove all Tremor.</p>
+    <p dir="ltr">At the end of Round, remove all [[/status Tremor]].</p>
 
     <p>&nbsp;</p>
   slug: ''

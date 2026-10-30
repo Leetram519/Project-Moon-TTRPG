@@ -6,8 +6,9 @@ img: >-
 system:
   name: ''
   description: >-
-    <p>Increase the Power of Offensive Dice by the number of Strength
-    stack.</p><p>At the end of the Round, lose all Strength.</p>
+    <p>Increase the Power of Offensive Dice by the number of [[/status
+    Strength]] stack.</p><p>At the end of the Round, lose all [[/status
+    Strength]].</p>
   slug: ''
   homebrewDependencies: []
   subtype: regular

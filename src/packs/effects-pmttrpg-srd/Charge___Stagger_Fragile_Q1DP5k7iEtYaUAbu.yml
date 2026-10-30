@@ -31,8 +31,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume [N*4] Charge to inflict [N] Stagger Fragile to the target next
-    round.</p>
+    <p>Consume [N*4] [[/status Charge]] to inflict [N] [[/status Stagger
+    Fragile]] to the target next round.</p>
   negative: ''
   macro:
     uuid: ''

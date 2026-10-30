@@ -33,8 +33,8 @@ system:
   procCondition: ''
   positive: >-
     <p>[Inflict Rupture] from Effects and this Skill is applied to the target
-    and is activated immediately for the round. This occurs before any Rupture
-    Burst.</p>
+    and is activated immediately for the round. This occurs before any [[/status
+    Rupture]] Burst.</p>
   negative: ''
   macro:
     uuid: ''

@@ -30,10 +30,12 @@ system:
   procDice: any
   procAction: any
   procCondition: >-
-    You can use an Action to Stagger yourself, treating it as a normal stagger.
-    You may choose to not lose SP from this
-  positive: |-
-    <p>Immediately gain 4 Overcharge after Staggering yourself this way.</p>
+    You can use an Action to [[/status Stagger]] yourself, treating it as a
+    normal [[/status Stagger]]. You may choose to not lose SP from this
+  positive: >-
+    <p>Immediately gain 4 [[/status Overcharge]] after [[/status Stagger]]ing
+    yourself this way.</p>
+
     <p>Any other Effect with this conditional also activates this.</p>
   negative: ''
   macro:

@@ -31,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Consume 2 Overcharge.</p><p>Deal [N]d8 Force Damage to the Target. You
-    can then choose to push the Target back a number of SQRs equal to double the
-    Force Damage dice rolled. This Forced Movement does not deal Force Damage.
-    (Max 3)</p>
+    <p>Consume 2 [[/status Overcharge]].</p><p>Deal [N]d8 Force Damage to the
+    Target. You can then choose to push the Target back a number of SQRs equal
+    to double the Force Damage dice rolled. This Forced Movement does not deal
+    Force Damage. (Max 3)</p>
   negative: ''
   macro:
     uuid: ''
