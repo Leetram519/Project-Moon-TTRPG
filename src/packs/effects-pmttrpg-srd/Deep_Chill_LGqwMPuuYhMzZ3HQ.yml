@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 8
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -22,12 +32,13 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Frostbite stacks on this target do not reduce at the end of this
-    turn.</p>
+    <p>[[/status Frostbite]] stacks on this target do not reduce at the end of
+    this turn.</p>
 
-    <p>This also prevents Frostbite from being reduced by Reduce Status or other
-    effects that immediately activate Frostbite. When immediately activating
-    Frostbite, do not halve Frostbite and remove this effect.</p>
+    <p>This also prevents [[/status Frostbite]] from being reduced by Reduce
+    Status or other effects that immediately activate [[/status Frostbite]].
+    When immediately activating [[/status Frostbite]], do not halve [[/status
+    Frostbite]] and remove this effect.</p>
   negative: ''
   macro:
     uuid: ''
@@ -47,8 +58,8 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787225390418
-  modifiedTime: 1787225656329
+  systemVersion: 0.1.0
+  createdTime: 1790606642795
+  modifiedTime: 1790606642795
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!LGqwMPuuYhMzZ3HQ'

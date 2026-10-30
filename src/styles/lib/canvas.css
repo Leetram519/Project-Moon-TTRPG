@@ -39,3 +39,51 @@
 .pm-tip-body { padding: 10px 14px 12px; font-size: 0.9rem; line-height: 1.4; }
 .pm-tip-body p { margin: 0 0 0.4em; }
 .pm-tip-body strong { color: #fff; }
+
+.status-display {
+  display: inline;
+  white-space: nowrap;
+  vertical-align: baseline;
+  position: relative;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: help;
+  text-decoration: underline;
+}
+
+.status-display__icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  vertical-align: -0.15em;
+  margin: 0 0.15em 0 0;
+}
+
+.status-display__name {
+  vertical-align: baseline;
+}
+
+.status-display__tooltip {
+  position: absolute;
+  z-index: 1000;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  width: max-content;
+  max-width: 320px;
+
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    opacity 150ms ease 700ms,
+    visibility 0s linear 850ms;
+}
+
+.status-display:hover .status-display__tooltip,
+.status-display:focus-within .status-display__tooltip {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 700ms, 0s;
+}

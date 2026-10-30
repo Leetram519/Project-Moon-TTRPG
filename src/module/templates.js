@@ -70,7 +70,11 @@
     "systems/projectmoonttrpg/templates/dialog/apply-end-of-combat-healing.hbs",
     "systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs",
     // Status Tooltip
-    "systems/projectmoonttrpg/templates/hud/status-tooltip.hbs"
+    "systems/projectmoonttrpg/templates/hud/status-tooltip.hbs",
+    // Settings partials
+    "systems/projectmoonttrpg/templates/settings/homebrew-menu.hbs",
+    // Effect Autocomplet Partial
+    "systems/projectmoonttrpg/templates/parts/effect-autocomplete.hbs"
   ];
 
   // Load the template parts

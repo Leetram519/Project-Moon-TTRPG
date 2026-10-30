@@ -6,12 +6,19 @@ img: systems/projectmoonttrpg/assets/icons/Statuses/Renewed_Blaze.webp
 system:
   name: ''
   description: >-
-    <p><strong>Burns on this target do not reduce at the end of this
-    round.</strong></p><p>This also prevents Burn from being reduced by Reduce
-    Status or other effects that immediately activate Burn. <strong>When
-    immediately activating Burn, do not halve Burn and remove 1 Stack of this
-    status.</strong></p>
+    <p><strong>[[/status Burn]] on this target do not reduce at the end of this
+    round.</strong></p><p>This also prevents [[/status Burn]] from being reduced
+    by Reduce Status or other effects that immediately activate [[/status
+    Burn]]. <strong>When immediately activating [[/status Burn]], do not halve
+    [[/status Burn]] and remove 1 Stack of [[/status Burn - Renewed
+    Blaze]].</strong></p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   stacks: 1
   stackMax: 0
   priority: 8
@@ -19,6 +26,16 @@ system:
   arrival: ''
   shelved: false
   origin: ''
+  proc:
+    turnStart: false
+    startOfRound: false
+    endOfRound: false
+    actionOrReaction: false
+    attackerBurst: false
+    onHitWhenActorHas: false
+    onHitWhenTargetHas: false
+    alwaysActive: false
+    skillEffect: false
   customNotes: ''
   easyEffects: ''
 effects: []
@@ -30,9 +47,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785434791886
-  modifiedTime: 1787225241161
+  systemVersion: 0.1.0
+  createdTime: 1790606642193
+  modifiedTime: 1790606642193
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

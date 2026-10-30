@@ -1,0 +1,123 @@
+folder: 0ZNhUclGIU5coFbU
+name: E.G.O. Attunement [Lust]
+type: effect
+_id: 7apXn9eZyj1bQn7X
+img: >-
+  systems/projectmoonttrpg/assets/icons/Custom/HomebrewRequests_EgoResonance_Luxuria.webp
+system:
+  name: ''
+  description: >-
+    <p><em>Suggested by <strong>butteredtoast601</strong></em></p><p>This is
+    currently not ENTIRELY automated. <strong>Please set the actual values
+    yourself in EE</strong>, the values assume you have 0 rank difference!</p>
+  slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: 'butteredtoast601'
+    source: Patreon Homebrew
+  cost: 2
+  stackMax: 3
+  appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
+  tags: []
+  canPositive: true
+  canNegative: false
+  procOn: alwaysActive
+  procResult: none
+  procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
+  procStat: any
+  procDice: any
+  procAction: any
+  procCondition: ''
+  positive: >-
+    <p>Gain [N*2] + [Rank Difference between Weapon and Holder] Movement Speed.
+    If the rank difference is negative (Weapon rank is higher than Holder rank),
+    for every rank difference, your minimum [[/status Bleed]] is [N*2], and you
+    lose [N] SP when you first use an action or reaction made each round.</p>
+  negative: ''
+  macro:
+    uuid: ''
+  customNotes: ''
+  easyEffects: >-
+    [On Equip]
+
+    # REPLACE 0 BY RANK DIFFERENCE, and take the absolute value (-2 becomes 2)
+
+    set flag "rank_difference" on item to 0;
+
+    # REPLACE 0 BY 1 IF RANK DIFFERENCE IS NEGATIVE!
+
+    set flag "is_rank_difference_negative" on item to 0;
+
+    proc Luxuria_Attunement;
+
+
+    [Always Active]
+
+    gain ((N) + (item.flag.rank_difference)) movement;
+
+
+    [On Luxuria_Attunement]
+
+    require (Bleed) < ((N * 2) * (item.flag.rank_difference)) and
+    (item.flag."is_rank_difference_negative") == 1 then 
+      set Bleed to ((N * 2) * (item.flag.rank_difference));
+
+    [On Clash Start]
+
+    proc Luxuria_Attunement;
+
+
+    [On Being Hit]
+
+    proc Luxuria_Attunement;
+
+
+    [On Reaction]
+
+    require (item.flag."has_used_action_or_reaction") == 0 and
+    (item.flag."is_rank_difference_negative") == 1 then
+      deal ((N) * (item.flag.rank_difference)) sp damage to self and
+      set flag "has_used_action_or_reaction" on item to 1;
+    proc Luxuria_Attunement;
+
+
+    [On Action]
+
+    require (item.flag."has_used_action_or_reaction") == 0 and
+    (item.flag."is_rank_difference_negative") == 1 then
+      deal ((N) * (item.flag.rank_difference)) sp damage to self and
+      set flag "has_used_action_or_reaction" on item to 1;
+    proc Luxuria_Attunement;
+
+
+    [Start of Round]
+
+    set flag "has_used_action_or_reaction" on item to 0;
+
+    proc Luxuria_Attunement;
+effects: []
+sort: 125000
+ownership:
+  default: 0
+  yWsvx4DXrmYcZsue: 3
+flags: {}
+_stats:
+  coreVersion: '14.364'
+  systemId: projectmoonttrpg
+  systemVersion: 0.1.0
+  createdTime: 1793368166819
+  modifiedTime: 1793369024820
+  lastModifiedBy: yWsvx4DXrmYcZsue
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!items!7apXn9eZyj1bQn7X'

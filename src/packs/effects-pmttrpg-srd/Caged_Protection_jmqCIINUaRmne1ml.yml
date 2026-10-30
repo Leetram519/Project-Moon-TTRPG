@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -21,8 +31,9 @@ system:
   procAction: any
   procCondition: At the start of each round,
   positive: >-
-    <p>Apply 1 Protection and 1 Stagger Protection to the character for every
-    25% Max Sanity Lost (Max of 3 each). Do not activate when in Panic.</p>
+    <p>Apply 1 [[/status Protection]] and 1 [[/status Stagger Protection]] to
+    the character for every 25% Max Sanity Lost (Max of 3 each). Do not activate
+    when in Panic.</p>
   negative: ''
   macro:
     uuid: ''
@@ -44,9 +55,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485124305
-  modifiedTime: 1787165266680
+  systemVersion: 0.1.0
+  createdTime: 1790606643067
+  modifiedTime: 1790606643067
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: jmqCIINUaRmne1ml
 _key: '!items!jmqCIINUaRmne1ml'

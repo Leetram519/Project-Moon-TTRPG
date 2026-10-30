@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 3
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -22,8 +32,8 @@ system:
   procAction: any
   procCondition: If you are inflicting Rupture
   positive: >-
-    <p>Apply an additional [N] Rupture on any Clash Result. This effect only
-    activates once per target, including the user.</p>
+    <p>Apply an additional [N] [[/status Rupture]] on any Clash Result. This
+    effect only activates once per target, including the user.</p>
   negative: ''
   macro:
     uuid: ''
@@ -59,8 +69,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1787230920024
-  modifiedTime: 1789292364500
+  createdTime: 1790606643073
+  modifiedTime: 1790606643073
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: qJ2J5phOZTJlDt8x
 _key: '!items!qJ2J5phOZTJlDt8x'

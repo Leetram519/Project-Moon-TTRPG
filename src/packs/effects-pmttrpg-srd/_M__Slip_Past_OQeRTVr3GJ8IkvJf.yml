@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: m-slip-past
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -39,9 +49,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787249213103
-  modifiedTime: 1787249213103
+  systemVersion: 0.1.0
+  createdTime: 1790606642798
+  modifiedTime: 1790606642798
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.9vOF1eczVYNC8fKg

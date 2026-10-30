@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 3
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -22,8 +32,9 @@ system:
   procAction: any
   procCondition: If you inflict Burn
   positive: >-
-    <p>Apply an additional [N] Burn to the target. This only activates once per
-    target, including the user in case of self-burn.</p>
+    <p>Apply an additional [N] [[/status Burn]] to the target. This only
+    activates once per target, including the user in case of self-[[/status
+    Burn]].</p>
   negative: ''
   macro:
     uuid: ''
@@ -57,8 +68,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1787171976159
-  modifiedTime: 1789291633844
+  createdTime: 1790606642631
+  modifiedTime: 1790606642631
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 3vpUQ3w6ZtC4UYvP
 _key: '!items!3vpUQ3w6ZtC4UYvP'

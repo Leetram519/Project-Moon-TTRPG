@@ -6,23 +6,36 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to consume 4 Charge to inflict 1 Paralysis next round. If you
-    spend 1 Overcharge instead, this effect is doubled. If this weapon already
-    has Inflict Paralysis, both it and this effect must be set on the same Clash
-    [Result].
+    You can choose to consume 4 [[/status Charge]] to inflict 1 [[/status
+    Paralysis]] next round. If you spend 1 [[/status Overcharge]] instead, this
+    effect is doubled. If this weapon already has Inflict Paralysis, both it and
+    this effect must be set on the same Clash [Result].
   negative: ''
   macro:
     uuid: ''
@@ -53,9 +66,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1779651087474
-  modifiedTime: 1786514919110
+  systemVersion: 0.1.0
+  createdTime: 1790606642789
+  modifiedTime: 1790606642789
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: HghllezdKfN9US29
 _key: '!items!HghllezdKfN9US29'

@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onDevastating
@@ -21,8 +31,8 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>Inflict 2 Bind to the target and targets adjacent to them (excluding
-    self/allies) next round.</p>
+    <p>Inflict 2 [[/status Bind]] to the target and targets adjacent to them
+    (excluding self/allies) next round.</p>
   negative: ''
   macro:
     uuid: ''
@@ -42,9 +52,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485141813
-  modifiedTime: 1787164700332
+  systemVersion: 0.1.0
+  createdTime: 1790606643058
+  modifiedTime: 1790606643058
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ep3n8KY9cE3cNfcK
 _key: '!items!ep3n8KY9cE3cNfcK'

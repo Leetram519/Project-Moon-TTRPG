@@ -1,10 +1,3 @@
-/**
- * A simple and flexible system for world-building using an arbitrary collection of character and item attributes
- * Author: Atropos
- * Software License: GNU GPLv3
- */
-
-// Import Modules
 import { PMTTRPG } from "./config.js";
 import { ActorPMTTRPG } from "./actor/actor.js";
 import { ItemPMTTRPG } from "./item/item.js";
@@ -47,9 +40,15 @@ import {
 } from "./combat/clash-chat.js";
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
 import { MigrationList, MigrationRunner } from "./migration/index.js";
+import { HomebrewSettings } from "./settings/homebrew-settings.js";
+//import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
+import { HomebrewRegistry } from "./homebrew/homebrew-registry.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
+import { CompendiumBrowserOverride } from "./homebrew/compendium/compendium-browser.js";
+import { addEnrichers } from "./enrichers/text-enrich.js";
+import { PMTTRPGGamePause } from "./apps/game-pause.js";
 
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
@@ -79,6 +78,7 @@ Hooks.once("init", async function() {
   CONFIG.Item.documentClass = ItemPMTTRPG;
   CONFIG.Token.objectClass = TokenPMTTRPG;
   CONFIG.Token.rulerClass = TokenRulerPMTTRPG;
+  CONFIG.ui.compendium = CompendiumBrowserOverride;
   registerTokenStatusBadges();
   CONFIG.Item.typeLabels = foundry.utils.mergeObject(CONFIG.Item.typeLabels ?? {}, {
     status: game.i18n.localize("TYPES.Item.status"),
@@ -187,7 +187,25 @@ Hooks.once("init", async function() {
   registerEasyEffectsHooks();
   registerActorScriptHooks();
   registerClashChatListeners();
+
+  CompendiumBrowserOverride.init();
+  HomebrewSettings.register();
+  HomebrewRegistry.registerAll();
+
+  addEnrichers();
 });
+
+Hooks.on("renderGamePause", function(app, html) {
+  const icon = html.querySelector("#pause > img");
+
+  if (!icon) return;
+
+  // Mark it for our custom styling.
+  icon.classList.remove("fa-spin");
+  icon.classList.add("system-pause-logo");
+
+  icon.src = "systems/projectmoonttrpg/assets/pmttrpg-foundry-logo.webp";
+})
 
 Hooks.once("ready", async function() {
   const migrationRunner = new MigrationRunner(MigrationList.constructAll());
@@ -204,6 +222,10 @@ Hooks.once("ready", async function() {
         format: { version: game.system.version },
       });
       await migrationRunner.runMigration();
+      for( const pack of game.packs ) {
+        console.log(pack);
+        await migrationRunner.runCompendiumMigration(pack);
+      }
     }
   }
 

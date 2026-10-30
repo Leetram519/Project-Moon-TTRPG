@@ -6,9 +6,20 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -21,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to increase the weapon's Range by 1 SQR, consuming 4 Charge
-    per attack made this way. If you spend 1 Overcharge instead, this effect is
-    doubled.
+    You can choose to increase the weapon's Range by 1 SQR, consuming 4
+    [[/status Charge]] per attack made this way. If you spend 1 [[/status
+    Overcharge]] instead, this effect is doubled.
   negative: ''
   macro:
     uuid: ''
@@ -83,8 +94,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1779651087474
-  modifiedTime: 1789149811815
+  createdTime: 1790606642936
+  modifiedTime: 1790606642936
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: a1KJPfv72d6EdPjs
 _key: '!items!a1KJPfv72d6EdPjs'

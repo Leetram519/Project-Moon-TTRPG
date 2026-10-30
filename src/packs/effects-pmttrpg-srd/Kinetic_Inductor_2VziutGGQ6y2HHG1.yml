@@ -6,23 +6,35 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 6
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: ''
-  positive: When hit by an Attack, gain [N] Charge
+  positive: When hit by an Attack, gain [N] [[/status Charge]]
   negative: >-
-    When hit by an Attack, consume [N] Charge. If the character doesn't have
-    Charge, deal [N*2] After Resistance HP Damage to the character for every
-    missing Charge.
+    When hit by an Attack, consume [N] [[/status Charge]]. If the character
+    doesn't have [[/status Charge]], deal [N*2] After Resistance HP Damage to
+    the character for every missing [[/status Charge]].
   macro:
     uuid: ''
   customNotes: ''
@@ -46,9 +58,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308622217
-  modifiedTime: 1786542333086
+  systemVersion: 0.1.0
+  createdTime: 1790606642630
+  modifiedTime: 1790606642630
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 2VziutGGQ6y2HHG1
 _key: '!items!2VziutGGQ6y2HHG1'

@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 6
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -22,11 +32,13 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Burns on this target do not reduce at the end of this round.</p>
+    <p>[[/status Burn]] on this target do not reduce at the end of this
+    round.</p>
 
-    <p>This also prevents Burn from being reduced by Reduce Status or other
-    effects that immediately activate Burn. When immediately activating Burn, do
-    not halve Burn and remove this effect.</p>
+    <p>This also prevents [[/status Burn]] from being reduced by Reduce Status
+    or other effects that immediately activate [[/status Burn]]. When
+    immediately activating [[/status Burn]], do not halve [[/status Burn]] and
+    remove this effect.</p>
   negative: ''
   macro:
     uuid: ''
@@ -46,9 +58,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787171976160
-  modifiedTime: 1787224794455
+  systemVersion: 0.1.0
+  createdTime: 1790606643070
+  modifiedTime: 1790606643070
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: nKLz1basSja10njB
 _key: '!items!nKLz1basSja10njB'

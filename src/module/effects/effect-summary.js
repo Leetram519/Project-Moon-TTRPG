@@ -158,6 +158,66 @@ export function buildEffectSummaryGroups(effects = []) {
   }];
 }
 
+function getEffectTriggerClass(effect = {}) {
+  const triggerClasses = {
+    alwaysActive: "trigger-always-active",
+    onClash: "trigger-on-clash",
+    onClashLose: "trigger-on-clash-lose",
+    onClashWin: "trigger-on-clash-win",
+    onHit: "trigger-on-hit",
+    onBeingHit: "trigger-on-being-hit",
+    onUse: "trigger-on-use",
+    onBurst: "trigger-on-burst",
+    onKill: "trigger-on-kill",
+    onTurnStart: "trigger-on-turn-start",
+    onRoundStart: "trigger-on-round-start",
+    onMovement: "trigger-on-movement",
+    onCombatStart: "trigger-on-combat-start",
+    onAction: "trigger-on-action"
+  };
+
+  return triggerClasses[effect.procOn] ?? "trigger-default";
+}
+
+function stripOuterBlockTags(html = "") {
+  let result = String(html).trim();
+
+  // Remove leading and trailing paragraph tags, including attributes.
+  result = result
+    .replace(/^<p\b[^>]*>/i, "")
+    .replace(/<\/p>\s*$/i, "")
+    .trim();
+
+  // Also remove a single outer div if present.
+  result = result
+    .replace(/^<div\b[^>]*>/i, "")
+    .replace(/<\/div>\s*$/i, "")
+    .trim();
+
+  return result;
+}
+
+export async function buildInlineEffectSummary(effect = {}) {
+  const stack = getEffectStack(effect);
+
+  const textSource = effect.mode === "negative"
+    ? (effect.negative || effect.positive || "")
+    : (effect.positive || effect.negative || "");
+
+  const text = PMTTRPGUtility.expandEffectText(textSource, stack).trim();
+  const trigger = PMTTRPGUtility.formatEffectProcLabel(effect);
+  const triggerClass = getEffectTriggerClass(effect);
+  const fallback = game.i18n.localize("PMTTRPG.EffectNoSummaryText");
+
+  const enrichedText = await TextEditor.enrichHTML(text || fallback);
+  const cleanText = stripOuterBlockTags(enrichedText);
+
+  const triggerHtml = trigger
+    ? `<span class="effect-summary-trigger ${triggerClass}">[${foundry.utils.escapeHTML(trigger)}]</span> `
+    : "";
+
+  return `<span class="effect-summary-line">${triggerHtml}${cleanText}</span>`;
+}
 
 export function computeEffectSummary(entries = [], epMax = 0) {
   let positiveSpent = 0;

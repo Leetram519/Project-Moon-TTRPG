@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -21,13 +31,14 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Any Bleed on the target is not reduced the next [N] times it activates.
-    This does apply to Bleed that activated as a result of this clash, and
-    counts as one instance of activation.</p>
+    <p>Any [[/status Bleed]] on the target is not reduced the next [N] times it
+    activates. This does apply to [[/status Bleed]] that activated as a result
+    of this clash, and counts as one instance of activation.</p>
 
-    <p>This also prevents Bleed from being reduced by Reduce Status or other
-    effects that immediately activate Bleed. When immediately activating Bleed,
-    do not halve Bleed and remove 1 stack of this effect.</p>
+    <p>This also prevents [[/status Bleed]] from being reduced by Reduce Status
+    or other effects that immediately activate [[/status Bleed]]. When
+    immediately activating [[/status Bleed]], do not halve [[/status Bleed]] and
+    remove 1 [[/status Bleed - Hemorrhage]].</p>
   negative: ''
   macro:
     uuid: ''
@@ -49,9 +60,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787225861375
-  modifiedTime: 1787225982955
+  systemVersion: 0.1.0
+  createdTime: 1790606642928
+  modifiedTime: 1790606642928
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: UQb6UB19UOL5kMF4
 _key: '!items!UQb6UB19UOL5kMF4'

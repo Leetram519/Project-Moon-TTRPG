@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: charge-disarm
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 3
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -20,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Consume [N*6] Charge to inflict [N] Disarm to the target next round.</p>
+  positive: >-
+    <p>Consume [N*6] [[/status Charge]] to inflict [N] [[/status Disarm]] to the
+    target next round.</p>
   negative: ''
   macro:
     uuid: ''
@@ -37,9 +49,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585544
-  modifiedTime: 1787561958507
+  systemVersion: 0.1.0
+  createdTime: 1790606642799
+  modifiedTime: 1790606642799
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.9TL9iSeWZTeJmJrY

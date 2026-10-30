@@ -7,20 +7,32 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: onClash
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Apply [N] Burn to the target
-  negative: Apply [N] Burn to the character
+  positive: Apply [N] [[/status Burn]] to the target
+  negative: Apply [N] [[/status Burn]] to the character
   macro:
     uuid: ''
   customNotes: ''
@@ -43,8 +55,8 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308631139
-  modifiedTime: 1786529618444
+  systemVersion: 0.1.0
+  createdTime: 1790606642939
+  modifiedTime: 1790606642939
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!aocVjqf5zPQcOMgu'

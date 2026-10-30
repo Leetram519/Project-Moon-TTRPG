@@ -8,9 +8,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: onClashResult
@@ -22,8 +32,8 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>Apply [N] Burn to the target.</p>
-  negative: <p>Apply [N] Burn to the character.</p>
+  positive: <p>Apply [N] [[/status Burn]] to the target.</p>
+  negative: <p>Apply [N] [[/status Burn]] to the character.</p>
   macro:
     uuid: ''
   customNotes: ''
@@ -45,8 +55,8 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787171976160
-  modifiedTime: 1787172102634
+  systemVersion: 0.1.0
+  createdTime: 1790606643074
+  modifiedTime: 1790606643074
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!r02vKLOziJkIolSV'

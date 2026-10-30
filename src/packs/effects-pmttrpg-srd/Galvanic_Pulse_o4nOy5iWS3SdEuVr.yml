@@ -6,22 +6,34 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: outfit
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: ''
   positive: >-
-    You can choose to consume 10 Charge to inflict 1 Feeble or Disarm to the
-    target next round, chosen on use. If you spend 1 Overcharge instead, apply
-    both.
+    You can choose to consume 10 [[/status Charge]] to inflict 1 [[/status
+    Feeble]] or [[/status Disarm]] to the target next round, chosen on use. If
+    you spend 1 [[/status Overcharge]] instead, apply both.
   negative: ''
   macro:
     uuid: ''
@@ -63,9 +75,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1780308622217
-  modifiedTime: 1786541965532
+  systemVersion: 0.1.0
+  createdTime: 1790606643071
+  modifiedTime: 1790606643071
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: o4nOy5iWS3SdEuVr
 _key: '!items!o4nOy5iWS3SdEuVr'

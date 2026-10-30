@@ -9,9 +9,19 @@ system:
     <p><em>Note: This effect is not yet automated. <strong>Though, there is a
     text message telling you how to apply this.</strong></em></p>
   slug: charge-shooting-star
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -24,10 +34,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] Consume 6 Charge to replace this Attack with an Area
-    of Effect Attack. This attack follows a straight line until obstructed, up
-    to [Weapon Range *2] SQRs, with a main target designated as the first target
-    in the line.</p>
+    <p>[Attack Replacement] Consume 6 [[/status Charge]] to replace this Attack
+    with an Area of Effect Attack. This attack follows a straight line until
+    obstructed, up to [Weapon Range *2] SQRs, with a main target designated as
+    the first target in the line.</p>
   negative: ''
   macro:
     uuid: ''
@@ -57,9 +67,9 @@ flags:
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585548
-  modifiedTime: 1787561958503
+  systemVersion: 0.1.0
+  createdTime: 1790606642935
+  modifiedTime: 1790606642935
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: Compendium.projectmoonttrpg.effects-pmttrpg-srd.Item.xKghKCCTAoMQwAxK
   duplicateSource: Item.dUeAShBWRyiRmCWR

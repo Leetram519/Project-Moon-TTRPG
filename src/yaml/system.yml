@@ -41,6 +41,9 @@ styles:
   - styles/lib/combat-turn-order.css
   - styles/lib/dialogs.css
   - styles/lib/canvas.css
+  - styles/lib/settings.css
+  - styles/lib/autocomplete.css
+  - styles/lib/item-sheet.css
 media:
   - type: setup
     url: "systems/projectmoonttrpg/assets/thumbnail.webp"
@@ -65,6 +68,16 @@ packs:
     path: packs/macros-pmttrpg-srd
     type: Macro
     system: projectmoonttrpg
+  - name: patreon-pmttrpg
+    label: Patreon Supporters Homebrew
+    path: packs/patreon-pmttrpg
+    system: projectmoonttrpg
+    type: Item
+  - name: boi-homebrew
+    label: Boi's Homebrew Effects List
+    path: packs/boi-homebrew
+    system: projectmoonttrpg
+    type: Item
 languages:
   - lang: en
     name: English

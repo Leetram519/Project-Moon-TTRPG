@@ -887,6 +887,19 @@
   -webkit-text-stroke: clamp(2px, 1.1cqi, 6px) var(--ink);
   paint-order: stroke fill;
   text-align: center;
+
+  position: absolute;
+}
+
+.pm-sheet .attr .val .ability-stat--name {
+  font-size: 18px;
+  -webkit-text-stroke: clamp(2px, 1.1cqi, 4px) var(--ink);
+  margin-top: 0px;
+  paint-order: stroke fill;
+  font-style: italic;
+  color: var(--cream);
+  opacity: 0.6;
+  margin-top: auto;
 }
 
 .pm-sheet .attr .val input.num.ability-roll {

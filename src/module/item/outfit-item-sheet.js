@@ -6,7 +6,7 @@ export class PMTTRPGOutfitItemSheet extends PMTTRPGItemSheet {
     PMTTRPGItemSheet.DEFAULT_OPTIONS,
     {
       classes: ["projectmoonttrpg", "sheet", "item", "outfit"],
-      position: { width: 640, height: 720 },
+      position: { width: 620, height: 800 },
     },
     { inplace: false }
   );

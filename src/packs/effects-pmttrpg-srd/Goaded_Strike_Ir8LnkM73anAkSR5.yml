@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: goaded-strike
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onBurst
@@ -22,9 +32,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Sinking Burst, if the target panics as a result of this Skill, upgrade
-    the Panic to a Goaded Panic. If target is Panicking, upgrade it to Goaded.
-    This effect ignores Altered Psyche.</p>
+    <p>On [[/status Sinking]] Burst, if the target panics as a result of this
+    Skill, upgrade the Panic to a Goaded Panic. If target is Panicking, upgrade
+    it to Goaded. This effect ignores Altered Psyche.</p>
   negative: ''
   macro:
     uuid: ''
@@ -39,9 +49,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787233598769
-  modifiedTime: 1787233598769
+  systemVersion: 0.1.0
+  createdTime: 1790606642790
+  modifiedTime: 1790606642790
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.fyt1SCpIVGuwyUpZ

@@ -8,9 +8,19 @@ system:
     <p><strong>Note: This effect is manual. Add the corresponding Mark to the
     target, and spend an action.</strong></p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 5
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -28,8 +38,9 @@ system:
     <p>When your Marked Target takes the Reduce Status Action, the amount of
     Status they can reduce is halved.</p>
 
-    <p>Your Marked Target cannot reduce Renewed Blaze, Deep Chill or Hemorrhage
-    with the Reduce Status Action.</p>
+    <p>Your Marked Target cannot reduce [[/status Burn - Renewed Blaze]],
+    [[/status Frostbite - Deep Chill]] or [[/status Bleed - Hemorrhage]] with
+    the Reduce Status Action.</p>
 
     <p>This counts as [N] source(s) of Mark.</p>
   negative: ''
@@ -49,9 +60,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485132690
-  modifiedTime: 1787169577453
+  systemVersion: 0.1.0
+  createdTime: 1790606642939
+  modifiedTime: 1790606642939
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: ax0FMQ7cGkVL5PEE
 _key: '!items!ax0FMQ7cGkVL5PEE'

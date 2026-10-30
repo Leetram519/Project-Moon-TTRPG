@@ -6,20 +6,32 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: At the end of round, if any allies are out of combat due to reaching 0 HP
-  positive: <p>Apply 2 Strength to the character next round.</p>
-  negative: <p>Apply 2 Feeble to the character next round.</p>
+  positive: <p>Apply 2 [[/status Strength]] to the character next round.</p>
+  negative: <p>Apply 2 [[/status Feeble]] to the character next round.</p>
   macro:
     uuid: ''
   customNotes: ''
@@ -36,9 +48,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485124307
-  modifiedTime: 1785512974958
+  systemVersion: 0.1.0
+  createdTime: 1790606642635
+  modifiedTime: 1790606642635
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 6pWoxy0929stHKpc
 _key: '!items!6pWoxy0929stHKpc'

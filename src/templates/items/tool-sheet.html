@@ -1,26 +1,15 @@
-<div class="{{cssClass}} item-form flexcol">
-  <div class="sheet-wrapper flexcol">
-    <header class="sheet-header flexrow">
-      {{#if isOutdated}}
-      <div class="compendium-outdated-banner">
-        <span>{{localize "PMTTRPG.OutdatedWarning"}}</span>
-        <button type="button" data-action="sync-from-compendium">
-          {{localize "PMTTRPG.OutdatedUpdate"}}
-        </button>
-        <button type="button"
-                data-action="dismiss-outdated"
-                data-modified-time="{{compendiumModifiedTime}}">
-          {{localize "PMTTRPG.OutdatedDismiss"}}
-        </button>
-      </div>
-      {{/if}}
-      <div class="cell cell--image">
-        <img class="profile-img" src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
+<div class="{{cssClass}} item-form">
+  <div class="sheet-wrapper">
+    <header class="sheet-header">
+      <div class="item-image">
+        <img src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
       </div>
       <div class="header-fields">
           <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PMTTRPG.Common.Name"}}"/></h1>
       </div>
     </header>
+
+    <hr class="separator--tabs-header">
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
@@ -40,16 +29,31 @@
 
         {{!-- Description Tab --}}
         <div class="tab{{#if (eq activeTab 'description')}} active{{/if}}" data-group="primary" data-tab="description">
+          <div class="description-container">
+            <label class="description-label">{{localize "PMTTRPG.Common.Description"}}</label>
             <prose-mirror name="system.description" value="{{system.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.descriptionEnriched}}}</prose-mirror>
+          </div>
         </div>
 
         {{!-- Details Tab --}}
         <div class="tab{{#if (eq activeTab 'details')}} active{{/if}}" data-group="primary" data-tab="details">
-          <div class="resource-group">
+          <div class="resource-header">
             <div class="resource">
               <label>{{localize "PMTTRPG.Rank"}}</label>
               <input type="text" name="system.rank" value="{{system.rank}}" data-dtype="Number"/>
             </div>
+            {{#if isReusable}}
+            <div class="resource">
+              <label>{{localize "PMTTRPG.ToolUsesMax"}}</label>
+              <input type="text" name="system.usesMax" value="{{system.usesMax}}" data-dtype="Number"/>
+            </div>
+            {{/if}}
+            <div class="resource">
+              <label>{{localize "PMTTRPG.EP"}}</label>
+              <input class="disabled" type="text" value="{{system.epMax}}" readonly/>
+            </div>
+          </div>
+          <div class="resource-list">
             <div class="resource">
               <label>{{localize "PMTTRPG.ToolForm"}}</label>
               <select name="system.form" data-dtype="String">
@@ -90,32 +94,12 @@
               </select>
             </div>
             {{/if}}
-            {{#unless isReusable}}
-            <div class="resource">
-              <label>{{localize "PMTTRPG.Quantity"}}</label>
-              <input type="text" name="system.quantity" value="{{system.quantity}}" data-dtype="Number"/>
-            </div>
-            {{/unless}}
-            {{#if isReusable}}
-            <div class="resource">
-              <label>{{localize "PMTTRPG.ToolUsesRemaining"}}</label>
-              <input type="text" name="system.usesRemaining" value="{{system.usesRemaining}}" data-dtype="Number"/>
-            </div>
-            <div class="resource">
-              <label>{{localize "PMTTRPG.ToolUsesMax"}}</label>
-              <input type="text" name="system.usesMax" value="{{system.usesMax}}" data-dtype="Number"/>
-            </div>
-            {{/if}}
             {{#if isFormNone}}
             <div class="resource">
               <label>{{localize "PMTTRPG.ToolAllowUse"}}</label>
               <input type="checkbox" name="system.allowUse" data-dtype="Boolean" {{checked system.allowUse}}/>
             </div>
             {{/if}}
-            <div class="resource">
-              <label>{{localize "PMTTRPG.EP"}}</label>
-              <input class="disabled" type="text" value="{{system.epMax}}" readonly/>
-            </div>
             <div class="resource">
               <label>{{localize "PMTTRPG.ToolInventoryTag"}}</label>
               <select name="system.inventoryTag" data-dtype="String">
@@ -150,10 +134,6 @@
               <label>{{localize "PMTTRPG.ToolUnique"}}</label>
               <input type="checkbox" name="system.unique" data-dtype="Boolean" {{checked system.unique}}/>
             </div>
-            <div class="resource">
-              <label>{{localize "PMTTRPG.Equipped"}}</label>
-              <input type="checkbox" name="system.equipped" data-dtype="Boolean" {{checked system.equipped}}/>
-            </div>
           </div>
         </div>
 
@@ -171,12 +151,23 @@
         </div>
         {{/if}}
 
+        {{!-- Advanced Tab --}}
         <div class="tab{{#if (eq activeTab 'advanced')}} active{{/if}}" data-group="primary" data-tab="advanced">
-          <div class="resource-group">
+          <div class="resource-list">
             {{> "systems/projectmoonttrpg/templates/parts/item-slug-field.hbs"}}
-            <div class="resource">
+            <div class="resource vertical">
               <label>{{localize "PMTTRPG.CustomNotes"}}</label>
-              <textarea name="system.customNotes" rows="5" data-dtype="String">{{system.customNotes}}</textarea>
+              <textarea class="custom-notes" name="system.customNotes" rows="5" data-dtype="String">{{system.customNotes}}</textarea>
+            </div>
+
+            <div class="resource horizontal">
+              <label>{{localize "PMTTRPG.HomebrewAuthor"}}</label>
+              <input type="text" name="system.homebrew.author" value="{{system.homebrew.author}}" data-dtype="String"/>
+            </div>
+
+            <div class="resource horizontal">
+              <label>{{localize "PMTTRPG.HomebrewSource"}}</label>
+              <input type="text" name="system.homebrew.source" value="{{system.homebrew.source}}" data-dtype="String"/>
             </div>
           </div>
         </div>

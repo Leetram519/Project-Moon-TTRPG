@@ -8,9 +8,19 @@ system:
     <p><strong>Note: This effect is manual. Add the corresponding Mark to the
     target, and spend an action.</strong></p>
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 5
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -51,9 +61,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485132689
-  modifiedTime: 1787169545745
+  systemVersion: 0.1.0
+  createdTime: 1790606643075
+  modifiedTime: 1790606643075
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: sCp2qXvbwZBusEsU
 _key: '!items!sCp2qXvbwZBusEsU'

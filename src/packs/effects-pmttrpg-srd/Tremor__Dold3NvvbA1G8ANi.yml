@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -20,7 +30,9 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: <p>When inflict Tremor, inflit an additional [N] Tremor.</p>
+  positive: >-
+    <p>When inflict [[/status Tremor]], inflit an additional [N] [[/status
+    Tremor]].</p>
   negative: ''
   macro:
     uuid: ''
@@ -51,8 +63,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1787232171756
-  modifiedTime: 1789292430062
+  createdTime: 1790606642650
+  modifiedTime: 1790606642650
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.8IsI9UrvhkzYgnjn

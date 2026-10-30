@@ -7,7 +7,7 @@
   --ee-tok-string: #e0a8b8;
   --ee-tok-number: #f0d09a;
   --ee-tok-variable: #8ec8e8;
-  --ee-code-font: Consolas, "Courier New", monospace;
+  --ee-code-font: "Fira Code", Consolas, "Courier New", monospace;
   --ee-code-size: 13px;
   --ee-code-line: 1.5;
   --ee-code-pad: 10px;
@@ -15,7 +15,7 @@
   position: relative;
   display: block;
   width: 100%;
-  height: 220px;
+  height: 400px;
   min-height: 160px;
   overflow: hidden;
   resize: vertical;
@@ -111,6 +111,7 @@
 .pm-ee-tok {
   font-weight: inherit;
   font-style: inherit;
+  font-family: var(--ee-code-font) !important;
 
   &--comment { color: #9db88a; }
   &--trigger { color: #f5c15a; }
@@ -125,7 +126,7 @@
 }
 
 .item-form .resource.resource--easy-effects .pm-ee-code {
-  height: 220px;
+  height: 400px;
   min-height: 160px;
   resize: vertical;
 
@@ -277,7 +278,7 @@
     border: 1px solid rgba(170, 60, 50, 0.6);
     border-radius: 6px;
     background: rgba(170, 60, 50, 0.14);
-    font-family: Consolas, "Courier New", monospace;
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
     font-size: 11px;
 
     &[hidden] {

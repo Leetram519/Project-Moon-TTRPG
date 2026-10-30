@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -22,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Evade can roll Poise to check for Critical Hit. The character doesn't
-    deal Critical Damage with this skill.</p>
+    <p>Evade can roll [[/status Poise]] to check for [[/status Critical]] Hit.
+    The character doesn't deal Critical Damage with this skill.</p>
 
     <p>[On Crit] Give the character [N] SQRs of Movement without provoking
     Opportunity Attacks. Gain extra SQRs of movement by the result of the
@@ -63,9 +73,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787226336936
-  modifiedTime: 1787228802052
+  systemVersion: 0.1.0
+  createdTime: 1790606642634
+  modifiedTime: 1790606642634
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: 69HArisD3dc94oet
 _key: '!items!69HArisD3dc94oet'

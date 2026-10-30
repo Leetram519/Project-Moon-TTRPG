@@ -87,15 +87,9 @@
   &.sheet {
     // Generic.
     @import 'global/base/input';
-    @import 'global/base/sheet-wrapper';
-    @import 'global/components/sheet/layout';
     @import 'global/base/cell';
     @import 'global/components/tabs';
     @import 'global/components/editor';
-    // Specific.
-    @import 'global/components/item-form/index';
-    // @import 'global/components/tags';
-    @import 'global/components/header';
     @import 'global/components/attributes/index';
     @import 'global/components/abilities';
     @import 'global/components/biography';
@@ -104,9 +98,46 @@
     @import 'global/components/augment/index';
     @import 'global/components/weapons/index';
     @import 'global/components/outfits/index';
-    @import 'global/components/moves/index';
     @import 'global/components/npc';
     @import 'global/components/pmttrpg-level-up';
+  }
+}
+
+// PAUSE
+#pause {
+  .system-pause-logo {
+    font-size: 0 !important;
+    color: transparent !important;
+
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+
+    background-image: var(--system-pause-logo);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    animation: system-pause-animation 3s ease-in-out infinite;
+
+    transform-origin: center;
+  }
+}
+
+@keyframes system-pause-animation {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 5px rgba(255, 193, 0, 0.2));
+  }
+
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(255, 193, 0, 0.7));
+  }
+
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 5px rgba(255, 193, 0, 0.2));
   }
 }
 
@@ -126,5 +157,3 @@
     }
   }
 }
-
-@import 'global/theme/nightmode';

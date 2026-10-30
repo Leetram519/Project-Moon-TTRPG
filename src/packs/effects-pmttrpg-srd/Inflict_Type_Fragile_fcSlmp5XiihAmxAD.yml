@@ -8,19 +8,34 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 1
   stackMax: 5
   appliesTo: weapon
+  subtypeWhitelist:
+    - melee
+    - ranged
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: true
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: ''
-  positive: ''
+  positive: >-
+    <p>Apply [N] [Type] Fragile to the target next round. The Fragile Type is
+    chosen on use.</p>
   negative: ''
   macro:
     uuid: ''
@@ -52,9 +67,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1786529750173
-  modifiedTime: 1786529780379
+  systemVersion: 0.1.0
+  createdTime: 1790606643062
+  modifiedTime: 1790606643062
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

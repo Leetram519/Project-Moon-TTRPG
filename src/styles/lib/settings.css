@@ -1,0 +1,120 @@
+.homebrew-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tab-content .tab {
+  display: none;
+  padding: 0.5rem 0;
+}
+.tab-content .tab.active {
+  display: block;
+}
+
+.hint {
+  font-size: 0.85em;
+  color: var(--color-text-dark-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.homebrew-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.homebrew-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 4px;
+  background: var(--color-bg-option);
+  transition: background 0.15s;
+}
+.homebrew-row.dragging {
+  opacity: 0.45;
+}
+.homebrew-row.not-implemented {
+  opacity: 0.55;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: var(--color-text-dark-secondary);
+  font-size: 1rem;
+}
+.drag-handle.disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.toggle-wrap {
+  flex-shrink: 0;
+}
+
+.pack-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.pack-label {
+  font-weight: 600;
+  font-size: 0.95em;
+}
+.pack-hint {
+  font-size: 0.8em;
+  color: var(--color-text-dark-secondary);
+}
+.wip {
+  font-weight: 400;
+  font-size: 0.85em;
+}
+
+.priority-badge {
+  font-size: 0.75em;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--color-bg-option-hover);
+  color: var(--color-text-dark-secondary);
+  white-space: nowrap;
+}
+
+.pack-config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+.pack-config-table th,
+.pack-config-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--color-border-light-tertiary);
+}
+.pack-config-table th {
+  text-align: left;
+  font-weight: 600;
+}
+.center {
+  text-align: center;
+}
+.pack-name {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.priority-input {
+  width: 60px;
+  text-align: right;
+}
+
+.form-footer {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onUse
@@ -22,9 +32,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>If the character would have 10 Poise as a result of this clash, apply the
-    character's Poise, reduce Poise to 1, and increase Critical on character by
-    1. This applies before rolling to Critically Hit.</p>
+    <p>If the character would have 10 [[/status Poise]] as a result of this
+    clash, apply the character's [[/status Poise]], reduce [[/status Poise]] to
+    1, and increase [[/status Critical]] on character by 1. This applies before
+    rolling to Critically Hit.</p>
   negative: ''
   macro:
     uuid: ''
@@ -44,9 +55,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787226336936
-  modifiedTime: 1787226740472
+  systemVersion: 0.1.0
+  createdTime: 1790606642936
+  modifiedTime: 1790606642936
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: aEUTdgBfSmVBxNzs
 _key: '!items!aEUTdgBfSmVBxNzs'

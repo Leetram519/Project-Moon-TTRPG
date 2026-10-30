@@ -6,7 +6,7 @@ export class PMTTRPGAugmentItemSheet extends PMTTRPGItemSheet {
     PMTTRPGItemSheet.DEFAULT_OPTIONS,
     {
       classes: ["projectmoonttrpg", "sheet", "item", "augment"],
-      position: { width: 620, height: 700 },
+      position: { width: 620, height: 800 },
     },
     { inplace: false }
   );

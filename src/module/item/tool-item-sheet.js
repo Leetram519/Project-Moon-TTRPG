@@ -6,7 +6,7 @@ export class PMTTRPGToolItemSheet extends PMTTRPGItemSheet {
     PMTTRPGItemSheet.DEFAULT_OPTIONS,
     {
       classes: ["projectmoonttrpg", "sheet", "item", "item-tool"],
-      position: { width: 560, height: 560 },
+      position: { width: 620, height: 800 },
     },
     { inplace: false }
   );

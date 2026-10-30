@@ -6,9 +6,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 3
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClash
@@ -21,13 +31,13 @@ system:
   procAction: action
   procCondition: ''
   positive: >-
-    <p>If the character has [4+4*N] or more Smoke stacks, the character gains
-    [N] Dice Power Up on [Attack/Defense].</p>
+    <p>If the character has [4+4*N] or more [[/status Smoke]] stacks, the
+    character gains [N] Dice Power Up on [Attack/Defense].</p>
 
-    <p>The character's Smoke cap is raised to [8+4*N].&nbsp;</p>
+    <p>The character's [[/status Smoke]] cap is raised to [8+4*N].&nbsp;</p>
 
-    <p>The increased Smoke cap gained from this does not count as being above 10
-    for the purposes of any other Effects for the user.</p>
+    <p>The increased [[/status Smoke]] cap gained from this does not count as
+    being above 10 for the purposes of any other Effects for the user.</p>
   negative: ''
   macro:
     uuid: ''
@@ -48,8 +58,8 @@ _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
   systemVersion: 0.1.0
-  createdTime: 1785485127260
-  modifiedTime: 1787388696335
+  createdTime: 1790606642789
+  modifiedTime: 1790606642789
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: HxwAlbkdiiyRGPHD
 _key: '!items!HxwAlbkdiiyRGPHD'

@@ -294,6 +294,7 @@ export class ItemPMTTRPG extends Item {
       const normalizedEffects = normalizeEffectEntries(data.effects);
       data.effects = normalizedEffects;
       data.effectsSummary = computeEffectSummary(normalizedEffects, Number(data.epMax ?? 0));
+      data.subtype = data.weaponType;
     }
 
     if (itemData.type == 'ammunition') {
@@ -516,6 +517,8 @@ export class ItemPMTTRPG extends Item {
       data.showProcStat = ['onCondition', 'onUse', 'onAction'].includes(effectProcOn);
       data.showProcDice = ['onClash', 'onClashResult', 'onEitherClashResult', 'onBurst', 'onCritical', 'onDevastating'].includes(effectProcOn);
       data.showProcAction = ['onUse', 'onAction'].includes(effectProcOn);
+      data.subtypeWhitelist = data.subtypeWhitelist ?? ['regular'];
+      data.subsubtypeWhitelist = data.subsubtypeWhitelist ?? ['regular'];
     }
   }
 

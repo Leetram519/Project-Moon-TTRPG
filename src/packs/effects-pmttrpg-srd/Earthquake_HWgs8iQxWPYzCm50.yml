@@ -7,9 +7,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: earthquake
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 6
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onBurst
@@ -22,11 +32,11 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On Tremor Burst, apply the amount of target's Tremor to all characters
-    (allies and self are optional) within [N] SQRs of the target, next
-    round.</p><p>Each of these targets are inflicted with [N*2] Bind next
-    round.</p><p>Targets may avoid this effect by winning a defensive Clash
-    against your initial Attack Roll.</p>
+    <p>On [[/status Tremor]] Burst, apply the amount of target's [[/status
+    Tremor]] to all characters (allies and self are optional) within [N] SQRs of
+    the target, next round.</p><p>Each of these targets are inflicted with [N*2]
+    [[/status Bind]] next round.</p><p>Targets may avoid this effect by winning
+    a defensive Clash against your initial Attack Roll.</p>
   negative: ''
   macro:
     uuid: ''
@@ -44,9 +54,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787232171758
-  modifiedTime: 1787232171758
+  systemVersion: 0.1.0
+  createdTime: 1790606642789
+  modifiedTime: 1790606642789
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.vi7BUjJrR2zP893v

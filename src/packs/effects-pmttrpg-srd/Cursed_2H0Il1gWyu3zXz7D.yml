@@ -7,9 +7,19 @@ system:
   name: ''
   description: ''
   slug: ''
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 5
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: false
   canNegative: true
   procOn: alwaysActive
@@ -23,11 +33,12 @@ system:
   procCondition: ''
   positive: ''
   negative: >-
-    <p>Your minimum Ruin is [N*2] and minimum Devastation is [N] instead of
-    0.</p>
+    <p>Your minimum [[/status Ruin]] is [N*2] and minimum [[/status
+    Devastation]] is [N] instead of 0.</p>
 
-    <p>Whenever you would be below this amount, gain Ruin/Devastation until you
-    are at [N*2] Ruin and [N] Devastation.</p>
+    <p>Whenever you would be below this amount, gain [[/status Ruin]] and/or
+    [[/status Devastation]] until you are at [N*2] [[/status Ruin]] and [N]
+    [[/status Devastation]].</p>
   macro:
     uuid: ''
   customNotes: ''
@@ -54,8 +65,8 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485134515
-  modifiedTime: 1787170407478
+  systemVersion: 0.1.0
+  createdTime: 1790606642628
+  modifiedTime: 1790606642628
   lastModifiedBy: yWsvx4DXrmYcZsue
 _key: '!items!2H0Il1gWyu3zXz7D'

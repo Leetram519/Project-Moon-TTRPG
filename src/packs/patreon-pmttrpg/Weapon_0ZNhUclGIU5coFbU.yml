@@ -1,0 +1,20 @@
+type: Item
+folder: ONkhyKsg7ZyUFdSo
+name: Weapon
+color: null
+sorting: a
+_id: 0ZNhUclGIU5coFbU
+description: ''
+sort: 0
+flags: {}
+_stats:
+  coreVersion: '14.364'
+  systemId: projectmoonttrpg
+  systemVersion: 0.1.0
+  createdTime: 1793369020210
+  modifiedTime: 1793369020210
+  lastModifiedBy: yWsvx4DXrmYcZsue
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!folders!0ZNhUclGIU5coFbU'

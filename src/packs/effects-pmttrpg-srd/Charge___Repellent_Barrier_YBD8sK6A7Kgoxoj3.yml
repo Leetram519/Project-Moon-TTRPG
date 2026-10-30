@@ -6,9 +6,19 @@ system:
   name: ''
   description: '<p><em>Note: This effect is not yet automated.</em></p>'
   slug: charge-repellent-barrier
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 2
   stackMax: 5
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: onClashResult
@@ -21,10 +31,10 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>Push the target backwards in SQRs equal to the character's Charge
-    Barrier, to a max of N SQRs. This uses the value of the character’s Charge
-    Barrier before any damage/loss. </p><p>(This movement does not trigger
-    Opportunity Attacks)</p>
+    <p>Push the target backwards in SQRs equal to the character's [[/status
+    Charge Barrier]], to a max of N SQRs. This uses the value of the character’s
+    [[/status Charge Barrier]] before any damage/loss. </p><p>(This movement
+    does not trigger Opportunity Attacks)</p>
   negative: ''
   macro:
     uuid: ''
@@ -39,9 +49,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787251585550
-  modifiedTime: 1787561958506
+  systemVersion: 0.1.0
+  createdTime: 1790606642931
+  modifiedTime: 1790606642931
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: Item.tgfqt6J3HXSUC0eJ

@@ -1,26 +1,15 @@
-<div class="{{cssClass}} item-form flexcol">
-  <div class="sheet-wrapper flexcol">
-    <header class="sheet-header flexrow">
-      {{#if isOutdated}}
-      <div class="compendium-outdated-banner">
-        <span>{{localize "PMTTRPG.OutdatedWarning"}}</span>
-        <button type="button" data-action="sync-from-compendium">
-          {{localize "PMTTRPG.OutdatedUpdate"}}
-        </button>
-        <button type="button"
-                data-action="dismiss-outdated"
-                data-modified-time="{{compendiumModifiedTime}}">
-          {{localize "PMTTRPG.OutdatedDismiss"}}
-        </button>
-      </div>
-      {{/if}}
-      <div class="cell cell--image">
-        <img class="profile-img" src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
+<div class="{{cssClass}} item-form">
+  <div class="sheet-wrapper">
+    <header class="sheet-header">
+      <div class="item-image">
+        <img src="{{item.img}}" data-action="editImage" data-edit="img" title="{{item.name}}"/>
       </div>
       <div class="header-fields">
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PMTTRPG.Common.Name"}}"/></h1>
       </div>
     </header>
+
+    <hr class="separator--tabs-header">
 
     <nav class="sheet-tabs tabs" data-group="primary">
       <a class="item{{#if (eq activeTab 'description')}} active{{/if}}" data-action="tab" data-group="primary" data-tab="description">{{localize "PMTTRPG.Common.Description"}}</a>
@@ -35,24 +24,17 @@
 
     <section class="sheet-body">
       <div class="tab{{#if (eq activeTab 'description')}} active{{/if}}" data-group="primary" data-tab="description">
-        <prose-mirror name="system.description" value="{{system.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.descriptionEnriched}}}</prose-mirror>
+        <div class="description-container">
+          <label class="description-label">{{localize "PMTTRPG.Common.Description"}}</label>
+          <prose-mirror name="system.description" value="{{system.description}}" toggled {{#unless editable}}disabled{{/unless}}>{{{system.descriptionEnriched}}}</prose-mirror>
+        </div>
       </div>
 
       <div class="tab{{#if (eq activeTab 'defenses')}} active{{/if}}" data-group="primary" data-tab="defenses">
-        <div class="resource-group">
-          <div class="resource">
-            <label>{{localize "PMTTRPG.OutfitProperty"}}</label>
-            <select name="system.outfitProperty" data-dtype="String">
-              {{selectOptions selects.outfitProperties selected=system.outfitProperty localize=true}}
-            </select>
-          </div>
+        <div class="resource-header">
           <div class="resource">
             <label>{{localize "PMTTRPG.OutfitRank"}}</label>
             <input type="text" name="system.rank" value="{{system.rank}}" data-dtype="Number"/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.EP"}}</label>
-            <input class="disabled" type="text" data-system-field="epMax" value="{{system.epMax}}" readonly/>
           </div>
           <div class="resource">
             <label>{{localize "PMTTRPG.BlockDice"}}</label>
@@ -63,38 +45,24 @@
             <input class="disabled" type="text" data-system-field="evadeDiceComputed" value="{{system.evadeDiceComputed}}" readonly/>
           </div>
           <div class="resource">
-            <label>{{localize "PMTTRPG.BlockDicePower"}}</label>
-            <input class="disabled" type="text" data-system-field="blockDicePower" value="{{system.blockDicePower}}" readonly/>
+            <label>{{localize "PMTTRPG.EP"}}</label>
+            <input class="disabled" type="text" data-system-field="epMax" value="{{system.epMax}}" readonly/>
           </div>
+        </div>
+        <div class="resource-list">
           <div class="resource">
-            <label>{{localize "PMTTRPG.EvadeDicePower"}}</label>
-            <input class="disabled" type="text" data-system-field="evadeDicePower" value="{{system.evadeDicePower}}" readonly/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.BonusLight"}}</label>
-            <input class="disabled" type="text" data-system-field="bonusLight" value="{{system.bonusLight}}" readonly/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.BonusEP"}}</label>
-            <input class="disabled" type="text" data-system-field="bonusEP" value="{{system.bonusEP}}" readonly/>
-          </div>
-          <div class="resource">
-            <label>{{localize "PMTTRPG.Equipped"}}</label>
-            <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+            <label>{{localize "PMTTRPG.OutfitProperty"}}</label>
+            <select name="system.outfitProperty" data-dtype="String">
+              {{selectOptions selects.outfitProperties selected=system.outfitProperty localize=true}}
+            </select>
           </div>
         </div>
       </div>
 
       <div class="tab{{#if (eq activeTab 'resistances')}} active{{/if}}" data-group="primary" data-tab="resistances">
         <div class="resource-group">
-          <div class="resource">
-            <label>{{localize "PMTTRPG.ResistanceTrading"}}</label>
-            <div class="help-text">
-              <p>{{localize "PMTTRPG.ResistanceTradingHelp"}}</p>
-            </div>
-          </div>
           <div class="resource-grid">
-            <div class="resource-group resource-group--resistance resource-group--hp" data-resistance="hp">
+            <div class="resource-list resource-group--resistance resource-group--hp" data-resistance="hp">
               <h3>{{localize "PMTTRPG.HPResistances"}}</h3>
               {{#each system.resistances.hp as |resistance key|}}
                 <div class="resource">
@@ -102,11 +70,10 @@
                   <select name="system.resistances.hp.{{key}}" data-dtype="String">
                     {{selectOptions ../selects.resistanceLevels selected=resistance localize=true}}
                   </select>
-                  <span class="resistance-multiplier">{{lookup ../system.resistancesDisplay.hp key}}</span>
                 </div>
               {{/each}}
             </div>
-            <div class="resource-group resource-group--resistance resource-group--st" data-resistance="st">
+            <div class="resource-list resource-group--resistance resource-group--st" data-resistance="st">
               <h3>{{localize "PMTTRPG.STResistances"}}</h3>
               {{#each system.resistances.st as |resistance key|}}
                 <div class="resource">
@@ -114,7 +81,6 @@
                   <select name="system.resistances.st.{{key}}" data-dtype="String">
                     {{selectOptions ../selects.resistanceLevels selected=resistance localize=true}}
                   </select>
-                  <span class="resistance-multiplier">{{lookup ../system.resistancesDisplay.st key}}</span>
                 </div>
               {{/each}}
             </div>
@@ -133,11 +99,21 @@
       {{/if}}
 
       <div class="tab{{#if (eq activeTab 'advanced')}} active{{/if}}" data-group="primary" data-tab="advanced">
-        <div class="resource-group">
+        <div class="resource-list">
           {{> "systems/projectmoonttrpg/templates/parts/item-slug-field.hbs"}}
-          <div class="resource">
+          <div class="resource vertical">
             <label>{{localize "PMTTRPG.CustomNotes"}}</label>
-            <textarea name="system.customNotes" rows="6" data-dtype="String">{{system.customNotes}}</textarea>
+            <textarea class="custom-notes" name="system.customNotes" rows="5" data-dtype="String">{{system.customNotes}}</textarea>
+          </div>
+
+          <div class="resource horizontal">
+            <label>{{localize "PMTTRPG.HomebrewAuthor"}}</label>
+            <input type="text" name="system.homebrew.author" value="{{system.homebrew.author}}" data-dtype="String"/>
+          </div>
+
+          <div class="resource horizontal">
+            <label>{{localize "PMTTRPG.HomebrewSource"}}</label>
+            <input type="text" name="system.homebrew.source" value="{{system.homebrew.source}}" data-dtype="String"/>
           </div>
         </div>
       </div>

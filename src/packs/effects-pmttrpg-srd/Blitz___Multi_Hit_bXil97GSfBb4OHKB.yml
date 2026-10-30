@@ -10,9 +10,19 @@ system:
     <p><em>Note: This effect is not yet automated. <strong>Though, there is a
     text message telling you how to apply this.</strong></em></p>
   slug: blitz-multi-hit
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: skill
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
@@ -25,8 +35,9 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>[Attack Replacement] You must have at least [N*2] Haste to activate this
-    effect.</p><p>Replaces Attack with [N+1] Attacks, to a max of 3 overall.</p>
+    <p>[Attack Replacement] You must have at least [N*2] [[/status Haste]] to
+    activate this effect.</p><p>Replaces Attack with [N+1] Attacks, to a max of
+    3 overall.</p>
   negative: ''
   macro:
     uuid: ''
@@ -55,9 +66,9 @@ flags: {}
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1787243655058
-  modifiedTime: 1787243655058
+  systemVersion: 0.1.0
+  createdTime: 1790606642940
+  modifiedTime: 1790606642940
   lastModifiedBy: yWsvx4DXrmYcZsue
   compendiumSource: null
   duplicateSource: null

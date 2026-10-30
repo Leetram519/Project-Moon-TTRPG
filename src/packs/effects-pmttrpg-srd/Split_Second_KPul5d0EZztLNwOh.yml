@@ -6,22 +6,34 @@ system:
   name: ''
   description: ''
   slug: split-second
+  homebrewDependencies: []
+  subtype: regular
+  subsubtype: regular
+  homebrew:
+    author: ''
+    source: Community Rules
   cost: 4
   stackMax: 1
   appliesTo: augment
+  subtypeWhitelist:
+    - regular
+  subsubtypeWhitelist:
+    - regular
   canPositive: true
   canNegative: false
   procOn: alwaysActive
   procResult: none
   procResultLocked: false
+  procChoice: none
+  procChoiceLocked: false
   procStat: any
   procDice: any
   procAction: any
   procCondition: When using a targeted Haste effect
   positive: >-
-    <p>You may combine your Haste and the target's Bind for the purpose of
-    meeting the Haste effect's condition. You must have at least 1 Haste for
-    this effect to function.</p>
+    <p>You may combine your [[/status Haste]] and the target's [[/status Bind]]
+    for the purpose of meeting the [[/status Haste]] effect's condition. You
+    must have at least 1 [[/status Haste]] for this effect to function.</p>
   negative: ''
   macro:
     uuid: ''
@@ -39,9 +51,9 @@ _stats:
   exportSource: null
   coreVersion: '14.364'
   systemId: projectmoonttrpg
-  systemVersion: 0.0.1
-  createdTime: 1785485124307
-  modifiedTime: 1785485124307
+  systemVersion: 0.1.0
+  createdTime: 1790606642794
+  modifiedTime: 1790606642794
   lastModifiedBy: yWsvx4DXrmYcZsue
 _id: KPul5d0EZztLNwOh
 _key: '!items!KPul5d0EZztLNwOh'
