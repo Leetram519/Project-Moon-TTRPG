@@ -78,6 +78,13 @@ When possible:
 * Keep commits focused and logically grouped.
 * Avoid unrelated formatting changes in the same pull request.
 
+### Dialogs
+
+New dialogs use the dark and gold `pm-window` theme in `src/styles/src/global/application/_pm-window.scss`. The end of that file holds the shared content classes the themed dialog templates are built on, so most themed dialogs need no styles of their own.
+
+* For a fixed set of choices, render a template from `src/templates/dialog/` and open it with `waitForWindowChoice` from `src/module/apps/dialog-wait.js`, using `cancelButton()` and `confirmButton()`. `waitForWindowChoice` puts the default button last, and Enter presses it.
+* Do not start a dialog template with a `<form>`. DialogV2 already wraps its content in one, and the browser drops a form nested inside another.
+
 ## Reporting Bugs
 
 When reporting a bug, please include:

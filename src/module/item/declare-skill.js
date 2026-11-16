@@ -1,4 +1,5 @@
 import { PMTTRPGUtility } from "../utility.js";
+import { waitForChoice } from "../apps/dialog-wait.js";
 const { renderTemplate } = foundry.applications.handlebars;
 
 export function getDeclareSkillOptions(actor, skillType = "attack") {
@@ -50,7 +51,7 @@ export async function promptDeclareSkillDialog(actor, {
   const dlgOptions = { classes: ["projectmoonttrpg", "PMTTRPG-dialog"] };
   if (PMTTRPGUtility.nightmode) dlgOptions.classes.push("nightmode");
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.localize("PMTTRPG.Clash.ChooseSkill") },
     classes: dlgOptions.classes,
     content: html,
