@@ -1,9 +1,9 @@
 <div class="chat-damage-buttons" data-pool="hp" data-pools="hp" data-damage-type="{{#if damageType}}{{damageType}}{{else}}none{{/if}}">
     <div class="chat-damage-types" role="group" aria-label="{{localize "PMTTRPG.DamageTaken.TypeSelect"}}">
-    <button type="button" class="button dtype{{#if (or (eq damageType "none") (not damageType))}} active{{/if}}" data-action="set-damage-type" data-damage-type="none" title="{{localize "PMTTRPG.DamageTypeNone"}}">{{localize "PMTTRPG.DamageTypeNone"}}</button>
     <button type="button" class="button dtype{{#ifEquals damageType "slash"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="slash" title="{{localize "PMTTRPG.DamageTypeSlash"}}">{{localize "PMTTRPG.DamageTypeSlash"}}</button>
     <button type="button" class="button dtype{{#ifEquals damageType "pierce"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="pierce" title="{{localize "PMTTRPG.DamageTypePierce"}}">{{localize "PMTTRPG.DamageTypePierce"}}</button>
     <button type="button" class="button dtype{{#ifEquals damageType "blunt"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="blunt" title="{{localize "PMTTRPG.DamageTypeBlunt"}}">{{localize "PMTTRPG.DamageTypeBlunt"}}</button>
+    <button type="button" class="button dtype{{#ifEquals damageType "force"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="force" title="{{localize "PMTTRPG.DamageTypeForce"}}">{{localize "PMTTRPG.DamageTypeForce"}}</button>
   </div>
   <div class="chat-damage-pools" role="group" aria-label="{{localize "PMTTRPG.DamageTaken.PoolSelect"}}" title="{{localize "PMTTRPG.DamageTaken.PoolHint"}}">
     <button type="button" class="button pool active" data-action="set-pool" data-pool="hp">{{localize "PMTTRPG.TrackerHP"}}</button>

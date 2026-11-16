@@ -1,3 +1,4 @@
+import { WEAPON_DAMAGE_TYPE_CHOICES } from "../easy-effects/resistances.js";
 import { PMTTRPGItemSheet } from "./item-sheet.js";
 
 export class PMTTRPGWeaponItemSheet extends PMTTRPGItemSheet {
@@ -23,12 +24,7 @@ export class PMTTRPGWeaponItemSheet extends PMTTRPGItemSheet {
       melee: "PMTTRPG.WeaponTypeMelee",
       ranged: "PMTTRPG.WeaponTypeRanged"
     };
-    context.selects.damageTypes = {
-      none: "PMTTRPG.DamageTypeNone",
-      slash: "PMTTRPG.DamageTypeSlash",
-      pierce: "PMTTRPG.DamageTypePierce",
-      blunt: "PMTTRPG.DamageTypeBlunt"
-    };
+    context.selects.damageTypes = { ...WEAPON_DAMAGE_TYPE_CHOICES };
     context.selects.formPropertiesMelee = {
       small: "PMTTRPG.FormPropertySmall",
       medium: "PMTTRPG.FormPropertyMedium",
