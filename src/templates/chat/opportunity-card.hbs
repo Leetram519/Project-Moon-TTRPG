@@ -1,0 +1,72 @@
+<div
+  class="pmttrpg-opportunity-card"
+  data-opportunity-id="{{opportunityId}}"
+  data-movement-id="{{movementId}}"
+  {{#if singleWeapon}}data-weapon-id="{{singleWeapon.id}}"{{/if}}
+>
+  <header class="pmttrpg-opportunity-card__header">
+    <strong>{{i18n.title}}</strong>
+  </header>
+  <p class="pmttrpg-opportunity-card__copy">{{leavingText}}</p>
+  {{#if pending}}
+    <div class="pmttrpg-opportunity-card__weapon">
+      <span>{{i18n.weapon}}</span>
+      {{#if singleWeapon}}
+        <span>{{singleWeapon.name}}</span>
+      {{else}}
+        <select name="weapon">
+          {{#each weapons}}
+            <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      {{/if}}
+    </div>
+    <p class="pmttrpg-opportunity-card__status" data-opportunity-waiting {{#if canAct}}hidden{{/if}}>{{waitingText}}</p>
+    <div class="pmttrpg-opportunity-card__actions">
+      <button
+        type="button"
+        class="clash-btn clash-btn--primary"
+        data-action="opportunity-attack"
+        data-opportunity-id="{{opportunityId}}"
+        data-movement-id="{{movementId}}"
+        data-message-id="{{messageId}}"
+        {{#if singleWeapon}}data-weapon-id="{{singleWeapon.id}}"{{/if}}
+        {{#unless canAct}}disabled hidden{{/unless}}
+      >{{i18n.attack}}</button>
+      <button
+        type="button"
+        class="clash-btn"
+        data-action="opportunity-pass"
+        data-opportunity-id="{{opportunityId}}"
+        data-movement-id="{{movementId}}"
+        data-message-id="{{messageId}}"
+        {{#unless canAct}}disabled hidden{{/unless}}
+      >{{i18n.pass}}</button>
+      {{#if canForcePass}}
+        <button
+          type="button"
+          class="clash-btn pmttrpg-opportunity-card__force"
+          data-action="opportunity-force-pass"
+          data-movement-id="{{movementId}}"
+          data-message-id="{{messageId}}"
+        >{{i18n.forcePass}}</button>
+      {{/if}}
+    </div>
+  {{else if passed}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.passed}}</p>
+  {{else if cancelled}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.cancelled}}</p>
+  {{else if expired}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.expired}}</p>
+  {{else if awaiting}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.awaiting}}</p>
+  {{else if resolving}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.resolving}}</p>
+  {{else if committed}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.resolvingClash}}</p>
+  {{else if resolvedAttack}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.resolved}}</p>
+  {{else if resolutionError}}
+    <p class="pmttrpg-opportunity-card__status">{{i18n.resolutionError}}</p>
+  {{/if}}
+</div>

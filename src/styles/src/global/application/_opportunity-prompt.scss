@@ -1,0 +1,58 @@
+.pmttrpg-opportunity-card__copy,
+.pmttrpg-opportunity-card__status {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.pmttrpg-opportunity-card__weapon {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
+}
+
+.pmttrpg-opportunity-card__weapon select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.pmttrpg-opportunity-card__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.pmttrpg-opportunity-card__force {
+  border-color: #8a6a3a;
+  background: #3a2f1c;
+  color: #e6d3a4;
+}
+
+.pmttrpg-opportunity-card {
+  padding: 0.65rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.pmttrpg-opportunity-card__header {
+  margin-bottom: 0.35rem;
+}
+
+#pmttrpg-admin-movement-badge {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 1.25rem;
+  z-index: 40;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid #6f5238;
+  border-radius: 4px;
+  background: rgba(42, 31, 20, 0.94);
+  color: #f4c96f;
+  font-size: 0.75rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+#pmttrpg-admin-movement-badge[hidden] {
+  display: none !important;
+}
