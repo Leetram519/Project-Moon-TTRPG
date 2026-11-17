@@ -1,0 +1,160 @@
+.application.pm-reduce-status {
+  .pm-reduce-status__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: opacity 0.16s ease;
+
+    &[data-inactive] {
+      opacity: 0.5;
+    }
+  }
+
+  .pm-reduce-status__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pm-reduce-status__row {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 76px;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: var(--pmw-well);
+    box-shadow: inset 0 0 0 1px rgba(215, 182, 106, 0.12);
+
+    &:not(:has(.action-menu-option__img)) {
+      grid-template-columns: minmax(0, 1fr) 76px;
+    }
+
+    input[type="number"] {
+      text-align: center;
+    }
+  }
+
+  .pm-reduce-status__allocated {
+    margin: 0;
+    color: var(--pmw-ink-dim);
+    font-size: 14px;
+
+    strong {
+      color: var(--pmw-cream);
+      font-family: var(--pmw-display);
+      font-size: 17px;
+      font-weight: 400;
+    }
+
+    &[data-over],
+    &[data-over] strong {
+      color: var(--pmw-danger);
+    }
+  }
+}
+
+.item-form .resource-list .resource.reduce-status-config {
+  align-items: stretch;
+  gap: 0.45rem;
+
+  > label {
+    margin-bottom: 0;
+  }
+
+  .help-text {
+    padding: 0;
+    margin: 0;
+
+    p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+  }
+
+  .reduce-status-config__type {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    label {
+      flex: 0 0 auto;
+      margin: 0;
+    }
+
+    select {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+
+  .reduce-status-config__blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-top: 0.15rem;
+  }
+
+  .reduce-status-config__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .reduce-status-config__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0.2rem 0.15rem 0.55rem;
+    border-radius: 8px;
+    background: var(--sheet-paper-alt);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    color: var(--sheet-ink);
+    font-size: 12px;
+    text-transform: none;
+  }
+
+  .reduce-status-config__remove {
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--sheet-ink);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: var(--sheet-brown-dark);
+    }
+  }
+
+  .reduce-status-config__add {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    input {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    button {
+      flex: 0 0 auto;
+      width: auto;
+      min-width: 7.5rem;
+      padding: 4px 10px;
+    }
+  }
+}

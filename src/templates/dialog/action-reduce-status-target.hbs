@@ -1,0 +1,21 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{i18n.hint}}</p>
+  <div class="action-weapon-form__options">
+    <label class="action-menu-option">
+      <input type="radio" name="targetId" value="self" {{#if selfChecked}}checked{{/if}}>
+      {{#if selfImg}}
+      <img class="action-menu-option__img" src="{{selfImg}}" alt="">
+      {{/if}}
+      <span class="action-menu-option__label">{{i18n.self}}</span>
+    </label>
+    {{#each targets}}
+    <label class="action-menu-option">
+      <input type="radio" name="targetId" value="{{tokenId}}">
+      {{#if img}}
+      <img class="action-menu-option__img" src="{{img}}" alt="">
+      {{/if}}
+      <span class="action-menu-option__label">{{name}}</span>
+    </label>
+    {{/each}}
+  </div>
+</div>
