@@ -1,0 +1,19 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{hint}}</p>
+  <div class="action-weapon-form__options">
+    {{#each options}}
+    <label class="action-menu-option{{#if disabled}} action-menu-option--disabled{{/if}}">
+      <input type="radio" name="customVariant" value="{{identity}}" {{#if checked}}checked{{/if}} {{#if disabled}}disabled{{/if}}>
+      {{#if img}}<img class="action-menu-option__img" src="{{img}}" alt="">{{/if}}
+      <span class="action-menu-option__text">
+        <span class="action-menu-option__label">{{label}}</span>
+        {{#if source}}<span class="action-menu-option__detail">{{source}}</span>{{/if}}
+        {{#if detail}}<span class="action-menu-option__detail">{{detail}}</span>{{/if}}
+      </span>
+      <span class="action-menu-option__meta">
+        <span class="action-menu-option__cost">{{cost}}</span>
+      </span>
+    </label>
+    {{/each}}
+  </div>
+</div>
