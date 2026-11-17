@@ -47,6 +47,17 @@
           <span class="modifier-hint">{{localize "PMTTRPG.Dialog.modifierHint"}}</span>
         </div>
       </div>
+
+      {{#if assistOptions}}
+      <div class="form-group assist-choice">
+        <label for="assistEntryId">{{assistLabel}}</label>
+        <select id="assistEntryId" name="assistEntryId" class="form-control">
+          {{#each assistOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      {{/if}}
     </div>
   </form>
 </div>

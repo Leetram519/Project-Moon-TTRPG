@@ -1,5 +1,8 @@
 import { PMTTRPGUtility } from "../utility.js";
-import { emitActorAction, emitToolUsed } from "../easy-effects/registry.js";
+import { emitToolUsed } from "../easy-effects/registry.js";
+import { declareActorAction } from "../action-economy/declare.js";
+import { ACTION_KINDS, ECONOMY_TYPES } from "../action-economy/kinds.js";
+import { waitForChoice } from "../apps/dialog-wait.js";
 const { renderTemplate } = foundry.applications.handlebars;
 
 export function getToolUsesRemaining(tool) {
@@ -53,10 +56,40 @@ export function getPreferredToolTargetActor() {
   return targeted[0]?.actor ?? null;
 }
 
+export async function declareToolAction(tool, {
+  alreadyDeclared = false,
+  tokenId = null,
+  combatant = null,
+  timing = null,
+  consumeAction = true,
+  target = null,
+} = {}) {
+  if (alreadyDeclared) return { ok: true };
+  const actor = tool.actor;
+  if (!actor) return { ok: false };
+  return declareActorAction({
+    actor,
+    economyType: ECONOMY_TYPES.ACTION,
+    kind: ACTION_KINDS.TOOL,
+    cost: 1,
+    item: tool,
+    combatant,
+    tokenId,
+    timing,
+    consume: consumeAction,
+    target,
+  });
+}
+
 export async function useTool(tool, {
   consume,
   configureDialog = true,
   target = undefined,
+  alreadyDeclared = false,
+  tokenId = null,
+  combatant = null,
+  timing = null,
+  consumeAction = true,
 } = {}) {
   if (tool?.type !== "tool") return false;
 
@@ -66,7 +99,7 @@ export async function useTool(tool, {
 
   if (tool.system?.toolKind === "standalone") {
     const { useStandaloneTool } = await import("./standalone-tool.js");
-    return useStandaloneTool(tool, { configureDialog, target });
+    return useStandaloneTool(tool, { configureDialog, target, alreadyDeclared, tokenId, combatant, timing, consumeAction });
   }
 
   const actor = tool.actor;
@@ -111,6 +144,9 @@ export async function useTool(tool, {
   else if (resolvedTarget === undefined) {
     resolvedTarget = getPreferredToolTargetActor();
   }
+
+  const declared = await declareToolAction(tool, { alreadyDeclared, tokenId, combatant, timing, consumeAction, target: resolvedTarget });
+  if (!declared.ok) return false;
 
   if (willConsume) {
     const ok = await consumeToolUse(tool, { consume: true });
@@ -181,12 +217,6 @@ export async function useTool(tool, {
     item: tool,
     target: resolvedTarget ?? null,
   });
-  await emitActorAction({
-    actor,
-    item: tool,
-    actionType: "tool",
-    target: resolvedTarget ?? null,
-  });
 
   return message;
 }
@@ -214,7 +244,7 @@ async function promptToolUseDialog(tool, { consume = true } = {}) {
   const dlgOptions = { classes: ["projectmoonttrpg", "PMTTRPG-dialog"] };
   if (PMTTRPGUtility.nightmode) dlgOptions.classes.push("nightmode");
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.format("PMTTRPG.Dialog.useToolTitle", { name: tool.name }) },
     classes: dlgOptions.classes,
     content: html,

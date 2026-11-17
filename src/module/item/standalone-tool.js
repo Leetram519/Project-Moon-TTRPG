@@ -1,12 +1,15 @@
-import { emitActorAction, emitToolUsed } from "../easy-effects/registry.js";
+import { emitToolUsed } from "../easy-effects/registry.js";
+import { declareToolAction } from "./tool-use.js";
 import { PMTTRPGUtility } from "../utility.js";
 import { PMTTRPGRolls } from "../rolls.js";
+import { assistChoiceOptions, resolveAssistRecipient } from "../action-economy/assist.js";
 import {
   canUseTool,
   consumeToolUse,
   getToolUsesRemaining,
   toolConsumesByDefault,
 } from "./tool-use.js";
+import { waitForChoice } from "../apps/dialog-wait.js";
 const { renderTemplate } = foundry.applications.handlebars;
 
 function getActorStatValue(actor, statKey) {
@@ -27,6 +30,11 @@ function effectLines(tool, mode) {
 export async function useStandaloneTool(tool, {
   configureDialog = true,
   target = undefined,
+  alreadyDeclared = false,
+  tokenId = null,
+  combatant = null,
+  timing = null,
+  consumeAction = true,
 } = {}) {
   if (tool?.type !== "tool" || tool.system?.toolKind !== "standalone") return false;
 
@@ -56,6 +64,8 @@ export async function useStandaloneTool(tool, {
   let rollMode = actor.flags?.projectmoonttrpg?.rollMode ?? "def";
   let resolvedTarget = target ?? null;
   let targetSelection = null;
+  const assistRecipient = resolveAssistRecipient(actor, { tokenId, combatant });
+  let assistEntryId = null;
 
   if (configureDialog) {
     const dlg = await promptStandaloneToolDialog(tool, {
@@ -64,12 +74,14 @@ export async function useStandaloneTool(tool, {
       rank,
       actorStat: getActorStatValue(actor, statKey),
       rollMode,
+      assistOptions: assistRecipient ? assistChoiceOptions(assistRecipient) : [],
     });
     if (dlg === null) return null;
 
     targetMode = dlg.targetMode;
     extraModifier = dlg.modifier;
     rollMode = dlg.rollMode;
+    assistEntryId = dlg.assistEntryId ?? null;
     await actor.setFlag("projectmoonttrpg", "rollMode", rollMode);
 
     if (targetMode !== "self") {
@@ -123,6 +135,9 @@ export async function useStandaloneTool(tool, {
     });
   }
 
+  const declared = await declareToolAction(tool, { alreadyDeclared, tokenId, combatant, timing, consumeAction, target: resolvedTarget });
+  if (!declared.ok) return false;
+
   const templateData = {
     image: tool.img,
     title: tool.name,
@@ -148,6 +163,9 @@ export async function useStandaloneTool(tool, {
     formula: statKey,
     templateData,
     statModifier: challengePenalty + Number(extraModifier || 0),
+    assist: assistEntryId && assistRecipient
+      ? { combatant: assistRecipient, entryId: assistEntryId, combat: game.combat ?? null }
+      : null,
     onBeforeChat: async ({ resultType, templateData: td }) => {
       const failed = resultType === "failure";
       const mode = failed ? "negative" : "positive";
@@ -177,14 +195,6 @@ export async function useStandaloneTool(tool, {
         result: resultType,
         effectMode: mode,
       });
-      await emitActorAction({
-        actor,
-        item: tool,
-        actionType: "standalone",
-        target: resolvedTarget ?? null,
-        result: resultType,
-        effectMode: mode,
-      });
     },
   });
 }
@@ -195,8 +205,10 @@ async function promptStandaloneToolDialog(tool, {
   rank,
   actorStat,
   rollMode = "def",
+  assistOptions = null,
 } = {}) {
   const remaining = getToolUsesRemaining(tool);
+  const assistRows = Array.isArray(assistOptions) && assistOptions.length ? assistOptions : null;
   const dialogData = {
     tool: {
       name: tool.name,
@@ -209,6 +221,8 @@ async function promptStandaloneToolDialog(tool, {
     actorStat,
     rankPenalty: rank,
     rollMode,
+    assistOptions: assistRows,
+    assistLabel: assistRows ? game.i18n.localize("PMTTRPG.Assist.ChoiceLabel") : null,
   };
 
   const html = await renderTemplate(
@@ -219,7 +233,7 @@ async function promptStandaloneToolDialog(tool, {
   const dlgOptions = { classes: ["projectmoonttrpg", "PMTTRPG-dialog"] };
   if (PMTTRPGUtility.nightmode) dlgOptions.classes.push("nightmode");
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.format("PMTTRPG.Dialog.useToolTitle", { name: tool.name }) },
     classes: dlgOptions.classes,
     content: html,
@@ -233,6 +247,7 @@ async function promptStandaloneToolDialog(tool, {
           targetMode: form.targetMode?.value || "self",
           modifier: Number(form.modifier?.value) || 0,
           rollMode: form.advantage?.value || "def",
+          assistEntryId: String(form.assistEntryId?.value ?? "").trim() || null,
         };
       },
     }, {

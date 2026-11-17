@@ -15,6 +15,25 @@ import { HomebrewRegistry } from "../homebrew/homebrew-registry.js";
 import { CompendiumFlags } from "../homebrew/compendium/compendium-flags.js";
 import { CompendiumManager } from "../homebrew/compendium/compendium-manager.js";
 
+function normalizeReduceStatusType(raw) {
+  const type = String(raw ?? "none").trim();
+  if (type === "standard" || type === "pause") return type;
+  return "none";
+}
+
+function normalizeReduceStatusBlocks(blocks) {
+  if (!Array.isArray(blocks)) return [];
+  const seen = new Set();
+  const out = [];
+  for (const raw of blocks) {
+    const identity = String(raw ?? "").trim();
+    if (!identity || seen.has(identity)) continue;
+    seen.add(identity);
+    out.push(identity);
+  }
+  return out;
+}
+
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { TextEditor, FormDataExtended } = foundry.applications.ux;
@@ -56,6 +75,8 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       eeFlags: PMTTRPGItemSheet.prototype._onOpenEEFlags,
       addTag: PMTTRPGItemSheet.prototype._onAddTag,
       removeTag: PMTTRPGItemSheet.prototype._onRemoveTag,
+      "add-reduce-status-block": PMTTRPGItemSheet.prototype._onAddReduceStatusBlock,
+      "remove-reduce-status-block": PMTTRPGItemSheet.prototype._onRemoveReduceStatusBlock,
     },
   };
 
@@ -97,6 +118,53 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   _onOpenEEFlags() {
     if (!game.user.isGM) return;
     openEEFlagInspector(this.item ?? this.document);
+  }
+
+  _collectStatusNameSuggestions(exclude = []) {
+    const skip = new Set(exclude.map((name) => String(name).trim()).filter(Boolean));
+    const names = new Set();
+    const add = (name) => {
+      const identity = String(name ?? "").trim();
+      if (identity && !skip.has(identity)) names.add(identity);
+    };
+    const parent = this.document.parent;
+    if (parent?.items) {
+      for (const item of parent.items) {
+        if (item.type === "status") add(item.name);
+      }
+    }
+    for (const item of game.items) {
+      if (item.type === "status") add(item.name);
+    }
+    return [...names].sort((a, b) => a.localeCompare(b));
+  }
+
+  async _onAddReduceStatusBlock(event, target) {
+    if (!this.isEditable || this.document.type !== "status") return;
+    event.preventDefault();
+    if (normalizeReduceStatusType(this.document.system.reduceStatus?.type) !== "pause") return;
+
+    const input = this.element.querySelector("[data-reduce-status-block-input]");
+    const identity = String(input?.value ?? "").trim();
+    if (!identity) return;
+
+    const blocks = normalizeReduceStatusBlocks(this.document.system.reduceStatus?.blocks);
+    if (blocks.includes(identity)) {
+      if (input) input.value = "";
+      return;
+    }
+    blocks.push(identity);
+    await this.document.update({ "system.reduceStatus.blocks": blocks });
+  }
+
+  async _onRemoveReduceStatusBlock(event, target) {
+    if (!this.isEditable || this.document.type !== "status") return;
+    event.preventDefault();
+    const index = Number(target.dataset.index);
+    const blocks = normalizeReduceStatusBlocks(this.document.system.reduceStatus?.blocks);
+    if (!Number.isInteger(index) || index < 0 || index >= blocks.length) return;
+    blocks.splice(index, 1);
+    await this.document.update({ "system.reduceStatus.blocks": blocks });
   }
 
   async _prepareContext(options) {
@@ -286,6 +354,14 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       reaction: 'PMTTRPG.EffectProcActionReaction'
     };
 
+    if (itemData.type === "status") {
+      selects.reduceStatusType = {
+        none: "PMTTRPG.StatusReduceStatusTypeNone",
+        standard: "PMTTRPG.StatusReduceStatusTypeStandard",
+        pause: "PMTTRPG.StatusReduceStatusTypePause",
+      };
+    }
+
     Object.assign(context, {
       item: this.document,
       cssClass: this.isEditable ? "editable" : "locked",
@@ -341,6 +417,19 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
           this.document.system?.arrival,
         )
         : this.document.parent.getStatusStacks(this.document.name);
+    }
+
+    if (itemData.type === "status") {
+      const type = normalizeReduceStatusType(this.document.system.reduceStatus?.type);
+      const blocks = normalizeReduceStatusBlocks(this.document.system.reduceStatus?.blocks);
+      context.system.reduceStatus = { type, blocks };
+      context.reduceStatusBlocks = blocks;
+      context.reduceStatusTypeHint = type === "standard"
+        ? "PMTTRPG.StatusReduceStatusTypeStandardHint"
+        : type === "pause"
+          ? "PMTTRPG.StatusReduceStatusTypePauseHint"
+          : "PMTTRPG.StatusReduceStatusTypeNoneHint";
+      context.reduceStatusBlockSuggestions = this._collectStatusNameSuggestions(blocks);
     }
 
     return context;
@@ -537,7 +626,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     for (const k of deletedKeys) {
       const keys = k.split('.');
       if (formObj.system[keys[0]][keys[1]] == undefined) {
-        formObj.system[keys[0]][keys[1]] = foundry.data.operators.ForcedDeletion;
+        formObj.system[keys[0]][keys[1]] = new foundry.data.operators.ForcedDeletion();
       }
     }
 
