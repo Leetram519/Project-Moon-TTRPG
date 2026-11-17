@@ -1,0 +1,73 @@
+{{#*inline "itemRow"}}
+<li>
+  <label class="pm-change-weapons__item">
+    <input type="checkbox" name="{{field}}" value="{{id}}" id="{{@root.partId}}-{{field}}-{{id}}" {{checked checked}}>
+    <img class="pm-change-weapons__img" src="{{img}}" alt="">
+    <span class="pm-change-weapons__name">{{name}}</span>
+    {{#if groundKey}}<span class="pm-change-weapons__note">{{localize groundKey}}</span>{{/if}}
+    <span class="pm-window__tag">{{localize handsKey}}</span>
+  </label>
+</li>
+{{/inline}}
+
+<header class="pm-change-weapons__status">
+  <div class="pm-change-weapons__stat">
+    <span class="pm-window__label">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsHands"}}</span>
+    <span class="pm-change-weapons__value">
+      <span class="pm-change-weapons__slots" aria-hidden="true">
+        {{#each hands.slots}}<i class="pm-change-weapons__slot fa-solid fa-hand" data-slot="{{state}}" {{#if over}}data-over{{/if}}></i>{{/each}}
+      </span>
+      <span {{#if hands.usedOver}}data-over{{/if}}>{{hands.used}}/{{hands.capacity}}</span>
+      {{#if hands.changes}}
+      <i class="pm-change-weapons__arrow fa-solid fa-arrow-right-long" aria-hidden="true"></i>
+      <span {{#if hands.afterOver}}data-over{{/if}}>{{hands.after}}/{{hands.capacity}}</span>
+      {{/if}}
+    </span>
+  </div>
+  {{#if freeChange}}
+  <div class="pm-change-weapons__stat">
+    <span class="pm-window__label">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsFreeChange"}}</span>
+    <span class="pm-change-weapons__value" {{#if freeChange.used}}data-spent{{/if}}>
+      {{#if freeChange.used}}{{localize "PMTTRPG.ActionMenu.ChangeWeaponsFreeSpent"}}{{else}}{{localize "PMTTRPG.ActionMenu.ChangeWeaponsFreeUnused"}}{{/if}}
+    </span>
+  </div>
+  {{/if}}
+  {{#if pool}}
+  <div class="pm-change-weapons__stat">
+    <span class="pm-window__label">{{localize pool.labelKey}}</span>
+    <span class="pm-change-weapons__value">{{pool.value}}</span>
+  </div>
+  {{/if}}
+</header>
+
+<section class="pm-change-weapons__group">
+  <div class="pm-change-weapons__heading">
+    <h3 class="pm-window__label">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsHeld"}}</h3>
+    {{#if held.rows.length}}
+    <button type="button" class="pm-change-weapons__drop" data-action="drop" data-tooltip-text="{{localize drop.tooltipKey}}" {{disabled drop.disabled}}>
+      <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+      <span>{{localize "PMTTRPG.ActionMenu.ChangeWeaponsDrop"}}</span>
+    </button>
+    {{/if}}
+  </div>
+  {{#if held.rows.length}}
+  <ul class="pm-change-weapons__items">
+    {{#each held.rows}}{{> itemRow field="held"}}{{/each}}
+  </ul>
+  {{else}}
+  <p class="pm-window__empty">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsReasonNothingHeld"}}</p>
+  {{/if}}
+</section>
+
+<section class="pm-change-weapons__group">
+  <h3 class="pm-window__label">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsInventory"}}</h3>
+  {{#if stowed.rows.length}}
+  <ul class="pm-change-weapons__items">
+    {{#each stowed.rows}}{{> itemRow field="stowed"}}{{/each}}
+  </ul>
+  {{else}}
+  <p class="pm-window__empty">{{localize "PMTTRPG.ActionMenu.ChangeWeaponsReasonNothingStowed"}}</p>
+  {{/if}}
+</section>
+
+{{> "systems/projectmoonttrpg/templates/apps/parts/reactive-dialog-footer.hbs"}}
