@@ -193,7 +193,7 @@ function wallLevels(path, moverLevelId, snapshot) {
 }
 
 /**
- * Floors and ceilings stop Foundry's movement check too. If the next step would go down into the
+ * Foundry's movement check stops at a Define Surface too. If the next step would go down into the
  * floor under the token or up into a surface at its head then that surface is what stopped it.
  */
 function surfaceAtStop(stop, next, snapshot, body) {
@@ -314,7 +314,10 @@ function environmentObstacle(path, { snapshot, grid, token, surfaces, transition
       levelId: token.levelId,
     };
     if (surfaces === "stop" && length > 0) {
-      const hit = surfaceContact(snapshot, body);
+      const underfoot = surfaceAtStop(from, to, snapshot, body) === "floor";
+      const hit = underfoot
+        ? { kind: "floor", fraction: 0, point: from, elevation: from.elevation ?? 0 }
+        : surfaceContact(snapshot, body);
       const nextElevation = path[index + 1]?.elevation;
       const rising = (to.elevation ?? 0) > (from.elevation ?? 0);
       const continuesPast = index < path.length - 1
@@ -323,7 +326,7 @@ function environmentObstacle(path, { snapshot, grid, token, surfaces, transition
         && (rising ? nextElevation > hit.elevation + 1e-9 : nextElevation < hit.elevation - 1e-9);
       const interior = hit && hit.fraction > 1e-9 && hit.fraction < 1 - 1e-9;
       const endpointCross = hit && hit.fraction >= 1 - 1e-9 && hit.fraction <= 1 + 1e-9 && continuesPast;
-      if (interior || endpointCross) {
+      if (underfoot || interior || endpointCross) {
         const distance = travelled + hit.fraction * length;
         if (!best || distance < best.distance - 1e-9) {
           best = {

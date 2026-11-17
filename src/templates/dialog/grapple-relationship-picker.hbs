@@ -1,0 +1,11 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{i18n.hint}}</p>
+  <div class="action-weapon-form__options" role="radiogroup">
+    {{#each rows}}
+      <label class="action-menu-option">
+        <input type="radio" name="relationshipId" value="{{id}}" {{#if checked}}checked{{/if}}>
+        <span class="pmttrpg-grapple-picker__pair">{{grappler}} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> {{target}}</span>
+      </label>
+    {{/each}}
+  </div>
+</div>
