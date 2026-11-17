@@ -1132,6 +1132,89 @@
   text-align: center;
 }
 
+.pm-sheet .combat-economy__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.pm-sheet .combat-economy__credit-badge {
+  margin-block: -3px;
+  padding: 2px 6px;
+  border: 1px solid rgba(215, 182, 106, 0.45);
+  border-radius: 999px;
+  background: rgba(215, 182, 106, 0.14);
+  color: var(--gold-tab);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1;
+  cursor: help;
+  -webkit-text-stroke: 0;
+}
+
+.pm-sheet .combat-economy__credit-badge[data-action] {
+  cursor: pointer;
+}
+
+.pm-sheet .combat-economy__grid .combat-economy__label button.combat-economy__edit {
+  display: inline;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0;
+  background: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit;
+  font-family: inherit !important;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.pm-sheet .combat-economy__grid .combat-economy__label button.combat-economy__edit:focus {
+  background: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+.pm-sheet .combat-economy__grid .combat-economy__label button.combat-economy__edit:hover,
+.pm-sheet .combat-economy__grid .combat-economy__label button.combat-economy__edit:focus-visible {
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--gold-tab) !important;
+  outline: 0;
+}
+
+
+@container tab-stack (20rem < width <= 27.5rem) {
+  .pm-sheet .combat-economy__label {
+    gap: 2px;
+  }
+
+  .pm-sheet .combat-economy__credit-badge {
+    margin-right: -6px;
+    padding: 0;
+    border-width: 0;
+    background: none;
+    font-size: 10px;
+  }
+}
+
+#tooltip.pm-reaction-credit-tooltip {
+  text-align: left;
+  white-space: pre-line;
+}
+
 .pm-sheet .combat-initiative__inline {
   display: flex;
   align-items: center;
@@ -1178,6 +1261,126 @@
   font-weight: 500;
   text-align: center;
   -webkit-text-stroke: 0;
+}
+
+.pm-sheet .tab-section-header--action-states {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px 10px;
+}
+
+.pm-sheet .tab-section-header--action-states .tab-section-title {
+  flex: 0 0 auto;
+  margin: 0;
+  line-height: 26px;
+  white-space: nowrap;
+}
+
+.pm-sheet .sheet-action-states {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-sheet .sheet-action-states > li {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.pm-sheet .sheet-action-states__empty {
+  margin-left: auto;
+  line-height: 26px;
+}
+
+.pm-sheet .sheet-action-state,
+.character-sheet-prototype .pm-sheet .sheet-action-states button.sheet-action-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  max-width: 100%;
+  height: 26px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid rgba(215, 182, 106, 0.3) !important;
+  border-radius: 999px;
+  background: rgba(42, 31, 20, 0.75) !important;
+  box-shadow: none !important;
+  color: var(--cream) !important;
+  font-family: var(--font-body) !important;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: help;
+  -webkit-text-stroke: 0;
+}
+
+.character-sheet-prototype .pm-sheet .sheet-action-states button.sheet-action-state {
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.character-sheet-prototype .pm-sheet .sheet-action-states button.sheet-action-state:hover,
+.character-sheet-prototype .pm-sheet .sheet-action-states button.sheet-action-state:focus-visible {
+  border-color: rgba(243, 194, 103, 0.55) !important;
+  background: rgba(66, 48, 31, 0.95) !important;
+  box-shadow: 0 0 8px rgba(215, 182, 106, 0.18) !important;
+  color: var(--cream-bright) !important;
+  outline: none;
+}
+
+.pm-sheet .sheet-action-state__icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-left: -6px;
+  object-fit: contain;
+}
+
+.pm-sheet i.sheet-action-state__icon {
+  width: auto;
+  height: auto;
+  margin-left: -2px;
+  color: var(--gold-tab);
+  font-size: 12px;
+}
+
+.pm-sheet .sheet-action-state__counterpart {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(244, 234, 210, 0.72);
+  font-weight: 500;
+}
+
+.pm-sheet .sheet-action-state__counterpart::before {
+  content: "· ";
+}
+
+.pm-sheet .sheet-action-state__remove {
+  flex: 0 0 auto;
+  margin-left: 1px;
+  font-size: 10px;
+  opacity: 0.55;
+}
+
+.character-sheet-prototype .pm-sheet .sheet-action-state i {
+  font-family: var(--font-awesome, "Font Awesome 6 Pro"), "Font Awesome 6 Free", FontAwesome, sans-serif !important;
+  font-weight: 900 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.pm-sheet button.sheet-action-state:hover .sheet-action-state__remove,
+.pm-sheet button.sheet-action-state:focus-visible .sheet-action-state__remove {
+  opacity: 1;
 }
 
 .pm-sheet .tab-empty,
@@ -1624,6 +1827,12 @@
   color: #b9f0ba;
   background: rgba(36, 68, 37, 0.45);
   border-color: rgba(126, 201, 127, 0.4);
+}
+
+.pm-sheet .item-tags .tag--dropped {
+  color: #f0b39e;
+  background: rgba(224, 120, 86, 0.14);
+  border-color: rgba(224, 120, 86, 0.45);
 }
 
 .pm-sheet .item-tags .tag--rank {
@@ -2146,6 +2355,17 @@
 .pm-sheet .item--weapon-unequipped,
 .pm-sheet .item--outfit-unequipped,
 .pm-sheet .item--augment-inactive {
+  filter: grayscale(1);
+}
+
+.pm-sheet .item--weapon-unequipped.item--dropped {
+  filter: none;
+}
+
+.pm-sheet .item--weapon-unequipped.item--dropped > .item-title-row > .item-title-row__lead,
+.pm-sheet .item--weapon-unequipped.item--dropped .item-controls > :not(.tool-equip--dropped),
+.pm-sheet .item--weapon-unequipped.item--dropped > .item-details > :not(.item-tags),
+.pm-sheet .item--weapon-unequipped.item--dropped .item-tags > :not(.tag--dropped) {
   filter: grayscale(1);
 }
 

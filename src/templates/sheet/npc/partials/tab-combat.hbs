@@ -20,8 +20,9 @@
     <header class="tab-section-header tab-section-header--used">
       <h3 class="tab-section-title">{{localize "PMTTRPG.ActionEconomy"}}</h3>
       <div class="combat-used-actions">
-        <button type="button" class="combat-used" data-action="usedActionEconomy" data-kind="action" title="{{localize "PMTTRPG.UsedActionHint"}}" {{#if (eq system.attributes.actions.value 0)}}disabled{{/if}}>{{localize "PMTTRPG.UsedAction"}}</button>
-        <button type="button" class="combat-used" data-action="usedActionEconomy" data-kind="reaction" title="{{localize "PMTTRPG.UsedReactionHint"}}" {{#if (eq system.attributes.reactions.value 0)}}disabled{{/if}}>{{localize "PMTTRPG.UsedReaction"}}</button>
+        <button type="button" class="combat-used" data-action="openActionMenu" data-tooltip="{{localize "PMTTRPG.ActionMenu.OpenHint"}}">{{localize "PMTTRPG.ActionMenu.Open"}}</button>
+        <button type="button" class="combat-used" data-action="usedActionEconomy" data-kind="action" data-tooltip="{{localize "PMTTRPG.UsedActionHint"}}" {{#if usedActionDisabled}}disabled{{/if}}>{{localize "PMTTRPG.UsedAction"}}</button>
+        <button type="button" class="combat-used" data-action="usedActionEconomy" data-kind="reaction" data-tooltip="{{localize "PMTTRPG.UsedReactionHint"}}" {{#if (and inCombat (eq reactionDisplay.universal 0))}}disabled{{/if}}>{{localize "PMTTRPG.UsedReaction"}}</button>
       </div>
     </header>
     <div class="combat-modifiers__grid combat-economy__grid">
@@ -32,9 +33,10 @@
           <span class="combat-economy__max" title="{{localize "PMTTRPG.Actions"}}">{{system.attributes.actions.max}}</span>
         </span>
       </label>
-      <label class="stat-field">{{localize "PMTTRPG.Reactions"}}
+      <label class="stat-field" for="{{@root.partId}}-reactions">
+        <span class="combat-economy__label">{{#if reactionDisplay.canEdit}}<button type="button" class="combat-economy__edit" data-action="editReactionCredits" data-tooltip="{{localize "PMTTRPG.ReactionCredit.EditHint"}}">{{localize "PMTTRPG.Reactions"}}</button>{{else}}{{localize "PMTTRPG.Reactions"}}{{/if}}{{> "systems/projectmoonttrpg/templates/sheet/character/partials/combat-economy-credits.hbs"}}</span>
         <span class="combat-economy__readout">
-          <input type="text" name="system.attributes.reactions.value" value="{{system.attributes.reactions.value}}" data-dtype="Number" aria-label="{{localize "PMTTRPG.ReactionsRemaining"}}">
+          <input type="text" id="{{@root.partId}}-reactions" name="system.attributes.reactions.value" value="{{system.attributes.reactions.value}}" data-dtype="Number" aria-label="{{localize "PMTTRPG.ReactionsRemaining"}}">
           <span class="combat-economy__sep" aria-hidden="true">/</span>
           <span class="combat-economy__max" title="{{localize "PMTTRPG.Reactions"}}">{{system.attributes.reactions.max}}</span>
         </span>
@@ -48,6 +50,8 @@
       </label>
     </div>
   </section>
+
+  {{> "systems/projectmoonttrpg/templates/sheet/character/partials/action-states.hbs"}}
 
   <section class="equipment-section equipment-section--initiative">
     <header class="tab-section-header tab-section-header--initiative">
@@ -154,7 +158,7 @@
     {{#if tools.length}}
     <ol class="items-list">
       {{#each tools as |tool|}}
-      <li class="item item--tool collapsed{{#if tool.system.equipped}} item--equipped{{/if}}" data-item-id="{{tool._id}}">
+      <li class="item item--tool collapsed{{#if tool.system.equipped}} item--equipped{{else if tool.flags.projectmoonttrpg.dropped}} item--dropped{{/if}}" data-item-id="{{tool._id}}">
         <div class="item-title-row">
           <div class="item-title-row__lead">
             {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=tool.img name=tool.name}}
@@ -175,9 +179,9 @@
           </div>
           <div class="item-controls">
             {{#if (eq tool.system.form "reusable")}}
-            {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="usesRemaining" equipped=tool.system.equipped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
+            {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="usesRemaining" equipped=tool.system.equipped dropped=tool.flags.projectmoonttrpg.dropped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
             {{else}}
-            {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="quantity" equipped=tool.system.equipped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
+            {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="quantity" equipped=tool.system.equipped dropped=tool.flags.projectmoonttrpg.dropped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
             {{/if}}
           </div>
         </div>
@@ -189,6 +193,8 @@
             {{else}}
             <span class="tag tag--equipped">{{localize "PMTTRPG.ToolHeld"}}</span>
             {{/if}}
+            {{else if tool.flags.projectmoonttrpg.dropped}}
+            <span class="tag tag--dropped">{{localize "PMTTRPG.ToolDropped"}}</span>
             {{/if}}
             {{#if (lookup ../selects.toolForms tool.system.form)}}
             <span class="tag">{{localize (lookup ../selects.toolForms tool.system.form)}}</span>

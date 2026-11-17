@@ -1,21 +1,21 @@
-<li class="item item--weapon collapsed{{#if item.system.equipped}} item--equipped{{else}} item--weapon-unequipped{{/if}}" data-item-id="{{item._id}}">
+<li class="item item--weapon collapsed{{#if item.system.equipped}} item--equipped{{else}} item--weapon-unequipped{{#if item.flags.projectmoonttrpg.dropped}} item--dropped{{/if}}{{/if}}" data-item-id="{{item._id}}">
   <div class="item-title-row">
     <div class="item-title-row__lead">
       {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=item.img name=item.name}}
       <strong class="item-name">{{item.name}}</strong>
       <div class="item-title-row__actions">
         {{#if (and item.system.offensiveDiceComputed (or (and (eq item.system.weaponType "ranged") (not item.system.damageTypeFixed)) (lookup selects.damageTypes item.system.damageType)))}}
-          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-attack-dice.hbs" assetPath=assetPath roll=item.system.offensiveDiceComputed itemId=item._id damageType=item.system.damageType damageLabel=(localize (lookup selects.damageTypes item.system.damageType)) showDamageIcon=(lookup selects.damageTypes item.system.damageType)}}
+          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-attack-dice.hbs" assetPath=assetPath roll=item.system.offensiveDiceComputed itemId=item._id damageType=item.system.damageType damageLabel=(localize (lookup selects.damageTypes item.system.damageType)) showDamageIcon=(and (lookup selects.damageTypes item.system.damageType) (not (eq item.system.damageType "force")))}}
         {{/if}}
       </div>
     </div>
     <div class="item-controls">
-      {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-equipment.hbs" itemId=item._id equipped=item.system.equipped handProperty=item.system.handProperty}}
+      {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-equipment.hbs" itemId=item._id equipped=item.system.equipped dropped=item.flags.projectmoonttrpg.dropped handProperty=item.system.handProperty}}
     </div>
   </div>
   <div class="item-details">
     <div class="item-tags">
-      {{#if item.system.equipped}}<span class="tag tag--equipped">{{localize "PMTTRPG.ToolHeld"}}</span>{{/if}}
+      {{#if item.system.equipped}}<span class="tag tag--equipped">{{localize "PMTTRPG.ToolHeld"}}</span>{{else if item.flags.projectmoonttrpg.dropped}}<span class="tag tag--dropped">{{localize "PMTTRPG.ToolDropped"}}</span>{{/if}}
       {{#if (lookup selects.weaponTypes item.system.weaponType)}}
         <span class="tag">{{localize (lookup selects.weaponTypes item.system.weaponType)}}</span>
       {{/if}}

@@ -21,7 +21,7 @@
   {{#if tools.length}}
   <ol class="items-list">
     {{#each tools as |tool|}}
-    <li class="item item--tool collapsed{{#if tool.system.equipped}} item--equipped{{/if}}" data-item-id="{{tool._id}}">
+    <li class="item item--tool collapsed{{#if tool.system.equipped}} item--equipped{{else if tool.flags.projectmoonttrpg.dropped}} item--dropped{{/if}}" data-item-id="{{tool._id}}">
       <div class="item-title-row">
         <div class="item-title-row__lead">
           {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-thumb.hbs" img=tool.img name=tool.name}}
@@ -42,9 +42,9 @@
         </div>
         <div class="item-controls">
           {{#if (eq tool.system.form "reusable")}}
-          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="usesRemaining" equipped=tool.system.equipped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
+          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="usesRemaining" equipped=tool.system.equipped dropped=tool.flags.projectmoonttrpg.dropped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
           {{else}}
-          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="quantity" equipped=tool.system.equipped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
+          {{> "systems/projectmoonttrpg/templates/sheet/character/partials/item-controls-tool.hbs" itemId=tool._id counter="quantity" equipped=tool.system.equipped dropped=tool.flags.projectmoonttrpg.dropped handProperty=tool.system.handProperty showUse=(and (ne tool.system.toolKind "applied") (or (ne tool.system.form "none") tool.system.allowUse))}}
           {{/if}}
         </div>
       </div>
@@ -56,6 +56,8 @@
           {{else}}
           <span class="tag tag--equipped">{{localize "PMTTRPG.ToolHeld"}}</span>
           {{/if}}
+          {{else if tool.flags.projectmoonttrpg.dropped}}
+          <span class="tag tag--dropped">{{localize "PMTTRPG.ToolDropped"}}</span>
           {{/if}}
           {{#if (lookup ../selects.toolForms tool.system.form)}}
           <span class="tag">{{localize (lookup ../selects.toolForms tool.system.form)}}</span>

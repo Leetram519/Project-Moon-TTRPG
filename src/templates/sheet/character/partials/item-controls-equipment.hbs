@@ -1,12 +1,22 @@
-{{!-- readiness: outfits/handless = worn, weapons/tools 1H/2H = held --}}
+{{!-- readiness: outfits/handless = worn, weapons/tools 1H/2H = held. Outfits just toggle, the rest open the carry menu. --}}
+{{#*inline "carryLabel"}}{{#if equipped}}{{#if (or (eq mode "wear") (eq handProperty "handless"))}}{{localize "PMTTRPG.CarryState.Worn"}}{{else if (or (eq handProperty "twoHanded") (eq handProperty "off2h") (eq handProperty "def2h"))}}{{localize "PMTTRPG.CarryState.Held2H"}}{{else}}{{localize "PMTTRPG.CarryState.Held1H"}}{{/if}}{{else if dropped}}{{localize "PMTTRPG.CarryState.Dropped"}}{{else}}{{localize "PMTTRPG.CarryState.Stowed"}}{{/if}}{{/inline}}
+{{#*inline "wearLabel"}}{{#if equipped}}{{localize "PMTTRPG.ToolStow"}}{{else}}{{localize "PMTTRPG.ToolWear"}}{{/if}}{{/inline}}
 <button type="button"
-        class="item-control tool-equip{{#if equipped}} tool-equip--on{{else}} tool-equip--stowed{{/if}}"
+        class="item-control tool-equip{{#if equipped}} tool-equip--on{{else if dropped}} tool-equip--dropped{{else}} tool-equip--stowed{{/if}}"
         data-action="itemEquip"
         data-item-id="{{itemId}}"
-        title="{{#if equipped}}{{localize "PMTTRPG.ToolStow"}}{{else if (or (eq mode "wear") (eq handProperty "handless"))}}{{localize "PMTTRPG.ToolWear"}}{{else if (or (eq handProperty "twoHanded") (eq handProperty "off2h") (eq handProperty "def2h"))}}{{localize "PMTTRPG.ToolHold2H"}}{{else}}{{localize "PMTTRPG.ToolHold1H"}}{{/if}}"
-        aria-label="{{#if equipped}}{{localize "PMTTRPG.ToolStow"}}{{else if (or (eq mode "wear") (eq handProperty "handless"))}}{{localize "PMTTRPG.ToolWear"}}{{else if (or (eq handProperty "twoHanded") (eq handProperty "off2h") (eq handProperty "def2h"))}}{{localize "PMTTRPG.ToolHold2H"}}{{else}}{{localize "PMTTRPG.ToolHold1H"}}{{/if}}"
-        aria-pressed="{{#if equipped}}true{{else}}false{{/if}}">
-  {{#if (or (eq mode "wear") (eq handProperty "handless"))}}
+        {{#if (eq mode "wear")}}
+        title="{{> wearLabel}}"
+        aria-label="{{> wearLabel}}"
+        aria-pressed="{{#if equipped}}true{{else}}false{{/if}}"
+        {{else}}
+        title="{{> carryLabel}}"
+        aria-label="{{> carryLabel}}"
+        aria-haspopup="menu"
+        {{/if}}>
+  {{#if (and dropped (not equipped))}}
+  <i class="fa-solid fa-grip-lines" aria-hidden="true"></i>
+  {{else if (or (eq mode "wear") (eq handProperty "handless"))}}
   <i class="fa-solid fa-shirt" aria-hidden="true"></i>
   {{else}}
   <span class="tool-equip__hands" aria-hidden="true">

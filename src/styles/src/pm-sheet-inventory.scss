@@ -54,6 +54,13 @@
       opacity: 0.72;
     }
 
+    &--dropped {
+      color: var(--sheet-danger, #e07856);
+      border-color: rgba(224, 120, 86, 0.45);
+      background: rgba(224, 120, 86, 0.12);
+      opacity: 1;
+    }
+
     &__hands {
       position: relative;
       display: inline-flex;
@@ -160,5 +167,82 @@
     background: rgba(214, 162, 74, 0.16) !important;
     box-shadow: inset 0 0 0 1px rgba(214, 162, 74, 0.55) !important;
     opacity: 1;
+  }
+
+  .tool-equip.tool-equip--dropped {
+    color: var(--sheet-danger, #e07856) !important;
+    background: rgba(224, 120, 86, 0.12) !important;
+    box-shadow: inset 0 0 0 1px rgba(224, 120, 86, 0.45) !important;
+    opacity: 1;
+  }
+}
+
+.locked-tooltip.pmttrpg-carry-menu {
+  padding: 4px;
+  border: 1px solid rgba(214, 162, 74, 0.35);
+  border-radius: 8px;
+  background: #1c140e;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+  text-align: left;
+
+  .pmttrpg-carry-menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  button.pmttrpg-carry-menu__option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-width: 8.5rem;
+    height: 30px;
+    margin: 0;
+    padding: 0 12px 0 10px;
+    border: 0;
+    border-radius: 5px;
+    color: #e8dcc8;
+    font-family: "Pretendard", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: left;
+    white-space: nowrap;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+
+    i {
+      width: 16px;
+      margin: 0;
+      color: rgba(232, 220, 200, 0.55);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: #f4ead2;
+      background: rgba(214, 162, 74, 0.14);
+      outline: 0;
+    }
+
+    &[aria-checked="true"] {
+      color: #d6a24a;
+      background: rgba(214, 162, 74, 0.16);
+      box-shadow: inset 2px 0 0 #d6a24a;
+
+      i {
+        color: #d6a24a;
+      }
+    }
+
+    &[data-state="dropped"] i {
+      color: #e07856;
+    }
   }
 }
