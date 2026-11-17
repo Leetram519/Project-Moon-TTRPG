@@ -12,16 +12,17 @@ function isCurrentTurn(token) {
   return Boolean(combatant && combat.combatant?.id === combatant.id);
 }
 
+// Goes off the measured cost (not the spaces). This allows additive surcharges to get counted too.
 function accruedCost(waypoint) {
+  const cell = Number(canvas?.grid?.distance) || 1;
+  const measuredCost = Number(waypoint?.measurement?.cost);
+  if (Number.isFinite(measuredCost) && measuredCost >= 0) return Math.max(0, Math.round(measuredCost / cell));
   const spaces = Number(waypoint?.measurement?.spaces);
   if (Number.isFinite(spaces) && spaces >= 0) return Math.max(0, Math.round(spaces));
   const distance = Number(waypoint?.measurement?.distance);
-  const cell = Number(canvas?.grid?.distance) || 1;
   if (Number.isFinite(distance) && distance >= 0 && cell > 0) {
     return Math.max(0, Math.round(distance / cell));
   }
-  const measured = Number(waypoint?.measurement?.cost);
-  if (Number.isFinite(measured) && measured >= 0) return Math.max(0, Math.round(measured));
   const cost = Number(waypoint?.cost);
   if (Number.isFinite(cost) && cost >= 0) return Math.max(0, Math.round(cost));
   return 0;

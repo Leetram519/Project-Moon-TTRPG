@@ -1,18 +1,37 @@
 import { groupStatuses, onStatusItemChange } from "../status/group-statuses.js";
 import { actorTokenPlaceables } from "../acting-user.js";
 import { showStatusTooltip, hideStatusTooltip } from "./status-tooltip.js";
+import {
+  applyAdditiveSurcharge,
+  isFreeMovementAction,
+  movementCostSurchargePerSpace,
+} from "../movement/movement-cost.js";
+import {
+  combatUpdateAffectsActionState,
+  confirmDismissActionState,
+  dismissActionState,
+  getActionStateEntries,
+  layoutActionStateBadges,
+} from "../action-economy/presentation.js";
 
 const VISIBLE_CAP = 5;
+const ACTION_STATE_CAP = 3;
+const FALLBACK_ICON = "icons/svg/mystery-man.svg";
+const ACTION_STATE_SETTING = "showTokenActionStateBadges";
 
 export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   /** @type {PIXI.Container|null} */
   statusBadges = null;
+
+  /** @type {PIXI.Container|null} */
+  actionStateBadges = null;
   
   /** @type {PIXI.Container|null} */ 
   rangeVisualizer = null;
 
   #statusHover = false;
   #badgeDrawId = 0;
+  #actionBadgeDrawId = 0;
   #pendingBreathTicks = new Set();
 
   #badgeHits = [];
@@ -22,7 +41,9 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   async _draw(options) {
     await super._draw(options);
     this.#createStatusBadgeContainer();
+    this.#createActionStateBadgeContainer();
     await this.drawStatusBadges();
+    await this.drawActionStateBadges();
   }
 
   /** @override */ 
@@ -33,6 +54,7 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     this.#clearPendingBreath();
     this.#destroyRangeVisualizer();
     this.statusBadges = null;
+    this.actionStateBadges = null;
     super._destroy(options);
   }
 
@@ -40,6 +62,25 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
   _refreshSize() {
     super._refreshSize();
     void this.drawStatusBadges();
+    void this.drawActionStateBadges();
+  }
+
+  /** @override */
+  _getMovementCostFunction(options) {
+    const base = super._getMovementCostFunction(options);
+    let perSpace = 0;
+    try {
+      perSpace = movementCostSurchargePerSpace(this.document);
+    } catch (error) {
+      console.warn("[PMTTRPG] Movement cost surcharge failed, so Foundry's cost is kept", error);
+      perSpace = 0;
+    }
+    if (!(perSpace > 0)) return base;
+    return (from, to, distance, segment) => {
+      const cost = base ? base(from, to, distance, segment) : distance;
+      if (isFreeMovementAction(segment.action)) return cost;
+      return applyAdditiveSurcharge(cost, distance, perSpace);
+    };
   }
 
   /** @override */
@@ -48,16 +89,18 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     this.#statusHover = true;
     canvas.stage.on("globalpointermove", this.#onStagePointerMove);
     void this.drawStatusBadges();
+    void this.drawActionStateBadges();
     return result;
   }
 
   /** @override */
-  _onHoverOut(event) {
+  _onHoverOut(event, options) {
     this.#statusHover = false;
     canvas.stage.off("globalpointermove", this.#onStagePointerMove);
     this.#setHoveredBadge(null);
     void this.drawStatusBadges();
-    return super._onHoverOut(event);
+    void this.drawActionStateBadges();
+    return super._onHoverOut(event, options);
   }
 
   /* -------------------------------------------- */
@@ -325,6 +368,18 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     }
   }
 
+  async #loadBadgeTexture(src, label = "") {
+    try {
+      const texture = await foundry.canvas.loadTexture(src || FALLBACK_ICON, {
+        fallback: FALLBACK_ICON,
+      });
+      return texture instanceof PIXI.Texture ? texture : null;
+    } catch (err) {
+      console.warn(`PMTTRPG | Failed to load badge icon for ${label}`, err);
+      return null;
+    }
+  }
+
   async #buildBadgeEntry(status, iconSize, textStyle, PreciseText) {
     const entry = new PIXI.Container();
     entry.eventMode = "none";
@@ -332,17 +387,8 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     entry._pmStatus = status;
     entry.iconSize = iconSize;
 
-    const src = status.img || "icons/svg/mystery-man.svg";
-    let texture = null;
-    try {
-      texture = await foundry.canvas.loadTexture(src, {
-        fallback: "icons/svg/mystery-man.svg",
-      });
-    } catch (err) {
-      console.warn(`PMTTRPG | Failed to load status icon for ${status.name}`, err);
-      return null;
-    }
-    if (!(texture instanceof PIXI.Texture)) return null;
+    const texture = await this.#loadBadgeTexture(status.img, status.name);
+    if (!texture) return null;
 
     const icon = new PIXI.Sprite(texture);
     icon.width = iconSize;
@@ -473,6 +519,149 @@ export class TokenPMTTRPG extends foundry.canvas.placeables.Token {
     icon.height = size;
     icon.position.set(offset, offset);
   }
+
+  /* -------------------------------------------- */
+  /* ----------- ACTION STATE BADGES ------------ */
+  /* -------------------------------------------- */
+
+  #createActionStateBadgeContainer() {
+    this.actionStateBadges?.destroy({ children: true });
+    this.actionStateBadges = this.addChild(new PIXI.Container());
+    this.actionStateBadges.name = "pmttrpgActionStateBadges";
+    this.actionStateBadges.eventMode = "passive";
+    this.actionStateBadges.sortableChildren = false;
+  }
+
+  // uses this Token's own Combatant.
+  #actionStateEntries() {
+    try {
+      if (!game.settings.get("projectmoonttrpg", ACTION_STATE_SETTING)) return [];
+      const combatant = this.document.combatant;
+      if (!combatant) return [];
+      const combat = combatant.combat;
+      return getActionStateEntries(combatant, { combat, user: game.user });
+    } catch (error) {
+      console.warn("PMTTRPG | action-state presentation failed for token", this.id, error);
+      return [];
+    }
+  }
+
+  /**
+   * Draws the action badges top right (Foundry's effect icons sit top left and our status row is at the bottom).
+   */
+  async drawActionStateBadges() {
+    if (!this.actionStateBadges || this.destroyed) return;
+
+    const drawId = ++this.#actionBadgeDrawId;
+    for (const child of this.actionStateBadges.removeChildren()) {
+      child.destroy({ children: true });
+    }
+
+    const entries = this.#actionStateEntries();
+    if (!entries.length) {
+      this.actionStateBadges.visible = false;
+      return;
+    }
+
+    const { visible, overflow } = layoutActionStateBadges(entries, {
+      cap: ACTION_STATE_CAP,
+      expanded: this.#statusHover,
+    });
+
+    const pad = Math.max(2, Math.round(Math.min(this.w, this.h) * 0.03));
+    const iconSize = Math.max(10, Math.min(28, Math.round(Math.min(this.w, this.h) * 0.22)));
+    const gap = Math.max(1, Math.round(iconSize * 0.12));
+    const PreciseText = foundry.canvas.containers.PreciseText;
+
+    const sprites = [];
+    for (const entry of visible) {
+      const texture = await this.#loadBadgeTexture(entry.icon?.img, entry.labelKey);
+      if (drawId !== this.#actionBadgeDrawId || this.destroyed) break;
+      if (!texture) continue;
+      const wrap = new PIXI.Container();
+      const icon = new PIXI.Sprite(texture);
+      icon.width = iconSize;
+      icon.height = iconSize;
+      icon.eventMode = "none";
+      wrap.addChild(icon);
+      if (entry.dismissible === true) {
+        wrap.eventMode = "static";
+        wrap.cursor = "pointer";
+        const entryId = entry.id;
+        wrap.on("pointertap", (event) => {
+          event.stopPropagation();
+          const combatant = this.document.combatant;
+          if (!combatant) return;
+          const options = { combat: combatant.combat, user: game.user };
+          void (async () => {
+            if (!(await confirmDismissActionState(combatant, entryId, options))) return;
+            await dismissActionState(combatant, entryId, options);
+          })();
+        });
+      } else {
+        wrap.eventMode = "none";
+      }
+      sprites.push(wrap);
+    }
+
+    if (drawId !== this.#actionBadgeDrawId || this.destroyed || !this.actionStateBadges) {
+      for (const sprite of sprites) sprite.destroy({ children: true });
+      return;
+    }
+    if (!sprites.length) {
+      this.actionStateBadges.visible = false;
+      return;
+    }
+
+    if (overflow > 0) {
+      this.#attachOverflowBadge(sprites[sprites.length - 1], iconSize, overflow, PreciseText);
+    }
+
+    // right-aligned, and it wraps down a row when the hover expansion doesn't fit
+    const maxRowWidth = Math.max(iconSize, this.w - pad * 2);
+    const perRow = Math.max(1, Math.floor((maxRowWidth + gap) / (iconSize + gap)));
+    sprites.forEach((sprite, index) => {
+      const row = Math.floor(index / perRow);
+      const col = index % perRow;
+      const rowCount = Math.min(perRow, sprites.length - row * perRow);
+      const rowWidth = rowCount * iconSize + (rowCount - 1) * gap;
+      sprite.x = (maxRowWidth - rowWidth) + col * (iconSize + gap);
+      sprite.y = row * (iconSize + gap);
+      this.actionStateBadges.addChild(sprite);
+    });
+
+    this.actionStateBadges.x = pad;
+    this.actionStateBadges.y = pad;
+    this.actionStateBadges.visible = true;
+  }
+}
+
+function refreshTokenActionStateBadgesForCombatant(combatant) {
+  if (!canvas.ready || !combatant.tokenId) return;
+  void canvas.tokens.get(combatant.tokenId)?.drawActionStateBadges();
+}
+
+function refreshTokenActionStateBadgesForCombat(combat) {
+  for (const combatant of combat.combatants) {
+    refreshTokenActionStateBadgesForCombatant(combatant);
+  }
+}
+
+function refreshAllTokenActionStateBadges() {
+  if (!canvas.ready) return;
+  for (const token of canvas.tokens.placeables) void token.drawActionStateBadges();
+}
+
+export function registerTokenActionStateBadges() {
+  Hooks.on("updateCombatant", (combatant) => refreshTokenActionStateBadgesForCombatant(combatant));
+  Hooks.on("createCombatant", (combatant) => refreshTokenActionStateBadgesForCombatant(combatant));
+  Hooks.on("deleteCombatant", (combatant) => refreshTokenActionStateBadgesForCombatant(combatant));
+  Hooks.on("updateCombat", (combat, changed) => {
+    if (!combatUpdateAffectsActionState(changed)) return;
+    if ("active" in changed) refreshAllTokenActionStateBadges();
+    else refreshTokenActionStateBadgesForCombat(combat);
+  });
+  Hooks.on("deleteCombat", (combat) => refreshTokenActionStateBadgesForCombat(combat));
 }
 
 export function registerTokenStatusBadges() {
@@ -506,6 +695,16 @@ export function registerTokenStatusBadgeSettings() {
     config: true,
     type: Boolean,
     default: true,
+  });
+
+  game.settings.register("projectmoonttrpg", ACTION_STATE_SETTING, {
+    name: "PMTTRPG.Settings.showTokenActionStateBadges.name",
+    hint: "PMTTRPG.Settings.showTokenActionStateBadges.hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
+    onChange: () => refreshAllTokenActionStateBadges(),
   });
 }
 
