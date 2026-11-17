@@ -1,5 +1,5 @@
 import {
-  DAMAGE_TYPES,
+  RESISTANCE_DAMAGE_TYPES,
   buildResistanceOverrideMap,
   isResistanceNoun,
   normalizeDamageType,
@@ -24,6 +24,7 @@ import {
 import { isAlwaysActiveResource, isApplyPoolNoun, isBonusNoun, isRegenNoun, isReservedNoun, isResourceNoun, lookupNoun, nounAllowsOp, resolveApplyPool} from "./nouns.js";
 import { tokenize, tokenizeExpression, LexError } from "./lexer.js";
 import { parseDiceFormulaOverride } from "./dice-formula.js";
+import { ACTION_KINDS } from "../action-economy/kinds.js";
 
 const SINGLE_TARGETS = new Set(["self", "target", "ally", "attacker", "originator", "burster", "burstee", "healer"]);
 const MULTI_TARGETS  = new Set(["enemies", "allies", "all"]);
@@ -34,9 +35,11 @@ const MUL_OPS = new Set(["*", "/", "%", "//", "//f", "//c"]);
 const EXPR_PATH_ROOTS = new Set([
   "self", "target", "ally", "attacker", "originator", "burster", "burstee", "healer",
   "damage", "incoming", "heal", "item", "clash", "changed", "burst", "depleted", "moved", "roll", "pendingRoll", "proc",
-  "round", "combat", "event",
+  "round", "combat", "event", "action",
 ]);
 const SINGLE_TARGET_HINT = "self/target/ally/attacker/originator/burster/burstee/healer";
+const REACTION_KIND_WORDS = new Set(["universal", "block", "evade", "counter"]);
+const ACTION_KIND_IDS = new Set(Object.values(ACTION_KINDS));
 
 const NUMERIC_COMPARE_OPS = new Set([">", "<", ">=", "<="]);
 
@@ -517,6 +520,12 @@ class Parser {
 
   _assertAlwaysActiveSafe(stmt) {
     if (stmt.type === "LetStatement") return;
+    if (stmt.reactionSpend) {
+      throw new ParseError(
+        "[Always Active] can't spend Reactions; use an event trigger",
+        this.peek()
+      );
+    }
     if (stmt.type === "DialogStatement") {
       throw new ParseError(
         "[Always Active] does not allow 'dialog'; use an event trigger",
@@ -577,6 +586,12 @@ class Parser {
         if (!isAlwaysActiveResource(action.argument)) {
           throw new ParseError(
             `[Always Active] cannot use '${action.argument}' (use an event trigger)`,
+            this.peek()
+          );
+        }
+        if (action.lifetime) {
+          throw new ParseError(
+            "[Always Active] Reactions come back every turn, so 'this round' only works in event triggers",
             this.peek()
           );
         }
@@ -1050,8 +1065,22 @@ class Parser {
   parseConditionBody() {
     const lhs = this.parseCondLhs();
     const operator = this.consume("OPERATOR").value;
+    const rhsTok = this.peek();
     const rhs = this.parseCondRhs(operator);
+    this._checkActionKindValue(lhs, rhs, rhsTok);
     return { type: "Condition", lhs, operator, rhs };
+  }
+
+  _checkActionKindValue(lhs, rhs, tok) {
+    const path = lhs?.type === "ACCESSOR" && lhs.expr?.type === "Path" ? lhs.expr.segments : null;
+    if (path?.length !== 2 || path[0] !== "action" || path[1] !== "kind" || rhs?.type !== "IDENT") return;
+    if (ACTION_KIND_IDS.has(rhs.value)) return;
+    const loose = String(rhs.value).replace(/[\s_-]/g, "").toLowerCase();
+    const meant = [...ACTION_KIND_IDS].find((id) => id.toLowerCase() === loose);
+    throw new ParseError(
+      meant ? `'${rhs.value}' isn't an action kind; it's written '${meant}'` : `'${rhs.value}' isn't an action kind`,
+      tok
+    );
   }
 
   parseCondLhs() {
@@ -1489,6 +1518,19 @@ class Parser {
     if (this.check("KEYWORD", "spend")) {
       const spend = this.parseSpendBody();
       this.consumeStatementEnd();
+      if (spend.reactionSpend) {
+        const stmt = {
+          type: "Statement",
+          condition: packConditions(pre),
+          reactionSpend: spend.reactionSpend,
+          actions: spend.actions,
+          polarity: null,
+        };
+        if (roll) stmt.roll = roll;
+        const packedPost = packConditions(post);
+        if (packedPost) stmt.postCondition = packedPost;
+        return stmt;
+      }
       const spendPre = roll ? pre : [...pre, spend.condition];
       const spendPost = roll ? [...post, spend.condition] : post;
       const stmt = {
@@ -1745,6 +1787,20 @@ class Parser {
     return this._parseAmountExpr({ required: true });
   }
 
+  /**
+   * Null if the token isn't a damage type at all. A damage type outfits don't
+   * resist (like force) throws a parse error instead.
+   */
+  _resistanceDamageType(token) {
+    if (!token || (token.type !== "IDENT" && token.type !== "KEYWORD")) return null;
+    const named = normalizeDamageType(token.value);
+    if (!named) return null;
+    if (!RESISTANCE_DAMAGE_TYPES.includes(named)) {
+      throw new ParseError(`'${token.value}' is not a resistance damage type`, token);
+    }
+    return named;
+  }
+
   _isSetResistanceAhead() {
     const t0 = this.peek();
     if (!t0 || (t0.type !== "IDENT" && t0.type !== "KEYWORD")) return false;
@@ -1765,8 +1821,9 @@ class Parser {
     let pools = null;
 
     const first = this.peek();
-    if (normalizeDamageType(first.value)) {
-      damageTypes = [normalizeDamageType(first.value)];
+    const firstType = this._resistanceDamageType(first);
+    if (firstType) {
+      damageTypes = [firstType];
       this.advance();
     } else if (String(first.value).toLowerCase() === "hp" || String(first.value).toLowerCase() === "st") {
       pools = [String(first.value).toLowerCase()];
@@ -1775,8 +1832,9 @@ class Parser {
 
     const second = this.peek();
     if (second && (second.type === "IDENT" || second.type === "KEYWORD")) {
-      if (!damageTypes && normalizeDamageType(second.value)) {
-        damageTypes = [normalizeDamageType(second.value)];
+      const secondType = !damageTypes ? this._resistanceDamageType(second) : null;
+      if (secondType) {
+        damageTypes = [secondType];
         this.advance();
       } else if (!pools && (String(second.value).toLowerCase() === "hp" || String(second.value).toLowerCase() === "st")) {
         pools = [String(second.value).toLowerCase()];
@@ -1810,7 +1868,7 @@ class Parser {
 
     const map = buildResistanceOverrideMap({
       pools: pools ?? ["hp", "st"],
-      damageTypes: damageTypes ?? [...DAMAGE_TYPES],
+      damageTypes: damageTypes ?? [...RESISTANCE_DAMAGE_TYPES],
       level,
     });
     if (!map) {
@@ -2188,6 +2246,22 @@ class Parser {
       ? (this._parseOptionalAmount() ?? { type: "NUMBER", value: 1 })
       : { type: "NUMBER", value: 1 };
 
+    const typedReaction = this._parseTypedReactionNoun(verbTok);
+    if (typedReaction) {
+      const tail = this._parseReactionGrantTail();
+      return {
+        type: "Action",
+        verb: "add",
+        noun: "resource",
+        argument: "reaction",
+        amount,
+        per: tail.per,
+        target: tail.target ?? "self",
+        reactionKind: typedReaction.kind,
+        lifetime: tail.lifetime,
+      };
+    }
+
     const nameTok = this.peek();
     const isResource = (nameTok.type === "IDENT" || nameTok.type === "KEYWORD") && isResourceNoun(nameTok.value);
     if (isResource) {
@@ -2197,6 +2271,20 @@ class Parser {
       if (!nounAllowsOp(nameTok.value, verbTok.value))
         throw new ParseError(`'${verbTok.value}' is not allowed on resource '${resourceHit.id}'`, verbTok);
       this.advance();
+
+      if (resourceHit.id === "reaction" && verbTok.value === "gain") {
+        const tail = this._parseReactionGrantTail();
+        return {
+          type: "Action",
+          verb: "add",
+          noun: "resource",
+          argument: resourceHit.id,
+          amount,
+          per: tail.per,
+          target: tail.target ?? "self",
+          ...(tail.lifetime ? { reactionKind: "universal", lifetime: tail.lifetime } : {}),
+        };
+      }
 
       const tail = this._parseStatusOrResourceTail({ allowTiming: false });
 
@@ -2270,6 +2358,115 @@ class Parser {
       return "turn";
     }
     throw new ParseError(`Expected 'round' or 'turn' after 'next', got '${this.peek().value}'`, this.peek());
+  }
+
+  _isWordTok(tok, word) {
+    return !!tok && (tok.type === "IDENT" || tok.type === "KEYWORD") && String(tok.value).toLowerCase() === word;
+  }
+
+  _reactionNounAt(offset) {
+    const tok = this._peekOffset(offset);
+    return !!tok && (tok.type === "IDENT" || tok.type === "KEYWORD") && lookupNoun(tok.value)?.id === "reaction";
+  }
+
+  /** A Reaction kind at `offset` ("Opportunity Attack" is two words). */
+  _peekReactionKind(offset = 0) {
+    const tok = this._peekOffset(offset);
+    if (this._isWordTok(tok, "opportunity") && this._isWordTok(this._peekOffset(offset + 1), "attack")) {
+      return { kind: "opportunityAttack", length: 2 };
+    }
+    const word = tok && (tok.type === "IDENT" || tok.type === "KEYWORD") ? String(tok.value).toLowerCase() : null;
+    return word && REACTION_KIND_WORDS.has(word) ? { kind: word, length: 1 } : null;
+  }
+
+  /** `<Kind> Reaction` after gain/lose/inflict. Only gain may name a kind. */
+  _parseTypedReactionNoun(verbTok) {
+    const first = this.peek();
+    if ((this._isWordTok(first, "defensive") || this._isWordTok(first, "any")) && this._reactionNounAt(1)) {
+      throw new ParseError(
+        `'${first.value} Reaction' only works with 'spend'; '${verbTok.value}' takes one kind (Block, Evade, Counter, Opportunity Attack or Universal)`,
+        first
+      );
+    }
+    const kind = this._peekReactionKind();
+    if (!kind) return null;
+    if (this._isWordTok(this._peekOffset(kind.length), "or")) {
+      throw new ParseError(`'${verbTok.value}' takes one Reaction kind; 'or' only works with 'spend'`, this._peekOffset(kind.length));
+    }
+    if (!this._reactionNounAt(kind.length)) return null;
+    if (verbTok.value !== "gain") {
+      throw new ParseError(`Only 'gain' can name a Reaction kind (like 'gain 1 Block Reaction'); '${verbTok.value}' takes any kind`, verbTok);
+    }
+    for (let i = 0; i <= kind.length; i++) this.advance();
+    return kind;
+  }
+
+  _parseReactionGrantTail() {
+    let per = null;
+    let target = null;
+    let lifetime = null;
+    for (;;) {
+      if (!lifetime && this._isWordTok(this.peek(), "this") && this._peekOffset(1)?.type === "KEYWORD" && this._peekOffset(1)?.value === "round") {
+        this.advance();
+        this.consume("KEYWORD", "round");
+        lifetime = "round";
+        continue;
+      }
+      if (!per) {
+        const nextPer = this._parseOptionalPerAmount();
+        if (nextPer) { per = nextPer; continue; }
+      }
+      if (!target) {
+        const nextTarget = this._parseOptionalOnOrToTarget();
+        if (nextTarget) { target = nextTarget; continue; }
+      }
+      break;
+    }
+    const tok = this.peek();
+    const after = this._peekOffset(1);
+    if (this._isWordTok(tok, "this") && this._isWordTok(after, "turn")) {
+      throw new ParseError("'this turn' doesn't work on Reactions; a credit already lasts until the next Turn Start ('this round' keeps it until the round ends)", tok);
+    }
+    if (this._isWordTok(tok, "next")) {
+      const words = this._isWordTok(after, "round") || this._isWordTok(after, "turn") ? `next ${after.value}` : "next";
+      throw new ParseError(`Reactions can't wait for '${words}'; they're gained right away ('this round' keeps one until the round ends)`, tok);
+    }
+    return { per, target, lifetime };
+  }
+
+  /** What a `spend N ... Reaction` accepts, or null when it's a status spend. */
+  _parseReactionSpendKinds() {
+    if (this._reactionNounAt(0)) {
+      this.advance();
+      return { acceptKinds: [], order: null };
+    }
+    const first = this.peek();
+    if (this._isWordTok(first, "any") && this._reactionNounAt(1)) {
+      this.advance();
+      this.advance();
+      return { acceptKinds: [], order: "any" };
+    }
+    if (this._isWordTok(first, "defensive") && this._reactionNounAt(1)) {
+      this.advance();
+      this.advance();
+      return { acceptKinds: ["block", "evade"], order: null };
+    }
+    const kinds = [];
+    let offset = 0;
+    for (;;) {
+      const kind = this._peekReactionKind(offset);
+      if (!kind) return null;
+      kinds.push(kind.kind);
+      offset += kind.length;
+      if (this._isWordTok(this._peekOffset(offset), "or")) {
+        offset += 1;
+        continue;
+      }
+      break;
+    }
+    if (!this._reactionNounAt(offset)) return null;
+    for (let i = 0; i <= offset; i++) this.advance();
+    return { acceptKinds: [...new Set(kinds.filter((kind) => kind !== "universal"))], order: null };
   }
 
   parseNaturalPauseAction() {
@@ -2379,6 +2576,9 @@ class Parser {
   parseSpendStatement() {
     const spend = this.parseSpendBody();
     this.consumeStatementEnd();
+    if (spend.reactionSpend) {
+      return { type: "Statement", condition: null, reactionSpend: spend.reactionSpend, actions: spend.actions, polarity: null };
+    }
     return { type: "Statement", condition: spend.condition, actions: spend.actions, polarity: null };
   }
 
@@ -2394,6 +2594,23 @@ class Parser {
       spendAmount = { type: "ACCESSOR", expr: parseAccessorExpression(this.consume("ACCESSOR").value) };
     } else {
       throw new ParseError(`Expected amount after 'spend', got '${this.peek().value}'`, this.peek());
+    }
+
+    const reactionKinds = this._parseReactionSpendKinds();
+    if (reactionKinds) {
+      if (this.check("KEYWORD", "on")) {
+        this.consume("KEYWORD", "on");
+        const tok = this.peek();
+        if (tok.value !== "self") throw new ParseError(`Only self can spend its own Reactions, got '${tok.value}'`, tok);
+        this.consume("KEYWORD");
+      }
+      this.consume("KEYWORD", "to");
+      if (this.check("KEYWORD", "do")) this.consume("KEYWORD", "do");
+      const actions = this.parseNaturalActionChain();
+      return {
+        reactionSpend: { amount: spendAmount, acceptKinds: reactionKinds.acceptKinds, order: reactionKinds.order },
+        actions,
+      };
     }
 
     const statusName = this.parseStatusName();
@@ -2568,6 +2785,12 @@ class ExprParser {
     if (name === "clamp") {
       if (args.length !== 3) {
         throw new ParseError(`'clamp()' needs 3 arguments (value, lo, hi), got ${args.length}`, tok);
+      }
+      return;
+    }
+    if (name === "abs") {
+      if (args.length !== 1) {
+        throw new ParseError(`'abs()' needs 1 argument, got ${args.length}`, tok);
       }
       return;
     }

@@ -42,6 +42,7 @@ export function emptyClashSideBonuses() {
     regenST:     0,
     advantage: 0,
     disadvantage: 0,
+    labeledPower: [],
   };
 }
 
@@ -590,7 +591,7 @@ const TRIGGER_HOOKS = [
   },
 
   // ── [On Action] ─────────────────────────────────────────────────────────────
-  // Fires for Attack, Block, Counter, Evade, and the sheet [Used Action] / [Used Reaction] buttons.
+  // Fires for every non-exempt Action Economy declaration and for direct Applied Tool use.
   {
     hook: "pmttrpg.actorAction",
     triggerName: "On Action",
@@ -599,7 +600,7 @@ const TRIGGER_HOOKS = [
       if (!actor) return [];
       return [...getEquippedItems(actor), ...uniqueStatusItems(actor.items)];
     },
-    buildContext: ({ actor, target, attacker, defender, clash }) => {
+    buildContext: ({ actor, target, attacker, defender, clash, usedItem, hostItem, action, declarationOwner, declarationDepth }) => {
       if (!actor) return null;
       return {
         self:      actor,
@@ -608,6 +609,10 @@ const TRIGGER_HOOKS = [
         defender:  defender ?? null,
         ally:      null,
         clash:     clash ?? null,
+        usedItem:  usedItem ?? hostItem ?? null,
+        action:    action ?? null,
+        _declarationOwner: declarationOwner ?? null,
+        _declarationDepth: Number(declarationDepth) || 0,
       };
     },
   },
@@ -822,7 +827,7 @@ let _emittingClashStarted = false;
 let _emittingClashResolved = false;
 let _emittingClashBeforeResults = false;
 let _emittingHitBeforeResults = false;
-let _emittingActorAction = false;
+let _emittingActorActionDepth = 0;
 let _emittingTokenMoved = false;
 let _emittingTurnStart = false;
 let _emittingEndOfTurn = false;
@@ -900,7 +905,7 @@ function isHookEmitting(hookName) {
   if (hookName === "pmttrpg.clashResolved") return _emittingClashResolved;
   if (hookName === "pmttrpg.clashBeforeResults") return _emittingClashBeforeResults;
   if (hookName === "pmttrpg.hitBeforeResults") return _emittingHitBeforeResults;
-  if (hookName === "pmttrpg.actorAction") return _emittingActorAction;
+  if (hookName === "pmttrpg.actorAction") return _emittingActorActionDepth > 0;
   if (hookName === "pmttrpg.tokenMoved") return _emittingTokenMoved;
   if (hookName === "pmttrpg.turnStart") return _emittingTurnStart;
   if (hookName === "pmttrpg.endOfTurn") return _emittingEndOfTurn;
@@ -964,14 +969,15 @@ export async function runItemEasyEffects(item, triggerName, context = {}) {
  * [On Action]. Clash callers should pass `clash`, `attacker`, and `defender`.
  */
 export async function emitActorAction(payload) {
-  _emittingActorAction = true;
+  // counted instead of true/false since a nested one (like a script spending a Reaction) would clear it early and the outer [On Action] would run twice
+  _emittingActorActionDepth += 1;
   try {
     await runLogicalEmission(async (emission) => {
       await runTriggerDefs("pmttrpg.actorAction", payload, emission);
     });
     Hooks.callAll("pmttrpg.actorAction", payload);
   } finally {
-    _emittingActorAction = false;
+    _emittingActorActionDepth = Math.max(0, _emittingActorActionDepth - 1);
   }
 }
 
@@ -1451,6 +1457,8 @@ export async function emitProc({
   binds = {},
   depth = 0,
   _emitPendingRoll,
+  _declarationOwner = null,
+  _declarationDepth = 0,
 } = {}) {
   const name = String(procName ?? "").trim();
   if (!focusActor || !name) return false;
@@ -1487,6 +1495,8 @@ export async function emitProc({
         defenderSkill: resolvedDefenderSkill,
         _procDepth: depth + 1,
         _emitPendingRoll,
+        _declarationOwner,
+        _declarationDepth,
       }, emission);
       try {
         await runItemEasyEffects(statusItem, triggerName, localCtx);
@@ -1515,6 +1525,8 @@ export async function emitProc({
         defenderSkill: resolvedDefenderSkill,
         _procDepth: depth + 1,
         _emitPendingRoll,
+        _declarationOwner,
+        _declarationDepth,
       }, emission);
       try {
         await runItemEasyEffects(item, triggerName, globalCtx);
@@ -1679,6 +1691,17 @@ export async function emitItemUnequipped(item) {
 // ── [Always Active] integration ───────────────────────────────────────────────
 
 /**
+ * Owned content whose rules apply while the actor has it: statuses that aren't
+ * pending (shelved counts as pending too) and loadout-active gear. Stacks don't matter.
+ */
+export function isAlwaysActiveParticipant(item, actor) {
+  if (!item) return false;
+  if (item.type === "status") return !isPendingStatus(item);
+  if (!["weapon", "outfit", "augment", "skill", "tool"].includes(item.type)) return false;
+  return itemIsLoadoutActive(item, actor);
+}
+
+/**
  * Collects `[Always Active]` modifiers from the actor, equipped items, and
  * active statuses into one merged result.
  *
@@ -1699,13 +1722,7 @@ export function applyAlwaysActiveModifiers(actor) {
   }
 
   for (const item of actor.items) {
-    const isStatus = item.type === "status";
-    if (!isStatus && !["weapon", "outfit", "augment", "skill", "tool"].includes(item.type)) continue;
-    if (isStatus) {
-      if (isPendingStatus(item)) continue;
-    } else if (!itemIsLoadoutActive(item, actor)) {
-      continue;
-    }
+    if (!isAlwaysActiveParticipant(item, actor)) continue;
 
     const ast = getAST(item);
     if (!ast) continue;
@@ -1752,6 +1769,13 @@ function mergeAlwaysActiveMods(merged, mods, sourceName) {
     }
     if (key === "overrideSources") continue;
     if (key === "resistanceOverrideSources") continue;
+    if (key === "reactionGrants") {
+      if (!Array.isArray(merged.reactionGrants)) merged.reactionGrants = [];
+      for (const grant of Array.isArray(mods.reactionGrants) ? mods.reactionGrants : []) {
+        merged.reactionGrants.push({ ...grant });
+      }
+      continue;
+    }
     if (key === "diceFormulas") {
       if (!merged.diceFormulas) merged.diceFormulas = emptyDiceFormulas();
       for (const die of ["attack", "block", "evade"]) {
@@ -1817,6 +1841,20 @@ export async function runDepletedEasyEffects(actor, depleted) {
   } finally {
     _depletingPools.delete(key);
   }
+}
+
+const _depletionsInFlight = new Set();
+
+export function queueDepletedEasyEffects(actor, jobs) {
+  const run = new Promise((resolve) => setTimeout(resolve, 0))
+    .then(() => Promise.all(jobs.map((job) => runDepletedEasyEffects(actor, job))))
+    .catch((error) => console.warn("[EasyEffects] depleted failed", error))
+    .finally(() => _depletionsInFlight.delete(run));
+  _depletionsInFlight.add(run);
+}
+
+export async function settleDepletedEasyEffects() {
+  while (_depletionsInFlight.size) await Promise.all(_depletionsInFlight);
 }
 
 // ── [On Taking Damage] runner ─────────────────────────────────────────────────

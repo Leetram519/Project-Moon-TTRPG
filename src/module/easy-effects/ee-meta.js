@@ -1,4 +1,5 @@
 import { canUserUpdateDocument } from "../acting-user.js";
+import { flagKeyDeletion } from "../action-economy/combat-flags.js";
 
 const EE_FLAG_SCOPE = "projectmoonttrpg";
 const EE_FLAG_BLOB = "eeMeta";
@@ -227,10 +228,6 @@ export function eeMetaUpdatePath(encodedKey) {
   return `flags.${EE_FLAG_SCOPE}.${EE_FLAG_BLOB}.flags.${encodedKey}`;
 }
 
-export function eeMetaUnsetPath(encodedKey) {
-  return `flags.${EE_FLAG_SCOPE}.${EE_FLAG_BLOB}.flags.-=${encodedKey}`;
-}
-
 /*
  * Applies an EE metadata patch directly to the document. This is the low-level
  * write path and does not perform permission checks or GM routing.
@@ -258,7 +255,7 @@ export async function applyEEMetaPatch(doc, { set = {}, unset = [] } = {}) {
   }
 
   for (const key of unset ?? []) {
-    updates[eeMetaUnsetPath(encodeFlagKey(key))] = null;
+    Object.assign(updates, flagKeyDeletion(eeMetaUpdatePath(encodeFlagKey(key))));
   }
 
   if (!Object.keys(updates).length) return true;

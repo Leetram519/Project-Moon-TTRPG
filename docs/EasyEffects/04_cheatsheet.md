@@ -18,6 +18,7 @@ deal (incoming.amount) damage to attacker;
 convert [amount] damage to <pool|type>;
 convert damage to hp and st;
 set maxHp|maxSt|maxSp|maxLight to <N>;
+gain|lose <N> dashSquares|reduceStatusStacks;
 spend <N> <Status> [on <target>] to <actions>;
 require <N> <target> <Status> then <actions>;
 require (<expr>) <op> <value> then <actions>;
@@ -26,6 +27,14 @@ require <cond> then require <cond> then <actions>;
 require <cond> then roll <dice> [as <name>];
 require <cond> then spend <N> <Status> [on <target>] to <actions>;
 on roll <dice> <op> <value> then <actions>;
+
+# Reactions
+gain <N> Block|Evade|Counter|Opportunity Attack Reaction [this round] [on <target>];
+gain <N> Reaction this round;
+spend <N> Reaction to <actions>;
+spend <N> Block or Counter Reaction to <actions>;
+spend <N> Defensive Reaction to <actions>;
+spend <N> any Reaction to <actions>;
 
 # Standard syntax (full control)
 if (<expr>) <op> <value> do <verb> <noun> <arg> <amount> [per (<expr>)] [on <target>];
@@ -146,6 +155,9 @@ self.stat.for  .pru  .jus  .cha  .ins  .tem
 self.status.Burn
 self.status."Stagger Fragile"
 clash.margin   clash.attackerRoll   clash.defenderRoll
+clash.reaction clash.recycled
+self.reaction  self.reactionsUsed
+action.reaction   action.kind   action.consumed   action.offTurn    # [On Action]
 round          round.number         combat.round
 incoming.amount   incoming.pool   incoming.source   incoming.damageType
 damage.amount     damage.pool     damage.source     damage.damageType
