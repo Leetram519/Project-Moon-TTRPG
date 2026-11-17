@@ -187,27 +187,35 @@ function resequenceGroupUpdates(combat, dropped, initiative, above) {
   }));
 }
 
-export async function applyCombatantPlacement(combat, combatant, placement) {
+export async function applyCombatantPlacement(combat, combatant, placement, operation = {}) {
   if (!combat || !combatant || !placement) return null;
   const updates = placement.updates ?? [{
     _id: combatant.id,
     initiative: placement.initiative,
     [TIEBREAK_PATH]: placement.turnTiebreak,
   }];
-  return combat.updateEmbeddedDocuments("Combatant", updates);
+  return combat.updateEmbeddedDocuments("Combatant", updates, operation);
 }
 
-export async function placeCombatantInOrder(combat, combatant, { above = null, below = null } = {}) {
-  if (!combat || !combatant || !canControlCombatantOrder(combatant)) return null;
-  if (isAlreadyInSlot(combat, combatant, above, below)) return combatant;
-
+export function planCombatantPlacement(combat, combatant, { above = null, below = null } = {}) {
+  if (!combat || !combatant) return null;
+  if (isAlreadyInSlot(combat, combatant, above, below)) return null;
   const placement = placementForSlot({ above, below, dropped: combatant });
   if (placement.needsGroupResequence) {
-    return applyCombatantPlacement(combat, combatant, {
-      updates: resequenceGroupUpdates(combat, combatant, placement.initiative, above),
-    });
+    return resequenceGroupUpdates(combat, combatant, placement.initiative, above);
   }
-  return applyCombatantPlacement(combat, combatant, placement);
+  return [{
+    _id: combatant.id,
+    initiative: placement.initiative,
+    [TIEBREAK_PATH]: placement.turnTiebreak,
+  }];
+}
+
+export async function placeCombatantInOrder(combat, combatant, { above = null, below = null } = {}, operation = {}) {
+  if (!combat || !combatant || !canControlCombatantOrder(combatant)) return null;
+  const updates = planCombatantPlacement(combat, combatant, { above, below });
+  if (!updates) return combatant;
+  return applyCombatantPlacement(combat, combatant, { updates }, operation);
 }
 
 export async function applyManualInitiative(combat, combatant, value) {

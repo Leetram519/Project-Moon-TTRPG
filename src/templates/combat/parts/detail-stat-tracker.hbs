@@ -1,5 +1,10 @@
 <div class="detail-stat-card" data-tracker-context data-reveal-key="{{stat.key}}">
-    <img class="detail-stat-icon" src="{{stat.icon}}" alt="{{stat.name}}">
+    <span class="detail-stat-icon-wrap">
+        <img class="detail-stat-icon" src="{{stat.icon}}" alt="{{stat.name}}">
+        {{#if stat.hasCredits}}
+            <span class="detail-stat-credits" data-tooltip-text="{{stat.creditTitle}}">+{{stat.creditCount}}</span>
+        {{/if}}
+    </span>
 
     <input
         class="detail-stat-value {{#if stat.editable}}editable{{/if}} {{inputFontSize stat.amount}} num cur"

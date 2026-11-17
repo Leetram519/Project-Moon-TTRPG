@@ -1,4 +1,5 @@
 import {
+  CLASH_PHASES,
   CLASH_FLAG_SCOPE,
   CLASH_FLAG_KEY,
   serialiseClashState,
@@ -6,6 +7,7 @@ import {
 } from "./clash-state.js";
 import { showDiceForRoll } from "../utility.js";
 import { resolveTokenDocument } from "../acting-user.js";
+import { clashCombat } from "./clash-economy.js";
 
 const SOCKET_EVENT = "system.projectmoonttrpg";
 const CHAT_UPDATE = "chatUpdate";
@@ -26,7 +28,7 @@ export function isChatUpdatePayload(data) {
   return !data.type && !!data.message && data.content != null;
 }
 
-function flagsToUpdate(flags) {
+export function flagsToUpdate(flags) {
   if (!flags || typeof flags !== "object") return {};
   return foundry.utils.flattenObject({ flags });
 }
@@ -192,6 +194,59 @@ export async function enhanceClashRollBreakdown(message, html) {
     if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
   }
 }
+
+/** Only users who can act for the clash target (owners and the GM) see the Retaliate button. */
+export async function enhanceClashRetaliateControls(message, html) {
+  const button = html.querySelector("[data-action='clash-retaliate']");
+  if (!button) return;
+  const state = message.getFlag(CLASH_FLAG_SCOPE, CLASH_FLAG_KEY);
+  if (!state) return;
+  const { canActAs, resolveTokenOrWorldActor } = await import("../acting-user.js");
+  const target = resolveTokenOrWorldActor(state.targetActorId, state.targetTokenId);
+  if (target && !canActAs(target, state.targetTokenId, game.user)) button.hidden = true;
+}
+
+export async function enhanceClashProtectControls(message, html) {
+  const button = html.querySelector("[data-action='clash-protect']");
+  const hint = html.querySelector(".clash-card__protect-hint");
+  if (!button) return;
+  button.hidden = true;
+  if (hint) hint.hidden = true;
+  try {
+    const state = message.getFlag(CLASH_FLAG_SCOPE, CLASH_FLAG_KEY);
+    if (!state || state.phase !== CLASH_PHASES.PENDING) return;
+    const { interceptionContextFromClash, listInterceptors } = await import("./interception.js");
+    const { canActAs } = await import("../acting-user.js");
+    const combat = clashCombat(state);
+    const attackerToken = state.attackerTokenId ? canvas.tokens?.get(state.attackerTokenId) : null;
+    const attacker = attackerToken?.actor ?? (state.attackerActorId ? game.actors.get(state.attackerActorId) : null);
+    const attackerItem = state.attackerItemId ? (attacker?.items.get(state.attackerItemId) ?? null) : null;
+    const ctx = interceptionContextFromClash(state, { combat, attackerItem });
+    const candidates = ctx ? listInterceptors(ctx) : [];
+    const mine = candidates.filter((candidate) => {
+      const token = candidate.tokenId ? canvas.tokens?.get(candidate.tokenId) : null;
+      const actor = token?.actor ?? (candidate.actorId ? game.actors.get(candidate.actorId) : null);
+      return actor && canActAs(actor, candidate.tokenId, game.user);
+    });
+    if (!mine.length) return;
+    button.hidden = false;
+    if (!hint) return;
+    const names = [];
+    for (const candidate of candidates) {
+      const token = candidate.tokenId ? canvas.tokens?.get(candidate.tokenId) : null;
+      if (token?.document.hidden && !game.user.isGM) continue;
+      const actor = token?.actor ?? (candidate.actorId ? game.actors.get(candidate.actorId) : null);
+      if (actor?.name) names.push(actor.name);
+    }
+    if (!names.length) return;
+    hint.textContent = game.i18n.format("PMTTRPG.Clash.ProtectHint", { names: names.join(", ") });
+    hint.hidden = false;
+  } catch (error) {
+    console.warn("[PMTTRPG] Clash Protect controls failed", error);
+    button.hidden = true;
+    if (hint) hint.hidden = true;
+  }
+}
 // ── Button click wiring ───────────────────────────────────────────────────────
 
 export function registerClashChatListeners() {
@@ -221,8 +276,13 @@ async function _clashButtonHandler(event) {
   const { handleRetaliateClick } = await import("./clashing.js");
 
   switch (action) {
-    case "clash-retaliate":  await handleRetaliateClick(state, { isIntercept: false }); break;
+    case "clash-retaliate":  await handleRetaliateClick(state); break;
     case "clash-intercept":  await handleRetaliateClick(state, { isIntercept: true  }); break;
+    case "clash-protect": {
+      const { handleProtectClick } = await import("./clashing.js");
+      await handleProtectClick(state);
+      break;
+    }
   }
 }
 
@@ -368,14 +428,62 @@ async function _rerenderRollHtml(message) {
   catch { return ""; }
 }
 
+function protectingLine(state) {
+  const interception = state?.interception;
+  if (!interception?.interceptorCombatantId) return "";
+  const protector = state.retaliatorName || "";
+  const target = state.targetName || "";
+  if (!protector || !target) return "";
+  return game.i18n.format("PMTTRPG.Clash.ProtectingLine", { protector, target });
+}
+
+function _economyTags({ consumed = true, offTurn = false, source = null, asReaction = false } = {}, economyKey) {
+  const tags = [];
+  if (consumed === false) {
+    tags.push(game.i18n.format("PMTTRPG.ActionTiming.NotConsumed", { economy: game.i18n.localize(economyKey) }));
+  }
+  if (asReaction) {
+    tags.push(game.i18n.localize(offTurn ? "PMTTRPG.ActionTiming.OffTurnAsReaction" : "PMTTRPG.ActionTiming.AsReaction"));
+  } else if (offTurn) {
+    tags.push(source
+      ? game.i18n.format("PMTTRPG.ActionTiming.OffTurnSource", { source })
+      : game.i18n.localize("PMTTRPG.ActionTiming.OffTurn"));
+  }
+  return tags.join(" · ");
+}
+
+/**
+ * The economy line under each side. Before the clash it's what was picked on
+ * the attack card, after it's whatever the declarations recorded.
+ */
+function clashEconomyLines(state) {
+  if (!state) return { attacker: "", defender: "" };
+  const attackerNote = state.attackerEconomyNote ?? {
+    consumed: state.attackerConsume !== false,
+    offTurn: state.attackerOffTurn === true,
+    source: state.attackerTimingSource ?? null,
+    asReaction: state.attackerAsReaction === true,
+  };
+  const attackerKey = state.attackerEconomyType === "reaction" || attackerNote.asReaction === true
+    ? "PMTTRPG.ActionFeedback.Reaction"
+    : "PMTTRPG.ActionFeedback.Action";
+  return {
+    attacker: state.skipAttackerEconomy ? "" : _economyTags(attackerNote, attackerKey),
+    defender: state.defenderEconomyNote ? _economyTags(state.defenderEconomyNote, "PMTTRPG.ActionFeedback.Reaction") : "",
+  };
+}
+
 function _attackCardI18n(state) {
   return {
+    attackerEconomy: clashEconomyLines(state).attacker,
     retaliate:    game.i18n.localize("PMTTRPG.Clash.Retaliate"),
     intercept:    game.i18n.localize("PMTTRPG.Clash.Intercept"),
+    protect:      game.i18n.localize("PMTTRPG.Clash.Protect"),
     retaliateHint: state.targetName
       ? game.i18n.format("PMTTRPG.Clash.RetaliateHint", { name: state.targetName })
       : game.i18n.localize("PMTTRPG.Clash.Retaliate"),
     interceptHint: game.i18n.localize("PMTTRPG.Clash.InterceptHint"),
+    protectingLine: protectingLine(state),
     using:        game.i18n.localize("PMTTRPG.Clash.Using"),
     attackBy:     game.i18n.format("PMTTRPG.Clash.AttackBy",     { name: state.attackerName }),
     targeting:    state.targetName
@@ -398,7 +506,11 @@ function _resultCardI18n(state, applyTarget = null) {
   const dtype = state.damageType || "none";
   const dtypeKey = `PMTTRPG.DamageType${dtype.charAt(0).toUpperCase()}${dtype.slice(1)}`;
   const name = applyTarget?.name || "";
+  const economy = clashEconomyLines(state);
   return {
+    attackerEconomy: economy.attacker,
+    defenderEconomy: economy.defender,
+    protectingLine: protectingLine(state),
     attackWin:    game.i18n.localize("PMTTRPG.Clash.AttackWin"),
     defenseWin:   game.i18n.localize("PMTTRPG.Clash.DefenseWin"),
     evadeWin:     game.i18n.localize("PMTTRPG.Clash.EvadeWin"),

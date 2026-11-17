@@ -46,6 +46,17 @@
     </div>
   </div>
 
+  {{#if i18n.protectingLine}}
+    <p class="clash-result-card__protect-line">{{i18n.protectingLine}}</p>
+  {{/if}}
+
+  {{#if i18n.attackerEconomy}}
+    <p class="clash-card__economy">{{state.attackerName}}: {{i18n.attackerEconomy}}</p>
+  {{/if}}
+  {{#if i18n.defenderEconomy}}
+    <p class="clash-card__economy">{{state.retaliatorName}}: {{i18n.defenderEconomy}}</p>
+  {{/if}}
+
   <div class="clash-result-card__defense-roll">
     {{{defenseRollHtml}}}
   </div>
@@ -146,7 +157,6 @@
 
   <div class="chat-damage-buttons" data-pool="{{poolSelect.pool}}" data-pools="{{poolSelect.pools}}" data-damage-type="{{#if state.damageType}}{{state.damageType}}{{else}}none{{/if}}">
     <div class="chat-damage-types" role="group" aria-label="{{localize "PMTTRPG.DamageTaken.TypeSelect"}}">
-      <button type="button" class="button dtype{{#if (or (eq state.damageType "none") (not state.damageType))}} active{{/if}}" data-action="set-damage-type" data-damage-type="none" title="{{localize "PMTTRPG.DamageTypeNone"}}">{{localize "PMTTRPG.DamageTypeNone"}}</button>
       <button type="button" class="button dtype{{#ifEquals state.damageType "slash"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="slash" title="{{localize "PMTTRPG.DamageTypeSlash"}}">{{localize "PMTTRPG.DamageTypeSlash"}}</button>
       <button type="button" class="button dtype{{#ifEquals state.damageType "pierce"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="pierce" title="{{localize "PMTTRPG.DamageTypePierce"}}">{{localize "PMTTRPG.DamageTypePierce"}}</button>
       <button type="button" class="button dtype{{#ifEquals state.damageType "blunt"}} active{{/ifEquals}}" data-action="set-damage-type" data-damage-type="blunt" title="{{localize "PMTTRPG.DamageTypeBlunt"}}">{{localize "PMTTRPG.DamageTypeBlunt"}}</button>

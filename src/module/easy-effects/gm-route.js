@@ -1,8 +1,19 @@
 import { applyRuntimeResourceLocal, recoverPoolLocal } from "./nouns.js";
 import { getEquippedOutfit } from "../damage-application.js";
-import { normalizeResistanceLevel } from "./resistances.js";
+import { normalizeResistanceDamageType, normalizeResistanceLevel } from "./resistances.js";
 import { applyEEMetaPatch, canMutateEEMetaHost, isApprovedEEMetaHost } from "./ee-meta.js";
-import { canUserUpdateDocument } from "../acting-user.js";
+import { canActAs, canUserUpdateDocument } from "../acting-user.js";
+import { ACTION_BINDINGS_PATH, bindingListForStorage } from "../action-economy/action-bindings.js";
+import { DROPPED_ITEM_PATH } from "../action-economy/formulas.js";
+import { ACTION_STATE_ENTRY_KEYS, actionStateEntryUpdate, flagKeyDeletion } from "../action-economy/combat-flags.js";
+import {
+  ASSIST_STATE_PATH,
+  appendAssistEntry,
+  consumeAssistEntry,
+  pruneAssistEntries,
+  rawAssistEntries,
+  withCombatantAssistMutation,
+} from "../action-economy/assist-state.js";
 
 const SOCKET_EVENT = "system.projectmoonttrpg";
 const GM_REQUEST = "eeGmRequest";
@@ -33,8 +44,25 @@ function sanitizeItemUpdate(update) {
   const out = {};
   for (const [key, value] of Object.entries(update)) {
     if (key.startsWith("system.")) out[key] = value;
+    else if (key === DROPPED_ITEM_PATH) out[key] = value === true;
+    else if (key === ACTION_BINDINGS_PATH) {
+      const records = bindingListForStorage(value);
+      if (records) out[key] = records;
+    }
   }
   return out;
+}
+
+/** Plain data for the socket reply. A Document (or anything we can't serialize) just goes back as `true`. */
+function gmRouteSocketResult(result) {
+  if (result === undefined || result === null) return null;
+  if (typeof result !== "object") return result;
+  if (typeof result.documentName === "string") return true;
+  try {
+    return JSON.parse(JSON.stringify(result));
+  } catch {
+    return true;
+  }
 }
 
 function uuidFromDocOrString(value) {
@@ -107,6 +135,15 @@ function isPrimaryGM() {
   return !!(gm && game.user.id === gm.id);
 }
 
+export function getTurnEventGM() {
+  return game.users.activeGM ?? null;
+}
+
+function isTurnEventGM() {
+  const gm = getTurnEventGM();
+  return !!(gm && game.user.id === gm.id);
+}
+
 /**
  * Routes actor mutations through an owner or active GM.
  * Persistent EE metadata uses `runEEMetaPatch` instead
@@ -126,6 +163,60 @@ export async function runAsOwnerOrGM(actor, op, payload = {}) {
     return HANDLERS[op]({ ...payload, actor });
   }
 
+  const wirePayload = {
+    ...payload,
+    actorUuid: actor.uuid,
+  };
+  delete wirePayload.actor;
+  return dispatchToPrimaryGM(op, wirePayload);
+}
+
+/**
+ * Players can only update a Combatant if they can modify its Actor. A write to someone
+ * else's Combatant (like an Assist) goes through the GM instead.
+ */
+export async function runAsCombatantOwnerOrGM(combatant, op, payload = {}) {
+  ensureGmRouteSocket();
+
+  if (!HANDLERS[op]) {
+    throw new Error(`[EasyEffects] Unknown GM route op '${op}'`);
+  }
+  if (!combatant?.uuid) return false;
+
+  if (canUserUpdateDocument(combatant)) {
+    return HANDLERS[op]({ ...payload, combatant, combatantUuid: combatant.uuid });
+  }
+
+  const wirePayload = { ...payload, combatantUuid: combatant.uuid };
+  delete wirePayload.combatant;
+  return dispatchToPrimaryGM(op, wirePayload);
+}
+
+/** Runs `op` on the primary GM (locally if that's us). Handlers get `{ fromUserId }` as a second argument. */
+export async function runOnPrimaryGM(op, payload = {}) {
+  ensureGmRouteSocket();
+  if (!HANDLERS[op]) {
+    throw new Error(`[EasyEffects] Unknown GM route op '${op}'`);
+  }
+  if (isPrimaryGM()) return HANDLERS[op](payload, { fromUserId: game.user.id });
+  return dispatchToPrimaryGM(op, payload);
+}
+
+/**
+ * Same socket as `runOnPrimaryGM`, but `game.users.activeGM` is the one that answers
+ * `delayForwardAdvance`. The Delay mask has to go on the client that runs Foundry's turn events.
+ */
+export async function runOnTurnEventGM(op, payload = {}) {
+  ensureGmRouteSocket();
+  if (!HANDLERS[op]) {
+    throw new Error(`[EasyEffects] Unknown GM route op '${op}'`);
+  }
+  if (isTurnEventGM()) return HANDLERS[op](payload, { fromUserId: game.user.id });
+  if (!getTurnEventGM()) return null;
+  return dispatchToPrimaryGM(op, payload);
+}
+
+function dispatchToPrimaryGM(op, wirePayload) {
   const primary = getPrimaryGM();
   if (!primary) {
     const msg = game.i18n.localize("PMTTRPG.Dialog.easyEffectsNoGM");
@@ -135,11 +226,6 @@ export async function runAsOwnerOrGM(actor, op, payload = {}) {
   }
 
   const requestId = foundry.utils.randomID();
-  const wirePayload = {
-    ...payload,
-    actorUuid: actor.uuid,
-  };
-  delete wirePayload.actor;
 
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -179,7 +265,231 @@ async function resolveActor(data) {
   return fromUuid(data.actorUuid);
 }
 
+async function resolveCombatant(data) {
+  const doc = data.combatant ?? (data.combatantUuid ? await fromUuid(data.combatantUuid) : null);
+  if (!doc || doc.documentName !== "Combatant") return null;
+  if (data.combatId && String(doc.parent?.id) !== String(data.combatId)) return null;
+  return doc;
+}
+
+function combatOfCombatant(combatant) {
+  return combatant.parent;
+}
+
+async function writeAssistEntries(combatant, entries) {
+  await combatant.update({ [ASSIST_STATE_PATH]: entries });
+  return true;
+}
+
+async function resolveCombat(data) {
+  const doc = data.combatUuid ? await fromUuid(data.combatUuid) : null;
+  return doc?.documentName === "Combat" ? doc : null;
+}
+
 const HANDLERS = {
+  commitPlannedMovement: async (data, meta = {}) => {
+    const { commitPlannedMovementRequest } = await import("../movement/movement-commit.js");
+    const user = game.users.get(meta.fromUserId ?? "") ?? null;
+    return commitPlannedMovementRequest(data, { fromUser: user });
+  },
+
+  mutateGrappleState: async (data, meta = {}) => {
+    const combat = await resolveCombat(data);
+    if (!combat) return { ok: false, reason: "no-combat" };
+    const { handleGrappleMutationRequest } = await import("../grapple/grapple-authority.js");
+    const fromUser = game.users.get(meta.fromUserId ?? "") ?? null;
+    return handleGrappleMutationRequest(combat, data.op, data.payload ?? {}, { fromUser });
+  },
+
+  setCombatantFirstAction: async (data) => {
+    const combatant = await resolveCombatant(data);
+    const marker = data.marker;
+    if (!combatant || !marker || typeof marker !== "object") return false;
+    if (!Number.isInteger(marker.started) || typeof marker.declarationId !== "string") return false;
+    await combatant.update({
+      "flags.projectmoonttrpg.actionState.firstAction": {
+        combatId: String(marker.combatId ?? ""),
+        started: marker.started,
+        round: Number.isInteger(marker.round) ? marker.round : null,
+        declarationId: marker.declarationId,
+      },
+    });
+    return true;
+  },
+
+  grantCombatantReactionCredits: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return { ok: false, reason: "no-combatant" };
+    const { grantReactionCreditsHere } = await import("../action-economy/reaction-credits.js");
+    return grantReactionCreditsHere(combatant, data.grant ?? {});
+  },
+
+  editCombatantReactionCredit: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return { ok: false, reason: "no-combatant" };
+    if (typeof data.creditId !== "string" || typeof data.op !== "string") return { ok: false, reason: "invalid-edit" };
+    const { editReactionCreditHere } = await import("../action-economy/reaction-credits.js");
+    return editReactionCreditHere(combatant, data.creditId, data.op);
+  },
+
+  setCombatantReactionUse: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return false;
+    const { REACTION_USE_PATH, normalizeReactionUseStamp } = await import("../action-economy/reaction-use.js");
+    const stamp = normalizeReactionUseStamp(data.stamp);
+    if (!stamp || stamp.combatantId !== String(combatant.id)) return false;
+    await combatant.update({ [REACTION_USE_PATH]: stamp });
+    return true;
+  },
+
+  commitGrappleContestDefense: async (data, meta = {}) => {
+    const { commitGrappleContestDefense } = await import("../grapple/grapple-contest.js");
+    return commitGrappleContestDefense(data, meta);
+  },
+
+  removeCombatantReactionAvailability: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant?.actor) return { ok: false, reason: "no-combatant" };
+    const { removeReactionAvailability } = await import("../action-economy/reaction-credits.js");
+    return removeReactionAvailability(combatant.actor, Math.max(0, Math.round(Number(data.amount) || 0)), { combatant });
+  },
+
+  spendCombatantReactionForDeclaration: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant?.actor) return { ok: false, reason: "no-combatant" };
+    const { spendReactionsForDeclaration } = await import("../action-economy/reaction-credits.js");
+    return spendReactionsForDeclaration(combatant.actor, {
+      kind: typeof data.kind === "string" ? data.kind : null,
+      itemId: typeof data.itemId === "string" ? data.itemId : null,
+      acceptKinds: Array.isArray(data.acceptKinds) ? data.acceptKinds.filter((kind) => typeof kind === "string") : null,
+      amount: Math.max(1, Math.min(10, Math.round(Number(data.amount) || 1))),
+      order: typeof data.order === "string" ? data.order : null,
+    }, { combatant, warn: false });
+  },
+
+  delayForwardAdvance: async (data, meta = {}) => {
+    const combat = await resolveCombat(data);
+    if (!combat) return false;
+    const user = game.users.get(meta.fromUserId ?? "") ?? null;
+    const current = combat.combatant;
+    const allowed = user?.isGM === true
+      || current?.testUserPermission(user, "OWNER") === true;
+    if (!allowed) return false;
+    const { enqueueDelayGate } = await import("../action-economy/delay.js");
+    void enqueueDelayGate(combat, {
+      mode: data.mode,
+      expectedCurrentCombatantId: data.expectedCurrentCombatantId ?? null,
+      expectedRound: data.expectedRound ?? null,
+    }).catch((error) => console.error("[PMTTRPG] Delay gate failed", error));
+    return true;
+  },
+
+  setCombatantDelayIntent: async (data, meta = {}) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant?.parent) return false;
+    const user = game.users.get(meta.fromUserId ?? "") ?? null;
+    const {
+      DELAY_INTENT_PATH,
+      buildDelayIntent,
+      canArmDelay,
+      prospectiveDelayCombatant,
+      prospectiveRound,
+      validateDelayIntent,
+    } = await import("../action-economy/delay.js");
+    if (!canArmDelay(user, combatant)) return false;
+    const combat = combatant.parent;
+    const next = prospectiveDelayCombatant(combat);
+    if (!next || next.id !== combatant.id) return false;
+    const intent = buildDelayIntent(combat, {
+      mode: data.intent?.mode,
+      afterCombatantId: data.intent?.afterCombatantId ?? null,
+    });
+    const round = prospectiveRound(combat, combatant);
+    if (!validateDelayIntent(combat, { round, combatant }, intent).ok) return false;
+    await combatant.update({ [DELAY_INTENT_PATH]: intent });
+    return true;
+  },
+
+  clearCombatantDelayIntent: async (data, meta = {}) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return false;
+    const user = game.users.get(meta.fromUserId ?? "") ?? null;
+    const { canArmDelay } = await import("../action-economy/delay.js");
+    if (!canArmDelay(user, combatant)) return false;
+    await combatant.update(flagKeyDeletion("flags.projectmoonttrpg.delayIntent"));
+    return true;
+  },
+
+  appendCombatantAssist: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant || !data.entry) return false;
+    return withCombatantAssistMutation(combatant.uuid, async () => {
+      const result = appendAssistEntry(rawAssistEntries(combatant), data.entry, {
+        combat: combatOfCombatant(combatant),
+        targetCombatant: combatant,
+      });
+      if (!result.ok) {
+        console.warn("[PMTTRPG] Assist append rejected", { reason: result.reason, entryId: data.entry?.id });
+        return false;
+      }
+      return writeAssistEntries(combatant, result.entries);
+    });
+  },
+
+  consumeCombatantAssist: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant || !data.entryId) return false;
+    return withCombatantAssistMutation(combatant.uuid, async () => {
+      const result = consumeAssistEntry(rawAssistEntries(combatant), data.entryId, {
+        combat: combatOfCombatant(combatant),
+        targetCombatant: combatant,
+      });
+      if (!result.ok) return false;
+      return writeAssistEntries(combatant, result.entries);
+    });
+  },
+
+  setCombatantActionStateEntry: async (data, meta = {}) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return false;
+    const key = typeof data.key === "string" ? data.key : "";
+    if (!ACTION_STATE_ENTRY_KEYS.has(key)) return false;
+    const user = game.users.get(meta.fromUserId ?? "") ?? null;
+    if (!canActAs(combatant.actor, combatant.tokenId, user)) return false;
+    if (data.value == null) {
+      await combatant.update(actionStateEntryUpdate(key, null));
+      return true;
+    }
+    if (typeof data.value !== "object" || Array.isArray(data.value)) return false;
+    let encoded = "";
+    try {
+      encoded = JSON.stringify(data.value);
+    } catch {
+      return false;
+    }
+    if (encoded.length > 4000) return false;
+    await combatant.update(actionStateEntryUpdate(key, data.value));
+    return true;
+  },
+
+  claimClashCard: async (data, meta = {}) => {
+    const { commitClashClaimAsGM } = await import("../combat/clash-economy.js");
+    return commitClashClaimAsGM(data, meta);
+  },
+
+  pruneCombatantAssists: async (data) => {
+    const combatant = await resolveCombatant(data);
+    if (!combatant) return false;
+    return withCombatantAssistMutation(combatant.uuid, async () => {
+      const result = pruneAssistEntries(rawAssistEntries(combatant), {
+        combat: combatOfCombatant(combatant),
+        targetCombatant: combatant,
+      });
+      if (!result.removed) return true;
+      return writeAssistEntries(combatant, result.entries);
+    });
+  },
+
   addStatusStacks: async ({ actor, actorUuid, statusName, amount, originUuid = null, origin = null }) => {
     const a = await resolveActor({ actor, actorUuid });
     if (!a) return null;
@@ -264,7 +574,7 @@ const HANDLERS = {
       const lvl = normalizeResistanceLevel(level);
       if (!lvl) continue;
       const [pool, damageType] = String(key).split(".");
-      if ((pool !== "hp" && pool !== "st") || !damageType) continue;
+      if ((pool !== "hp" && pool !== "st") || !normalizeResistanceDamageType(damageType)) continue;
       updates[`system.resistances.${pool}.${damageType}`] = lvl;
     }
     if (!Object.keys(updates).length) return false;
@@ -324,6 +634,12 @@ const HANDLERS = {
       return false;
     }
     return applyEEMetaPatch(doc, { set, unset });
+  },
+
+  settleDepletedEasyEffects: async () => {
+    const { settleDepletedEasyEffects } = await import("./registry.js");
+    await settleDepletedEasyEffects();
+    return true;
   },
 };
 
@@ -405,7 +721,8 @@ function ensureGmRouteSocket() {
     if (!data || typeof data !== "object") return;
 
     if (data.type === GM_REQUEST) {
-      if (!isPrimaryGM()) return;
+      const handles = data.op === "delayForwardAdvance" ? isTurnEventGM() : isPrimaryGM();
+      if (!handles) return;
       if (!HANDLERS[data.op]) {
         game.socket.emit(SOCKET_EVENT, {
           type: GM_RESPONSE,
@@ -417,12 +734,12 @@ function ensureGmRouteSocket() {
       }
 
       try {
-        const result = await HANDLERS[data.op](data.payload ?? {});
+        const result = await HANDLERS[data.op](data.payload ?? {}, { fromUserId: data.fromUserId ?? null });
         game.socket.emit(SOCKET_EVENT, {
           type: GM_RESPONSE,
           requestId: data.requestId,
           ok: true,
-          result: result === undefined ? null : (typeof result === "object" ? true : result),
+          result: gmRouteSocketResult(result),
         });
       } catch (err) {
         console.error("[EasyEffects] GM route failed", data.op, err);

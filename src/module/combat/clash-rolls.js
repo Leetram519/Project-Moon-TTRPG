@@ -43,6 +43,24 @@ function signed(n) {
   return v > 0 ? `+${v}` : `${v}`;
 }
 
+function labeledClashPower(bonuses, field) {
+  const labeled = (Array.isArray(bonuses?.labeledPower) ? bonuses.labeledPower : [])
+    .filter((row) => row?.field === field && Number(row.value));
+  const labeledSum = labeled.reduce((sum, row) => sum + (Number(row.value) || 0), 0);
+  return { labeled, labeledSum };
+}
+
+function pushLabeledRows(rows, labeled) {
+  for (const row of labeled) {
+    pushRow(
+      rows,
+      `labeled:${row.labelKey}`,
+      row.labelKey,
+      `${signed(row.value)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
+    );
+  }
+}
+
 function pushRow(rows, key, labelKey, detail, extra = {}) {
   if (detail == null || detail === "" || detail === "0" || detail === "+0") return;
   rows.push({
@@ -178,12 +196,17 @@ export function buildOffensiveDiceParts(actor, weaponItem, clashBonuses = {}, sk
     );
   }
   if (clashPower) {
-    pushRow(
-      rows,
-      "clashPower",
-      "PMTTRPG.Clash.Breakdown.ClashStartPower",
-      `${signed(clashPower)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
-    );
+    const labeled = labeledClashPower(clashBonuses, "attackPower");
+    const unlabeled = clashPower - labeled.labeledSum;
+    if (unlabeled) {
+      pushRow(
+        rows,
+        "clashPower",
+        "PMTTRPG.Clash.Breakdown.ClashStartPower",
+        `${signed(unlabeled)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
+      );
+    }
+    pushLabeledRows(rows, labeled.labeled);
   }
   if (clashMax) {
     pushRow(
@@ -307,12 +330,17 @@ export function buildDefenseDiceParts(actor, kind, clashBonuses = {}, skillItem 
     );
   }
   if (clashPower) {
-    pushRow(
-      rows,
-      "clashPower",
-      "PMTTRPG.Clash.Breakdown.ClashStartPower",
-      `${signed(clashPower)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
-    );
+    const labeled = labeledClashPower(clashBonuses, isEvade ? "evadePower" : "blockPower");
+    const unlabeled = clashPower - labeled.labeledSum;
+    if (unlabeled) {
+      pushRow(
+        rows,
+        "clashPower",
+        "PMTTRPG.Clash.Breakdown.ClashStartPower",
+        `${signed(unlabeled)} ${game.i18n.localize("PMTTRPG.Clash.Breakdown.DicePower")}`,
+      );
+    }
+    pushLabeledRows(rows, labeled.labeled);
   }
   if (clashMax) {
     pushRow(

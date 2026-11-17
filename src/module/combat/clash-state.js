@@ -29,6 +29,17 @@ export const RETALIATION_TYPES = Object.freeze({
   ONESIDED:       "onesided"
 });
 
+const RETALIATION_DEFENSE_KINDS = Object.freeze({
+  [RETALIATION_TYPES.EVADE]:          "evade",
+  [RETALIATION_TYPES.RECYCLED_EVADE]: "evade",
+  [RETALIATION_TYPES.BLOCK]:          "block",
+  [RETALIATION_TYPES.COUNTER]:        "counter",
+});
+
+export function retaliationDefenseKind(type) {
+  return RETALIATION_DEFENSE_KINDS[type] ?? null;
+}
+
 export const CLASH_RESULTS = Object.freeze({
   ATTACK_WIN: "attackWin",
   DEFENSE_WIN: "defenseWin",
@@ -61,6 +72,29 @@ export const CLASH_RESULTS = Object.freeze({
  * @param {string|null} [params.attackerAmmoId]
  * @param {boolean} [params.consumeSkillLight]
  * @param {boolean} [params.attackerDryFire]
+ * @param {boolean} [params.attackerAmmoPending]
+ * @param {boolean} [params.attackerMovementPending]
+ * @param {boolean} [params.skipAttackerEconomy]
+ * @param {boolean} [params.attackerConsume]
+ * @param {boolean} [params.attackerOffTurn]
+ * @param {boolean} [params.attackerAsReaction]
+ * @param {string|null} [params.attackerTimingSource]
+ * @param {"action"|"reaction"} [params.attackerEconomyType]
+ * @param {string} [params.attackerKind]
+ * @param {boolean} [params.opportunityAttack]
+ * @param {string|null} [params.movementId]
+ * @param {string|null} [params.opportunityId]
+ * @param {string|null} [params.reactorCombatantId]
+ * @param {string|null} [params.moverCombatantId]
+ * @param {boolean} [params.defensiveOnly]
+ * @param {boolean} [params.movementRisk]
+ * @param {boolean} [params.resolutionComplete]
+ * @param {string|null} [params.attackerCombatantId]
+ * @param {string|null} [params.attackerAssistEntryId]
+ * @param {string|null} [params.targetCombatantId]
+ * @param {object|null} [params.opportunityPauseAt]
+ * @param {string|null} [params.opportunityMessageId]
+ * @param {string|null} [params.movementActionId]
  * @returns {ClashStateData}
  */
 export function createClashState({
@@ -86,6 +120,29 @@ export function createClashState({
   attackerAmmoId  = null,
   consumeSkillLight = false,
   attackerDryFire = false,
+  attackerAmmoPending = false,
+  attackerMovementPending = false,
+  skipAttackerEconomy = false,
+  attackerConsume = true,
+  attackerOffTurn = false,
+  attackerAsReaction = false,
+  attackerTimingSource = null,
+  attackerEconomyType = "action",
+  attackerKind = "attack",
+  opportunityAttack = false,
+  movementId = null,
+  opportunityId = null,
+  reactorCombatantId = null,
+  moverCombatantId = null,
+  defensiveOnly = false,
+  movementRisk,
+  resolutionComplete,
+  attackerCombatantId = null,
+  attackerAssistEntryId = null,
+  targetCombatantId = null,
+  opportunityPauseAt = null,
+  opportunityMessageId = null,
+  movementActionId = null,
 }) {
   return {
     phase: CLASH_PHASES.PENDING,
@@ -93,6 +150,8 @@ export function createClashState({
     // Attacker
     attackerActorId,
     attackerTokenId,
+    attackerCombatantId: attackerCombatantId ?? null,
+    attackerAssistEntryId: attackerAssistEntryId ?? null,
     attackerName,
     attackerImg,
     attackerItemId,
@@ -101,15 +160,42 @@ export function createClashState({
     attackerSkillId: attackerSkillId ?? null,
     attackerAmmoId: attackerAmmoId ?? null,
     consumeSkillLight: !!consumeSkillLight,
+    attackerAmmoPending: !!attackerAmmoPending,
+    attackerMovementPending: !!attackerMovementPending,
     attackerDryFire: !!attackerDryFire,
+    skipAttackerEconomy: !!skipAttackerEconomy,
+    attackerEconomyCommitted: false,
+    attackerDeclarationId: null,
+    attackerConsume: attackerConsume !== false,
+    attackerOffTurn: attackerOffTurn === true,
+    attackerAsReaction: attackerAsReaction === true,
+    attackerTimingSource: typeof attackerTimingSource === "string" && attackerTimingSource ? attackerTimingSource : null,
+    defenderEconomyCommitments: [],
+    attackerEconomyType: attackerEconomyType === "reaction" ? "reaction" : "action",
+    attackerKind: String(attackerKind || "attack"),
+    opportunityAttack: !!opportunityAttack,
+    movementId: movementId ?? null,
+    opportunityId: opportunityId ?? null,
+    reactorCombatantId: reactorCombatantId ?? null,
+    moverCombatantId: moverCombatantId ?? null,
+    opportunityPauseAt: opportunityPauseAt ?? null,
+    opportunityMessageId: opportunityMessageId ?? null,
+    movementActionId: movementActionId ?? null,
+    interception: null,
+    defensiveOnly: !!defensiveOnly,
+    movementRisk: movementRisk !== false,
+    resolutionComplete: resolutionComplete !== false,
 
     // Primary target (may be overridden by an interceptor)
     targetActorId,
     targetTokenId,
+    targetCombatantId: targetCombatantId ?? null,
     targetName,
     targetImg,
 
     // The actual retaliator (set when someone clicks Retaliate)
+    // `claimId` is the attempt whose claim to ROLLING won
+    claimId:             null,
     retaliatorActorId:   null,
     retaliatorTokenId:   null,
     retaliatorName:      null,
