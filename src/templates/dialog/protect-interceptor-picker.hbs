@@ -1,0 +1,11 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{i18n.hint}}</p>
+  <div class="action-weapon-form__options">
+    {{#each rows}}
+    <label class="action-menu-option">
+      <input type="radio" name="combatantId" value="{{id}}" {{#if @first}}checked{{/if}}>
+      <span class="action-menu-option__label">{{name}}</span>
+    </label>
+    {{/each}}
+  </div>
+</div>
