@@ -24,6 +24,22 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
     - E.G.O. Attunement [Pride]
     - E.G.O. Attunement [Sloth]
     - E.G.O. Attunement [Wrath]
+- Added the Action Menu to character and NPC sheets.
+- Added Dash, Disengage, Convert to Reactions, Protect, Take Cover, Ready, Assist and Reduce Status.
+- Added Grapple, Throw and Break Free.
+- Added Opportunity Attacks.
+- Added Reaction credits.
+- Added Delay to the Combat Tracker.
+- Added Change Weapons and Change Outfit.
+- Added Falling.
+- Added the Force damage type.
+- Actions now post a short chat message.
+- Added Action states to tokens, the Combat Tracker and sheets.
+- Added a Consume checkbox to skip the cost.
+- [EasyEffects] `abs()`, `self.reactionsUsed`, `action.*`, `clash.reaction` and `clash.recycled` added.
+- [EasyEffects] `gain N <Kind> Reaction` and `spend N Reaction to …` syntax added.
+- [EasyEffects] `dashSquares` and `reduceStatusStacks` added.
+- Added module APIs for the Action Economy.
 
 ### Changed
 
@@ -31,11 +47,55 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] Charge lost at the end of the round counts toward Overcharge.
 - [EasyEffects] Charge Barrier grants its temporary HP on `[Start of Round]`.
 - A migration rewrites those Charge, Charge Barrier, and `with CHOICE` scripts on actors and items already in the world.
+- Deleting an item from a sheet now asks first.
+- Weapons and tools can now be Held, Stowed or Dropped.
+- Actions taken outside your turn cost a Reaction.
+- Actions and Reactions are free out of combat.
+- Market and Standalone tools cost 1 Action.
+- Starting or joining combat refills Actions, Reactions and Movement.
+- Weapon attacks need a held weapon.
+- Attacks and Retaliates you can't pay for are refused.
+- Ammo and Skill Light are spent when the clash rolls.
+- Linked actors with several tokens now ask which one acts if it isn't clear.
+- Range now counts from the edge of large tokens.
+- Difficult Terrain and Crawl cost extra Squares.
+- Removed the None damage type button. Click a selected type again to clear it.
+- [EasyEffects] Updated SRD scripts for the Action Economy:
+    - Staggered
+    - Self-Staggered
+    - Panic [Freeze]
+    - Panic [Fawn]
+    - Bleed
+    - Burn
+    - Frostbite
+    - Smoke
+    - Bleed - Hemorrhage
+    - Burn - Renewed Blaze
+    - Frostbite - Deep Chill
+    - Additional Block
+    - Gain Charge
+    - Single Strike
+    - Light Material
+    - Insulated Fabric
+- [EasyEffects] `self.reaction`, `lose N Reaction` and `set reaction to N` include Reaction credits.
+- [EasyEffects] `With Counter` clash triggers only run for Counters now.
+- [Macros] Full Heal restores Reaction credits.
+
+### Cleanup
+
+- Removed an unused copy of the Combatant class.
 
 ### Fixed
 
 - Foundry combat tracker Roll All / Roll NPCs now use 1d6 + Justice + misc.
 - Each unlinked token has its own combatant. Combat start, combat end, turns, movement, targeting, and clash chat use that token. EasyEffects `enemies`, `allies`, and `all` use that token too.
+- Cancelling a dialog no longer counts as a choice.
+- Retaliating twice on the same attack card no longer starts two clashes.
+- Previous Turn and Previous Round no longer rerun turn and round triggers.
+- Removing the current Combatant now starts the next turn.
+- Status stacks no longer get lost when two changes happen at once.
+- [EasyEffects] Using a tool now runs `[On Action]` on equipped items and statuses.
+- [EasyEffects] Staggered from end-of-round damage now lasts through the next round.
 
 ## [0.1.3] - 2026-09-16
 
