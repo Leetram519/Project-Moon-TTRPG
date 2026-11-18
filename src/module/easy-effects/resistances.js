@@ -1,4 +1,20 @@
-export const DAMAGE_TYPES = Object.freeze(["slash", "pierce", "blunt"]);
+export const DAMAGE_TYPES = Object.freeze(["slash", "pierce", "blunt", "force"]);
+
+export const RESISTANCE_DAMAGE_TYPES = Object.freeze(["slash", "pierce", "blunt"]);
+
+export const WEAPON_DAMAGE_TYPE_CHOICES = Object.freeze({
+  none: "PMTTRPG.DamageTypeNone",
+  slash: "PMTTRPG.DamageTypeSlash",
+  pierce: "PMTTRPG.DamageTypePierce",
+  blunt: "PMTTRPG.DamageTypeBlunt",
+  force: "PMTTRPG.DamageTypeForce",
+});
+
+export const RESISTANCE_DAMAGE_TYPE_CHOICES = Object.freeze({
+  slash: "PMTTRPG.DamageTypeSlash",
+  pierce: "PMTTRPG.DamageTypePierce",
+  blunt: "PMTTRPG.DamageTypeBlunt",
+});
 
 export const RESISTANCE_MULTIPLIERS = Object.freeze({
   fatal: 2,
@@ -23,6 +39,11 @@ export function normalizeDamageType(raw) {
   return DAMAGE_TYPES.includes(key) ? key : null;
 }
 
+export function normalizeResistanceDamageType(raw) {
+  const key = normalizeDamageType(raw);
+  return key && RESISTANCE_DAMAGE_TYPES.includes(key) ? key : null;
+}
+
 /** @param {string} raw */
 export function isResistanceNoun(raw) {
   const key = String(raw ?? "").trim().toLowerCase();
@@ -37,8 +58,8 @@ export function buildResistanceOverrideMap({ pools, damageTypes, level } = {}) {
   const lvl = normalizeResistanceLevel(level);
   if (!lvl) return null;
   const poolList = (pools?.length ? pools : ["hp", "st"]).filter((p) => p === "hp" || p === "st");
-  const typeList = (damageTypes?.length ? damageTypes : [...DAMAGE_TYPES])
-    .map(normalizeDamageType)
+  const typeList = (damageTypes?.length ? damageTypes : [...RESISTANCE_DAMAGE_TYPES])
+    .map(normalizeResistanceDamageType)
     .filter(Boolean);
   if (!poolList.length || !typeList.length) return null;
   const out = {};

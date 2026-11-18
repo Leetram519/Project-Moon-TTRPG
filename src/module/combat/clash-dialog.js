@@ -1,11 +1,13 @@
 /**
  * Two dialogs:
  *
- *   showRetaliationDialog(actor, state, { isIntercept })
- *     Shown when a player clicks Retaliate or Intercept.
+ *   showRetaliationDialog(actor, state, { allowedTypes })
+ *     Shown when a player clicks Retaliate, Intercept or Protect.
  *     Lets them pick: Evade / Recycled Evade / Block / Counter (+ weapon)
  *     Optional matching Skill or Applied Tool (mutex) on Block / Evade /
  *     Counter / Recycled Evade.
+ *     Protect limits the list with allowedTypes (Recycled Evade counts as
+ *     Evade, One-Sided drops out).
  *     Returns a RetaliationChoice or null if cancelled.
  *
  *   showInterceptConfirmDialog(actorName)
@@ -23,6 +25,7 @@
  * @property {Item|null} [ammo]
  * @property {boolean} [consumeAmmo]
  * @property {boolean} [dryFire]
+ * @property {boolean} [consumeReaction]
  */
 
 import { PMTTRPGUtility } from "../utility.js";
@@ -32,8 +35,20 @@ import {
   isAppliedToolEligible,
 } from "../item/applied-tool.js";
 import { getToolUsesRemaining, toolConsumesByDefault } from "../item/tool-use.js";
-import { RETALIATION_TYPES } from "./clash-state.js";
+import { RETALIATION_TYPES, retaliationDefenseKind } from "./clash-state.js";
+import { canPayRetaliation } from "./clash-economy.js";
 import { getRecycledEvade } from "./recycled-evade.js";
+import { assistChoiceOptions } from "../action-economy/assist.js";
+import { canPayReactionForDeclaration, combatantForReactionToken } from "../action-economy/reaction-credits.js";
+import { ACTION_KINDS } from "../action-economy/kinds.js";
+import { findRelationshipForTarget } from "../grapple/grapple-state.js";
+import { waitForChoice } from "../apps/dialog-wait.js";
+
+function canBreakFreeAfterHit(actor, combatant, combat) {
+  if (!combatant || !combat) return false;
+  if (!findRelationshipForTarget(combat, combatant.id)) return false;
+  return canPayReactionForDeclaration(actor, { kind: ACTION_KINDS.BREAK_FREE, itemId: null }, { combatant });
+}
 
 const { renderTemplate } = foundry.applications.handlebars;
 
@@ -67,11 +82,26 @@ export async function showInterceptConfirmDialog(actorName = "") {
  * @param {ActorPMTTRPG} actor        — the actor who is retaliating
  * @param {ClashStateData} state
  * @param {object} [options]
- * @param {boolean} [options.isIntercept=false]
  * @param {string|null} [options.retaliatorTokenId]
+ * @param {boolean} [options.defensiveOnly=false]
+ * @param {string[]|null} [options.allowedTypes]
+ * @param {string|null} [options.titleKey]
+ * @param {string|null} [options.protectedName]
+ * @param {Combat|null} [options.combat]
  * @returns {Promise<RetaliationChoice|null>}
  */
-export async function showRetaliationDialog(actor, state, { isIntercept = false, retaliatorTokenId = null } = {}) {
+export async function showRetaliationDialog(actor, state, {
+  retaliatorTokenId = null,
+  defensiveOnly = false,
+  allowedTypes = null,
+  titleKey = null,
+  protectedName = null,
+  combat: clashCombat = null,
+} = {}) {
+  // Counter gets checked per weapon since an item-bound Small credit only allows its own weapon
+  const combat = clashCombat ?? game.combat ?? null;
+  const affordable = (type, item) => canPayRetaliation(actor, type, item, { tokenId: retaliatorTokenId, combat, state });
+
   const equippedWeapons = actor.items
     .filter(i => i.type === "weapon" && i.system?.equipped)
     .map(i => {
@@ -88,12 +118,19 @@ export async function showRetaliationDialog(actor, state, { isIntercept = false,
         range: check.range,
         distance: check.distance,
         inRange: check.inRange,
+        affordable: affordable(RETALIATION_TYPES.COUNTER, i),
       };
     });
 
-  const equippedOutfits = actor.items
-    .filter(i => i.type === "outfit" && i.system?.equipped)
-    .map(i => ({ id: i.id, name: i.name, img: i.img, type: "outfit" }));
+  const outfits = actor.items.filter(i => i.type === "outfit" && i.system?.equipped);
+  const outfitEntries = (type) => outfits.map(i => ({
+    id: i.id,
+    name: i.name,
+    img: i.img,
+    type: "outfit",
+    affordable: affordable(type, i),
+  }));
+  const equippedOutfits = outfitEntries(RETALIATION_TYPES.EVADE);
 
   const skills = actor.items
     .filter(i => i.type === "skill")
@@ -104,25 +141,40 @@ export async function showRetaliationDialog(actor, state, { isIntercept = false,
 
   const recycled = getRecycledEvade(actor);
 
+  const retaliatorCombatant = combatantForReactionToken(actor, retaliatorTokenId, combat);
+  const assistOptions = retaliatorCombatant ? assistChoiceOptions(retaliatorCombatant, { combat }) : [];
+  const breakFree = !allowedTypes && canBreakFreeAfterHit(actor, retaliatorCombatant, combat)
+    ? { label: game.i18n.localize("PMTTRPG.Grapple.BreakFreeAfterHit") }
+    : null;
+
   const templateData = {
     actor,
     state,
-    isIntercept,
     equippedWeapons,
     equippedOutfits,
     skills,
     appliedTools,
+    assistOptions: assistOptions.length ? assistOptions : null,
+    breakFree,
     recycledEvade: recycled,
-    options: _buildRetaliationOptions(equippedWeapons, equippedOutfits, recycled),
+    options: _buildRetaliationOptions({
+      weapons: equippedWeapons,
+      blockOutfits: outfitEntries(RETALIATION_TYPES.BLOCK),
+      evadeOutfits: equippedOutfits,
+      recycledOutfits: outfitEntries(RETALIATION_TYPES.RECYCLED_EVADE),
+      recycled,
+      defensiveOnly,
+      allowedTypes,
+    }),
     i18n: {
-      title:      isIntercept
-        ? game.i18n.localize("PMTTRPG.Clash.InterceptTitle")
-        : game.i18n.localize("PMTTRPG.Clash.RetaliateTitle"),
+      title: game.i18n.localize(titleKey || "PMTTRPG.Clash.RetaliateTitle"),
       evade:      game.i18n.localize("PMTTRPG.Clash.Evade"),
       block:      game.i18n.localize("PMTTRPG.Clash.Block"),
       counter:    game.i18n.localize("PMTTRPG.Clash.Counter"),
       onesided:   game.i18n.localize("PMTTRPG.Clash.OneSided"),
-      attackedBy: game.i18n.format("PMTTRPG.Clash.AttackedBy", { name: state.attackerName }),
+      attackedBy: protectedName
+        ? game.i18n.format("PMTTRPG.Clash.ProtectingFrom", { name: protectedName })
+        : game.i18n.format("PMTTRPG.Clash.AttackedBy", { name: state.attackerName }),
       outfit:     game.i18n.localize("PMTTRPG.Clash.ChooseOutfit"),
       weapon:     game.i18n.localize("PMTTRPG.Clash.ChooseWeapon"),
       skill:      game.i18n.localize("PMTTRPG.Clash.ChooseSkill"),
@@ -132,6 +184,8 @@ export async function showRetaliationDialog(actor, state, { isIntercept = false,
       toolOptional: game.i18n.localize("PMTTRPG.Clash.OptionalAppliedTool"),
       toolNone:   game.i18n.localize("PMTTRPG.Dialog.noAppliedTool"),
       consumeTool: game.i18n.localize("PMTTRPG.Dialog.consumeToolUse"),
+      consumeReaction: game.i18n.localize("PMTTRPG.Dialog.consumeReaction"),
+      assist:     game.i18n.localize("PMTTRPG.Assist.ChoiceLabel"),
       confirm:    game.i18n.localize("PMTTRPG.Clash.Confirm"),
       cancel:     game.i18n.localize("PMTTRPG.Dialog.cancel"),
     },
@@ -142,9 +196,10 @@ export async function showRetaliationDialog(actor, state, { isIntercept = false,
     if (retaliatorTokenId) hideWeaponRange(retaliatorTokenId);
   };
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: templateData.i18n.title },
     classes: _dialogClasses(),
+    position: { width: 320 },
     content: html,
     buttons: [
       {
@@ -178,38 +233,48 @@ export async function showRetaliationDialog(actor, state, { isIntercept = false,
 /**
  * Builds the ordered list of retaliation options for the template.
  */
-function _buildRetaliationOptions(weapons, outfits, recycled) {
+function _buildRetaliationOptions({
+  weapons = [],
+  blockOutfits = [],
+  evadeOutfits = [],
+  recycledOutfits = [],
+  recycled = null,
+  defensiveOnly = false,
+  allowedTypes = null,
+} = {}) {
   const options = [];
 
-  if (recycled && outfits.length) {
+  if (recycled && recycledOutfits.length) {
     options.push({
       type: RETALIATION_TYPES.RECYCLED_EVADE,
       labelText: game.i18n.format("PMTTRPG.Clash.RecycledEvade", { penalty: recycled.penalty }),
       icon: "systems/projectmoonttrpg/assets/icons/sheet/01_evade",
       requiresItem: true,
-      items: outfits,
+      items: recycledOutfits,
       recycled: true,
     });
   }
 
-  if (outfits.length) {
+  if (evadeOutfits.length) {
     options.push({
       type: RETALIATION_TYPES.EVADE,
       label: "PMTTRPG.Clash.Evade",
       icon: "systems/projectmoonttrpg/assets/icons/sheet/01_evade",
       requiresItem: true,
-      items: outfits,
+      items: evadeOutfits,
     });
+  }
+  if (blockOutfits.length) {
     options.push({
       type: RETALIATION_TYPES.BLOCK,
       label: "PMTTRPG.Clash.Block",
       icon: "systems/projectmoonttrpg/assets/icons/sheet/01_defense",
       requiresItem: true,
-      items: outfits,
+      items: blockOutfits,
     });
   }
 
-  if (weapons.length) {
+  if (weapons.length && !defensiveOnly) {
     options.push({
       type: RETALIATION_TYPES.COUNTER,
       label: "PMTTRPG.Clash.Counter",
@@ -220,13 +285,25 @@ function _buildRetaliationOptions(weapons, outfits, recycled) {
   }
 
   options.push({
-    type: "onesided",
+    type: RETALIATION_TYPES.ONESIDED,
     label: "PMTTRPG.Clash.OneSided",
     icon: "systems/projectmoonttrpg/assets/icons/sheet/03_danger1",
     requiresItem: false,
   });
 
-  return options;
+  const allowed = Array.isArray(allowedTypes) ? new Set(allowedTypes) : null;
+  const visible = allowed
+    ? options.filter((option) => allowed.has(retaliationDefenseKind(option.type)))
+    : options;
+
+  for (const option of visible) {
+    option.unavailable = option.requiresItem
+      && !(option.items ?? []).some((item) => item.affordable !== false);
+  }
+  const first = visible.find((option) => !option.unavailable) ?? visible[0];
+  for (const option of visible) option.checked = option === first;
+
+  return visible;
 }
 
 function _skillTypeForRetaliation(type) {
@@ -275,12 +352,28 @@ function _readRetaliationForm(dialog, actor) {
   const consumeSkillLight = form.querySelector("[name='consumeSkillLight']")?.checked !== false;
   const toolId = form.querySelector("[name='appliedToolId']")?.value?.trim() ?? "";
   const consumeAppliedTool = form.querySelector("[name='consumeAppliedTool']")?.checked !== false;
+  const assistEntryId = form.querySelector("[name='assistEntryId']")?.value.trim() || null;
+  const breakFreeAfterHit = form.querySelector("[name='breakFreeAfterHit']")?.checked === true;
+  const consumeReaction = form.querySelector("[name='consumeReaction']")?.checked !== false;
 
   if (!type) return null;
+
+  // Disabled options and unaffordable items still show up, they just get
+  // rejected here (unless Consume Reaction is unticked).
+  const optionInput = form.querySelector(`.clash-option[data-type="${type}"] input[name='retaliationType']`);
+  if (optionInput?.disabled) {
+    ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.OptionUnavailable"));
+    return null;
+  }
 
   let item = null;
   if (itemId) {
     item = actor.items.get(itemId) ?? null;
+    const itemEntry = form.querySelector(`.clash-item-option[data-type="${type}"][data-item-id="${itemId}"]`);
+    if (consumeReaction && itemEntry?.dataset.affordable === "0") {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.OptionUnavailable"));
+      return null;
+    }
   }
   // For counter, require an item selection.
   if (type === RETALIATION_TYPES.COUNTER && !item) {
@@ -312,6 +405,10 @@ function _readRetaliationForm(dialog, actor) {
     appliedTool,
     consumeAppliedTool: !!appliedTool && consumeAppliedTool,
     recycled: type === RETALIATION_TYPES.RECYCLED_EVADE,
+    // One-Sided has no roll for the grant to help (it stays unspent)
+    assistEntryId: type === RETALIATION_TYPES.ONESIDED ? null : assistEntryId,
+    breakFreeAfterHit: type === RETALIATION_TYPES.ONESIDED && breakFreeAfterHit,
+    consumeReaction,
   };
 }
 
@@ -389,19 +486,12 @@ export async function promptRangedAmmo(actor, weapon, { shootLabel } = {}) {
     callback: () => null,
   });
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.localize("PMTTRPG.Dialog.chooseAmmunition") },
     classes: _dialogClasses(),
     content: html,
     buttons,
     rejectClose: false,
-  });
-}
-
-/** @deprecated Prefer {@link promptRangedAmmo} */
-export async function promptRangedCounterAmmo(actor, weapon) {
-  return promptRangedAmmo(actor, weapon, {
-    shootLabel: game.i18n.localize("PMTTRPG.Clash.Counter"),
   });
 }
 
@@ -446,6 +536,31 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
   const rangeTag = el.querySelector(".clash-option__range-tag");
   const rangeNotice = el.querySelector(".clash-range-notice");
   const rangeNoticeText = el.querySelector(".clash-range-notice__text");
+  const assistPicker = el.querySelector(".clash-assist-picker");
+
+  // if Consume Reaction is unticked then the options that only lacked a Reaction become selectable
+  const consumeReaction = el.querySelector("[name='consumeReaction']");
+  const consuming = () => consumeReaction?.checked !== false;
+  const refreshAffordability = () => {
+    for (const label of el.querySelectorAll(".clash-option--unavailable")) {
+      const input = label.querySelector("input[name='retaliationType']");
+      if (input) input.disabled = consuming();
+    }
+  };
+
+  const refreshAssist = () => {
+    if (!assistPicker) return;
+    const selected = el.querySelector("[name='retaliationType']:checked")?.value;
+    assistPicker.style.display = selected === RETALIATION_TYPES.ONESIDED ? "none" : "";
+  };
+
+  // Break Free after the hit only shows up for One-Sided
+  const breakFreeToggle = el.querySelector(".clash-break-free");
+  const refreshBreakFree = () => {
+    if (!breakFreeToggle) return;
+    const selected = el.querySelector("[name='retaliationType']:checked")?.value;
+    breakFreeToggle.style.display = selected === RETALIATION_TYPES.ONESIDED ? "" : "none";
+  };
 
   const fillNoneOption = (select, label) => {
     if (!select) return;
@@ -540,7 +655,13 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
         const opt = document.createElement("option");
         opt.value   = item.dataset.itemId;
         opt.textContent = item.dataset.itemName;
+        opt.disabled = consuming() && item.dataset.affordable === "0";
         itemSelect.appendChild(opt);
+      }
+      const current = itemSelect.selectedOptions[0];
+      if (!current || current.disabled) {
+        const enabled = [...itemSelect.options].find((option) => !option.disabled);
+        if (enabled) itemSelect.value = enabled.value;
       }
     }
 
@@ -563,6 +684,8 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
     refreshConsume();
     refreshTools();
     refreshCounterRange();
+    refreshAssist();
+    refreshBreakFree();
   };
 
   for (const radio of radios) {
@@ -574,7 +697,12 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
   });
   toolSelect?.addEventListener("change", refreshToolConsume);
   itemSelect?.addEventListener("change", refreshCounterRange);
+  consumeReaction?.addEventListener("change", () => {
+    refreshAffordability();
+    refreshPicker();
+  });
 
+  refreshAffordability();
   refreshPicker();
 }
 

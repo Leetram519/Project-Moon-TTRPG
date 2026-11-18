@@ -18,6 +18,7 @@ import {
 } from "./declare-skill.js";
 import { applyCombatDie } from "../easy-effects/dice-formula.js";
 import { resolveDiceFormula } from "../easy-effects/nouns.js";
+import { RESISTANCE_DAMAGE_TYPES } from "../easy-effects/resistances.js";
 import {
   emitItemEquipped,
   emitItemUnequipped,
@@ -27,6 +28,84 @@ import {
 import { promptRangedAmmo } from "../combat/clash-dialog.js";
 import { resolveRangedDamageType } from "../damage-application.js";
 import { normalizeWeaponProperties } from "./weapon-properties.js";
+import { rejectUnheldWeaponAttack } from "../action-economy/attack-eligibility.js";
+import { canPayDeclaration } from "../action-economy/declare.js";
+import { ACTION_KINDS, ECONOMY_TYPES } from "../action-economy/kinds.js";
+import { checkActionTiming } from "../action-economy/timing.js";
+import { combatantForReactionToken } from "../action-economy/reaction-credits.js";
+import { assistChoiceOptions, resolveAssistRecipient } from "../action-economy/assist.js";
+import { rangedCoverBlock } from "../action-economy/cover.js";
+import { DROPPED_ITEM_PATH, isDroppedItem } from "../action-economy/formulas.js";
+
+/** The attacker's Combatant and its Assist choices. */
+function attackerAssistContext(actor, tokenId) {
+  const combatant = resolveAssistRecipient(actor, { tokenId });
+  if (!combatant) return { combatant: null, options: [], tokenId: tokenId ?? actor?.token?.id ?? null };
+  return {
+    combatant,
+    options: assistChoiceOptions(combatant),
+    tokenId: tokenId ?? combatant.tokenId ?? actor?.token?.id ?? null,
+  };
+}
+
+function attackerIdentityTemplateData(assistCtx, chosenTarget) {
+  const data = {};
+  if (assistCtx?.combatant) {
+    data.attackerCombatantId = assistCtx.combatant.id;
+    if (assistCtx.tokenId) data.attackerTokenId = assistCtx.tokenId;
+    if (chosenTarget?.assistEntryId) data.attackerAssistEntryId = chosenTarget.assistEntryId;
+  }
+  return data;
+}
+
+function blockUnheldWeaponAttack(item, path) {
+  return !rejectUnheldWeaponAttack(item.actor, item, { path }).ok;
+}
+
+function weaponAttackTiming(item, { combatant = null, tokenId = null, timing = null } = {}) {
+  const combat = game.combat ?? null;
+  const attacker = combat?.started ? (combatant ?? combatantForReactionToken(item.actor, tokenId, combat)) : null;
+  const check = checkActionTiming({ combat, combatant: attacker, economyType: ECONOMY_TYPES.ACTION, kind: ACTION_KINDS.ATTACK, timing });
+  return { combat, attacker, check };
+}
+
+// an Action on their turn, a Reaction off it.
+function blockUnaffordableWeaponAttack(item, { consumeAction = true, combatant = null, tokenId = null, timing = null } = {}) {
+  if (!game.combat?.started || consumeAction === false) return false;
+  const { combat, attacker, check } = weaponAttackTiming(item, { combatant, tokenId, timing });
+  if (canPayDeclaration(item.actor, {
+    economyType: ECONOMY_TYPES.ACTION,
+    kind: ACTION_KINDS.ATTACK,
+    cost: 1,
+    itemId: item.id,
+    combat,
+    combatant: attacker,
+    tokenId,
+    timing,
+  })) return false;
+  const key = check.asReaction ? "PMTTRPG.Attack.NoReaction" : "PMTTRPG.Attack.NoAction";
+  ui.notifications.warn(game.i18n.format(key, { name: item.actor?.name ?? "" }));
+  return true;
+}
+
+function blockOffTurnWeaponAttack(item, { combatant = null, tokenId = null, timing = null } = {}) {
+  if (!game.combat?.started) return false;
+  if (weaponAttackTiming(item, { combatant, tokenId, timing }).check.ok) return false;
+  ui.notifications.warn(game.i18n.format("PMTTRPG.Attack.NotYourTurn", { name: item.actor?.name ?? "" }));
+  return true;
+}
+
+/**
+ * The target dialog's Consume default and label (Consume Reaction when the Attack is taken off turn).
+ */
+function consumeActionChoice(item, consumeAction, timingOptions = {}) {
+  if (!game.combat?.started) return { consumeAction: null, consumeLabelKey: null };
+  const { check } = weaponAttackTiming(item, timingOptions);
+  return {
+    consumeAction: consumeAction !== false,
+    consumeLabelKey: check.asReaction ? "PMTTRPG.Dialog.consumeReaction" : "PMTTRPG.Dialog.consumeAction",
+  };
+}
 
 /**
  * Skill XOR applied tool.
@@ -80,6 +159,11 @@ async function pickWeaponBuyIn(actor, hostItem, options = {}) {
     applyTo: "weapon",
     skillType: "attack",
   });
+}
+
+function sameOwnedItem(actor, item) {
+  if (!item) return item;
+  return actor.items.get(item.id) ?? null;
 }
 
 function getEffectSignature(entry) {
@@ -143,7 +227,11 @@ export class ItemPMTTRPG extends Item {
       if (this._source.system.held && changed.system.equipped === undefined) {
         changed.system.equipped = true;
       }
-      changed.system.held = foundry.data.operators.ForcedDeletion;
+      changed.system.held = new foundry.data.operators.ForcedDeletion();
+    }
+    // equipping a dropped item picks it back up
+    if (changed.system?.equipped === true && isDroppedItem(this)) {
+      foundry.utils.setProperty(changed, DROPPED_ITEM_PATH, false);
     }
     if (this.type === "weapon" && changed.system) {
       const merged = { ...this._source?.system, ...changed.system };
@@ -393,11 +481,12 @@ export class ItemPMTTRPG extends Item {
         // Ensure consistent formatting (no trailing .0)
         return `${Number.isInteger(m) ? m : m}${'x'}`;
       };
-      for (let damageType of ['slash', 'pierce', 'blunt']) {
-        const hpKey = data.resistances.hp[damageType];
-        const stKey = data.resistances.st[damageType];
-        const hpMult = CONFIG.PMTTRPG.resistances[hpKey]?.multiplier ?? 1;
-        const stMult = CONFIG.PMTTRPG.resistances[stKey]?.multiplier ?? 1;
+      const resistanceLevels = CONFIG.PMTTRPG.resistances;
+      for (const damageType of RESISTANCE_DAMAGE_TYPES) {
+        const hpKey = data.resistances.hp?.[damageType] || "normal";
+        const stKey = data.resistances.st?.[damageType] || "normal";
+        const hpMult = resistanceLevels[hpKey]?.multiplier ?? 1;
+        const stMult = resistanceLevels[stKey]?.multiplier ?? 1;
         data.resistancesDisplay.hp[damageType] = formatMultiplier(hpMult);
         data.resistancesDisplay.st[damageType] = formatMultiplier(stMult);
       }
@@ -534,25 +623,56 @@ export class ItemPMTTRPG extends Item {
    * Roll the item to Chat, creating a chat card which contains follow up attack or damage roll options
    * @return {Promise}
    */
-  async roll({
-    configureDialog = true,
-    mode = 'block',
-    ammo = null,
-    consumeAmmo = true,
-    dryFire = false,
-    appliedTool = undefined,
-    consumeAppliedTool = true,
-    declaredSkill = undefined,
-    consumeSkillLight = true,
-    targetSelection,
-  } = {}) {
+  async roll(options = {}) {
+    let {
+      configureDialog = true,
+      mode = 'block',
+      ammo = null,
+      consumeAmmo = true,
+      dryFire = false,
+      appliedTool = undefined,
+      consumeAppliedTool = true,
+      declaredSkill = undefined,
+      consumeSkillLight = true,
+      targetSelection,
+      alreadyDeclared = false,
+      tokenId = null,
+      combatant = null,
+      timing = null,
+      consumeAction = true,
+    } = options;
+    if ((this.type == 'weapon' || this.type == 'tool') && tokenId == null && !combatant && this.actor && game.combat) {
+      const { ACTING_PURPOSES, resolveActingContext } = await import("../action-economy/acting-token.js");
+      const acting = await resolveActingContext(this.actor, { combat: game.combat, purpose: ACTING_PURPOSES.ACTION });
+      if (!acting) return;
+      if (acting.actor && acting.actor !== this.actor) {
+        const own = sameOwnedItem(acting.actor, this);
+        if (!own) return;
+        return own.roll({
+          ...options,
+          ammo: sameOwnedItem(acting.actor, ammo),
+          appliedTool: sameOwnedItem(acting.actor, appliedTool),
+          declaredSkill: sameOwnedItem(acting.actor, declaredSkill),
+          tokenId: acting.tokenId,
+          combatant: acting.combatant,
+        });
+      }
+      tokenId = acting.tokenId ?? null;
+      combatant = acting.combatant ?? null;
+    }
+
     if (this.type == 'tool') {
       return useTool(this, {
         configureDialog,
         consume: true,
+        alreadyDeclared,
         target: targetSelection === undefined
           ? undefined
           : (targetSelection?.actor ?? targetSelection ?? null),
+        tokenId,
+        combatant,
+        timing,
+        consumeAction,
       });
     }
 
@@ -616,6 +736,10 @@ export class ItemPMTTRPG extends Item {
       return;
     }
 
+    if (this.type == 'weapon' && blockUnheldWeaponAttack(this, "item.roll")) return;
+    if (this.type == 'weapon' && blockOffTurnWeaponAttack(this, { combatant, tokenId, timing })) return;
+    if (this.type == 'weapon' && blockUnaffordableWeaponAttack(this, { consumeAction, combatant, tokenId, timing })) return;
+
     if (this.type == 'weapon' && (ammo || dryFire)) {
       const ammoQuantity = ammo ? Number(ammo.system?.quantity ?? 0) : 0;
       const isDryFire = !!(dryFire || !ammo || ammoQuantity <= 0);
@@ -638,7 +762,13 @@ export class ItemPMTTRPG extends Item {
         return;
       }
 
-      if (!isDryFire && consumeAmmo && ammo) {
+      if (blockUnheldWeaponAttack(this, "item.roll:ammo")) return;
+
+      // A targeted shot turns into a clash and only uses the ammo once the ATTACK declaration
+      // goes through. An untargeted shot will not declare.
+      const willConsumeAmmo = !isDryFire && consumeAmmo && !!ammo;
+      const deferAmmoToClash = willConsumeAmmo && !!targetSelection;
+      if (willConsumeAmmo && !deferAmmoToClash) {
         const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
         await runAsOwnerOrGM(ammo.actor ?? this.actor, "updateOwnedItem", {
           itemUuid: ammo.uuid,
@@ -668,6 +798,10 @@ export class ItemPMTTRPG extends Item {
           ammoType: isDryFire ? null : (ammo.system?.ammoType ?? null),
           ammoDamageType: isDryFire ? null : (ammo.system?.damageType ?? null),
           ammoId: isDryFire ? null : (ammo?.id ?? null),
+          consumeAmmo: deferAmmoToClash,
+          attackerConsume: (targetSelection?.consumeAction ?? consumeAction) !== false,
+          attackerTiming: timing ?? null,
+          ...attackerIdentityTemplateData(attackerAssistContext(this.actor, tokenId), targetSelection),
           ...buildAppliedToolTemplateData(tool),
           ...buildDeclaredSkillTemplateData(skill, consumeLight),
           damageType: resolveRangedDamageType({
@@ -704,14 +838,20 @@ export class ItemPMTTRPG extends Item {
         if (!buyIn) return;
 
         const targeting = game.projectmoonttrpg?.targeting;
+        const assistCtx = attackerAssistContext(this.actor, tokenId);
+        const originToken = (tokenId ? canvas.tokens?.get(tokenId) : null)
+          ?? (this.actor.isToken ? (this.actor.token?.object ?? null) : null);
         const chosenTarget = targeting ? await targeting.promptTargetSelection({
           actor: this.actor,
-          token: actorTokenPlaceables(this.actor)[0] ?? null,
+          token: originToken ?? actorTokenPlaceables(this.actor)[0] ?? null,
           title: this.name,
           sourceName: this.name,
           sourceImg: this.img,
           weaponRange: this.system.range,
           preferredCombatantId: game.combat?.combatant?.id ?? null,
+          assistOptions: assistCtx.options,
+          isTargetBlocked: rangedCoverBlock(this),
+          ...consumeActionChoice(this, consumeAction, { combatant, tokenId, timing }),
         }) : undefined;
 
         if (chosenTarget === null) return;
@@ -725,7 +865,11 @@ export class ItemPMTTRPG extends Item {
           consumeAppliedTool: buyIn.consumeTool,
           declaredSkill: buyIn.skill,
           consumeSkillLight: buyIn.consumeLight,
-          targetSelection: chosenTarget
+          targetSelection: chosenTarget,
+          tokenId,
+          combatant,
+          timing,
+          consumeAction: chosenTarget?.consumeAction ?? consumeAction,
         });
         return;
       }
@@ -746,18 +890,24 @@ export class ItemPMTTRPG extends Item {
       const consumeLight = buyIn.consumeLight;
 
       const targeting = game.projectmoonttrpg?.targeting;
+      const assistCtx = attackerAssistContext(this.actor, tokenId);
       const chosenTarget = targetSelection !== undefined
         ? targetSelection
         : (targeting ? await targeting.promptTargetSelection({
           actor: this.actor,
+          token: tokenId ? (canvas.tokens?.get(tokenId) ?? null) : null,
           title: this.name,
           sourceName: this.name,
           sourceImg: this.img,
           weaponRange: this.system.range,
           preferredCombatantId: game.combat?.combatant?.id ?? null,
+          assistOptions: assistCtx.options,
+          ...consumeActionChoice(this, consumeAction, { combatant, tokenId, timing }),
         }) : undefined);
 
       if (chosenTarget === null) return;
+
+      if (blockUnheldWeaponAttack(this, "item.roll:commit")) return;
 
       if (!canConsumeAppliedTool(tool, willConsumeTool)) {
         ui.notifications.warn(game.i18n.localize('PMTTRPG.Dialog.noToolUses'));
@@ -778,6 +928,9 @@ export class ItemPMTTRPG extends Item {
           details: this.system.description,
           rollType: 'damage',
           damageType: tool?.system?.damageType || this.system?.damageType || null,
+          attackerConsume: (chosenTarget?.consumeAction ?? consumeAction) !== false,
+          attackerTiming: timing ?? null,
+          ...attackerIdentityTemplateData(assistCtx, chosenTarget),
           ...buildAppliedToolTemplateData(tool),
           ...buildDeclaredSkillTemplateData(skill, consumeLight),
         },

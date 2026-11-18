@@ -2,6 +2,8 @@ import { PMTTRPG } from "./config.js";
 import { ActorPMTTRPG } from "./actor/actor.js";
 import { ItemPMTTRPG } from "./item/item.js";
 import { TokenPMTTRPG } from "./canvas/token.js";
+import { registerTokenDocumentPMTTRPG } from "./canvas/token-document.js";
+import { registerTokenHUDPMTTRPG } from "./canvas/token-hud.js";
 import { TokenRulerPMTTRPG } from "./canvas/token-ruler.js";
 import { PMTTRPGItemSheet } from "./item/item-sheet.js";
 import { PMTTRPGWeaponItemSheet } from "./item/weapon-item-sheet.js";
@@ -12,7 +14,7 @@ import { PMTTRPGToolItemSheet } from "./item/tool-item-sheet.js";
 import { PMTTRPGEffectItemSheet } from "./item/effect-item-sheet.js";
 import { PMTTRPGAugmentItemSheet } from "./item/augment-item-sheet.js";
 import { PMTTRPGActorNpcSheet } from "./actor/actor-npc-sheet.js";
-import { PMTTRPGCharacterSheet } from "./actor/character-sheet.js";
+import { PMTTRPGCharacterSheet, registerSheetCombatRefresh } from "./actor/character-sheet.js";
 import { PMTTRPGRegisterHelpers } from "./handlebars.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
 import { PMTTRPGUtility } from "./utility.js";
@@ -20,7 +22,36 @@ import { PMTTRPGTargetingAPI } from "./targeting.js";
 import { CombatSidebarPMTTRPG } from "./combat/combat.js";
 import { registerCombatMovement } from "./combat/movement.js";
 import { PMTTRPGStatusMacroAPI } from "./status-macro-api.js";
-import { registerEasyEffectsHooks } from "./easy-effects/registry.js";
+import { isAlwaysActiveParticipant, registerEasyEffectsHooks } from "./easy-effects/registry.js";
+import {
+  getRuleSubject,
+  listRuleContributionProviders,
+  registerRuleContributionProvider,
+  resolveRuleProfile,
+  unregisterRuleContributionProvider,
+  registerOwnedContentRuleProvider,
+} from "./rules/rule-contributions.js";
+import { registerPlannedMovement } from "./movement/movement-commit.js";
+import {
+  FORCED_MOVEMENT_ACTION,
+  MOVEMENT_NATURES,
+  getPendingMovement,
+  pendingMovementView,
+} from "./movement/movement-plan.js";
+import {
+  listMovementProcessors,
+  registerMovementProcessor,
+  unregisterMovementProcessor,
+} from "./movement/movement-processors.js";
+import { markMovementActionProcessed, wasMovementActionProcessed } from "./movement/movement-actions.js";
+import { pickCanvasPoint } from "./canvas/point-picker.js";
+import { registerGrapple, registerGrapplePresentation } from "./grapple/grapple.js";
+import {
+  findRelationshipForTarget,
+  isGrappleImmune,
+  listGrappleRelationships,
+} from "./grapple/grapple-state.js";
+import { getGrappleRestrictions } from "./grapple/grapple-restrictions.js";
 import { registerActorScriptHooks } from "./easy-effects/actor-scripts.js";
 import { registerChoiceDialogSocket } from "./easy-effects/choice-dialog.js";
 import { registerGmRouteSocket } from "./easy-effects/gm-route.js";
@@ -30,19 +61,113 @@ import { eeFlagsAPI } from "./apps/ee-flag-inspector.js";
 import { getActorWeaponDamageType, isSelectableDamageType } from "./damage-application.js";
 import { actorFromSpeaker } from "./acting-user.js";
 import {
+  registerTokenActionStateBadges,
   registerTokenStatusBadges,
   registerTokenStatusBadgeSettings,
 } from "./canvas/token.js";
+import { registerFallingSetting } from "./falling/fall-descent.js";
+import { registerDisengagePresentation } from "./action-economy/disengage.js";
+import { registerAssistPresentation } from "./action-economy/assist.js";
+import { registerProtect } from "./action-economy/protect.js";
+import { registerCoverPresentation } from "./action-economy/cover.js";
+import { registerReadyPresentation } from "./action-economy/ready.js";
+import { registerDelayIntent } from "./action-economy/delay.js";
 import {
   registerClashChatListeners,
   applyChatUpdate,
   isChatUpdatePayload,
 } from "./combat/clash-chat.js";
+import { analyzeOpportunityMovement } from "./combat/opportunity/opportunity-movement.js";
+import { normalizeFoundryOpportunityPath } from "./combat/opportunity/opportunity-path.js";
+import {
+  finalizeOpportunityAttackFromClash,
+  resolveOpportunityAttackDecision,
+} from "./combat/opportunity/opportunity-attack.js";
+import {
+  advanceCheckpoint,
+  cancelOpportunitySession,
+  completeOpportunitySession,
+  createOpportunitySession,
+  createOpportunitySessionFromCheckpoints,
+  bindOpportunitySessionMovementId,
+  createOpportunitySessionFromMovement,
+  decideOpportunityAttack,
+  decideOpportunityPass,
+  expireOpportunitySession,
+  forcePassPendingOpportunities,
+  getAwaitingAttackDecisions,
+  getCurrentCheckpoint,
+  getOpportunityDecision,
+  getOpportunitySession,
+  markOpportunityAttackResolved,
+  waitForOpportunityCheckpointResolution,
+} from "./combat/opportunity/opportunity-session.js";
+import {
+  handleOpportunityDecision,
+  handleOpportunityForcePass,
+  presentOpportunitySession,
+  registerOpportunityPromptListeners,
+} from "./combat/opportunity/opportunity-prompt.js";
+import { hasOpportunityTokenLock, registerOpportunityOrchestrator } from "./combat/opportunity/opportunity-orchestrator.js";
+import {
+  isAdministrativeMovementActive,
+  registerOpportunityClientControls,
+  setAdministrativeMovementHeld,
+} from "./combat/opportunity/opportunity-preferences.js";
 import { PMTTRPGClashAPI } from "./combat/clashing.js";
 import { MigrationList, MigrationRunner } from "./migration/index.js";
 import { HomebrewSettings } from "./settings/homebrew-settings.js";
 //import { BoiHomebrew } from "./homebrew/boi-homebrew.js";
 import { HomebrewRegistry } from "./homebrew/homebrew-registry.js";
+import {
+  applyDeclaredActorUpdate,
+  applyDeclaredOwnedItemUpdate,
+  declareActorAction,
+  listActionDeclarationProcessors,
+  registerActionDeclarationProcessor,
+  unregisterActionDeclarationProcessor,
+  registerDeclarationOnActionEmit,
+} from "./action-economy/declare.js";
+import {
+  ACTION_DEFINITIONS,
+  ACTION_GROUPS,
+} from "./action-economy/catalog.js";
+import {
+  ACTION_KINDS,
+  ECONOMY_TYPES,
+} from "./action-economy/kinds.js";
+import {
+  declareManualEconomy,
+  getEligibleAttackWeapons,
+  openActionMenu,
+} from "./action-economy/action-menu.js";
+import {
+  collectProvidedActions,
+  executeCustomAction,
+  listActionMenuCategories,
+  listActionProviders,
+  registerActionMenuCategory,
+  registerActionProvider,
+  registerCustomActionExecutor,
+  unregisterActionMenuCategory,
+  unregisterActionProvider,
+  unregisterCustomActionExecutor,
+} from "./action-economy/custom-actions.js";
+import {
+  bindSourceSlot,
+  findBindingForTarget,
+  listAvailableBindingSlots,
+  listSourceBindings,
+  unbindSourceSlot,
+} from "./action-economy/action-bindings.js";
+import { registerReactionUseCounter } from "./action-economy/reaction-use.js";
+import {
+  registerActionFeedback,
+  registerActionFeedbackFloatingText,
+  registerActionFeedbackSettings,
+} from "./action-economy/action-feedback.js";
+import { getEligibleOutfits } from "./action-economy/change-outfit.js";
+import { getEligibleUseTools } from "./action-economy/use-tool.js";
 
 import * as chat from "./chat.js";
 import { registerDiceSoNice } from "./integrations/dice-so-nice.js";
@@ -70,7 +195,95 @@ Hooks.once("init", async function() {
     targeting: PMTTRPGTargetingAPI,
     statusMacros: PMTTRPGStatusMacroAPI,
     clash: PMTTRPGClashAPI,
+    opportunity: {
+      analyzeOpportunityMovement,
+      normalizeFoundryOpportunityPath,
+      createOpportunitySession,
+      createOpportunitySessionFromMovement,
+      createOpportunitySessionFromCheckpoints,
+      presentOpportunitySession,
+      handleOpportunityDecision,
+      handleOpportunityForcePass,
+      forcePassPendingOpportunities,
+      bindOpportunitySessionMovementId,
+      waitForOpportunityCheckpointResolution,
+      decideOpportunityPass,
+      decideOpportunityAttack,
+      resolveOpportunityAttackDecision,
+      finalizeOpportunityAttackFromClash,
+      getOpportunitySession,
+      getCurrentCheckpoint,
+      getOpportunityDecision,
+      getAwaitingAttackDecisions,
+      advanceCheckpoint,
+      markOpportunityAttackResolved,
+      cancelOpportunitySession,
+      expireOpportunitySession,
+      completeOpportunitySession,
+      isAdministrativeMovementActive,
+      setAdministrativeMovementHeld,
+    },
     eeFlags: eeFlagsAPI,
+    rules: {
+      registerRuleContributionProvider,
+      unregisterRuleContributionProvider,
+      listRuleContributionProviders,
+      getRuleSubject,
+      resolveRuleProfile,
+    },
+    movement: {
+      registerMovementProcessor,
+      unregisterMovementProcessor,
+      listMovementProcessors,
+      getPendingMovement,
+      pendingMovementView,
+      wasMovementActionProcessed,
+      markMovementActionProcessed,
+      pickCanvasPoint,
+      MOVEMENT_NATURES,
+      FORCED_MOVEMENT_ACTION,
+    },
+    grapple: {
+      listGrappleRelationships,
+      findRelationshipForTarget,
+      isGrappleImmune,
+      getGrappleRestrictions,
+    },
+    declareActorAction,
+    actions: {
+      declareActorAction,
+      declareManualEconomy,
+      registerActionDeclarationProcessor,
+      unregisterActionDeclarationProcessor,
+      listActionDeclarationProcessors,
+      applyDeclaredActorUpdate,
+      applyDeclaredOwnedItemUpdate,
+      ACTION_KINDS,
+      ECONOMY_TYPES,
+      ACTION_DEFINITIONS,
+      ACTION_GROUPS,
+      openActionMenu,
+      getEligibleAttackWeapons,
+      getEligibleOutfits,
+      getEligibleUseTools,
+      registerActionProvider,
+      unregisterActionProvider,
+      listActionProviders,
+      collectProvidedActions,
+      registerActionMenuCategory,
+      unregisterActionMenuCategory,
+      listActionMenuCategories,
+      registerCustomActionExecutor,
+      unregisterCustomActionExecutor,
+      executeCustomAction,
+      bindings: {
+        listSourceBindings,
+        listAvailableBindingSlots,
+        bindSourceSlot,
+        unbindSourceSlot,
+        findBindingForTarget,
+      },
+    },
   };
 
   CONFIG.PMTTRPG = PMTTRPG;
@@ -79,7 +292,18 @@ Hooks.once("init", async function() {
   CONFIG.Token.objectClass = TokenPMTTRPG;
   CONFIG.Token.rulerClass = TokenRulerPMTTRPG;
   CONFIG.ui.compendium = CompendiumBrowserOverride;
+  registerTokenHUDPMTTRPG();
+  registerOwnedContentRuleProvider({ isActive: isAlwaysActiveParticipant });
+  registerGrapple();
+  registerPlannedMovement({
+    isAdministrative: isAdministrativeMovementActive,
+    hasOpportunityLock: hasOpportunityTokenLock,
+  });
+  game.projectmoonttrpg.TokenDocumentPMTTRPG = registerTokenDocumentPMTTRPG();
   registerTokenStatusBadges();
+  registerTokenActionStateBadges();
+  registerSheetCombatRefresh();
+  CONFIG.Item.compendiumIndexFields = [...new Set([...CONFIG.Item.compendiumIndexFields, "system.reduceStatus"])];
   CONFIG.Item.typeLabels = foundry.utils.mergeObject(CONFIG.Item.typeLabels ?? {}, {
     status: game.i18n.localize("TYPES.Item.status"),
     skill: game.i18n.localize("TYPES.Item.skill"),
@@ -173,8 +397,11 @@ Hooks.once("init", async function() {
     onChange: () => window.location.reload()
   });
 
+  registerFallingSetting();
   registerStatusTraySettings();
   registerTokenStatusBadgeSettings();
+  registerActionFeedbackSettings();
+  registerOpportunityClientControls();
   try {
     registerWorldEasyEffectsSettings();
   } catch (err) {
@@ -187,6 +414,19 @@ Hooks.once("init", async function() {
   registerEasyEffectsHooks();
   registerActorScriptHooks();
   registerClashChatListeners();
+  registerOpportunityPromptListeners();
+  registerOpportunityOrchestrator();
+  registerDeclarationOnActionEmit();
+  registerReactionUseCounter();
+  registerActionFeedback();
+  registerActionFeedbackFloatingText();
+  registerDisengagePresentation();
+  registerAssistPresentation();
+  registerProtect();
+  registerCoverPresentation();
+  registerReadyPresentation();
+  registerGrapplePresentation();
+  registerDelayIntent();
 
   CompendiumBrowserOverride.init();
   HomebrewSettings.register();
@@ -293,10 +533,10 @@ Hooks.once("ready", async function() {
 
 Hooks.on('createChatMessage', async (message, options, id) => {
   // TODO: expand this to work with multiple rolls.
-  if (message?.rolls) {
+  if (message?.rolls?.length) {
     // Limit this to a single user.
     let firstGM = game.users.find(u => u.active && u.role == CONST.USER_ROLES.GAMEMASTER);
-    if (!game.user.isGM || game.user.id !== firstGM.id) return;
+    if (!game.user.isGM || !firstGM || game.user.id !== firstGM.id) return;
     // Exit early if this is a rollable table.
     if (message?.flags?.core?.RollTable) return;
     // Since Clash has its own card, don't rewrite content or inject buttons.
@@ -325,10 +565,7 @@ Hooks.on('createChatMessage', async (message, options, id) => {
             'flags.projectmoonttrpg.damageType': damageType,
           })
           // Update the chat log scroll position.
-            .then(m => {
-              let chatLog = document.querySelector('#chat-log');
-              chatLog.scrollTop = chatLog.scrollHeight;
-            });
+            .then(() => ui.chat.scrollBottom());
         })
       });
     }
@@ -378,6 +615,8 @@ Hooks.once("setup", function() {
 /*  Actor Updates                               */
 /* -------------------------------------------- */
 Hooks.on('createActor', async (actor, options, id) => {
+  if (id !== game.user.id) return;
+
   // Prepare updates object.
   let updates = {};
 

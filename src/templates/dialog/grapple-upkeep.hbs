@@ -1,0 +1,18 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{i18n.hint}}</p>
+  {{#each rows}}
+  <fieldset class="pmttrpg-grapple-upkeep__row">
+    <legend>{{target}}</legend>
+    <div class="pmttrpg-grapple-upkeep__choices">
+      <label class="action-menu-option">
+        <input type="radio" name="upkeep-{{id}}" value="maintain" checked>
+        <span class="action-menu-option__label">{{../i18n.maintain}}</span>
+      </label>
+      <label class="action-menu-option">
+        <input type="radio" name="upkeep-{{id}}" value="release">
+        <span class="action-menu-option__label">{{../i18n.release}}</span>
+      </label>
+    </div>
+  </fieldset>
+  {{/each}}
+</div>

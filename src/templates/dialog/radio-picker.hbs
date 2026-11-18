@@ -1,0 +1,17 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{hint}}</p>
+  <div class="action-weapon-form__options">
+    {{#each rows}}
+    <label class="action-menu-option">
+      <input type="radio" name="{{../inputName}}" value="{{id}}" {{#if checked}}checked{{/if}}>
+      {{#if img}}
+      <img class="action-menu-option__img" src="{{img}}" alt="">
+      {{/if}}
+      <span class="action-menu-option__label">
+        {{name}}
+        {{#if tag}}<span class="action-menu-option__held">{{tag}}</span>{{/if}}
+      </span>
+    </label>
+    {{/each}}
+  </div>
+</div>

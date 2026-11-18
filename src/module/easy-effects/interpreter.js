@@ -582,6 +582,11 @@ function resolvePath(segments, context) {
     if (key === "margin") return clash.margin ?? 0;
     if (key === "attackerRoll") return clash.attackerRoll ?? 0;
     if (key === "defenderRoll") return clash.defenderRoll ?? 0;
+    if (key === "reaction" || key === "recycled") {
+      const side = _resolveClashBonusSide(context, "self");
+      if (key === "recycled") return side === "defender" && clash.isRecycledEvade ? 1 : 0;
+      return (side === "defender" ? clash.defenderReaction : clash.attackerReaction) ? 1 : 0;
+    }
 
     const sideBag = _clashBonusBagForSelf(context);
     const map = {
@@ -685,6 +690,19 @@ function resolvePath(segments, context) {
     if (key === "pool") return dep.pool ?? "";
     if (key === "before" || key === "max") return Number(dep[key]) || 0;
     console.warn(`[EasyEffects] Unknown depleted path 'depleted.${key}'`);
+    return 0;
+  }
+
+  if (root === "action") {
+    const info = context.action;
+    if (!info) {
+      console.warn("[EasyEffects] 'action.*' used outside [On Action] context.");
+      return 0;
+    }
+    const key = segments[1];
+    if (key === "kind") return info.kind ?? "";
+    if (key === "reaction" || key === "consumed" || key === "offTurn") return info[key] ? 1 : 0;
+    console.warn(`[EasyEffects] Unknown action path 'action.${key}'`);
     return 0;
   }
 
@@ -1002,6 +1020,10 @@ const ACTION_HANDLERS = {
   // ── Status / resource ──────────────────────────────────────────────────────
   add: async (action, context, amount) => {
     if (action.noun === "resource") {
+      if (isCreditGrant(action)) {
+        await grantScriptReactions(action, context, amount);
+        return;
+      }
       if (isRuntimeResource(action.argument)) {
         for (const actor of resolveTargets(action.target, context)) {
           await applyRuntimeResource(actor, action.argument, { mode: "add", amount });
@@ -1484,6 +1506,8 @@ const ACTION_HANDLERS = {
         binds,
         depth: Number(context._procDepth) || 0,
         _emitPendingRoll: context._emitPendingRoll,
+        _declarationOwner: context._declarationOwner ?? null,
+        _declarationDepth: Number(context._declarationDepth) || 0,
       });
     }
   },
@@ -1758,6 +1782,8 @@ export async function execute(ast, trigger, context) {
 
         if (stmt.postCondition && !(await evaluateCondition(stmt.postCondition, execContext))) continue;
 
+        if (stmt.reactionSpend && !(await payScriptReactions(stmt.reactionSpend, execContext))) continue;
+
         let inheritedTarget = "self";
         for (const action of allowedActions) {
           const isFlagAction = action.noun === "flag";
@@ -1783,6 +1809,77 @@ export async function execute(ast, trigger, context) {
       }
     }
   }
+}
+
+/**
+ * `spend N ... Reaction to ...` is a Reaction declaration, so [On Action] and the
+ * chat line happen like for any other Reaction.
+ */
+async function payScriptReactions(spend, context) {
+  const actor = context.self;
+  if (!actor) return false;
+  const owner = context._declarationOwner ?? null;
+  const depth = Number(context._declarationDepth) || 0;
+  if (owner && depth > 0) {
+    console.warn("[EasyEffects] 'spend ... Reaction' can't run from the [On Action] of another spend; nothing was spent", { item: context.item?.name ?? null });
+    return false;
+  }
+  const { amount } = await resolveActionAmount({ amount: spend.amount, per: null }, context);
+  const cost = Math.max(0, Math.round(Number(amount) || 0));
+  if (cost === 0) return true;
+  await flushContextEmission(context);
+  const { declareActorAction, isActorDeclarationBusy } = await import("../action-economy/declare.js");
+  if (isActorDeclarationBusy(actor, owner)) {
+    ui.notifications.warn(game.i18n.format("PMTTRPG.ReactionCredit.ScriptSpendBusy", { name: actor.name ?? "" }));
+    return false;
+  }
+  const result = await declareActorAction({
+    actor,
+    economyType: "reaction",
+    kind: "custom",
+    cost,
+    acceptKinds: Array.isArray(spend.acceptKinds) ? spend.acceptKinds : [],
+    paymentOrder: spend.order ?? null,
+    item: context.item ?? null,
+    metadata: {
+      source: "easyEffects",
+      customActionLabel: context.item?.name ?? null,
+    },
+    queueOwner: owner,
+    nestedDepth: owner ? depth + 1 : 0,
+  });
+  return result?.ok === true;
+}
+
+const warnedGrants = new Set();
+
+function warnGrantOnce(actor, reason) {
+  const key = `${actor?.uuid ?? actor?.id ?? "?"}:${reason}`;
+  if (warnedGrants.has(key)) return;
+  warnedGrants.add(key);
+  console.warn(`[EasyEffects] A typed or 'this round' Reaction needs a Combatant in a started combat (${reason}); nothing was granted to '${actor?.name ?? "?"}'`);
+}
+
+async function grantScriptReactions(action, context, amount) {
+  const count = Math.max(0, Math.round(Number(amount) || 0));
+  if (count === 0) return;
+  const { grantReactionCredits } = await import("../action-economy/reaction-credits.js");
+  for (const actor of resolveTargets(action.target, context)) {
+    const result = await grantReactionCredits(actor, {
+      kind: action.reactionKind ?? "universal",
+      amount: Math.min(count, 10),
+      boundary: action.lifetime === "round" ? "roundEnd" : "nextTurnStart",
+      sourceItemId: context.item?.id ?? null,
+      label: context.item?.name ?? "",
+      grantedBy: "easyEffects",
+    });
+    if (!result?.ok) warnGrantOnce(actor, result?.reason ?? "failed");
+  }
+}
+
+function isCreditGrant(action) {
+  return action.noun === "resource" && action.argument === "reaction"
+    && (!!action.lifetime || (!!action.reactionKind && action.reactionKind !== "universal"));
 }
 
 async function runLetStatement(stmt, context) {
@@ -2022,7 +2119,13 @@ export function executeAlwaysActive(ast, prepareContext) {
               break;
             }
             case "add":
-              if (action.noun === "resource") {
+              if (action.noun === "resource" && isCreditGrant(action)) {
+                mods.reactionGrants.push({
+                  itemId: context.item?.id ?? null,
+                  kind: action.reactionKind,
+                  amount: Math.max(0, Math.floor(Number(amount) || 0)),
+                });
+              } else if (action.noun === "resource") {
                 if (!applyResourceMod(mods, action.argument, +amount))
                   console.warn(`[EasyEffects] [Always Active] unknown resource '${action.argument}'`);
               } else {

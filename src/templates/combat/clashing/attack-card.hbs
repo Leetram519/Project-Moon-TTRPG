@@ -19,6 +19,10 @@
     {{/if}}
   </div>
 
+  {{#if i18n.attackerEconomy}}
+    <p class="clash-card__economy">{{i18n.attackerEconomy}}</p>
+  {{/if}}
+
   {{#if (eq state.phase "pending")}}
     {{#unless state.attackRollTotal}}
       <div class="clash-card__challenge-notice">
@@ -40,6 +44,12 @@
   {{/if}}
 
   {{#if (eq state.phase "pending")}}
+    {{#if state.attackerEconomyCommitted}}
+      <div class="clash-card__status clash-card__status--committed">
+        <i class="fa-solid fa-circle-check"></i>
+        {{localize "PMTTRPG.Clash.AttackerCommitted"}}
+      </div>
+    {{/if}}
     <div class="clash-card__actions">
       {{!-- Primary target gets a highlighted blue Retaliate button --}}
       {{#if state.targetActorId}}
@@ -47,7 +57,7 @@
           class="clash-btn clash-btn--retaliate clash-btn--primary"
           data-action="clash-retaliate"
           data-message-id="{{state.attackMessageId}}"
-          title="{{i18n.retaliateHint}}"
+          data-tooltip="{{i18n.retaliateHint}}"
         >
           <i class="fa-solid fa-shield-halved"></i>
           {{i18n.retaliate}}
@@ -55,15 +65,27 @@
       {{/if}}
 
       <button
+        class="clash-btn clash-btn--protect"
+        data-action="clash-protect"
+        data-message-id="{{state.attackMessageId}}"
+        hidden
+      >
+        <i class="fa-solid fa-shield"></i>
+        {{i18n.protect}}
+      </button>
+
+      <button
         class="clash-btn clash-btn--intercept"
         data-action="clash-intercept"
         data-message-id="{{state.attackMessageId}}"
-        title="{{i18n.interceptHint}}"
+        data-tooltip="{{i18n.interceptHint}}"
+        aria-label="{{i18n.intercept}}"
       >
         <i class="fa-solid fa-person-running"></i>
-        {{i18n.intercept}}
+        <span>{{i18n.intercept}}</span>
       </button>
     </div>
+    <p class="clash-card__protect-hint" hidden></p>
 
   {{else if (eq state.phase "rolling")}}
     <div class="clash-card__status clash-card__status--rolling">
@@ -71,6 +93,9 @@
       {{localize "PMTTRPG.Clash.WaitingForRoll"}}
       {{#if state.retaliatorName}}
         ({{state.retaliatorName}})
+      {{/if}}
+      {{#if i18n.protectingLine}}
+        <span class="clash-card__protect-line">{{i18n.protectingLine}}</span>
       {{/if}}
     </div>
 
@@ -80,6 +105,9 @@
       {{i18n.resolved}}
       {{#if state.retaliatorName}}
         ({{state.retaliatorName}})
+      {{/if}}
+      {{#if i18n.protectingLine}}
+        <span class="clash-card__protect-line">{{i18n.protectingLine}}</span>
       {{/if}}
     </div>
   {{/if}}

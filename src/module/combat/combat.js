@@ -1,10 +1,34 @@
 import { PMTTRPGUtility } from "../utility.js";
 import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
-import { emitCombatEnd, emitCombatStart, emitEndOfRound, emitEndOfTurn, emitStartOfRound, emitTurnStart } from "../easy-effects/registry.js";
+import { emitCombatEnd, emitCombatStart, emitEndOfRound, emitEndOfTurn, emitStartOfRound, emitTurnStart, settleDepletedEasyEffects } from "../easy-effects/registry.js";
 import { actorIdentityKey } from "../easy-effects/burst-roles.js";
 import { hasAnotherCombatantForActor, uniqueActorEntries } from "./combatant-match.js";
 import { beginCombatLifecyclePass, endCombatLifecyclePass } from "../status/lifecycle-pass.js";
+import { prepareReactionDisplay } from "../action-economy/reaction-credits.js";
+import { buildActionStateViews, confirmDismissActionState, dismissActionState } from "../action-economy/presentation.js";
+import { pruneExpiredAssists } from "../action-economy/assist.js";
+import {
+  DELAY_INTERNAL_OPTION,
+  canArmDelay,
+  currentIdOf,
+  deferredRoundOf,
+  delayIntentLabel,
+  promptDelayIntent,
+  prospectiveDelayCombatant,
+  readDelayIntent,
+  writeDelayIntent,
+} from "../action-economy/delay.js";
 import { rollInitiative } from "../targeting.js";
+import {
+  isRoundWorkDue,
+  isTurnEndDue,
+  isTurnStartDue,
+  queueTurnLifecycle,
+  recordRoundReached,
+  recordTurnEnd,
+  recordTurnStart,
+} from "./turn-stamps.js";
+import { pruneGrappleForCombat, runGrappleTurnStartUpkeep, runsGrappleUpkeepHere } from "../grapple/grapple.js";
 import {
   applyManualInitiative,
   canControlCombatantOrder,
@@ -14,7 +38,8 @@ import {
 } from "./turn-order.js";
 const { renderTemplate } = foundry.applications.handlebars;
 
-const combatTurnSnapshots = new Map();
+const TURN_CHANGE_OPTION = "pmttrpgTurnChange";
+const pendingTurnChanges = new Map();
 const combatEndSeen = new WeakSet();
 const combatStartActors = new WeakMap();
 const combatEndActors = new WeakMap();
@@ -75,13 +100,22 @@ function resolveCombatUserId(userId) {
 /**
  * [On Combat Start] for one person in the fight.
  * Does nothing until Begin Combat, and skips anyone who already got it.
+ * Refills the Combatant's Action Economy first.
  */
-export async function emitCombatStartForCombatant(combat, combatant, userId) {
+export async function emitCombatStartForCombatant(combat, combatant, userId, { beginCombat = false } = {}) {
   const resolvedUserId = resolveCombatUserId(userId);
   if (game.user.id !== resolvedUserId) return;
   if (!combatHasBegun(combat)) return;
   const actor = combatant?.actor;
   if (!actor) return;
+  if (actor.isOwner) {
+    const pools = beginCombat || !hasAnotherCombatantForActor(combat.combatants, actor, combatant.id);
+    try {
+      await actor.refreshActionEconomy({ combatant, pools });
+    } catch (error) {
+      console.warn("[PMTTRPG] combat entry refresh failed", error);
+    }
+  }
   const key = actorIdentityKey(actor);
   forgetCombatEnd(combat, key);
   if (!rememberCombatStart(combat, key)) return;
@@ -159,6 +193,212 @@ export async function emitCombatEndForEncounter(combat, userId) {
   } finally {
     endCombatLifecyclePass();
   }
+}
+
+/**
+ * End of Turn, then the round work if the round advanced, then Turn Start.
+ * This will run on whichever client changed the turn (or the active GM if
+ * deleting the current Combatant is what moved it).
+ *
+ * @param {{ turn: number|null, round: number, combatantId: string|null }} snapshot  state before the change
+ * @param {{ turn: number|null, round: number, combatantId: string|null }} after  state right after it
+ */
+async function runTurnLifecycle(combat, snapshot, after, { userId, options = {} } = {}) {
+  if (Number(options.direction) < 0) return;
+  const statusMacros = game.projectmoonttrpg?.statusMacros;
+  if (!statusMacros) return;
+
+  beginCombatLifecyclePass();
+  try {
+    const currentCombatant = after.combatantId ? combat.combatants.get(after.combatantId) ?? null : null;
+    const prevRound = Number(snapshot.round ?? 0);
+    const nextRound = Number(after.round ?? 0);
+    const roundWorkDue = nextRound > prevRound && isRoundWorkDue(combat, nextRound);
+    const roundEnded = roundWorkDue && prevRound >= 1;
+    const roundStarted = roundWorkDue;
+    const combatStarted = roundWorkDue && prevRound < 1 && nextRound >= 1;
+    const turnStartDue = isTurnStartDue(currentCombatant, combat, after.round);
+    const writesStamps = game.user.isGM;
+    const current = { turn: after.turn, round: after.round };
+
+    const eachCombatActor = async (fn) => {
+      for (const combatant of uniqueActorEntries(combat.combatants)) {
+        await fn({
+          ...actorFields(combatant.actor),
+          combat,
+          combatant,
+          previous: snapshot,
+          current,
+        });
+      }
+    };
+
+    const previousCombatant = snapshot.combatantId
+      ? combat.combatants.get(snapshot.combatantId) ?? null
+      : null;
+    const previousActor = previousCombatant?.actor ?? null;
+    if (prevRound >= 1 && previousActor && game.user.id === userId) {
+      if (isTurnEndDue(previousCombatant, combat)) {
+        if (writesStamps) {
+          try {
+            await recordTurnEnd(combat, previousCombatant);
+          } catch (error) {
+            console.warn("[PMTTRPG] turn end stamp failed", error);
+          }
+        }
+        const endTurnPayload = {
+          ...actorFields(previousActor),
+          combat,
+          combatant: previousCombatant,
+          previous: snapshot,
+          current,
+        };
+        try {
+          await emitEndOfTurn(endTurnPayload);
+        } catch (error) {
+          console.warn("[EasyEffects] endOfTurn failed", error);
+        }
+      }
+      try {
+        await pruneExpiredAssists(previousCombatant, { combat });
+      } catch (error) {
+        console.warn("[PMTTRPG] Assist prune failed", error);
+      }
+    }
+    if (prevRound >= 1 && game.user.isGM) {
+      try {
+        await pruneGrappleForCombat(combat);
+      } catch (error) {
+        console.warn("[PMTTRPG] Grapple prune failed", error);
+      }
+    }
+
+    if (roundWorkDue && writesStamps) {
+      try {
+        await recordRoundReached(combat, nextRound);
+      } catch (error) {
+        console.warn("[PMTTRPG] round stamp failed", error);
+      }
+    }
+
+    if (roundEnded) {
+      await eachCombatActor(async (payload) => {
+        await statusMacros.emitEndOfRound(payload);
+        if (game.user.id === userId) {
+          try {
+            await emitEndOfRound(payload);
+          } catch (error) {
+            console.warn("[EasyEffects] endOfRound failed", error);
+          }
+          try {
+            const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
+            await runAsOwnerOrGM(payload.actor, "promotePendingStatuses", { arrival: "round" });
+          } catch (error) {
+            console.warn("[PMTTRPG] promote pending (round) failed", error);
+          }
+        }
+      });
+      if (game.user.id === userId) {
+        try {
+          await settleDepletedEasyEffects();
+          const { getPrimaryGM, runOnPrimaryGM } = await import("../easy-effects/gm-route.js");
+          if (!game.user.isGM && getPrimaryGM()) await runOnPrimaryGM("settleDepletedEasyEffects");
+        } catch (error) {
+          console.warn("[EasyEffects] settle depleted failed", error);
+        }
+      }
+    }
+
+    if (combatStarted) {
+      for (const combatant of combat.combatants) {
+        await emitCombatStartForCombatant(combat, combatant, userId, { beginCombat: true });
+      }
+    }
+
+    if (roundStarted) {
+      await eachCombatActor(async (payload) => {
+        await statusMacros.emitStartOfRound(payload);
+        if (game.user.id === userId) {
+          try {
+            await emitStartOfRound(payload);
+          } catch (error) {
+            console.warn("[EasyEffects] startOfRound failed", error);
+          }
+        }
+        try {
+          payload.actor.prepareData();
+        } catch (error) {
+          console.warn("[PMTTRPG] prepareData after startOfRound failed", error);
+        }
+      });
+    }
+
+    if (turnStartDue && writesStamps) {
+      try {
+        const stamp = await recordTurnStart(combat, currentCombatant, after.round);
+        const { maybeRemindReadyExpiry } = await import("../action-economy/ready.js");
+        await maybeRemindReadyExpiry(combat, currentCombatant, stamp);
+      } catch (error) {
+        console.warn("[PMTTRPG] turn stamp failed", error);
+      }
+    }
+
+    if (turnStartDue && currentCombatant?.actor) {
+      const turnActor = currentCombatant.actor;
+      const turnPayload = {
+        ...actorFields(turnActor),
+        combat,
+        combatant: currentCombatant,
+        previous: snapshot,
+        current,
+      };
+      if (game.user.id === userId) {
+        try {
+          const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
+          await runAsOwnerOrGM(turnActor, "promotePendingStatuses", { arrival: "turn" });
+        } catch (error) {
+          console.warn("[PMTTRPG] promote pending (turn) failed", error);
+        }
+      }
+      if (turnActor.isOwner) {
+        try {
+          await turnActor.refreshActionEconomy({ combatant: currentCombatant });
+        } catch (error) {
+          console.warn("[PMTTRPG] action economy refresh failed", error);
+        }
+      }
+      if (runsGrappleUpkeepHere(currentCombatant)) {
+        try {
+          await runGrappleTurnStartUpkeep(combat, currentCombatant);
+        } catch (error) {
+          console.warn("[PMTTRPG] Grapple upkeep failed", error);
+        }
+      }
+      await statusMacros.emitTurnStart(turnPayload);
+      if (game.user.id === userId) {
+        try {
+          await emitTurnStart(turnPayload);
+        } catch (error) {
+          console.warn("[EasyEffects] turnStart failed", error);
+        }
+        try {
+          const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
+          await runAsOwnerOrGM(turnActor, "clearRecycledEvade");
+        } catch (error) {
+          console.warn("[PMTTRPG] recycled evade clear failed", error);
+        }
+      }
+    }
+  } finally {
+    endCombatLifecyclePass();
+  }
+}
+
+function runQueuedTurnLifecycle(combat, snapshot, after, context) {
+  return queueTurnLifecycle(combat, async () => {
+    if (!game.combats.has(combat.id)) return;
+    await runTurnLifecycle(combat, snapshot, after, context);
+  });
 }
 
 const TRACKER_REVEAL_FLAG = "revealTracker";
@@ -311,6 +551,52 @@ function canPingOrPanCombatant(combatant) {
   return game.user.isGM || token.isVisible;
 }
 
+function trackerActionStates(combatant, combat) {
+  try {
+    return buildActionStateViews(combatant, { combat, user: game.user });
+  } catch (error) {
+    console.warn("[PMTTRPG] tracker action-state presentation failed", error);
+    return [];
+  }
+}
+
+function delayControlFor(combatant) {
+  const combat = game.combat;
+  if (!combat || !combatant) return null;
+  const next = prospectiveDelayCombatant(combat);
+  if (!next || next.id !== combatant.id) return null;
+  if (currentIdOf(combat) != null && String(currentIdOf(combat)) === String(combatant.id)) return null;
+  if (!canArmDelay(game.user, combatant)) return null;
+  const intent = readDelayIntent(combatant, combat);
+  const destination = intent ? delayIntentLabel(combat, intent) : "";
+  const name = combatant.name;
+  const returns = intent?.mode === "nextRound";
+  return {
+    armed: !!intent,
+    label: !intent
+      ? game.i18n.localize("PMTTRPG.Delay.Delay")
+      : (returns ? game.i18n.localize("PMTTRPG.Delay.ReturnsNextRound") : destination),
+    title: game.i18n.localize(intent ? "PMTTRPG.Delay.Change" : "PMTTRPG.Delay.Arm"),
+    aria: intent
+      ? game.i18n.format("PMTTRPG.Delay.ArmedAria", {
+        name,
+        destination: returns ? game.i18n.localize("PMTTRPG.Delay.ReturnsNextRound") : destination,
+      })
+      : game.i18n.format("PMTTRPG.Delay.ArmAria", { name }),
+    cancelAria: game.i18n.format("PMTTRPG.Delay.CancelAria", { name }),
+  };
+}
+
+function returnsNextRound(combatant) {
+  const combat = game.combat;
+  if (!combat || !combatant) return false;
+  const intent = readDelayIntent(combatant, combat);
+  if (intent?.mode === "nextRound") return true;
+  const deferred = deferredRoundOf(combatant, combat);
+  const round = Number(combat.round) || 0;
+  return deferred != null && round > 0 && deferred >= round;
+}
+
 /**
  * Custom combat tracker. Context menu is bound once on document.body.
  */
@@ -410,6 +696,40 @@ export class CombatSidebarPMTTRPG {
           }
       });
 
+      $('body').on('mousedown', '.ct [data-action="armDelay"], .ct [data-action="cancelDelay"], .ct [data-action="dismissActionState"]', (event) => {
+        event.stopPropagation();
+      });
+
+      $('body').on('click', '.ct [data-action="armDelay"]', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const combatantId = $(event.currentTarget).closest("[data-combatant-id]").data("combatant-id");
+        const combatant = game.combat?.combatants.get(combatantId);
+        if (!combatant || !game.combat) return;
+        await promptDelayIntent(game.combat, combatant);
+      });
+
+      $('body').on('click', '.ct [data-action="cancelDelay"]', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const combatantId = $(event.currentTarget).closest("[data-combatant-id]").data("combatant-id");
+        const combatant = game.combat?.combatants.get(combatantId);
+        if (!combatant) return;
+        await writeDelayIntent(combatant, null);
+      });
+
+      $('body').on('click', '.ct [data-action="dismissActionState"]', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const combatantId = $(event.currentTarget).closest("[data-combatant-id]").data("combatant-id");
+        const combatant = game.combat?.combatants.get(combatantId);
+        const entryId = event.currentTarget.dataset.entryId;
+        if (!combatant || !entryId) return;
+        if (!(await confirmDismissActionState(combatant, entryId, { combat: game.combat, user: game.user }))) return;
+        const removed = await dismissActionState(combatant, entryId, { combat: game.combat, user: game.user });
+        if (removed) ui.combat.render();
+      });
+
       $('body').on('blur', '.ct [data-initiative-value]', async (event) => {
         const input = event.currentTarget;
         const combatant = combatantFromTrackerCard(input);
@@ -432,6 +752,10 @@ export class CombatSidebarPMTTRPG {
       });
 
       $('body').on('dragstart', '.ct .char-drag-handle', (event) => {
+        if (event.target instanceof Element && event.target.closest('[data-action="dismissActionState"]')) {
+          event.preventDefault();
+          return;
+        }
         const card = event.currentTarget.closest('[data-combatant-id]');
         const combatant = combatantFromTrackerCard(card);
         if (!card || !canControlCombatantOrder(combatant)) {
@@ -520,6 +844,25 @@ export class CombatSidebarPMTTRPG {
       await emitCombatEndForCombatant(combat, combatant, userId);
     });
 
+    // Deleting the current Combatant moves the turn without a Combat update, and
+    // unfortunately Foundry currently doesn't set `turnEvents` on that delete either.
+    // We ignore deleting the last Combatant of a round (Foundry only wraps the round in memory then).
+    Hooks.on("deleteCombatant", async (combatant, options) => {
+      if (!game.user.isActiveGM || options.turnEvents === false) return;
+      const combat = combatant.parent;
+      if (!combat?.started) return;
+      // `current` is still the turn from before the delete at this point
+      if (String(combat.current.combatantId ?? "") !== String(combatant.id)) return;
+      const snapshot = { turn: combat.current.turn ?? combat.turn, round: combat.round, combatantId: combatant.id };
+      // Foundry sets up the new turn order in `_onDeleteDescendantDocuments` right
+      // after this hook
+      await Promise.resolve();
+      const next = combat.combatant;
+      if (!next || next.id === combatant.id || combat.round !== snapshot.round) return;
+      const after = { turn: combat.turn, round: combat.round, combatantId: next.id };
+      await runQueuedTurnLifecycle(combat, snapshot, after, { userId: game.user.id, options });
+    });
+
     Hooks.on('deleteCombat', async (combat, _options, userId) => {
       if (game.user.id !== userId) return;
       try {
@@ -532,9 +875,14 @@ export class CombatSidebarPMTTRPG {
       }
     });
 
-    Hooks.on('preUpdateCombat', (combat, updateData) => {
+    Hooks.on('preUpdateCombat', (combat, updateData, options) => {
       if (updateData.turn === undefined && updateData.round === undefined) return;
-      combatTurnSnapshots.set(combat.id, {
+      // Delay's pointer correction keeps the same Combatant current (it's not a turn change).
+      if (options?.[DELAY_INTERNAL_OPTION]) return;
+      // the key travels with this update (one per combat in a batch), out of reach of other Combat updates
+      const key = foundry.utils.randomID();
+      options[TURN_CHANGE_OPTION] = { ...options[TURN_CHANGE_OPTION], [combat.id]: key };
+      pendingTurnChanges.set(key, {
         turn: combat.turn,
         round: combat.round,
         combatantId: combat.combatant?.id ?? null,
@@ -542,142 +890,16 @@ export class CombatSidebarPMTTRPG {
     });
 
     Hooks.on('updateCombat', async (combat, updateData, options, userId) => {
-      const snapshot = combatTurnSnapshots.get(combat.id);
+      const key = options?.[TURN_CHANGE_OPTION]?.[combat.id];
+      const snapshot = key ? pendingTurnChanges.get(key) : null;
       if (!snapshot) return;
-      combatTurnSnapshots.delete(combat.id);
+      pendingTurnChanges.delete(key);
 
       if (snapshot.turn === combat.turn && snapshot.round === combat.round) return;
       if (snapshot.combatantId === combat.combatant?.id && snapshot.round === combat.round) return;
 
-      const statusMacros = game.projectmoonttrpg?.statusMacros;
-      if (!statusMacros) return;
-
-      beginCombatLifecyclePass();
-      try {
-        const currentCombatant = combat.combatant ?? null;
-        const prevRound = Number(snapshot.round ?? 0);
-        const nextRound = Number(combat.round ?? 0);
-        const roundEnded = nextRound > prevRound && prevRound >= 1;
-        const roundStarted = nextRound > prevRound;
-        const combatStarted = prevRound < 1 && nextRound >= 1;
-        const current = { turn: combat.turn, round: combat.round };
-
-        const eachCombatActor = async (fn) => {
-          for (const combatant of uniqueActorEntries(combat.combatants)) {
-            await fn({
-              ...actorFields(combatant.actor),
-              combat,
-              combatant,
-              previous: snapshot,
-              current,
-            });
-          }
-        };
-
-        const previousCombatant = snapshot.combatantId
-          ? combat.combatants.get(snapshot.combatantId) ?? null
-          : null;
-        const previousActor = previousCombatant?.actor ?? null;
-        if (prevRound >= 1 && previousActor && game.user.id === userId) {
-          const endTurnPayload = {
-            ...actorFields(previousActor),
-            combat,
-            combatant: previousCombatant,
-            previous: snapshot,
-            current,
-          };
-          try {
-            await emitEndOfTurn(endTurnPayload);
-          } catch (error) {
-            console.warn("[EasyEffects] endOfTurn failed", error);
-          }
-        }
-
-        if (roundEnded) {
-          await eachCombatActor(async (payload) => {
-            await statusMacros.emitEndOfRound(payload);
-            if (game.user.id === userId) {
-              try {
-                await emitEndOfRound(payload);
-              } catch (error) {
-                console.warn("[EasyEffects] endOfRound failed", error);
-              }
-              try {
-                const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
-                await runAsOwnerOrGM(payload.actor, "promotePendingStatuses", { arrival: "round" });
-              } catch (error) {
-                console.warn("[PMTTRPG] promote pending (round) failed", error);
-              }
-            }
-          });
-        }
-
-        if (combatStarted) {
-          await eachCombatActor(async (payload) => {
-            await emitCombatStartForCombatant(payload.combat, payload.combatant, userId);
-          });
-        }
-
-        if (roundStarted) {
-          await eachCombatActor(async (payload) => {
-            await statusMacros.emitStartOfRound(payload);
-            if (game.user.id === userId) {
-              try {
-                await emitStartOfRound(payload);
-              } catch (error) {
-                console.warn("[EasyEffects] startOfRound failed", error);
-              }
-            }
-            try {
-              payload.actor.prepareData();
-            } catch (error) {
-              console.warn("[PMTTRPG] prepareData after startOfRound failed", error);
-            }
-          });
-        }
-
-        if (currentCombatant?.actor) {
-          const turnActor = currentCombatant.actor;
-          const turnPayload = {
-            ...actorFields(turnActor),
-            combat,
-            combatant: currentCombatant,
-            previous: snapshot,
-            current: { turn: combat.turn, round: combat.round },
-          };
-          if (game.user.id === userId) {
-            try {
-              const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
-              await runAsOwnerOrGM(turnActor, "promotePendingStatuses", { arrival: "turn" });
-            } catch (error) {
-              console.warn("[PMTTRPG] promote pending (turn) failed", error);
-            }
-          }
-          if (turnActor.isOwner) {
-            try {
-              await turnActor.refreshActionEconomy();
-            } catch (error) {
-              console.warn("[PMTTRPG] action economy refresh failed", error);
-            }
-          }
-          await statusMacros.emitTurnStart(turnPayload);
-          if (game.user.id === userId) {
-            try {
-              await emitTurnStart(turnPayload);
-            } catch (error) {
-              console.warn("[EasyEffects] turnStart failed", error);
-            }
-            try {
-              const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
-              await runAsOwnerOrGM(turnActor, "clearRecycledEvade");
-            } catch (error) {
-              console.warn("[PMTTRPG] recycled evade clear failed", error);
-            }
-          }
-        }
-      } finally {
-        endCombatLifecyclePass();
-      }
+      const after = { turn: combat.turn, round: combat.round, combatantId: combat.combatant?.id ?? null };
+      await runQueuedTurnLifecycle(combat, snapshot, after, { userId, options });
     });
 
     Hooks.on('updateToken', (scene, token, data, options, id) => {
@@ -790,6 +1012,7 @@ export class CombatSidebarPMTTRPG {
           showHiddenEye: showHiddenEye("sp"),
         }
       ].filter((stat) => showStat(stat.key));
+      const reactionDisplay = prepareReactionDisplay(actorData, { combatant });
       const detailedStats = [
         {
           key: "actions",
@@ -814,6 +1037,15 @@ export class CombatSidebarPMTTRPG {
           editable: canEdit,
           showRevealEye: showRevealEye("reactions"),
           showHiddenEye: showHiddenEye("reactions"),
+          creditCount: reactionDisplay.credits,
+          effective: reactionDisplay.effective,
+          hasCredits: reactionDisplay.hasCredits,
+          creditTitle: reactionDisplay.hasCredits
+            ? game.i18n.format("PMTTRPG.ReactionCredit.AvailableDetail", {
+              n: reactionDisplay.effective,
+              credits: reactionDisplay.creditTitle,
+            })
+            : reactionDisplay.creditTitle,
         },
         {
           key: "movement",
@@ -854,6 +1086,9 @@ export class CombatSidebarPMTTRPG {
         actorData,
         mainStats,
         detailedStats,
+        actionStates: trackerActionStates(combatant, game.combat),
+        delayControl: delayControlFor(combatant),
+        returnsNextRound: returnsNextRound(combatant),
         isCurrentTurn: combatant === game.combat.combatant,
         isExpanded: this.#expandedIds.has(combatant._id),
         showDetails,

@@ -204,6 +204,118 @@
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
 }
 
+/* Action-state badges */
+.ct .action-state-strip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.ct .action-state-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--ct-gold);
+    font-size: 0.75em;
+    line-height: 0;
+    cursor: help;
+}
+
+.ct button.action-state-badge {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    font: inherit;
+    font-weight: 400;
+    line-height: 0;
+    cursor: pointer;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+}
+
+.ct button.action-state-badge:hover,
+.ct button.action-state-badge:focus-visible {
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    filter: brightness(1.25);
+    outline: none;
+}
+
+.ct .action-state-badge img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+.ct .action-state-badge__text {
+    font-size: 0.65em;
+    font-weight: 700;
+    padding: 0 3px;
+    white-space: nowrap;
+}
+
+.ct .delay-return {
+    flex-shrink: 0;
+    margin-left: 4px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 193, 0, 0.45);
+    color: var(--ct-gold);
+    font-size: 0.62em;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.ct .delay-intent {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+
+.ct .delay-intent__arm,
+.ct .delay-intent__cancel {
+    appearance: none;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.78);
+    border-radius: 4px;
+    font-size: 0.65em;
+    line-height: 1.2;
+    padding: 1px 5px;
+    cursor: pointer;
+}
+
+.ct .delay-intent__arm:hover,
+.ct .delay-intent__cancel:hover {
+    border-color: var(--ct-gold);
+    color: var(--ct-gold);
+}
+
+.ct .delay-intent__cancel {
+    padding: 1px 4px;
+}
+
 .ct .char-revealed,
 .ct .char-name-revealed {
     color: var(--ct-gold);
@@ -430,6 +542,30 @@
 .ct .detail-stat-max {
     color: var(--ct-text-dim);
     font-size: 70%;
+}
+
+.ct .detail-stat-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.ct .detail-stat-credits {
+    position: absolute;
+    top: -7px;
+    left: -6px;
+    z-index: 1;
+    padding: 0 3px;
+    border: 1px solid var(--ct-border);
+    border-radius: 999px;
+    background: var(--ct-gold);
+    color: var(--ct-bg);
+    font-family: var(--ct-font);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: help;
 }
 
 /* ── Hover / focus states ── */

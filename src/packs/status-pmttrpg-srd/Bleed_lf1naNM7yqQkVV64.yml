@@ -46,6 +46,9 @@ system:
 
     require ("Bleed - Hemorrhage") >= 1 then lose 1 "Bleed - Hemorrhage" on
     self;
+  reduceStatus:
+    type: standard
+    blocks: []
 effects: []
 folder: fMFB6OnVCAkgdA96
 ownership:

@@ -1,4 +1,5 @@
 import { pmttrpgDialogClasses, pmttrpgDialogPosition } from "./dialog-classes.js";
+import { waitForChoice } from "./dialog-wait.js";
 
 const TEMPLATE = "systems/projectmoonttrpg/templates/dialog/status-drop-dialog.hbs";
 
@@ -25,7 +26,7 @@ export async function promptStatusDropDialog({ name, stacks = 1 } = {}) {
     stacks: quantity,
   });
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.format("PMTTRPG.StatusDropDialog.Title", { name }) },
     classes: pmttrpgDialogClasses(),
     position: pmttrpgDialogPosition({ width: 320 }),

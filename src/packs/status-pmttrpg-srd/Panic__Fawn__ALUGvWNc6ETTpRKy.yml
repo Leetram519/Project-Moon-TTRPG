@@ -45,6 +45,10 @@ system:
 
     [On Removed]
     clear flag "isPanicking" on self;
+
+    [On Action]
+    let $left = (self.action);
+    require (action.kind) == "protect" and (action.offTurn) == 0 then set action to 0 and gain ($left) Reaction;
 effects: []
 sort: 0
 ownership:

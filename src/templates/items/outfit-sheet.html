@@ -64,22 +64,22 @@
           <div class="resource-grid">
             <div class="resource-list resource-group--resistance resource-group--hp" data-resistance="hp">
               <h3>{{localize "PMTTRPG.HPResistances"}}</h3>
-              {{#each system.resistances.hp as |resistance key|}}
+              {{#each selects.damageTypes as |label key|}}
                 <div class="resource">
-                  <label>{{localize (lookup ../selects.damageTypes key)}}</label>
+                  <label>{{localize label}}</label>
                   <select name="system.resistances.hp.{{key}}" data-dtype="String">
-                    {{selectOptions ../selects.resistanceLevels selected=resistance localize=true}}
+                    {{selectOptions ../selects.resistanceLevels selected=(fallback (lookup ../system.resistances.hp key) "normal") localize=true}}
                   </select>
                 </div>
               {{/each}}
             </div>
             <div class="resource-list resource-group--resistance resource-group--st" data-resistance="st">
               <h3>{{localize "PMTTRPG.STResistances"}}</h3>
-              {{#each system.resistances.st as |resistance key|}}
+              {{#each selects.damageTypes as |label key|}}
                 <div class="resource">
-                  <label>{{localize (lookup ../selects.damageTypes key)}}</label>
+                  <label>{{localize label}}</label>
                   <select name="system.resistances.st.{{key}}" data-dtype="String">
-                    {{selectOptions ../selects.resistanceLevels selected=resistance localize=true}}
+                    {{selectOptions ../selects.resistanceLevels selected=(fallback (lookup ../system.resistances.st key) "normal") localize=true}}
                   </select>
                 </div>
               {{/each}}

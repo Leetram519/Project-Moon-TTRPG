@@ -38,6 +38,10 @@ system:
     skillEffect: false
   customNotes: ''
   easyEffects: ''
+  reduceStatus:
+    type: pause
+    blocks:
+      - Frostbite
 effects: []
 sort: 150000
 ownership:

@@ -1,3 +1,26 @@
+.action-feedback {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.action-feedback__action {
+  font-weight: 600;
+}
+
+.action-feedback__target {
+  white-space: nowrap;
+}
+
+.action-feedback__economy {
+  opacity: 0.8;
+}
+
+.action-feedback__note {
+  font-style: italic;
+  opacity: 0.8;
+}
+
 .chat-log {
   .message {
     background: $c-white;

@@ -1,0 +1,55 @@
+<section class="pm-reaction-credits__body">
+  <header class="pm-reaction-credits__pool">
+    <span class="pm-window__label">{{localize "PMTTRPG.ReactionCredit.Pool"}}</span>
+    <span class="pm-reaction-credits__value">{{pool}}</span>
+  </header>
+
+  {{#if rows.length}}
+  <ul class="pm-reaction-credits__rows">
+    {{#each rows}}
+    <li class="pm-reaction-credits__row" data-credit-id="{{id}}" {{#if spent}}data-spent{{/if}}>
+      <span class="pm-reaction-credits__kind">{{kindLabel}}</span>
+      <span class="pm-reaction-credits__source">{{#if itemName}}{{itemName}}{{else if sourceName}}{{sourceName}}{{/if}}</span>
+      {{#if expiryLabel}}<span class="pm-window__tag">{{expiryLabel}}</span>{{/if}}
+      {{#if spent}}
+      <span class="pm-window__tag">{{localize "PMTTRPG.ReactionCredit.Spent"}}</span>
+      <button type="button" class="pm-reaction-credits__icon" data-action="restore" data-tooltip="{{localize "PMTTRPG.ReactionCredit.Restore"}}" aria-label="{{localize "PMTTRPG.ReactionCredit.Restore"}}">
+        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+      </button>
+      {{else}}
+      <button type="button" class="pm-reaction-credits__icon" data-action="spend" data-tooltip="{{localize "PMTTRPG.ReactionCredit.Spend"}}" aria-label="{{localize "PMTTRPG.ReactionCredit.Spend"}}">
+        <i class="fa-solid fa-minus" aria-hidden="true"></i>
+      </button>
+      {{/if}}
+      {{#if removable}}
+      <button type="button" class="pm-reaction-credits__icon" data-action="remove" data-tooltip="{{localize "PMTTRPG.ReactionCredit.Remove"}}" aria-label="{{localize "PMTTRPG.ReactionCredit.Remove"}}">
+        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+      </button>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="pm-window__empty">{{localize "PMTTRPG.ReactionCredit.None"}}</p>
+  {{/if}}
+
+  <div class="pm-reaction-credits__add">
+    <select name="kind" aria-label="{{localize "PMTTRPG.ReactionCredit.AddKind"}}">
+      {{#each kinds}}<option value="{{value}}">{{label}}</option>{{/each}}
+    </select>
+    <button type="button" class="pm-window__button" data-action="add">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+      <span>{{localize "PMTTRPG.ReactionCredit.Add"}}</span>
+    </button>
+  </div>
+  <p class="pm-reaction-credits__hint">{{localize "PMTTRPG.ReactionCredit.AddHint"}}</p>
+
+  <footer class="pm-window__footer">
+    <div class="pm-window__buttons">
+      <button type="button" class="pm-window__button pm-window__button--primary" data-action="done">
+        <i class="fa-solid fa-check" aria-hidden="true"></i>
+        <span>{{localize "PMTTRPG.ReactionCredit.Done"}}</span>
+      </button>
+    </div>
+  </footer>
+</section>

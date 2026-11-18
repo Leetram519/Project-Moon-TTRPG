@@ -111,6 +111,10 @@ Actor:
         maxBase: 6
         maxMisc: 0
         max: 6
+      dash:
+        misc: 0
+      reduceStatus:
+        misc: 0
       attackModifier:
         value: 0
         min: 0
@@ -191,6 +195,10 @@ Actor:
         maxBase: 6
         maxMisc: 0
         max: 6
+      dash:
+        misc: 0
+      reduceStatus:
+        misc: 0
       attackModifier:
         value: 0
         min: 0
@@ -410,5 +418,8 @@ Item:
       onHitWhenTargetHas: false
       alwaysActive: false
       skillEffect: false
+    reduceStatus:
+      type: none
+      blocks: []
     customNotes: ''
     easyEffects: ''

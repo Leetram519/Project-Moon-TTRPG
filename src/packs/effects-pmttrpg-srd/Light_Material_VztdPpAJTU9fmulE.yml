@@ -35,7 +35,12 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Always Active]
+    positive:
+    gain N dashSquares;
+    negative:
+    lose N dashSquares;
   allowMultiple: true
 effects: []
 sort: 0

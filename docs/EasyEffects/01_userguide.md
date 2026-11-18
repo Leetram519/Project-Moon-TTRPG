@@ -13,8 +13,9 @@ This guide is for **Game Masters and content creators** who want to write effect
     - [Named Procs](#named-procs)
     - [Passive Effects](#passive-effects)
     - [Filtered taking-damage triggers](#filtered-taking-damage-triggers)
-    - [Clash With Attack / Block / Evade / Defense](#clash-with-attack-block-evade-defense)
+    - [Clash With Attack / Counter / Block / Evade / Defense](#clash-with-attack-counter-block-evade-defense)
     - [Clash order](#clash-order)
+    - [On Action](#on-action)
 5. [Actions](#actions)
 6. [Amounts](#amounts)
 7. [Conditions](#conditions)
@@ -95,11 +96,11 @@ A trigger tells the system **when** to fire your effect. Write it in square brac
 | `[Always Active]`                                                                         | A passive on an equipped item or live status                                                                                                                                                                                                                         |
 | `[On Clash Start]`                                                                        | When retaliation is chosen, before **either** clash die is rolled (both sides)                                                                                                                                                                                       |
 | `[On Clash]`                                                                              | Same timing as On Clash Start (alias for setup effects)                                                                                                                                                                                                              |
-| `[On Clash With Attack]` / `[… With Block                                                 | Evade                                                                                                                                                                                                                                                                |
+| `[On Clash With Attack]` / `[… With Counter\|Block\|Evade\|Defense]`                      | Same timing, only for the side whose stance matches. See [Clash With Attack / Counter / Block / Evade / Defense](#clash-with-attack-counter-block-evade-defense)                                                                                                     |
 | `[Clash Win]` / `[On Clash Win]`                                                          | The winner's **used kit** (weapon, applied tool, skill, ammo), plus outfits, active augments, and statuses. Other weapons on that actor do not run                                                                                                                   |
-| `[Clash Win With Attack]` / `[… With Block                                                | Evade                                                                                                                                                                                                                                                                |
+| `[Clash Win With Attack]` / `[… With Counter\|Block\|Evade\|Defense]`                     | Same listeners as Clash Win, only when the winner's stance matches                                                                                                                                                                                                   |
 | `[Clash Lose]` / `[On Clash Lose]`                                                        | Same listeners on the loser. Does not fire on a one-sided attack                                                                                                                                                                                                     |
-| `[Clash Lose With Attack]` / `[… With Block                                               | Evade                                                                                                                                                                                                                                                                |
+| `[Clash Lose With Attack]` / `[… With Counter\|Block\|Evade\|Defense]`                    | Same listeners as Clash Lose, only when the loser's stance matches                                                                                                                                                                                                   |
 | `[On Damage Calc]`                                                                        | Before damage is finalized. Used attacker kit only (weapon, applied tool, skill, ammo)                                                                                                                                                                               |
 | `[On Clash Win Before Results]` / `[Clash Win Before Results]` / `[Before Clash Results]` | Same listeners as Clash Win. After the result card and Instant, before `[Clash Win]`                                                                                                                                                                                 |
 | `[On Hit Before Results]` / `[On Being Hit Before Results]`                               | Same listeners as On Hit / On Being Hit. After the result card and Instant, before `[Clash Win]` / `[Clash Lose]`                                                                                                                                                    |
@@ -111,7 +112,7 @@ A trigger tells the system **when** to fire your effect. Write it in square brac
 | `[On Burst]`                                                                              | Status-local burst body on the status being burst (shorthand for `[On <this status> Burst]`)                                                                                                                                                                         |
 | `[On <Status> Burst]`                                                                     | After that status’s burst resolves. Used by skills, addons, and other statuses (e.g. `[On Tremor Burst]`)                                                                                                                                                            |
 | `[On <Name>]`                                                                             | Freeform named proc driven by `proc <Name>` (any name that is not a reserved lifecycle trigger)                                                                                                                                                                      |
-| `[On Action]`                                                                             | When the actor **spends** an Action or Reaction (clash Attack, Block, Counter, or Evade, and the sheet buttons). **Before** clash dice. Tool use fires it on that tool                                                                                               |
+| `[On Action]`                                                                             | When the actor takes an Action or Reaction (attacks, Block, Counter, Evade, the Action Menu, tools and the sheet buttons). **Before** clash dice. See [On Action](#on-action)                                                                                        |
 | `[On Applied]`                                                                            | This status was created on the actor (first appear only)                                                                                                                                                                                                             |
 | `[On Removed]`                                                                            | This status was cleared from the actor (full clear only)                                                                                                                                                                                                             |
 | `[On Gain]`                                                                               | This status gained stacks (every increase, including first apply)                                                                                                                                                                                                    |
@@ -158,6 +159,11 @@ lose 1 Charge;
 - Start waits for Begin Combat. Adding people to the tracker first does nothing.
 - A second linked token of someone already in the fight does not fire again.
 - End also fires if that actor is pulled out while combat is still going.
+
+`[Turn Start]`, `[End of Turn]`, `[Start of Round]` and `[End of Round]` run once per turn or round:
+
+- Previous Turn and Previous Round don't run them.
+- Going forward again doesn't repeat one that already ran. The same goes for `[On Combat Start]`.
 
 ```
 [On Applied]
@@ -335,7 +341,7 @@ Weapon and outfit Power, Max, Amount, and dice formulas stay on their respective
 
 You cannot use dice or randomness with `[Always Active]` effects. It is strictly intended for passive effects that do not depend on any other variables.
 
-Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, `power` / `dice max` / `dice amount` passives, `set dice formula`, `range up` / `range down`, and `instant`. `gain` / `lose` on `Action` / `Reaction` / `movement` bump those **maxes** (event-time `gain 1 Action` still spends or restores the current pool). You can **read** stored flags (`(self.flag.x)`, `(item.flag.x)`, `(combat.flag.x)`). You cannot `set flag`, `clear flag`, `increase flag`, or `reduce flag`.
+Allowed here: resource `gain` / `lose` / `set` on maxes, `set resistances to …`, `power` / `dice max` / `dice amount` passives, `set dice formula`, `range up` / `range down`, and `instant`. `gain` / `lose` on `Action` / `Reaction` / `movement` bump those **maxes** (event-time `gain 1 Action` still spends or restores the current pool). `gain 1 Block Reaction` (or Evade, Counter, Opportunity Attack) gives a Reaction credit instead (see [Gaining and spending Reactions](#gaining-and-spending-reactions)). You can **read** stored flags (`(self.flag.x)`, `(item.flag.x)`, `(combat.flag.x)`). You cannot `set flag`, `clear flag`, `increase flag`, or `reduce flag`.
 
 Example:
 
@@ -361,6 +367,7 @@ instant Tremor;
 - `set resistances to fatal` (or a single type) overrides outfit resists while the item/status is active; removing it restores the outfit values. Levels: `fatal` · `weak` · `normal` · `endured` · `ineffective` · `immune` (x2, 1.5x, 1, x0.5, x0.25, x0).
 - Lowering a max clamps the current value immediately. Removing the item restores the max, but not the points lost to that clamp. Removing an increased max also clamps current to the natural max.
 - If several items `set` the same max, the **lowest** value wins.
+- `gain` / `lose` on `dashSquares` changes how many squares Dash gives, and on `reduceStatusStacks` how many stacks of Standard statuses Reduce Status clears. Both only work here.
 
 
 
@@ -432,14 +439,15 @@ On Dealing you can read:
 
 If HP was 3 and the calculated hit was 10, `finalAmount` is 10 and `appliedAmount` is 3.
 
-## Clash With Attack / Block / Evade / Defense
+## Clash With Attack / Counter / Block / Evade / Defense
 
 Filters match the item actor's reaction on that clash, not who started the fight:
 
 
 | Stance                                         | When it matches                                                                                                                  |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `Attack` / `Attacks` / `Offensive` / `Counter` | **Offensive Dice**: initiator Attack, **Counter Reaction**, or Attack Skill. Counter is Offensive, not its own stance at runtime |
+| `Attack` / `Attacks` / `Offensive`             | **Offensive Dice**: initiator Attack, **Counter Reaction**, or Attack Skill                                                      |
+| `Counter` / `Counters`                         | Counter Reaction (or an Attack Skill used to Counter) only                                                                       |
 | `Block`                                        | Block Reaction (or Block Skill) only                                                                                             |
 | `Evade`                                        | Evade Reaction (or Evade Skill) only                                                                                             |
 | `Defense` / `Defensive`                        | Block **or** Evade. This is the Effect List *with [Attack/Defense]* bucket                                                       |
@@ -456,9 +464,15 @@ deal 5 hp damage to attacker;
 # Attack or Counter win
 deal 5 hp damage to attacker;
 
+[Clash Win With Counter]
+# Counter win only
+gain 1 Charge;
+
 [Clash Win With Defense]
 regen hp 2;
 ```
+
+In clash triggers, `clash.reaction` is 1 when your side of the clash is a Reaction, and `clash.recycled` is 1 for a Recycled Evade.
 
 
 
@@ -476,6 +490,38 @@ On a clash:
 8. `[On Hit Before Results]` / `[On Being Hit Before Results]` if the attack (or a connecting Counter) hits
 9. `[Clash Win]` / `[Clash Lose]` (`[Clash Lose]` skips a one-sided attack)
 10. `[On Hit]` / `[On Being Hit]` if that hit connected
+
+
+
+## On Action
+
+`[On Action]` fires when the actor takes an Action or Reaction:
+
+- Attacks, Block, Counter and Evade, when the clash runs (not when the attack card is posted)
+- Opportunity Attacks, the Action Menu's Actions, and tools
+- The sheet's Used Action / Used Reaction, Custom Actions and `spend … Reaction`
+
+Dash, Disengage, Convert to Reactions, Reduce Status and a Recycled Evade don't fire it.
+
+It still fires when the Action costs nothing (Consume unticked, or out of combat). Off turn, an Action is paid with a Reaction (a Free Action stays free) and still fires `[On Action]`.
+
+In `[On Action]` you can read:
+
+
+| Path              | Meaning                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| `action.kind`     | What was taken (see below)                                  |
+| `action.reaction` | 1 for a Reaction. An Action taken off turn counts as one    |
+| `action.consumed` | 0 when it cost nothing (Consume unticked, or out of combat) |
+| `action.offTurn`  | 1 for an Action taken off turn                              |
+
+
+`action.kind` is one of `attack` · `block` · `evade` · `counter` · `opportunityAttack` · `protect` · `takeCover` · `ready` · `assist` · `grapple` · `breakFree` · `throw` · `changeWeapon` · `changeOutfit` · `tool` · `manual` (the sheet's Used Action / Used Reaction) · `custom` (Custom Actions and `spend … Reaction`).
+
+```
+[On Action]
+require (action.kind) == "block" then gain 1 Poise;
+```
 
 ---
 
@@ -748,6 +794,57 @@ Inside `[On Roll]`:
 
 `on roll 1d10 <= X then …` does **not** fire `[On Roll]`.
 
+
+
+## Gaining and spending Reactions
+
+Reactions come from the pool (the number on the sheet) and from credits. A credit is either Universal or only for one kind of Reaction: Block, Evade, Counter or Opportunity Attack. Credits belong to the Combatant, so they only exist in a started combat. Held weapons give their credits on their own (Small, Sturdy, one-handed).
+
+`gain` with a kind gives a credit:
+
+```
+[Always Active]
+gain 1 Block Reaction;
+```
+
+- In `[Always Active]`, the item's owner gets it back unspent at every Turn Start (and when their Combatant joins the combat) while the item is active. It goes away as soon as the item isn't. An outfit put on mid-round gives its credit at the next Turn Start.
+- Anywhere else it's a one-off credit that lasts until the actor's next Turn Start. Add `this round` to keep it until the round ends.
+- Reactions are gained right away, so `next round` and `next turn` don't work on them.
+
+Without a kind, `gain 1 Reaction` raises the max in `[Always Active]` and adds to the pool anywhere else. Add `this round` and it gives a Universal credit instead:
+
+```
+[Clash Win With Block]
+gain 1 Reaction this round;
+```
+
+`Universal` is the same as no kind, so `gain 1 Universal Reaction` does the same as `gain 1 Reaction`.
+
+### Spending Reactions
+
+`spend` works with Reactions too (see [`spend ... to`](#spend-to)):
+
+```
+[On Clash Start]
+spend 1 Reaction to power up attack 2;
+```
+
+Reads: *"If you can take a Reaction, take it, then power up attack 2."*
+
+It's taken like any other Reaction: it posts the usual chat line and fires `[On Action]`, so scripts like Bleed's go off. Out of combat it costs nothing, so the actions always run.
+
+A plain `spend 1 Reaction` takes a Universal one (from the pool or a Universal credit). Name kinds to let other credits pay:
+
+- `spend 1 Block Reaction` or `spend 1 Block or Counter Reaction` (doesn't give a choice yet, just eligible to spend from, left to right)
+- `spend 1 Defensive Reaction` for Block or Evade
+- `spend 2 any Reaction` for any kind, even a credit tied to one weapon like a Small weapon's Counter. It pays with the pool first, then Universal credits, then Counter, Block, Evade and Opportunity Attack.
+
+Only `self` can spend its Reactions. `[On Action]` can spend them too, but in the `[On Action]` that this spend sets off, `spend … Reaction` does nothing. That way a script can't keep spending in a loop.
+
+`lose N Reaction` takes any kind, the most restricted credit first and the pool last. `set reaction to N` works on the same total `self.reaction` reads, so `set reaction to 0` uses up the credits too.
+
+`self.reactionsUsed` counts the Reactions the actor took since its last Turn Start. In `[On Action]` it already counts the one being taken.
+
 ---
 
 
@@ -767,6 +864,7 @@ Amounts can be plain numbers, dice rolls, or values read from the actor.
 | Cap             | `(min(N, 3))`         | Smaller of N and 3. N never goes **above** 3    |
 | Floor           | `(max(N, 2))`         | Larger of N and 2. N never goes **below** 2     |
 | Clamp           | `(clamp(N, 2, 6))`    | N kept between 2 and 6                          |
+| Absolute        | `(abs(N - 3))`        | How far N is from 3. Never **negative**         |
 
 
 ```
@@ -782,7 +880,7 @@ Dice and math can even be combined inside parentheses:
 do deal damage (1d6 + self.rank) on target;
 ```
 
-`min` / `max` / `clamp` work like Foundry roll math:
+`min` / `max` / `clamp` / `abs` work like Foundry roll math:
 
 ```
 let $taken = (min(self.status.Poise, N));
@@ -1261,6 +1359,9 @@ power down evade 1 on target;
 | `do deal damage <N> on <target>`                                                        | Deal HP damage (standard form)                                                                                                                      |
 | `convert [amount] damage to <pool\|type>`                                                | Rewrite pending hit on `[Before Dealing Damage]` / `[On Taking Damage]`                                                                             |
 | `gain`/`lose`/`set` `Action`\|`Reaction`\|`movement` `[on <t>]`                           | Current action-economy / tactical SQR pools (`actions` / `reactions` / `squares` / `sqr` aliases). In `[Always Active]`, `gain`/`lose` bump **max** |
+| `gain N <Kind> Reaction [this round] [on <t>]`                                          | `Block`/`Evade`/`Counter`/`Opportunity Attack` credit. Always Active: back every Turn Start. Event: until next Turn Start (`this round`: round end) |
+| `spend N [<Kind> [or <Kind>]\|Defensive\|any] Reaction to <actions>`                      | Take a Reaction (Universal unless you name kinds), then do the actions if it was paid                                                               |
+| `gain`/`lose` `dashSquares`\|`reduceStatusStacks`                                        | Squares Dash gives / stacks Reduce Status clears (`[Always Active]` only)                                                                           |
 | `gain`/`lose`/`set` `tempHp`\|`tempSt`\|`tempSp` `[on <t>]`                               | Temporary pool buffers                                                                                                                              |
 | `set hp\|st\|sp\|light to <N\|max> [on\|to <t>]`                                             | Set current pool (`max` = that actor’s current max)                                                                                                 |
 | `set resistances to <level> [on <t>]`                                                   | All HP+ST Slash/Pierce/Blunt outfit resists (Always Active = override; event = write outfit)                                                        |
@@ -1287,7 +1388,8 @@ power down evade 1 on target;
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `self.hp` / `sp` / `st` / `light`                                                | Core attributes                                                                               |
 | `self.hp%` / `sp%` / `st%` / `light%`                                            | Current fill as 0–100 of that pool’s max                                                      |
-| `self.action` / `self.reaction` / `self.movement`                                | Remaining Actions / Reactions / tactical SQRs                                                 |
+| `self.action` / `self.reaction` / `self.movement`                                | Remaining Actions / Reactions (pool plus credits) / tactical SQRs                             |
+| `self.reactionsUsed`                                                             | Reactions taken since the actor's last Turn Start                                             |
 | `self.tempHp` / `tempSt` / `tempSp`                                              | Temporary buffers                                                                             |
 | `self.rank`                                                                      | Rank                                                                                          |
 | `self.speed`                                                                     | Speed bonus                                                                                   |
@@ -1301,12 +1403,14 @@ power down evade 1 on target;
 | `originator` / `originator.name` / `.uuid`                                       | Who applied this status (status scripts; bare -> name)                                        |
 | `clash.margin`                                                                   | How much the winner won by on `[Clash Win]`. On `[Clash Lose]`: defender roll − attacker roll |
 | `clash.attackerRoll` / `clash.defenderRoll`                                      | Raw clash dice                                                                                |
+| `clash.reaction` / `clash.recycled`                                              | Your side of the clash is a Reaction / a Recycled Evade (0 or 1)                              |
 | `incoming.amount` / `.pool` / `.source` / `.damageType` / `.attack`              | Pending damage (`damage.*` also works; `.attack` is 1 on a weapon hit)                        |
 | `heal.amount` / `.pool` / `.originalPool` / `.source`                            | Pending restore on `[On Heal]` / `[On Being Healed]`                                          |
 | `pendingRoll.value` / `.rolledValue`                                             | Mutable / original total on `[On Roll]`                                                       |
 | `burst.status` / `.amount` / `.before` / `.after`                                | Active Burst snapshot                                                                         |
 | `depleted.pool` / `.before` / `.max`                                             | Pool that just hit 0 on `[On Depleted]`                                                       |
 | `moved.squares` / `.spaces` / `.movement` / `.forced`                            | `[On Move]` tiles walked (`forced` is 0 or 1)                                                 |
+| `action.reaction` / `.kind` / `.consumed` / `.offTurn`                           | What `[On Action]` fired for (`kind` is a name, the rest 0 or 1)                              |
 | `proc.name` / `proc.<Bind>`                                                      | Active Proc name / `with … as` binds (bare `<Bind>` also works)                               |
 | `roll` / `roll.<name>`                                                           | Last / named roll-once totals                                                                 |
 | `round` / `round.number` / `combat.round`                                        | Current combat round                                                                          |

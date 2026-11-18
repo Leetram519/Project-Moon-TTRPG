@@ -1,0 +1,36 @@
+<div class="pmttrpg-grapple-contest" data-contest-id="{{messageContestId}}">
+  <header class="pmttrpg-grapple-contest__header">
+    <i class="fa-solid fa-hand-fist" aria-hidden="true"></i>
+    <span class="pmttrpg-grapple-contest__title">{{i18n.title}}{{#if targetName}} → {{targetName}}{{/if}}</span>
+  </header>
+
+  {{#if pending}}
+    <p class="pmttrpg-grapple-contest__status" data-contest-viewer="others">{{i18n.awaiting}}</p>
+    <p class="pmttrpg-grapple-contest__status" data-contest-viewer="answerer" hidden>{{i18n.answer}}</p>
+    <div class="pmttrpg-grapple-contest__choices" role="group" aria-label="{{i18n.respond}}">
+      {{#each stats}}
+        <button type="button" data-action="grapple-defend" data-stat="{{stat}}">{{label}}</button>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{#if rolling}}
+    <p class="pmttrpg-grapple-contest__status">{{i18n.rolling}}</p>
+  {{/if}}
+
+  {{#if resolved}}
+    <dl class="pmttrpg-grapple-contest__totals">
+      <dt>{{grapplerName}}</dt>
+      <dd>{{grapplerTotal}}</dd>
+      <dt>{{targetName}}{{#if defenderStatLabel}} ({{defenderStatLabel}}){{/if}}</dt>
+      <dd>{{defenderTotal}}</dd>
+    </dl>
+    <p class="pmttrpg-grapple-contest__outcome {{#if won}}is-won{{else}}is-failed{{/if}}">
+      {{#if won}}{{i18n.won}}{{else}}{{i18n.failed}}{{/if}}
+    </p>
+  {{/if}}
+
+  {{#if cancelled}}
+    <p class="pmttrpg-grapple-contest__status">{{i18n.cancelled}}</p>
+  {{/if}}
+</div>

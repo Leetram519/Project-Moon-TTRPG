@@ -1,5 +1,6 @@
 import {
   DAMAGE_TYPES,
+  RESISTANCE_DAMAGE_TYPES,
   RESISTANCE_MULTIPLIERS,
   normalizeDamageType,
   normalizeResistanceLevel,
@@ -10,6 +11,7 @@ import { actorTokenDocument } from "./acting-user.js";
 
 export {
   DAMAGE_TYPES,
+  RESISTANCE_DAMAGE_TYPES,
   RESISTANCE_MULTIPLIERS,
   RESISTANCE_LEVELS,
   normalizeResistanceLevel,
@@ -46,6 +48,7 @@ const DAMAGE_TYPE_LABEL_KEYS = {
   slash: "PMTTRPG.DamageTypeSlash",
   pierce: "PMTTRPG.DamageTypePierce",
   blunt: "PMTTRPG.DamageTypeBlunt",
+  force: "PMTTRPG.DamageTypeForce",
 };
 
 const RESISTANCE_LABEL_KEYS = {
@@ -152,7 +155,7 @@ export function getEquippedOutfit(actor) {
  */
 export function resolveResistance(actor, pool, damageType) {
   if (pool !== "hp" && pool !== "st") return null;
-  if (!DAMAGE_TYPES.includes(damageType)) {
+  if (!RESISTANCE_DAMAGE_TYPES.includes(damageType)) {
     return { key: "normal", multiplier: 1, reason: "skipped", cause: null, damageType: damageType || null };
   }
 
@@ -188,7 +191,7 @@ export function resolveResistance(actor, pool, damageType) {
 export function buildEffectiveResistanceDisplay(actor) {
   const out = { hp: {}, st: {} };
   for (const pool of ["hp", "st"]) {
-    for (const damageType of DAMAGE_TYPES) {
+    for (const damageType of RESISTANCE_DAMAGE_TYPES) {
       const resolved = resolveResistance(actor, pool, damageType);
       out[pool][damageType] = formatResistanceMultiplier(resolved?.multiplier ?? 1);
     }
@@ -408,15 +411,6 @@ export async function enhanceDamageTakenCard(message, html) {
   info.dataset.tooltipHtml = breakdownHtml;
   info.dataset.tooltipClass = "projectmoonttrpg damage-breakdown-tooltip";
   info.dataset.tooltipDirection = "UP";
-}
-
-export function formatDamageTakenParts(changes) {
-  return changes.map((c) => {
-    const amount = Math.abs(c.delta);
-    const pool = poolLabel(c.pool);
-    const key = c.delta > 0 ? "PMTTRPG.DamageTaken.LossPart" : "PMTTRPG.DamageTaken.GainPart";
-    return game.i18n.format(key, { amount, pool });
-  }).join(", ");
 }
 
 export async function postDamageTakenMessage(actor, appliedDamage) {

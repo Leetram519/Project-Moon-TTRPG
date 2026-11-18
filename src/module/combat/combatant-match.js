@@ -15,6 +15,29 @@ export function listCombatants(combatants) {
   return [];
 }
 
+export function turnsOf(combat) {
+  return combat ? [...combat.turns] : [];
+}
+
+export function currentTurnCombatant(combat) {
+  return combat?.combatant ?? null;
+}
+
+export function combatantName(combatant) {
+  return combatant?.name ?? combatant?.token?.name ?? combatant?.actor?.name ?? "";
+}
+
+export function combatantOf(combat, id) {
+  if (!combat || id == null) return null;
+  return combat.combatants.get(String(id)) ?? null;
+}
+
+export function exactCombatantForToken(combat, tokenId) {
+  if (!combat || tokenId == null) return null;
+  const matches = combat.combatants.filter((entry) => entry.tokenId === tokenId);
+  return matches.length === 1 ? matches[0] : null;
+}
+
 /**
  * A token id matches that combatant only.
  * An actor id matches only when one combatant has it.

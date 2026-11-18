@@ -1,7 +1,13 @@
 import { emitTokenMoved } from "../easy-effects/registry.js";
+import { isFreeMovementAction, recordedHistorySquares, voluntaryChunkSpaces } from "../movement/movement-cost.js";
 import { compareCombatants, readTiebreak } from "./turn-order.js";
 import { getInitiativeFormulaParts } from "../targeting.js";
 import { findCombatant } from "./combatant-match.js";
+import {
+  DELAY_TRANSITION_OPTION,
+  delayTurnEventView,
+  requestDelayAwareAdvance,
+} from "../action-economy/delay.js";
 
 const TIEBREAK_PATH = "flags.projectmoonttrpg.turnTiebreak";
 
@@ -22,12 +28,6 @@ export function actorCombatToken(actor) {
   if (actor.isToken) return null;
   const linked = actor.getActiveTokens?.(true, true) ?? [];
   return linked.length === 1 ? linked[0] : null;
-}
-
-function paidHistory(tokenDoc) {
-  const history = tokenDoc?.movementHistory;
-  if (!Array.isArray(history) || !history.length) return [];
-  return history.filter((waypoint) => !waypoint?.forced && !waypoint?.teleport);
 }
 
 function isMeasureGrid(grid) {
@@ -86,20 +86,23 @@ function measureWaypointSpaces(tokenDoc, waypoints) {
 
 function paidWaypoints(waypoints) {
   if (!Array.isArray(waypoints) || !waypoints.length) return [];
-  return waypoints.filter((waypoint) => !waypoint?.forced && !waypoint?.teleport);
+  return waypoints.filter((waypoint) => !waypoint?.forced && !waypoint?.teleport && !isFreeMovementAction(waypoint?.action));
 }
 
 function chunkSpaceCost(tokenDoc, chunk) {
   if (!chunk) return 0;
   const measured = measureWaypointSpaces(tokenDoc, paidWaypoints(chunk.waypoints));
-  if (measured > 0) return measured;
-  const spaces = Number(chunk.spaces);
-  if (Number.isFinite(spaces) && spaces >= 0) return Math.max(0, Math.round(spaces));
-  return 0;
+  return voluntaryChunkSpaces(chunk.waypoints, measured, chunk.spaces);
 }
 
 export function tokenHistorySquareCost(tokenDoc) {
-  return measureWaypointSpaces(tokenDoc, paidHistory(tokenDoc));
+  const history = tokenDoc?.movementHistory;
+  if (!Array.isArray(history) || history.length < 2) return 0;
+  const grid = tokenDoc?.parent?.grid ?? canvas.grid ?? null;
+  return recordedHistorySquares(history, {
+    gridSize: Number(grid?.size) || 0,
+    gridDistance: Number(grid?.distance) || 1,
+  });
 }
 
 export function actorHistorySquareCost(actor) {
@@ -158,7 +161,9 @@ function isFreeMovement(movement) {
     ...(movement.passed?.waypoints ?? []),
   ];
   if (!waypoints.length) return false;
-  return waypoints.every((waypoint) => waypoint?.teleport || waypoint?.forced);
+  return waypoints.every((waypoint) => (
+    waypoint?.teleport || waypoint?.forced || isFreeMovementAction(waypoint?.action)
+  ));
 }
 
 async function emitMovedIfNeeded(tokenDoc, movement, operation, user) {
@@ -209,6 +214,75 @@ function registerCombatDocument() {
   const Base = CONFIG.Combat.documentClass;
 
   class CombatPMTTRPG extends Base {
+    #delayBypass = false;
+    #delayTransition = null;
+
+    /** @override */
+    async startCombat() {
+      if (this.#delayBypass) return super.startCombat();
+      return requestDelayAwareAdvance(this, "start");
+    }
+
+    /** @override */
+    async nextTurn() {
+      if (this.#delayBypass) return super.nextTurn();
+      return requestDelayAwareAdvance(this, "turn");
+    }
+
+    /** @override */
+    async nextRound() {
+      if (this.#delayBypass) return super.nextRound();
+      return requestDelayAwareAdvance(this, "round");
+    }
+
+    _pmttrpgNaturalAdvance(mode = "turn") {
+      this.#delayBypass = true;
+      try {
+        if (mode === "start") return super.startCombat();
+        return mode === "round" ? super.nextRound() : super.nextTurn();
+      } finally {
+        this.#delayBypass = false;
+      }
+    }
+
+    /**
+     * Holds onto the Delay transition option just for the synchronous
+     * `_manageTurnEvents` call inside `super._onUpdate`.
+     * @override
+     */
+    _onUpdate(changed, options, userId) {
+      this.#delayTransition = options?.[DELAY_TRANSITION_OPTION] ?? null;
+      try {
+        return super._onUpdate(changed, options, userId);
+      } finally {
+        this.#delayTransition = null;
+      }
+    }
+
+    /** @override */
+    async _manageTurnEvents() {
+      const transition = this.#delayTransition;
+      if (!transition || !this.previous) return super._manageTurnEvents();
+      const realTurns = this.turns;
+      const realPrevious = this.previous;
+      const view = delayTurnEventView({
+        turns: realTurns,
+        previous: realPrevious,
+        current: this.current,
+        maskedIds: transition.maskedIds,
+      });
+      this.turns = view.turns;
+      if (view.previous) this.previous = view.previous;
+      let pending;
+      try {
+        pending = super._manageTurnEvents();
+      } finally {
+        this.turns = realTurns;
+        this.previous = realPrevious;
+      }
+      return pending;
+    }
+
     /** @override */
     async _clearMovementHistoryOnStartTurn(combatant, _context) {
       if (!combatant) return;
@@ -310,6 +384,21 @@ function registerCombatantDocument() {
       const result = await super.rollInitiative(formula);
       if (readTiebreak(this) === 0) return result;
       return this.update({ [TIEBREAK_PATH]: 0 });
+    }
+
+    /**
+     * Drops a `combatTurn` equal to the current turn unless the caller set it. A flag
+     * write from one turn can land after the next turn started, which would move the
+     * turn back on us. We have to delete the key because the server will still apply
+     * it even if it's null.
+     * @override
+     */
+    static async _preUpdateOperation(documents, operation, user) {
+      const callerPinned = operation.combatTurn !== undefined;
+      const allowed = await super._preUpdateOperation(documents, operation, user);
+      if (allowed === false) return false;
+      if (!callerPinned && operation.combatTurn === operation.parent?.turn) delete operation.combatTurn;
+      return allowed;
     }
   }
 

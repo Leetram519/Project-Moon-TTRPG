@@ -1,6 +1,6 @@
 # targeting
 
-> **JSDoc coverage: -187/20 symbols (-935%)**
+> **JSDoc coverage: -189/21 symbols (-900%)**
 
 ## `src/module/targeting.js`
 
@@ -79,7 +79,26 @@
 
 ---
 
-### Function: `buildCombatantTarget(combatant, { actorId = null } = {})`
+### Function: `resolveSelfTokenDocument(actor, tokenDocument = null)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `tokenDocument = null` | — | — |
+
+---
+
+### Function: `isRangeEvaluated(weaponRange)`
+
+`weaponRange: null` means no range restriction. Despite its name, `outOfRange` is the one that holds the in-range result.
+
+---
+
+### Function: `buildCombatantTarget(combatant, { actorId = null, selfTokenDocument = null, weaponRange = 1 } = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -88,35 +107,9 @@
 | Name | Type | Description |
 |------|------|-------------|
 | `combatant` | — | — |
-| `{ actorId = null } = {}` | — | — |
-
----
-
-### Function: `getCombatantTargetOptions({ combat = game.combat, actorId = null, includeHidden = false } = {})`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `{ combat = game.combat` | — | — |
-| `actorId = null` | — | — |
-| `includeHidden = false } = {}` | — | — |
-
----
-
-### Function: `resolveCombatantTarget(combatantId, { combat = game.combat, actorId = null } = {})`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `combatantId` | — | — |
-| `{ combat = game.combat` | — | — |
-| `actorId = null } = {}` | — | — |
+| `{ actorId = null` | — | — |
+| `selfTokenDocument = null` | — | — |
+| `weaponRange = 1 } = {}` | — | — |
 
 ---
 
@@ -153,7 +146,7 @@
 
 ---
 
-### Function: `buildTargetFromToken(token, { actorId = null, combat = game.combat } = {})`
+### Function: `buildTargetFromToken(token, { actorId = null, selfTokenDocument = null, combat = game.combat, weaponRange = 1 } = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -163,7 +156,9 @@
 |------|------|-------------|
 | `token` | — | — |
 | `{ actorId = null` | — | — |
-| `combat = game.combat } = {}` | — | — |
+| `selfTokenDocument = null` | — | — |
+| `combat = game.combat` | — | — |
+| `weaponRange = 1 } = {}` | — | — |
 
 ---
 
@@ -194,7 +189,15 @@
 
 ---
 
-### Function: `rollInitiative(actor, { macroMisc = null, manualMisc = null } = {})`
+### Function: `hideRange()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `rollInitiative(actor, { macroMisc = null, manualMisc = null, combatant = null } = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -204,7 +207,8 @@
 |------|------|-------------|
 | `actor` | — | — |
 | `{ macroMisc = null` | — | — |
-| `manualMisc = null } = {}` | — | — |
+| `manualMisc = null` | — | — |
+| `combatant = null } = {}` | — | — |
 
 ---
 

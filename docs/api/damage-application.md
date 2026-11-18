@@ -1,8 +1,28 @@
 # damage-application
 
-> **JSDoc coverage: -109/18 symbols (-606%)**
+> **JSDoc coverage: -121/19 symbols (-637%)**
 
 ## `src/module/damage-application.js`
+
+### `const SELECTABLE_DAMAGE_TYPES`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `isSelectableDamageType(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
 
 ### `const DAMAGE_POOLS`
 
@@ -174,18 +194,6 @@ Turn stored damage steps into localized tooltip rows.
 ### Function: `enhanceDamageTakenCard(message, html)`
 
 Attach the damage breakdown for GMs and owners.
-
----
-
-### Function: `formatDamageTakenParts(changes)`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `changes` | — | — |
 
 ---
 

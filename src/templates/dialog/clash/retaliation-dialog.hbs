@@ -15,14 +15,16 @@
   <div class="clash-retaliation-form__options">
     {{#each options}}
       <label class="clash-option
-        {{#if requiresItem}}clash-option--has-items{{/if}}"
+        {{#if requiresItem}}clash-option--has-items{{/if}}
+        {{#if unavailable}}clash-option--unavailable{{/if}}"
         data-type="{{type}}">
 
         <input
           type="radio"
           name="retaliationType"
           value="{{type}}"
-          {{#if @first}}checked{{/if}}
+          {{#if checked}}checked{{/if}}
+          {{#if unavailable}}disabled{{/if}}
         >
 
         <span class="clash-option__icon">
@@ -39,6 +41,9 @@
             {{localize label}}
           {{/if}}
         </span>
+        {{#if unavailable}}
+          <span class="clash-option__unavailable-tag">{{localize "PMTTRPG.Clash.NoReaction"}}</span>
+        {{/if}}
         {{#if (eq type "counter")}}
           <span class="clash-option__range-tag" hidden>{{localize "PMTTRPG.Dialog.outOfRange"}}</span>
         {{/if}}
@@ -51,6 +56,7 @@
               data-type="{{../type}}"
               data-item-id="{{id}}"
               data-item-name="{{name}}"
+              data-affordable="{{#if (eq affordable false)}}0{{else}}1{{/if}}"
               {{#if (eq ../type "counter")}}
               data-in-range="{{#if inRange}}1{{else}}0{{/if}}"
               data-range="{{range}}"
@@ -64,6 +70,18 @@
       </label>
     {{/each}}
   </div>
+
+  <label class="consume-toggle clash-consume-reaction">
+    <input type="checkbox" name="consumeReaction" checked />
+    <span>{{i18n.consumeReaction}}</span>
+  </label>
+
+  {{#if breakFree}}
+  <label class="consume-toggle clash-break-free" style="display: none;">
+    <input type="checkbox" name="breakFreeAfterHit" />
+    <span>{{breakFree.label}}</span>
+  </label>
+  {{/if}}
 
   {{!-- Item picker — shown only when counter/evade/block/recycled is selected --}}
   <div class="clash-item-picker" style="display: none;">
@@ -133,5 +151,20 @@
       <span>{{i18n.consumeTool}}</span>
     </label>
   </div>
+
+  {{!-- Assist picker for the retaliator (hidden for One-Sided) --}}
+  {{#if assistOptions}}
+  <div class="clash-assist-picker">
+    <label class="clash-item-picker__label">
+      <i class="fa-solid fa-handshake-angle"></i>
+      {{i18n.assist}}
+    </label>
+    <select name="assistEntryId" class="clash-item-picker__select">
+      {{#each assistOptions}}
+        <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+  </div>
+  {{/if}}
 
 </form>

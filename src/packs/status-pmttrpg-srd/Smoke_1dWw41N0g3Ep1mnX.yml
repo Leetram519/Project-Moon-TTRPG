@@ -45,6 +45,9 @@ system:
 
     [On Gain]
     require (Smoke) > 20 then set Smoke to 20
+  reduceStatus:
+    type: standard
+    blocks: []
 effects: []
 folder: fMFB6OnVCAkgdA96
 sort: 400000

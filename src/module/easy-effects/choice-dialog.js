@@ -1,5 +1,6 @@
 import { PMTTRPGUtility } from "../utility.js";
 import { resolveActingUser } from "../acting-user.js";
+import { waitForChoice, waitForWindowChoice } from "../apps/dialog-wait.js";
 
 const SOCKET_EVENT = "system.projectmoonttrpg";
 const CHOICE_REQUEST = "eeChoiceRequest";
@@ -11,10 +12,21 @@ const _pending = new Map();
 let _socketRegistered = false;
 
 /**
- * Prompt the actor's controlling user, or the local client if that's us.
- * Returns the chosen answer id, or `null` on cancel / remote timeout.
+ * Asks whoever controls the actor (this client if that's us) and returns
+ * the chosen answer id, or null if they cancel. If a remote user doesn't
+ * answer within`timeoutMs` then we return `timeoutValue`.
  */
-export async function promptChoiceDialog({ prompt, choices, actor = null, tokenId = null } = {}) {
+export async function promptChoiceDialog({
+  prompt,
+  choices,
+  actor = null,
+  tokenId = null,
+  title = null,
+  cancel = true,
+  windowStyle = false,
+  timeoutMs = CHOICE_TIMEOUT_MS,
+  timeoutValue = null,
+} = {}) {
   const list = Array.isArray(choices) ? choices.filter((c) => c?.id && c?.label) : [];
   if (!list.length) return null;
 
@@ -22,13 +34,18 @@ export async function promptChoiceDialog({ prompt, choices, actor = null, tokenI
 
   const recipient = resolvePromptUser(actor, tokenId);
   if (!recipient || recipient.id === game.user.id) {
-    return showLocalChoiceDialog({ prompt, choices: list });
+    return showLocalChoiceDialog({ prompt, choices: list, title, cancel, windowStyle });
   }
 
   return requestRemoteChoice({
     userId: recipient.id,
     prompt,
     choices: list,
+    title,
+    cancel,
+    windowStyle,
+    timeoutMs,
+    timeoutValue,
   });
 }
 
@@ -41,12 +58,15 @@ export function resolvePromptUser(actor, tokenId = null) {
   return resolveActingUser(actor, tokenId) ?? game.user;
 }
 
-async function showLocalChoiceDialog({ prompt, choices }) {
+async function showLocalChoiceDialog({ prompt, choices, title: windowTitle = null, cancel = true, windowStyle = false }) {
   const classes = ["projectmoonttrpg", "PMTTRPG-dialog"];
   if (PMTTRPGUtility.nightmode) classes.push("nightmode");
 
-  const title = game.i18n.localize("PMTTRPG.Dialog.easyEffectsChoiceTitle");
-  const content = `<p class="ee-choice-prompt">${foundry.utils.escapeHTML(String(prompt ?? ""))}</p>`;
+  const title = windowTitle || game.i18n.localize("PMTTRPG.Dialog.easyEffectsChoiceTitle");
+  const text = foundry.utils.escapeHTML(String(prompt ?? ""));
+  const content = windowStyle
+    ? `<div class="action-weapon-form"><p class="action-weapon-form__hint">${text}</p></div>`
+    : `<p class="ee-choice-prompt">${text}</p>`;
 
   const buttons = choices.map((choice, index) => ({
     action: choice.id,
@@ -54,13 +74,14 @@ async function showLocalChoiceDialog({ prompt, choices }) {
     default: index === 0,
     callback: () => choice.id,
   }));
-  buttons.push({
+  if (cancel) buttons.push({
     action: "cancel",
     label: game.i18n.localize("PMTTRPG.Dialog.cancel"),
     callback: () => null,
   });
 
-  return foundry.applications.api.DialogV2.wait({
+  if (windowStyle) return waitForWindowChoice({ window: { title }, content, buttons, rejectClose: false });
+  return waitForChoice({
     window: { title },
     classes,
     content,
@@ -69,7 +90,7 @@ async function showLocalChoiceDialog({ prompt, choices }) {
   });
 }
 
-function requestRemoteChoice({ userId, prompt, choices }) {
+function requestRemoteChoice({ userId, prompt, choices, title = null, cancel = true, windowStyle = false, timeoutMs = CHOICE_TIMEOUT_MS, timeoutValue = null }) {
   const requestId = foundry.utils.randomID();
 
   return new Promise((resolve) => {
@@ -77,8 +98,8 @@ function requestRemoteChoice({ userId, prompt, choices }) {
       _pending.delete(requestId);
       console.warn("[EasyEffects] Choice dialog timed out waiting for remote user");
       ui.notifications?.warn(game.i18n.localize("PMTTRPG.Dialog.easyEffectsChoiceTimeout"));
-      resolve(null);
-    }, CHOICE_TIMEOUT_MS);
+      resolve(timeoutValue);
+    }, timeoutMs);
 
     _pending.set(requestId, {
       resolve: (answerId) => {
@@ -94,6 +115,9 @@ function requestRemoteChoice({ userId, prompt, choices }) {
       userId,
       prompt,
       choices,
+      title,
+      cancel,
+      windowStyle,
     });
   });
 }
@@ -115,6 +139,9 @@ function ensureChoiceSocket() {
       const answerId = await showLocalChoiceDialog({
         prompt: data.prompt,
         choices: data.choices ?? [],
+        title: typeof data.title === "string" ? data.title : null,
+        cancel: data.cancel !== false,
+        windowStyle: data.windowStyle === true,
       });
       game.socket.emit(SOCKET_EVENT, {
         type: CHOICE_RESPONSE,

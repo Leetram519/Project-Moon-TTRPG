@@ -41,6 +41,13 @@ export function resolveTokenDocument(tokenId) {
   return null;
 }
 
+/** An unlinked token's actor isn't the world actor with the same id, so the token (on any scene) goes first. */
+export function resolveTokenOrWorldActor(actorId, tokenId) {
+  const tokenActor = tokenId ? (resolveTokenDocument(tokenId)?.actor ?? null) : null;
+  if (tokenActor) return tokenActor;
+  return actorId ? (game.actors.get(actorId) ?? null) : null;
+}
+
 export function tokenIdForActor(actor, explicitTokenId = null) {
   if (explicitTokenId) return explicitTokenId;
   if (actor?.token?.id) return actor.token.id;

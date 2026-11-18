@@ -1,0 +1,12 @@
+<footer class="pm-window__footer">
+  <p class="pm-window__summary" {{#if summary.tone}}data-tone="{{summary.tone}}"{{/if}} aria-live="polite">
+    {{#if summary.text}}{{summary.text}}{{else if summary.key}}{{localize summary.key}}{{/if}}
+  </p>
+  <div class="pm-window__buttons">
+    <button type="button" class="pm-window__button" data-action="cancel">{{localize "PMTTRPG.Dialog.cancel"}}</button>
+    <button type="submit" class="pm-window__button pm-window__button--primary" data-action="confirm" {{disabled confirm.disabled}}>
+      <i class="fa-solid fa-check" aria-hidden="true"></i>
+      <span>{{localize confirm.labelKey}}</span>
+    </button>
+  </div>
+</footer>

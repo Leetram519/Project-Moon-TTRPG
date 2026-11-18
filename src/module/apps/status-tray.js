@@ -109,31 +109,13 @@ export class StatusTray extends HandlebarsApplicationMixin(ApplicationV2) {
 
     if (pending) {
       if (event.button === 2 && event.altKey) {
-        const stacks = actor.getPendingStatusStacks(name, arrival);
-        if (stacks > 0) {
-          const item = actor.items.find(
-            i => i.type === "status" && i.name === name && i.system?.pending
-              && String(i.system?.arrival || "round") === arrival
-          );
-          if (item) {
-            await item.delete({ PMTTRPG: { statusTextDelta: -stacks } });
-          }
-        }
+        await actor.setPendingStatusStacks(name, 0, { arrival });
         return;
       }
       const amount = (event.ctrlKey || event.metaKey) ? 5 : 1;
       if (event.button === 2) {
-        const item = actor.items.find(
-          i => i.id === el.dataset.itemId && i.system?.pending
-        );
-        if (!item) return;
-        const current = Math.max(0, Number(item.system?.stacks ?? 0) || 0);
-        const next = Math.max(0, current - amount);
-        if (next <= 0) {
-          await item.delete({ PMTTRPG: { statusTextDelta: -current } });
-        } else {
-          await item.update({ "system.stacks": next }, { PMTTRPG: { silentStatusText: true } });
-        }
+        const current = actor.getPendingStatusStacks(name, arrival);
+        await actor.removePendingStatusStacks(name, amount, { arrival, silent: current > amount });
       } else {
         await actor.addPendingStatusStacks(name, amount, { arrival, silent: true });
       }

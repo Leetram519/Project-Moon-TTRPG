@@ -4,6 +4,7 @@
       <div class="stat-icon"><i class="fas fa-dice-d20"></i></div>
       <div class="dialog-header__body">
         <h3>{{abilityLabel}}</h3>
+        {{#if rollModeNote}}<span class="modifier-hint">{{rollModeNote}}</span>{{/if}}
       </div>
     </div>
 
@@ -24,6 +25,17 @@
           <span class="modifier-hint">{{localize "PMTTRPG.Dialog.modifierHint"}}</span>
         </div>
       </div>
+
+      {{#if assistOptions}}
+      <div class="form-group assist-choice">
+        <label for="assistEntryId">{{assistLabel}}</label>
+        <select id="assistEntryId" name="assistEntryId" class="form-control">
+          {{#each assistOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      {{/if}}
     </div>
   </form>
 </div>

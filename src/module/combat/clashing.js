@@ -27,6 +27,7 @@ import {
   CLASH_FLAG_KEY,
   serialiseClashState,
   deserialiseClashState,
+  retaliationDefenseKind,
 } from "./clash-state.js";
 
 import {
@@ -39,16 +40,36 @@ import {
 } from "./clash-rolls.js";
 
 import {
+  getClashStateFromMessage,
   postAttackCard,
   updateAttackCard,
   postResultCard,
   resolveClashCombatant,
 } from "./clash-chat.js";
+import {
+  applyClashAssist,
+  canPayRetaliation,
+  claimClashRetaliation,
+  clashCombat,
+  clashEconomyAbortKey,
+  commitAttackerResources,
+  commitClashClaimAsGM,
+  declareClashAttackerEconomy,
+  declareClashDefenderEconomy,
+  markAttackerEconomyCommitted,
+  markDefenderEconomyCommitted,
+  preflightAttackerResources,
+  preflightDefenderResources,
+  resolveClashAttackerCombatant,
+  unlockClashState,
+} from "./clash-economy.js";
+import { claimAssistForRoll } from "../action-economy/assist.js";
+import { combatantForReactionToken } from "../action-economy/reaction-credits.js";
 
 import {
   showRetaliationDialog,
   showInterceptConfirmDialog,
-  promptRangedCounterAmmo,
+  promptRangedAmmo,
 } from "./clash-dialog.js";
 
 import { createClashContext, emitAttackConnected, emitClashStarted, emitClashOutcome, emitDamageCalc } from "../easy-effects/registry.js";
@@ -67,9 +88,18 @@ import {
   grantRecycledEvade,
   recycledPowerPenalty,
 } from "./recycled-evade.js";
+import { applyGrappleClashAdjustments } from "../grapple/grapple-restrictions.js";
+import { applyCoverClashAdjustments, canTargetWithAttack } from "../action-economy/cover.js";
+import { interceptionContextFromClash, listInterceptors, revalidateInterception } from "./interception.js";
 
 import {PMTTRPGUtility} from '../utility.js';
-import { canActAs, resolveTokenDocument } from "../acting-user.js";
+import { canActAs, resolveTokenDocument, resolveTokenOrWorldActor } from "../acting-user.js";
+import { canPayDeclaration, declareActorAction } from "../action-economy/declare.js";
+import { ACTION_KINDS, ECONOMY_TYPES } from "../action-economy/kinds.js";
+import { checkActionTiming } from "../action-economy/timing.js";
+import { rejectUnheldWeaponAttack } from "../action-economy/attack-eligibility.js";
+import { consumeAmmunitionCharge } from "../item/ammunition.js";
+import { cancelButton, confirmButton, waitForWindowChoice } from "../apps/dialog-wait.js";
 
 const REACTIONS_THAT_CLEAR_RECYCLED = new Set([
   RETALIATION_TYPES.EVADE,
@@ -77,22 +107,85 @@ const REACTIONS_THAT_CLEAR_RECYCLED = new Set([
   RETALIATION_TYPES.COUNTER,
 ]);
 
-const REACTIONS_THAT_SPEND = new Set([
-  RETALIATION_TYPES.BLOCK,
-  RETALIATION_TYPES.COUNTER,
-  RETALIATION_TYPES.EVADE,
-]);
+// How long a non-author retaliator waits for the GM to relay the ROLLING claim
+const CLAIM_CONFIRM_TIMEOUT_MS = 4_000;
 
 // ── Phase 1: Initiate Attack ──────────────────────────────────────────────────
 
 /**
  * Called when an actor makes an attack with a weapon.
  * Posts the attack card and waits for a retaliator (rolls happen in _executeClash).
+ * Nothing gets paid until the clash runs.
  *
  * @param {AttackPayload} attackPayload
- * @returns {Promise<void>}
+ * @returns {Promise<{ ok: boolean, state?: ClashStateData, reason?: string }>}
  */
 export async function initiateAttack(attackPayload) {
+  const eligibility = rejectUnheldWeaponAttack(attackPayload?.actor, attackPayload?.item, {
+    path: "initiateAttack",
+  });
+  if (!eligibility.ok) return { ok: false, reason: "unheld" };
+  if (!attackPayload?.item) {
+    console.warn("[PMTTRPG] Attack eligibility found no item on initiateAttack, so the held-weapon check is skipped", {
+      actorId: attackPayload?.actorId ?? null,
+    });
+  }
+
+  const skipAttackerEconomy = attackPayload.skipAttackerEconomy === true;
+  const targetCombatant = attackPayload.targetCombatant
+    ?? attackPayload.target?.combatant
+    ?? null;
+  if (targetCombatant) {
+    const cover = canTargetWithAttack({
+      attackerItem: attackPayload.item,
+      targetCombatant,
+      combat: game.combat ?? null,
+    });
+    if (!cover.ok) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Attack.TargetInFullCover"));
+      return { ok: false, reason: "full-cover" };
+    }
+  }
+  const attackerConsume = attackPayload.templateData?.attackerConsume !== false;
+  const attackerEconomyType = attackPayload.economyType === "reaction" ? ECONOMY_TYPES.REACTION : ECONOMY_TYPES.ACTION;
+  const attackerKind = attackPayload.kind || ACTION_KINDS.ATTACK;
+  let attackerTiming = { offTurn: false, source: null, asReaction: false };
+  if (!skipAttackerEconomy) {
+    const combat = game.combat ?? null;
+    const attackerCombatant = attackPayload.attackerCombatantId
+      ? (combat?.combatants.get(attackPayload.attackerCombatantId) ?? null)
+      : combatantForReactionToken(attackPayload.actor, attackPayload.tokenId ?? null, combat);
+    const requestedTiming = attackPayload.templateData?.attackerTiming ?? null;
+    const timing = checkActionTiming({
+      combat,
+      combatant: attackerCombatant,
+      economyType: attackerEconomyType,
+      kind: attackerKind,
+      timing: requestedTiming,
+    });
+    if (!timing.ok) {
+      ui.notifications.warn(game.i18n.format("PMTTRPG.Attack.NotYourTurn", { name: attackPayload.actor?.name ?? "" }));
+      return { ok: false, reason: timing.reason };
+    }
+    attackerTiming = { offTurn: timing.offTurn, source: timing.source, asReaction: timing.asReaction === true };
+    if (attackerConsume && !canPayDeclaration(attackPayload.actor, {
+      economyType: attackerEconomyType,
+      kind: attackerKind,
+      cost: 1,
+      itemId: attackPayload.item?.id ?? attackPayload.itemId ?? null,
+      combat,
+      combatant: attackerCombatant,
+      tokenId: attackPayload.tokenId ?? null,
+      timing: requestedTiming,
+    })) {
+      const asReaction = attackerTiming.asReaction;
+      ui.notifications.warn(game.i18n.format(asReaction ? "PMTTRPG.Attack.NoReaction" : "PMTTRPG.Attack.NoAction", {
+        name: attackPayload.actor?.name ?? "",
+      }));
+      return { ok: false, reason: asReaction ? "insufficient-reactions" : "insufficient-actions" };
+    }
+  }
+
   // Create a temporary message to get an ID, then use that ID in the state.
   // This way the buttons have data-message-id when they render.
   const tempMessage = await ChatMessage.create({
@@ -115,29 +208,31 @@ export async function initiateAttack(attackPayload) {
 
   const attackerSkillId = attackPayload.templateData?.skillId ?? null;
   const consumeSkillLight = !!attackerSkillId && attackPayload.templateData?.consumeSkillLight !== false;
-
-  if (consumeSkillLight) {
-    const skill = attackPayload.actor?.items.get(attackerSkillId) ?? null;
-    await _spendSkillLight(attackPayload.actor, skill);
-  }
-
-  if (_rangedAttackConsumesMovement(attackPayload.item)) {
-    try {
-      await exhaustRemainingSquares(attackPayload.actor);
-    } catch (error) {
-      console.warn("[PMTTRPG] exhaust remaining squares failed", error);
-    }
-  }
+  const attackerDryFire = attackPayload.templateData?.dryFire === true;
+  const attackerAmmoId = attackerDryFire ? null : (attackPayload.templateData?.ammoId ?? null);
+  const attackerAmmoPending = !skipAttackerEconomy
+    && !!attackerAmmoId
+    && attackPayload.templateData?.consumeAmmo === true;
+  const attackerMovementPending = !skipAttackerEconomy
+    && _rangedAttackConsumesMovement(attackPayload.item);
 
   const state = createClashState({
     attackerActorId:   attackPayload.actorId,
     attackerTokenId:   attackTokenId(attackPayload.actor, attackPayload.tokenId),
+    attackerCombatantId: attackPayload.attackerCombatantId ?? null,
+    attackerAssistEntryId: attackPayload.attackerAssistEntryId
+      ?? attackPayload.templateData?.attackerAssistEntryId
+      ?? null,
     attackerName:      attackPayload.actor.name,
     attackerImg:       attackPayload.actor.img,
     attackerItemId:    attackPayload.itemId,
     attackerItemName,
     targetActorId:     attackPayload.targetActorId   ?? null,
     targetTokenId:     attackPayload.targetTokenId   ?? null,
+    targetCombatantId: attackPayload.targetCombatantId
+      ?? attackPayload.target?.combatantId
+      ?? attackPayload.targetCombatant?.id
+      ?? null,
     targetName:        attackPayload.targetName      ?? null,
     targetImg:         attackPayload.targetImg       ?? null,
     attackRollTotal:   null,
@@ -151,14 +246,33 @@ export async function initiateAttack(attackPayload) {
     attackRollBreakdown: null,
     appliedToolId:     attackPayload.templateData?.appliedToolId ?? null,
     attackerSkillId,
-    attackerAmmoId:    attackPayload.templateData?.dryFire
-      ? null
-      : (attackPayload.templateData?.ammoId ?? null),
+    attackerAmmoId,
     consumeSkillLight,
-    attackerDryFire:   attackPayload.templateData?.dryFire === true,
+    attackerAmmoPending,
+    attackerMovementPending,
+    attackerDryFire,
+    skipAttackerEconomy,
+    attackerConsume,
+    attackerOffTurn: attackerTiming.offTurn,
+    attackerAsReaction: attackerTiming.asReaction,
+    attackerTimingSource: attackerTiming.source,
+    attackerEconomyType,
+    attackerKind,
+    opportunityAttack: attackPayload.opportunityAttack === true,
+    movementId: attackPayload.movementId ?? null,
+    opportunityId: attackPayload.opportunityId ?? null,
+    reactorCombatantId: attackPayload.reactorCombatantId ?? null,
+    moverCombatantId: attackPayload.moverCombatantId ?? null,
+    opportunityPauseAt: attackPayload.pauseAt ?? attackPayload.opportunityPauseAt ?? null,
+    opportunityMessageId: attackPayload.opportunityMessageId ?? null,
+    movementActionId: attackPayload.movementActionId ?? null,
+    defensiveOnly: attackPayload.defensiveOnly === true,
+    movementRisk: attackPayload.movementRisk !== false,
+    resolutionComplete: attackPayload.resolutionComplete !== false,
   });
 
   await postAttackCard(state, null, tempMessage.id);
+  return { ok: true, state };
 }
 
 // ── Phase 2: Retaliate Button Clicked ────────────────────────────────────────
@@ -174,81 +288,259 @@ export async function initiateAttack(attackPayload) {
  * @returns {Promise<void>}
  */
 export async function handleRetaliateClick(state, { isIntercept = false } = {}) {
-  // Block if the clash is already in progress or resolved.
+  const { actor, tokenId } = isIntercept ? _getSelectedRetaliator() : _getClashTargetRetaliator(state);
+  if (isIntercept) {
+    // Block if the clash is already in progress or resolved.
+    if (state.phase !== CLASH_PHASES.PENDING) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.AlreadyRetaliating"));
+      return;
+    }
+    if (!actor || !canActAs(actor, tokenId)) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.NoOwnedActor"));
+      return;
+    }
+    if (!await showInterceptConfirmDialog(actor.name)) return;
+  }
+  return _retaliate(state, {
+    actor,
+    tokenId,
+    titleKey: isIntercept ? "PMTTRPG.Clash.InterceptTitle" : null,
+    intercept: isIntercept,
+    interceptionRequest: null,
+  });
+}
+
+export async function handleProtectClick(state) {
+  if (state?.phase !== CLASH_PHASES.PENDING) {
+    ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.AlreadyRetaliating"));
+    return;
+  }
+  const combat = clashCombat(state);
+  const attacker = resolveTokenOrWorldActor(state.attackerActorId, state.attackerTokenId);
+  const attackerItem = state.attackerItemId ? (attacker?.items.get(state.attackerItemId) ?? null) : null;
+  const ctx = interceptionContextFromClash(state, { combat, attackerItem });
+  const candidates = ctx ? listInterceptors(ctx) : [];
+  const mine = candidates.filter((candidate) => {
+    const actor = resolveTokenOrWorldActor(candidate.actorId, candidate.tokenId);
+    return actor && canActAs(actor, candidate.tokenId, game.user);
+  });
+  if (!mine.length) {
+    ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.ProtectUnavailable"));
+    return;
+  }
+  const chosen = mine.length === 1 ? mine[0] : await _pickProtector(mine);
+  if (!chosen) return;
+  const actor = resolveTokenOrWorldActor(chosen.actorId, chosen.tokenId);
+  return _retaliate(state, {
+    actor,
+    tokenId: chosen.tokenId,
+    allowedTypes: chosen.allowedDefenses,
+    titleKey: "PMTTRPG.Clash.ProtectTitle",
+    interceptionRequest: {
+      sourceId: chosen.sourceId,
+      combatantId: chosen.combatantId,
+      tokenId: chosen.tokenId,
+      actorId: chosen.actorId,
+      itemId: null,
+    },
+  });
+}
+
+async function _retaliate(state, {
+  actor,
+  tokenId,
+  allowedTypes = null,
+  titleKey = null,
+  intercept = false,
+  interceptionRequest = null,
+} = {}) {
   if (state.phase !== CLASH_PHASES.PENDING) {
     ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.AlreadyRetaliating"));
     return;
   }
-
-  const { actor: retaliatorActor, tokenId: retaliatorTokenId } = isIntercept
-    ? _getSelectedRetaliator()
-    : _getClashTargetRetaliator(state);
-
-  if (!retaliatorActor) {
-    ui.notifications.warn(game.i18n.localize(
-      isIntercept ? "PMTTRPG.Clash.NoOwnedActor" : "PMTTRPG.Clash.NoClashTarget"
-    ));
+  if (!actor) {
+    ui.notifications.warn(game.i18n.localize(interceptionRequest ? "PMTTRPG.Clash.ProtectUnavailable" : "PMTTRPG.Clash.NoClashTarget"));
     return;
   }
-
-  if (!canActAs(retaliatorActor, retaliatorTokenId)) {
-    ui.notifications.warn(game.i18n.localize(
-      isIntercept ? "PMTTRPG.Clash.NoOwnedActor" : "PMTTRPG.Clash.NotTargetOwner"
-    ));
+  if (!canActAs(actor, tokenId)) {
+    ui.notifications.warn(game.i18n.localize(interceptionRequest ? "PMTTRPG.Clash.ProtectUnavailable" : "PMTTRPG.Clash.NotTargetOwner"));
     return;
   }
-
-  if (isIntercept) {
-    const confirmed = await showInterceptConfirmDialog(retaliatorActor.name);
-    if (!confirmed) return;
-  }
-
-  const choice = await showRetaliationDialog(retaliatorActor, state, { isIntercept, retaliatorTokenId });
-  if (!choice) return;
-  if (choice.type === RETALIATION_TYPES.RECYCLED_EVADE && !getRecycledEvade(retaliatorActor)) {
-    ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.RecycledEvadeGone"));
-    return;
-  }
-
-  if (choice.type === RETALIATION_TYPES.COUNTER && PMTTRPGUtility.isRangedWeapon(choice.item)) {
-    const ammoPick = await promptRangedCounterAmmo(retaliatorActor, choice.item);
-    if (!ammoPick) return;
-    choice.ammo = ammoPick.ammo;
-    choice.consumeAmmo = ammoPick.consumeAmmo;
-    choice.dryFire = ammoPick.dryFire;
-  }
-
-  if (!canConsumeAppliedTool(choice.appliedTool, choice.consumeAppliedTool !== false)) {
-    ui.notifications.warn(game.i18n.localize("PMTTRPG.Dialog.noToolUses"));
-    return;
-  }
-
-  // Lock the card immediately so no one else retaliates.
-  state.phase               = CLASH_PHASES.ROLLING;
-  state.retaliatorActorId   = retaliatorActor.id;
-  state.retaliatorTokenId   = retaliatorTokenId;
-  state.retaliatorName      = retaliatorActor.name;
-  state.retaliatorImg       = retaliatorActor.img;
-  state.retaliationItemId   = choice.item?.id ?? null;
-  state.retaliatorItemName  = _retaliatorItemLabel(choice);
-  state.retaliationType     = choice.type;
-  state.retaliatorAmmoId    = choice.dryFire ? null : (choice.ammo?.id ?? null);
-  state.retaliatorSkillId   = choice.skillItem?.id ?? null;
-  state.retaliatorAppliedToolId = choice.skillItem ? null : (choice.appliedTool?.id ?? null);
-
+  if (_retaliationInFlight.has(state.attackMessageId)) return;
+  _retaliationInFlight.add(state.attackMessageId);
   try {
-    await updateAttackCard(state.attackMessageId, state);
-    await _executeClash(state, retaliatorActor, choice);
-  } catch (error) {
-    console.error("[PMTTRPG] Clash execution failed", error);
-    _unlockClashState(state);
-    try {
-      await updateAttackCard(state.attackMessageId, state);
-    } catch (updateError) {
-      console.warn("[PMTTRPG] Failed to revert clash card after error", updateError);
+    const retaliationCombat = clashCombat(state);
+    const choice = await showRetaliationDialog(actor, state, {
+      retaliatorTokenId: tokenId,
+      defensiveOnly: state.defensiveOnly === true,
+      allowedTypes,
+      titleKey,
+      protectedName: interceptionRequest ? state.targetName : null,
+      combat: retaliationCombat,
+    });
+    if (!choice) return;
+    if (allowedTypes && !allowedTypes.includes(retaliationDefenseKind(choice.type))) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.ProtectUnavailable"));
+      return;
     }
-    ui.notifications.error(game.i18n.localize("PMTTRPG.Clash.ExecutionFailed"));
+    if (choice.type === RETALIATION_TYPES.RECYCLED_EVADE && !getRecycledEvade(actor)) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.RecycledEvadeGone"));
+      return;
+    }
+    if (choice.type === RETALIATION_TYPES.COUNTER && PMTTRPGUtility.isRangedWeapon(choice.item)) {
+      const ammoPick = await promptRangedAmmo(actor, choice.item, {
+        shootLabel: game.i18n.localize("PMTTRPG.Clash.Counter"),
+      });
+      if (!ammoPick) return;
+      choice.ammo = ammoPick.ammo;
+      choice.consumeAmmo = ammoPick.consumeAmmo;
+      choice.dryFire = ammoPick.dryFire;
+    }
+    if (!canConsumeAppliedTool(choice.appliedTool, choice.consumeAppliedTool !== false)) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Dialog.noToolUses"));
+      return;
+    }
+    if (choice.consumeReaction !== false && !canPayRetaliation(actor, choice.type, choice.item, { tokenId, state, combat: retaliationCombat })) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.OptionUnavailable"));
+      return;
+    }
+    // Lock the card immediately so no one else retaliates.
+    const claim = await _claimRetaliation(state.attackMessageId, {
+      retaliatorActor: actor,
+      retaliatorTokenId: tokenId,
+      choice,
+      intercept,
+      interceptionRequest: interceptionRequest
+        ? { ...interceptionRequest, itemId: choice.item?.id ?? null }
+        : null,
+    });
+    if (!claim.ok) {
+      let key = "PMTTRPG.Clash.AlreadyRetaliating";
+      if (interceptionRequest && (claim.reason === "interception-invalid" || claim.reason === "not-owner")) key = "PMTTRPG.Clash.ProtectUnavailable";
+      else if (intercept && claim.reason === "not-owner") key = "PMTTRPG.Clash.NoOwnedActor";
+      else if (!interceptionRequest && claim.reason === "not-owner") key = "PMTTRPG.Clash.NotTargetOwner";
+      ui.notifications.warn(game.i18n.localize(key));
+      return;
+    }
+    try {
+      await _executeClash(claim.state, actor, choice);
+    } catch (error) {
+      console.error("[PMTTRPG] Clash execution failed", error);
+      unlockClashState(claim.state);
+      const saved = await persistClashState(claim.state);
+      // The ATTACK gets marked on the state before any other cost is paid. These tell us
+      // if anything was paid.
+      const paid = claim.state.skipAttackerEconomy === true
+        || claim.state.attackerEconomyCommitted === true
+        || (claim.state.defenderEconomyCommitments?.length ?? 0) > 0;
+      if (saved) {
+        ui.notifications.error(game.i18n.localize(paid ? "PMTTRPG.Clash.ExecutionFailed" : "PMTTRPG.Clash.ExecutionFailedUnpaid"));
+      }
+    }
+  } finally {
+    _retaliationInFlight.delete(state.attackMessageId);
   }
+}
+
+const _retaliationInFlight = new Set();
+
+async function _pickProtector(candidates) {
+  const rows = candidates.map((candidate) => {
+    const actor = resolveTokenOrWorldActor(candidate.actorId, candidate.tokenId);
+    return { id: candidate.combatantId, name: actor?.name ?? candidate.combatantId };
+  });
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/projectmoonttrpg/templates/dialog/protect-interceptor-picker.hbs",
+    { rows, i18n: { hint: game.i18n.localize("PMTTRPG.Clash.ProtectPick") } },
+  );
+  const id = await waitForWindowChoice({
+    window: { title: game.i18n.localize("PMTTRPG.Clash.ProtectTitle") },
+    content: html,
+    buttons: [
+      cancelButton(),
+      confirmButton((_event, _button, dialog) => dialog.element.querySelector("[name='combatantId']:checked")?.value ?? null),
+    ],
+    rejectClose: false,
+  });
+  return candidates.find((candidate) => candidate.combatantId === id) ?? null;
+}
+
+async function _claimRetaliation(messageId, { retaliatorActor, retaliatorTokenId, choice, intercept = false, interceptionRequest = null }) {
+  const patch = {
+    retaliatorActorId: retaliatorActor.id,
+    retaliatorTokenId,
+    retaliatorName: retaliatorActor.name,
+    retaliatorImg: retaliatorActor.img,
+    retaliationItemId: choice.item?.id ?? null,
+    retaliatorItemName: _retaliatorItemLabel(choice),
+    retaliationType: choice.type,
+    retaliatorAmmoId: choice.dryFire ? null : (choice.ammo?.id ?? null),
+    retaliatorSkillId: choice.skillItem?.id ?? null,
+    retaliatorAppliedToolId: choice.skillItem ? null : (choice.appliedTool?.id ?? null),
+    defenderConsume: choice.consumeReaction !== false,
+    interceptionRequest,
+  };
+  const { getPrimaryGM, runOnPrimaryGM } = await import("../easy-effects/gm-route.js");
+  const gm = getPrimaryGM();
+  if (!gm) _warnClaimWithoutGM();
+  return claimClashRetaliation({
+    readState: () => getClashStateFromMessage(messageId),
+    confirmClaim: (claimId) => _confirmClaim(messageId, claimId),
+    randomId: () => foundry.utils.randomID(),
+    commitClaim: async (claimId) => {
+      const payload = { messageId, claimId, patch, intercept };
+      if (gm && game.user.id !== gm.id) return runOnPrimaryGM("claimClashCard", payload);
+      return commitClashClaimAsGM(payload, { fromUserId: game.user.id });
+    },
+  });
+}
+
+let _claimWithoutGMWarned = false;
+function _warnClaimWithoutGM() {
+  if (_claimWithoutGMWarned) return;
+  _claimWithoutGMWarned = true;
+  const text = game.i18n.localize("PMTTRPG.Clash.NoPrimaryGM");
+  ui.notifications.warn(text);
+  console.warn(`[PMTTRPG] ${text}`);
+}
+
+/**
+ * Authors and GMs will update the message directly while everyone else relays
+ * through the GM. Unfortunately two claims relayed at the same time can still
+ * race (last write wins).
+ */
+function _confirmClaim(messageId, claimId) {
+  const message = game.messages.get(messageId);
+  if (!message) return "unconfirmed";
+
+  const judge = () => {
+    const current = getClashStateFromMessage(messageId);
+    if (current?.phase !== CLASH_PHASES.ROLLING || !current.claimId) return null;
+    return current.claimId === claimId ? "won" : "lost";
+  };
+
+  if (message.isAuthor || game.user.isGM) return judge() ?? "unconfirmed";
+
+  return new Promise((resolve) => {
+    let settled = false;
+    let hookId = null;
+    let timer = null;
+    const finish = (outcome) => {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      if (hookId != null) Hooks.off("updateChatMessage", hookId);
+      resolve(outcome);
+    };
+    hookId = Hooks.on("updateChatMessage", (updated) => {
+      if (updated?.id !== messageId) return;
+      const outcome = judge();
+      if (outcome) finish(outcome);
+    });
+    timer = setTimeout(() => finish("unconfirmed"), CLAIM_CONFIRM_TIMEOUT_MS);
+    const immediate = judge();
+    if (immediate) finish(immediate);
+  });
 }
 
 // ── Phase 3: Execute Clash ────────────────────────────────────────────────────
@@ -257,12 +549,17 @@ export async function handleRetaliateClick(state, { isIntercept = false } = {}) 
  * Executes both sides of the clash, resolves the result, fires EasyEffects
  * hooks, and posts the result card.
  *
+ * The order is resource preflight, ATTACK declaration, the attacker's secondary
+ * resources, defender Reactions, the defender's secondary resources,
+ * [On Clash Start], then the dice. If something fails here then nothing will roll.
+ *
  * @param {ClashStateData} state
  * @param {ActorPMTTRPG}   retaliatorActor
  * @param {RetaliationChoice} choice
- * @returns {Promise<void>}
+ * @returns {Promise<{ ok: boolean, reason?: string }>}
  */
 async function _executeClash(state, retaliatorActor, choice) {
+  const combat = clashCombat(state);
   const attackerActor = resolveClashCombatant(state.attackerActorId, state.attackerTokenId);
   let attackerItem   = attackerActor?.items.get(state.attackerItemId) ?? null;
   const appliedTool  = state.appliedToolId
@@ -296,13 +593,148 @@ async function _executeClash(state, retaliatorActor, choice) {
     state.retaliationType = RETALIATION_TYPES.EVADE;
     ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.RecycledEvadeGone"));
   }
-  if (!isRecycled && REACTIONS_THAT_CLEAR_RECYCLED.has(choice.type)) {
-    await clearRecycledEvade(retaliatorActor);
-  }
 
   const defenderSkill = choice.skillItem ?? null;
   let defenderAppliedTool = choice.skillItem ? null : (choice.appliedTool ?? null);
   const defenderAmmo = (choice.dryFire || !choice.ammo) ? null : choice.ammo;
+
+  const attackerPreflight = preflightAttackerResources(state, { attackerAmmo });
+  if (!attackerPreflight.ok) {
+    return _abortClash(state, { key: "PMTTRPG.Clash.AmmoUnavailable", reason: attackerPreflight.reason });
+  }
+  const defenderPreflight = preflightDefenderResources(choice);
+  if (!defenderPreflight.ok) {
+    return _abortClash(state, { key: "PMTTRPG.Clash.AmmoUnavailable", reason: defenderPreflight.reason });
+  }
+  if (defenderAppliedTool && !canConsumeAppliedTool(defenderAppliedTool, choice.consumeAppliedTool !== false)) {
+    return _abortClash(state, { key: "PMTTRPG.Dialog.noToolUses", reason: "tool-unavailable" });
+  }
+
+  const counterDryFire = choice.type === RETALIATION_TYPES.COUNTER
+    && (PMTTRPGUtility.isRangedWeapon(choice.item) && (choice.dryFire === true || !choice.ammo));
+
+  // Rebuild clash context so EasyEffects On Clash can add bonuses before the roll.
+  // Built before the declarations, so the processors and [On Action] get the live clash too.
+  const clashCtx = createClashContext();
+  clashCtx.isRecycledEvade = isRecycled;
+  clashCtx.attackerReaction = state.attackerEconomyType === ECONOMY_TYPES.REACTION
+    || state.attackerAsReaction === true
+    || state.opportunityAttack === true;
+  clashCtx.defenderReaction = choice.type !== RETALIATION_TYPES.ONESIDED;
+  clashCtx.attackerSkill = attackerSkill;
+  clashCtx.defenderSkill = defenderSkill;
+  clashCtx.appliedTool = appliedTool;
+  clashCtx.defenderAppliedTool = defenderAppliedTool;
+  const defenderItem = choice.item ?? null;
+
+  const liveInterception = revalidateInterception(state, {
+    combat,
+    retaliationType: choice.type,
+    actor: retaliatorActor,
+    item: choice.item ?? null,
+    fromUser: game.user,
+    attackerItem,
+    requireAffordable: !!state.interception && choice.consumeReaction !== false,
+  });
+  if (state.interception && !liveInterception.ok) {
+    return _abortClash(state, { key: "PMTTRPG.Clash.ProtectUnavailable", reason: liveInterception.reason });
+  }
+  if (state.interception && String(retaliatorActor?.id ?? "") !== String(liveInterception.interception?.interceptorActorId ?? "")) {
+    return _abortClash(state, { key: "PMTTRPG.Clash.ProtectUnavailable", reason: "interceptor-mismatch" });
+  }
+  const defenderCombatant = combatantForReactionToken(retaliatorActor, state.retaliatorTokenId, combat);
+  const coverCheck = canTargetWithAttack({
+    attackerItem,
+    targetCombatant: defenderCombatant,
+    combat,
+  });
+  if (!coverCheck.ok) {
+    return _abortClash(state, { key: "PMTTRPG.Attack.TargetInFullCover", reason: "full-cover" });
+  }
+  clashCtx.interception = liveInterception.interception
+    ? { ...liveInterception.interception }
+    : null;
+
+  const attackerEconomy = await declareClashAttackerEconomy({
+    state,
+    attackerActor,
+    attackerItem,
+    retaliatorActor,
+    clash: clashCtx,
+    declare: declareActorAction,
+    combat,
+  });
+  if (attackerEconomy.required && !attackerEconomy.ok) {
+    return _abortClash(state, {
+      key: clashEconomyAbortKey(attackerEconomy.reason, "PMTTRPG.Clash.AttackerCannotPay"),
+      data: { name: attackerActor?.name ?? state.attackerName ?? "" },
+      reason: "attacker-economy",
+    });
+  }
+  if (attackerEconomy.ok && attackerEconomy.declaration) {
+    markAttackerEconomyCommitted(state, attackerEconomy.declaration);
+    if (!(await persistClashState(state))) {
+      return { ok: false, reason: "economy-persist-failed" };
+    }
+  }
+
+  // Attacker resources get paid right after the ATTACK. If the defender's declaration
+  // fails, the retry only redoes the defense.
+  const attackerResources = await commitAttackerResources(state, {
+    attackerActor,
+    attackerSkill,
+    attackerAmmo,
+    consumeAmmunition: consumeAmmunitionCharge,
+    spendSkillLight: _spendSkillLight,
+    exhaustMovement: exhaustRemainingSquares,
+  });
+  if (!attackerResources.ok) {
+    console.error("[PMTTRPG] attacker resources failed after ATTACK declaration", attackerResources.error);
+    return _abortClash(state, { key: "PMTTRPG.Clash.ResourceCommitFailed", reason: "attacker-resources", error: true });
+  }
+
+  const defenderEconomy = await declareClashDefenderEconomy({
+    state,
+    retaliatorActor,
+    attackerActor,
+    choice,
+    isRecycled,
+    clash: clashCtx,
+    declare: declareActorAction,
+    combat,
+  });
+  if (defenderEconomy.required && !defenderEconomy.ok) {
+    return _abortClash(state, {
+      key: clashEconomyAbortKey(defenderEconomy.reason, "PMTTRPG.Clash.DefenderCannotPay"),
+      data: { name: retaliatorActor?.name ?? "" },
+      reason: "defender-economy",
+    });
+  }
+  if (defenderEconomy.declaration) {
+    markDefenderEconomyCommitted(state, {
+      ...defenderEconomy.identity,
+      declaration: defenderEconomy.declaration,
+    });
+    if (!(await persistClashState(state))) {
+      return { ok: false, reason: "economy-persist-failed" };
+    }
+  }
+
+  // An Opportunity Attack still gets its grant even though its economy was paid somewhere else.
+  await applyClashAssist({
+    state,
+    choice,
+    attackerCombatant: resolveClashAttackerCombatant(state, attackerActor, combat),
+    retaliatorCombatant: combatantForReactionToken(retaliatorActor, state.retaliatorTokenId, combat),
+    clash: clashCtx,
+    combat,
+    consume: claimAssistForRoll,
+    warn: () => ui.notifications.warn(game.i18n.localize("PMTTRPG.Assist.Unavailable")),
+  });
+
+  if (!isRecycled && REACTIONS_THAT_CLEAR_RECYCLED.has(choice.type)) {
+    await clearRecycledEvade(retaliatorActor);
+  }
   if (attackerSkill) {
     Hooks.callAll("pmttrpg.skillUseStart", { actor: attackerActor, skillItem: attackerSkill });
   }
@@ -315,14 +747,7 @@ async function _executeClash(state, retaliatorActor, choice) {
 
   // Consume ammo once for the Counter Reaction.
   if (choice.ammo && choice.consumeAmmo) {
-    const qty = Number(choice.ammo.system?.quantity ?? 0);
-    if (qty > 0) {
-      const { runAsOwnerOrGM } = await import("../easy-effects/gm-route.js");
-      await runAsOwnerOrGM(choice.ammo.actor ?? retaliatorActor, "updateOwnedItem", {
-        itemUuid: choice.ammo.uuid,
-        update: { "system.quantity": Math.max(0, qty - 1) },
-      });
-    }
+    await consumeAmmunitionCharge(choice.ammo, { actor: retaliatorActor });
   }
 
   if (defenderAppliedTool) {
@@ -332,6 +757,7 @@ async function _executeClash(state, retaliatorActor, choice) {
     if (!ok) {
       ui.notifications.warn(game.i18n.localize("PMTTRPG.Dialog.noToolUses"));
       defenderAppliedTool = null;
+      clashCtx.defenderAppliedTool = null;
     } else {
       await emitAppliedToolHooks({
         actor: retaliatorActor,
@@ -343,17 +769,6 @@ async function _executeClash(state, retaliatorActor, choice) {
     }
   }
 
-  const counterDryFire = choice.type === RETALIATION_TYPES.COUNTER
-    && (PMTTRPGUtility.isRangedWeapon(choice.item) && (choice.dryFire === true || !choice.ammo));
-
-  // Rebuild clash context so EasyEffects On Clash can add bonuses before the roll.
-  const clashCtx = createClashContext();
-  clashCtx.isRecycledEvade = isRecycled;
-  clashCtx.attackerSkill = attackerSkill;
-  clashCtx.defenderSkill = defenderSkill;
-  clashCtx.appliedTool = appliedTool;
-  clashCtx.defenderAppliedTool = defenderAppliedTool;
-  const defenderItem = choice.item ?? null;
   const clashPayloadBase = {
     attacker:     attackerActor,
     defender:     retaliatorActor,
@@ -370,14 +785,6 @@ async function _executeClash(state, retaliatorActor, choice) {
     clash:        clashCtx,
   };
 
-  await _spendClashActionEconomy({
-    attackerActor,
-    retaliatorActor,
-    choice,
-    isRecycled,
-    clash: clashCtx,
-  });
-
   await emitClashStarted({ ...clashPayloadBase, side: "attacker" });
   await emitClashStarted({ ...clashPayloadBase, side: "defender" });
 
@@ -393,6 +800,8 @@ async function _executeClash(state, retaliatorActor, choice) {
     clashCtx.bonuses.defender.evadePower =
       (Number(clashCtx.bonuses.defender.evadePower) || 0) + recycledPowerPenalty(retaliatorActor);
   }
+  applyGrappleClashAdjustments(clashCtx, { state, choice, combat });
+  applyCoverClashAdjustments(clashCtx, { state, choice, attackerItem, combat });
 
   state.clashBonuses = foundry.utils.deepClone(clashCtx.bonuses);
 
@@ -584,6 +993,15 @@ async function _executeClash(state, retaliatorActor, choice) {
 
   await emitClashOutcome(resolvedPayload, hitPayload);
 
+  if (state.opportunityAttack) {
+    try {
+      const { finalizeOpportunityAttackFromClash } = await import("./opportunity/opportunity-attack.js");
+      await finalizeOpportunityAttackFromClash(state);
+    } catch (error) {
+      console.warn("[PMTTRPG] Opportunity Attack finalize failed", error);
+    }
+  }
+
   if (attackerSkill) {
     Hooks.callAll("pmttrpg.skillUseEnd", { actor: attackerActor, skillItem: attackerSkill });
   }
@@ -601,6 +1019,16 @@ async function _executeClash(state, retaliatorActor, choice) {
   if (hitPayload) {
     await emitAttackConnected(hitPayload);
   }
+
+  if (choice.breakFreeAfterHit && choice.type === RETALIATION_TYPES.ONESIDED) {
+    try {
+      const { runPostHitBreakFree } = await import("../grapple/break-free.js");
+      await runPostHitBreakFree({ retaliatorActor, retaliatorTokenId: state.retaliatorTokenId });
+    } catch (error) {
+      console.warn("[PMTTRPG] Break Free after the hit failed", error);
+    }
+  }
+  return { ok: true };
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -609,35 +1037,32 @@ function _isRangedWeapon(weapon) {
   return weapon?.system?.weaponType === "ranged";
 }
 
-/**
- * Spend Action (attacker) or Reaction (block / counter / evade) and run [On Action].
- */
-async function _spendClashActionEconomy({
-  attackerActor,
-  retaliatorActor,
-  choice,
-  isRecycled,
-  clash,
-}) {
-  const payload = {
-    attacker: attackerActor,
-    defender: retaliatorActor,
-    clash,
-  };
-  const silent = { warn: false };
-  if (attackerActor) {
-    await attackerActor.useActionEconomy("action", {
-      ...payload,
-      target: retaliatorActor,
-    }, silent);
+async function persistClashState(state) {
+  try {
+    await updateAttackCard(state.attackMessageId, state);
+    return true;
+  } catch (error) {
+    console.error("[PMTTRPG] clash economy could not be saved", error);
+    ui.notifications.error(game.i18n.localize("PMTTRPG.Clash.EconomyPersistFailed"));
+    return false;
   }
-  if (isRecycled || !retaliatorActor) return;
-  if (!REACTIONS_THAT_SPEND.has(choice?.type)) return;
-  await retaliatorActor.useActionEconomy("reaction", {
-    ...payload,
-    target: attackerActor,
-    reactionType: choice.type,
-  }, silent);
+}
+
+async function _abortClash(state, { key, data = {}, reason, error = false }) {
+  unlockClashState(state);
+  const saved = await persistClashState(state);
+  if (saved && key) {
+    const text = game.i18n.format(key, data);
+    if (error) ui.notifications.error(text);
+    else ui.notifications.warn(text);
+  }
+  console.warn("[PMTTRPG] Clash aborted before dice", {
+    messageId: state.attackMessageId,
+    reason: saved ? reason : "economy-persist-failed",
+    attackerEconomyCommitted: state.attackerEconomyCommitted === true,
+    defenderDeclarationIds: (state.defenderEconomyCommitments ?? []).map((entry) => entry?.declarationId ?? null),
+  });
+  return { ok: false, reason: saved ? reason : "economy-persist-failed" };
 }
 
 function _reactionAppliedToolActionType(type) {
@@ -738,18 +1163,6 @@ async function _spendSkillLight(actor, skill) {
       "system.attributes.light.value": Math.max(0, currentLight - lightCost),
     },
   });
-}
-
-function _unlockClashState(state) {
-  state.phase = CLASH_PHASES.PENDING;
-  state.retaliatorActorId = null;
-  state.retaliatorTokenId = null;
-  state.retaliatorName = null;
-  state.retaliatorImg = null;
-  state.retaliationItemId = null;
-  state.retaliatorItemName = null;
-  state.retaliationType = null;
-  state.retaliatorAmmoId = null;
 }
 
 function attackTokenId(actor, explicitTokenId = null) {

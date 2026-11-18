@@ -390,7 +390,8 @@ const CLASH_STANCE_ALIASES = {
   attack: "attack",
   attacks: "attack",
   offensive: "attack",
-  counter: "attack",
+  counter: "counter",
+  counters: "counter",
   block: "block",
   blocks: "block",
   evade: "evade",
@@ -404,18 +405,18 @@ const CLASH_STANCE_ALIASES = {
  * @param {string|null|undefined} retaliationType
  * @param {Item|null|undefined} defenderItem
  * @param {Item|null|undefined} [defenderSkill]
- * @returns {"attack"|"block"|"evade"|null}
+ * @returns {"counter"|"block"|"evade"|null}
  */
 export function resolveDefenderClashStance(retaliationType, defenderItem = null, defenderSkill = null) {
   const kind = String(retaliationType ?? "").toLowerCase();
   if (kind === "block") return "block";
   if (kind === "evade" || kind === "recycledevade") return "evade";
-  if (kind === "counter") return "attack";
+  if (kind === "counter") return "counter";
   if (kind === "skill") {
     const skillType = String((defenderSkill ?? defenderItem)?.system?.skillType ?? "attack").toLowerCase();
     if (skillType === "block") return "block";
     if (skillType === "evade") return "evade";
-    return "attack";
+    return "counter";
   }
   return null;
 }
@@ -430,7 +431,7 @@ export function resolveDefenderClashStance(retaliationType, defenderItem = null,
  *   defenderItem?: Item|null,
  *   defenderSkill?: Item|null,
  * }} payload
- * @returns {"attack"|"block"|"evade"|null}
+ * @returns {"attack"|"counter"|"block"|"evade"|null}
  */
 export function resolveActorClashStance(actor, payload = {}) {
   if (!actor) return null;
@@ -453,7 +454,7 @@ export function resolveActorClashStance(actor, payload = {}) {
 
 /**
  * @param {string} raw
- * @returns {{ matched: boolean, trigger: string, clashStanceFilter: { stance: "attack"|"block"|"evade"|"defense" }|null }}
+ * @returns {{ matched: boolean, trigger: string, clashStanceFilter: { stance: "attack"|"counter"|"block"|"evade"|"defense" }|null }}
  */
 export function normalizeClashStanceTrigger(raw) {
   const text = String(raw ?? "").trim();
@@ -495,6 +496,7 @@ export function matchesClashStanceFilter(filter, clashStance) {
   const got = String(clashStance).toLowerCase();
   const want = String(filter.stance).toLowerCase();
   if (want === "defense") return got === "block" || got === "evade";
+  if (want === "attack") return got === "attack" || got === "counter";
   return got === want;
 }
 

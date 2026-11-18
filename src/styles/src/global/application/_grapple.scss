@@ -1,0 +1,72 @@
+.pmttrpg-grapple-contest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pmttrpg-grapple-contest__header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+}
+
+.pmttrpg-grapple-contest__status {
+  margin: 0;
+}
+
+.pmttrpg-grapple-contest__status {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.pmttrpg-grapple-contest__choices {
+  display: flex;
+  gap: 0.4rem;
+
+  button {
+    flex: 1 1 0;
+  }
+}
+
+.pmttrpg-grapple-contest__totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.75rem;
+  margin: 0;
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.pmttrpg-grapple-contest__outcome {
+  margin: 0;
+  font-weight: 700;
+
+  &.is-won {
+    color: #3f8f5a;
+  }
+
+  &.is-failed {
+    color: #a33b2f;
+  }
+}
+
+.pmttrpg-grapple-upkeep__choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.pmttrpg-grapple-picker__pair {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}

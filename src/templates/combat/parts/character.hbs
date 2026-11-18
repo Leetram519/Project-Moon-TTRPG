@@ -38,11 +38,52 @@
                     <img class="faction-badge" src="{{actorData.system.details.badge}}" draggable="false" alt="">
                 {{/if}}
                 <span class="char-name">{{actorData.name}}</span>
+                {{#if returnsNextRound}}
+                    {{#unless delayControl}}
+                        <span class="delay-return" data-tooltip="{{localize "PMTTRPG.Delay.ReturnsNextRound"}}">{{localize "PMTTRPG.Delay.ReturnsNextRound"}}</span>
+                    {{/unless}}
+                {{/if}}
+                {{#*inline "actionStateBadgeBody"}}{{#if iconImg}}<img src="{{iconImg}}" alt="" draggable="false">{{else if iconFa}}<i class="fa-solid {{iconFa}}" aria-hidden="true"></i>{{else}}<span class="action-state-badge__text">{{label}}</span>{{/if}}{{/inline}}
+                {{#if actionStates.length}}
+                    <span class="action-state-strip" role="list" aria-label="{{localize "PMTTRPG.ActionState.StripLabel"}}">
+                        {{#each actionStates}}
+                        {{#if dismissible}}
+                        <button type="button" class="action-state-badge" role="listitem" data-action="dismissActionState" data-entry-id="{{id}}" data-tooltip-text="{{removeTooltip}}" aria-label="{{ariaLabel}}" draggable="false">
+                            {{> actionStateBadgeBody}}
+                        </button>
+                        {{else}}
+                        <span class="action-state-badge" role="listitem" data-tooltip-text="{{tooltip}}" aria-label="{{ariaLabel}}">
+                            {{> actionStateBadgeBody}}
+                        </span>
+                        {{/if}}
+                        {{/each}}
+                    </span>
+                {{/if}}
                 {{#ifEquals actorData.type 'npc'}}
                     <span class="npc-badge">{{localize "PMTTRPG.npc"}}</span>
                 {{/ifEquals}}
                 {{#if showNameRevealEye}}
                     <i class="fas fa-eye char-name-revealed" title="{{localize "PMTTRPG.Combat.TrackerRevealed"}}" aria-hidden="true"></i>
+                {{/if}}
+                {{#if delayControl}}
+                    <span class="delay-intent">
+                        <button
+                            type="button"
+                            class="delay-intent__arm"
+                            data-action="armDelay"
+                            data-tooltip="{{delayControl.title}}"
+                            aria-label="{{delayControl.aria}}"
+                        >{{delayControl.label}}</button>
+                        {{#if delayControl.armed}}
+                            <button
+                                type="button"
+                                class="delay-intent__cancel"
+                                data-action="cancelDelay"
+                                data-tooltip-text="{{delayControl.cancelAria}}"
+                                aria-label="{{delayControl.cancelAria}}"
+                            ><i class="fas fa-xmark" aria-hidden="true"></i></button>
+                        {{/if}}
+                    </span>
                 {{/if}}
             </div>
 

@@ -38,6 +38,10 @@ system:
     skillEffect: false
   customNotes: ''
   easyEffects: ''
+  reduceStatus:
+    type: pause
+    blocks:
+      - Burn
 effects: []
 sort: 200000
 ownership:

@@ -1,5 +1,6 @@
 import { PMTTRPGUtility } from "./utility.js";
 import { showWeaponRange, hideWeaponRange } from './canvas/token.js';
+import { waitForWindowChoice } from "./apps/dialog-wait.js";
 
 const { renderTemplate } = foundry.applications.handlebars;
 
@@ -93,6 +94,11 @@ function resolveSelfTokenDocument(actor, tokenDocument = null) {
   return actor?.getActiveTokens?.(true, true)?.[0] ?? null;
 }
 
+/** `weaponRange: null` means no range restriction. Despite its name, `outOfRange` is the one that holds the in-range result. */
+function isRangeEvaluated(weaponRange) {
+  return weaponRange !== null && weaponRange !== false;
+}
+
 function buildCombatantTarget(combatant, { actorId = null, selfTokenDocument = null, weaponRange = 1 } = {}) {
   // Always derive actor from token to handle unlinked tokens correctly
   const { token, actor } = PMTTRPGUtility.resolveTokenAndActor(combatant);
@@ -117,9 +123,11 @@ function buildCombatantTarget(combatant, { actorId = null, selfTokenDocument = n
     isSelf: selfTokenDocument
       ? combatant.tokenId === selfTokenDocument.id
       : (actorId ? actor.id === actorId : false),
-    outOfRange: selfTokenDocument
-      ? PMTTRPGUtility.isTargetInWeaponRange(selfTokenDocument.id, combatant.tokenId, { weaponRange })
-      : false,
+    outOfRange: !isRangeEvaluated(weaponRange)
+      ? true
+      : (selfTokenDocument
+        ? PMTTRPGUtility.isTargetInWeaponRange(selfTokenDocument.id, combatant.tokenId, { weaponRange })
+        : false),
   };
 }
 
@@ -198,9 +206,11 @@ function buildTargetFromToken(token, { actorId = null, selfTokenDocument = null,
     initiativeLabel: '-',
     isCurrent: false,
     isSelf: selfTokenDocument ? tokenId === selfTokenDocument.id : (actorId ? actor.id === actorId : false),
-    outOfRange: selfTokenDocument
-      ? PMTTRPGUtility.isTargetInWeaponRange(selfTokenDocument.id, tokenId, { weaponRange })
-      : false,
+    outOfRange: !isRangeEvaluated(weaponRange)
+      ? true
+      : (selfTokenDocument
+        ? PMTTRPGUtility.isTargetInWeaponRange(selfTokenDocument.id, tokenId, { weaponRange })
+        : false),
   };
 }
 
@@ -219,9 +229,20 @@ function getSelectedCombatantId(options = [], preferredCombatantId = null, comba
   const targetedIds = getUserTargetCombatantIds(options, combat);
   if (targetedIds.length) return targetedIds[0];
 
-  return options[0]?.combatantId ?? null;
+  return options.find(option => !option.isSelf)?.combatantId ?? null;
 }
 
+/**
+ * @param {object} [options]
+ * @param {number|null} [options.weaponRange=1]  `null` turns off range checks and the range grid.
+ * @param {object[]} [options.assistOptions]  Assist selector rows (`{ value, label, selected }`). If you
+ *   pass any then the dialog always shows so the roller can opt in.
+ * @param {boolean} [options.allowTargetShortcut=true]  false always opens the dialog, even with one targeted token.
+ * @param {boolean|null} [options.consumeAction]  The Attack's "Consume Action" default. The checkbox only shows for a boolean.
+ * @param {string|null} [options.consumeLabelKey]  Label for that checkbox, like Consume Reaction off turn.
+ * @returns {Promise<object|null|undefined>} The target, `undefined` if there's nothing to pick or they
+ *   chose No Target, and null on Cancel or a blocked target.
+ */
 export async function promptTargetSelection({
   actor = null,
   token = null,
@@ -234,8 +255,15 @@ export async function promptTargetSelection({
   allowNone = false,
   includeHidden = false,
   preferredCombatantId = null,
+  assistOptions = null,
+  isTargetBlocked = null,
+  consumeAction = null,
+  consumeLabelKey = null,
+  allowTargetShortcut = true,
 } = {}) {
   const selfTokenDocument = resolveSelfTokenDocument(actor, token?.document ?? token ?? null);
+  const rangeEvaluated = isRangeEvaluated(weaponRange);
+  const assistRows = Array.isArray(assistOptions) && assistOptions.length ? assistOptions : null;
 
   const options = getCombatantTargetOptions({
     combat,
@@ -247,22 +275,42 @@ export async function promptTargetSelection({
 
   const targetedTokens = getUserTargetedTokens();
 
-  if (targetedTokens.length === 1) {
-    return buildTargetFromToken(targetedTokens[0], {
+  if (allowTargetShortcut && targetedTokens.length === 1 && !assistRows) {
+    const fast = buildTargetFromToken(targetedTokens[0], {
       actorId: actor?.id ?? null,
       selfTokenDocument,
       combat,
       weaponRange,
     });
+    if (fast && typeof isTargetBlocked === "function") {
+      const reason = isTargetBlocked(fast);
+      if (reason) {
+        ui.notifications.warn(game.i18n.localize(reason));
+        return null;
+      }
+    }
+    if (fast && typeof consumeAction === "boolean") fast.consumeAction = consumeAction;
+    return fast;
   }
 
   if (!options.length) return undefined;
 
-  if (selfTokenDocument) {
+  if (selfTokenDocument && rangeEvaluated) {
     showWeaponRange(selfTokenDocument.id, weaponRange);
   }
+  const hideRange = () => {
+    if (selfTokenDocument && rangeEvaluated) hideWeaponRange(selfTokenDocument.id);
+  };
 
-  const selectedCombatantId = getSelectedCombatantId(options, preferredCombatantId, combat);
+  const rows = options.map(option => ({
+    ...option,
+    blockedReason: typeof isTargetBlocked === "function" ? (isTargetBlocked(option) || null) : null,
+  }));
+  const selectedCombatantId = getSelectedCombatantId(
+    rows.filter((option) => !option.blockedReason),
+    preferredCombatantId,
+    combat,
+  );
   const dialogData = {
     title,
     hint,
@@ -270,41 +318,27 @@ export async function promptTargetSelection({
       name: sourceName,
       img: sourceImg,
     },
-    options: options.map(option => ({
+    options: rows.map(option => ({
       ...option,
       isDefault: option.combatantId === selectedCombatantId,
     })),
     selectedCombatantId,
     allowNone,
+    assistOptions: assistRows,
+    assistLabel: assistRows ? game.i18n.localize('PMTTRPG.Assist.ChoiceLabel') : null,
+    showConsumeAction: typeof consumeAction === "boolean",
+    consumeAction: consumeAction !== false,
+    consumeLabelKey: consumeLabelKey || 'PMTTRPG.Dialog.consumeAction',
   };
 
   const html = await renderTemplate('systems/projectmoonttrpg/templates/dialog/target-roll-dialog.html', dialogData);
-  const dlgOptions = {
-    classes: ['projectmoonttrpg', 'PMTTRPG-dialog']
-  };
-
-  if (PMTTRPGUtility.nightmode) dlgOptions.classes.push('nightmode');
 
   const buttons = [{
-    action: 'select',
-    label: game.i18n.localize('PMTTRPG.Dialog.selectTarget'),
-    default: true,
-    callback: (event, button, dialog) => {
-      const form = dialog.element.querySelector('form');
-      const combatantId = form.combatantId?.value ?? selectedCombatantId;
-      if (selfTokenDocument) hideWeaponRange(selfTokenDocument.id);
-      return resolveCombatantTarget(combatantId, {
-        combat,
-        actorId: actor?.id ?? null,
-        selfTokenDocument,
-        weaponRange,
-      });
-    }
-  }, {
     action: 'cancel',
     label: game.i18n.localize('PMTTRPG.Dialog.cancel'),
     callback: () => {
-      if (selfTokenDocument) hideWeaponRange(selfTokenDocument.id);
+      hideRange();
+      return null;
     }
   }];
 
@@ -312,22 +346,50 @@ export async function promptTargetSelection({
     buttons.push({
       action: 'none',
       label: game.i18n.localize('PMTTRPG.Dialog.noTarget'),
-      callback: () => {
-        if (selfTokenDocument) hideWeaponRange(selfTokenDocument.id);
-      }
     });
   }
 
-  return foundry.applications.api.DialogV2.wait({
+  buttons.push({
+    action: 'select',
+    label: game.i18n.localize('PMTTRPG.Dialog.selectTarget'),
+    default: true,
+    callback: (event, button, dialog) => {
+      const form = dialog.element.querySelector('form');
+      const combatantId = form.combatantId?.value ?? selectedCombatantId;
+      hideRange();
+      const resolved = resolveCombatantTarget(combatantId, {
+        combat,
+        actorId: actor?.id ?? null,
+        selfTokenDocument,
+        weaponRange,
+      });
+      if (resolved && typeof isTargetBlocked === "function") {
+        const reason = isTargetBlocked(resolved);
+        if (reason) {
+          ui.notifications.warn(game.i18n.localize(reason));
+          return null;
+        }
+      }
+      if (resolved && assistRows) {
+        resolved.assistEntryId = String(form.assistEntryId?.value ?? '').trim();
+      }
+      if (resolved && typeof consumeAction === "boolean") {
+        resolved.consumeAction = form.consumeAction ? !!form.consumeAction.checked : consumeAction;
+      }
+      return resolved;
+    }
+  });
+
+  const picked = await waitForWindowChoice({
     window: { title },
-    classes: dlgOptions.classes,
     content: html,
     buttons,
     rejectClose: false,
     close: () => {
-      if (selfTokenDocument) hideWeaponRange(selfTokenDocument.id);
+      hideRange();
     }
   });
+  return picked === 'none' ? undefined : picked;
 }
 
 export async function rollInitiative(actor, { macroMisc = null, manualMisc = null, combatant = null } = {}) {
@@ -394,7 +456,10 @@ export function buildAttackContextPayload({ actor = null, item = null, roll = nu
   const payload = {
     actor,
     actorId: actor?.id ?? null,
-    tokenId: actor?.token?.id ?? null,
+    token: actor?.token ?? null,
+    tokenId: templateData?.attackerTokenId ?? actor?.token?.id ?? null,
+    attackerCombatantId: templateData?.attackerCombatantId ?? null,
+    attackerAssistEntryId: templateData?.attackerAssistEntryId ?? null,
     item,
     itemId: item?.id ?? null,
     roll,

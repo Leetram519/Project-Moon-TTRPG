@@ -197,6 +197,28 @@
   opacity:    1;
 }
 
+.clash-btn--protect {
+  background:   #e0eeee;
+  border-color: #3d7f7f;
+  color:        #1f5a5a;
+}
+
+.clash-btn--protect:hover:not(:disabled) {
+  background:   #cfe4e4;
+  border-color: #2f6b6b;
+  box-shadow:   0 0 6px rgba(61, 127, 127, 0.3);
+}
+
+.clash-btn--protect:not([hidden]) ~ .clash-btn--intercept {
+  flex:    0 0 auto;
+  width:   auto;
+  padding: 0.4rem 0.6rem;
+}
+
+.clash-btn--protect:not([hidden]) ~ .clash-btn--intercept span {
+  display: none;
+}
+
 .clash-btn--disabled,
 .clash-btn:disabled {
   opacity:        0.5;
@@ -210,6 +232,10 @@
 
 .clash-result-card {
   background: #f9f9f9;
+}
+
+.message-content .clash-result-card .chat-damage-types {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .clash-result-card--attack-win {
@@ -512,6 +538,39 @@
   white-space: nowrap;
 }
 
+.clash-option--unavailable {
+  opacity: 0.55;
+  cursor:  not-allowed;
+}
+
+.clash-option--unavailable:hover {
+  border-color: transparent;
+}
+
+.clash-option__unavailable-tag {
+  margin-left: auto;
+  font-size:   0.7rem;
+  font-weight: 600;
+  color:       #c0392b;
+  white-space: nowrap;
+}
+
+.clash-card__status--committed {
+  font-size: 0.8rem;
+  opacity:   0.85;
+}
+
+.clash-card__economy,
+.clash-card__protect-line,
+.clash-result-card__protect-line {
+  display:    block;
+  margin:     0.25rem 0;
+  font-size:  0.75rem;
+  font-style: italic;
+  text-align: center;
+  opacity:    0.85;
+}
+
 .clash-range-notice {
   display:     flex;
   align-items: flex-start;
@@ -536,11 +595,20 @@
   margin: 0;
 }
 
-.clash-item-picker {
+.clash-item-picker,
+.clash-assist-picker {
   display:        flex;
   flex-direction: column;
   gap:            0.3rem;
   padding:        0.5rem;
+}
+
+.clash-skill-picker,
+.clash-tool-picker {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.3rem;
+  padding:        0 0.5rem;
 }
 
 .clash-item-picker__label {
@@ -553,9 +621,15 @@
 
 .clash-item-picker__select {
   border-radius:   3px;
-  color:           #191813;
+  color:           var(--sheet-ink);
+  background-color: rgba(17, 13, 10, 0.45);
   padding:         0.35rem;
   font-size:       0.85rem;
+}
+
+.clash-item-picker__select option {
+  color:      var(--sheet-ink);
+  background: var(--sheet-paper);
 }
 
 .clash-item-picker__select:focus {

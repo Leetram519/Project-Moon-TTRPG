@@ -1,0 +1,15 @@
+<div class="action-weapon-form">
+  <p class="action-weapon-form__hint">{{i18n.hint}}</p>
+  {{#unless leaveOnly}}
+  <div class="action-weapon-form__options">
+    <label class="action-menu-option">
+      <input type="radio" name="cover" value="half" checked>
+      <span class="action-menu-option__label">{{i18n.half}}</span>
+    </label>
+    <label class="action-menu-option">
+      <input type="radio" name="cover" value="full">
+      <span class="action-menu-option__label">{{i18n.full}}</span>
+    </label>
+  </div>
+  {{/unless}}
+</div>

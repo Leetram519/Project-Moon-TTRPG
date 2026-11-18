@@ -1,0 +1,54 @@
+{{#if showModes}}
+<fieldset class="pm-window__tabs">
+  <legend class="pm-window__hidden">{{localize "PMTTRPG.ActionMenu.ReduceStatus"}}</legend>
+  {{#each modes}}
+  <label class="pm-window__tab">
+    <input type="radio" name="mode" value="{{id}}" id="{{@root.partId}}-mode-{{id}}" {{checked checked}}>
+    <span>{{localize labelKey}}</span>
+  </label>
+  {{/each}}
+</fieldset>
+{{else}}
+<input type="hidden" name="mode" value="{{mode}}">
+{{/if}}
+
+{{#if standard}}
+<section class="pm-reduce-status__panel" {{#unless standard.active}}data-inactive{{/unless}}>
+  <p class="action-weapon-form__hint">{{i18nFormat "PMTTRPG.ActionMenu.ReduceStatusBudgetHint" budget=standard.budget}}</p>
+  <ul class="pm-reduce-status__rows">
+    {{#each standard.rows}}
+    <li class="pm-reduce-status__row">
+      {{#if img}}<img class="action-menu-option__img" src="{{img}}" alt="">{{/if}}
+      <label class="action-menu-option__text" for="{{@root.partId}}-{{field}}">
+        <span class="action-menu-option__label">{{name}}</span>
+        <span class="action-menu-option__detail">{{localize "PMTTRPG.ActionMenu.ReduceStatusStacks"}} {{stacks}}</span>
+      </label>
+      <input type="number" name="{{field}}" id="{{@root.partId}}-{{field}}" min="0" max="{{stacks}}" step="1" value="{{value}}" {{disabled (not @root.standard.active)}}>
+    </li>
+    {{/each}}
+  </ul>
+  <p class="pm-reduce-status__allocated" {{#if standard.over}}data-over{{/if}}>
+    {{localize "PMTTRPG.ActionMenu.ReduceStatusAllocated"}} <strong>{{standard.allocated}}</strong> / {{standard.budget}}
+  </p>
+</section>
+{{/if}}
+
+{{#if pause}}
+<section class="pm-reduce-status__panel" {{#unless pause.active}}data-inactive{{/unless}}>
+  <p class="action-weapon-form__hint">{{i18nFormat "PMTTRPG.ActionMenu.ReduceStatusPauseHint" budget=pause.budget}}</p>
+  <div class="action-weapon-form__options">
+    {{#each pause.rows}}
+    <label class="action-menu-option">
+      <input type="radio" name="pauseItemId" value="{{itemId}}" id="{{@root.partId}}-pause-{{itemId}}" {{checked (and checked @root.pause.active)}} {{disabled (not @root.pause.active)}}>
+      {{#if img}}<img class="action-menu-option__img" src="{{img}}" alt="">{{/if}}
+      <span class="action-menu-option__text">
+        <span class="action-menu-option__label">{{name}}</span>
+        <span class="action-menu-option__detail">{{localize "PMTTRPG.ActionMenu.ReduceStatusStacks"}} {{stacks}} → {{after}}</span>
+      </span>
+    </label>
+    {{/each}}
+  </div>
+</section>
+{{/if}}
+
+{{> "systems/projectmoonttrpg/templates/apps/parts/reactive-dialog-footer.hbs"}}

@@ -10,10 +10,13 @@ import {
   getClashApplyTarget,
   resolveClashCombatant,
   enhanceClashRollBreakdown,
+  enhanceClashProtectControls,
+  enhanceClashRetaliateControls,
   emitChatUpdate,
 } from "./combat/clash-chat.js";
 import { getClashDamageSourceRef } from "./combat/clash-state.js";
 import { actorFromSpeaker } from "./acting-user.js";
+import { buildChatDamageOptions, dispatchChatDamage } from "./damage-source.js";
 
 export const displayChatActionButtons = function(message, html, data) {
   const chatCard = html.querySelector?.(".PMTTRPG.chat-card") ?? null;
@@ -24,7 +27,7 @@ export const displayChatActionButtons = function(message, html, data) {
     if (!el.dataset.damageType && isSelectableDamageType(flaggedType)) {
       el.dataset.damageType = flaggedType;
       el.querySelectorAll("button.dtype").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.damageType === flaggedType);
+        btn.classList.toggle("active", flaggedType !== "none" && btn.dataset.damageType === flaggedType);
       });
     }
   });
@@ -42,6 +45,8 @@ export const displayChatActionButtons = function(message, html, data) {
   const root = html?.[0] ?? html;
   if (root?.querySelector?.(".clash-card")) {
     enhanceClashRollBreakdown(message, root);
+    enhanceClashProtectControls(message, root);
+    enhanceClashRetaliateControls(message, root);
   }
 
   if ( chatCard && chatCard.length > 0 ) {
@@ -163,9 +168,12 @@ function _chatActionSetDamageType(button) {
   if (!root) return;
   const damageType = button.dataset.damageType;
   if (!isSelectableDamageType(damageType)) return;
-  root.dataset.damageType = damageType;
+  const next = damageType === "none" || root.dataset.damageType === damageType
+    ? "none"
+    : damageType;
+  root.dataset.damageType = next;
   root.querySelectorAll("button.dtype").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.damageType === damageType);
+    btn.classList.toggle("active", next !== "none" && btn.dataset.damageType === next);
   });
 }
 
@@ -311,13 +319,10 @@ function _resolveClashDamageAmount(state, pools, message) {
 }
 
 async function _chatActionDamage(message, action, button) {
-  let actors = canvas.tokens.controlled.map(t => t.document.actor).filter(Boolean);
-  if (!actors.length) return;
-
   const root = button?.closest?.(".chat-damage-buttons");
   const pools = _readSelectedPools(root);
   const damageType = _resolveDamageType(message, root);
-  let rollTotal = Number($(message.content).find('.dice-total')?.first()?.text()?.trim()) || 0;
+  const rollTotal = Number($(message.content).find('.dice-total')?.first()?.text()?.trim()) || 0;
   const attacker = actorFromSpeaker(message.speaker);
 
   const opByAction = {
@@ -329,17 +334,30 @@ async function _chatActionDamage(message, action, button) {
   const op = opByAction[action];
   if (!op) return;
 
-  for (const actor of actors) {
-    await actor.applyDamage(rollTotal, {
-      pool: pools.length === 1 ? pools[0] : pools,
-      op,
-      damageType,
-      attacker: op === "heal" ? null : attacker,
-      healer: op === "heal" ? attacker : undefined,
-      sourceLabel: message.speaker?.alias ?? attacker?.name ?? null,
-      fromAttack: op !== "heal",
-    });
-  }
+  const options = buildChatDamageOptions({
+    op,
+    pools,
+    damageType,
+    attacker,
+    speakerAlias: message.speaker?.alias,
+    flags: message.flags,
+  });
+  const card = button.closest(".chat-card");
+  const pin = card && "damageActorUuid" in card.dataset ? card.dataset.damageActorUuid : undefined;
+  const controlled = pin === undefined ? _controlledTokenActors() : [];
+  await dispatchChatDamage({
+    pin,
+    controlled,
+    fromUuid,
+    amount: rollTotal,
+    options,
+    applyDirect: (actor, amount, damageOptions) => actor.applyDamage(amount, damageOptions),
+    route: async (actor, amount, damageOptions) => {
+      const { runAsOwnerOrGM } = await import("./easy-effects/gm-route.js");
+      return runAsOwnerOrGM(actor, "applyDamage", { amount, options: damageOptions });
+    },
+    warn: () => ui.notifications.warn(game.i18n.localize("PMTTRPG.DamageTaken.PinnedTargetMissing")),
+  });
 }
 
 async function _chatActionRevertDamage(message, button) {

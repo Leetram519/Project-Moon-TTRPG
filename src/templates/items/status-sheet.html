@@ -47,6 +47,58 @@
               <input type="number" name="system.priority" value="{{system.priority}}" data-dtype="Number" min="0" max="100" step="1" {{#unless editable}}readonly{{/unless}}/>
             </div>
 
+            <div class="resource vertical reduce-status-config">
+              <label>{{localize "PMTTRPG.StatusReduceStatus"}}</label>
+              <div class="reduce-status-config__type">
+                <label>{{localize "PMTTRPG.StatusReduceStatusType"}}</label>
+                <select name="system.reduceStatus.type" data-dtype="String" {{#unless editable}}disabled{{/unless}}>
+                  {{selectOptions selects.reduceStatusType selected=system.reduceStatus.type localize=true}}
+                </select>
+              </div>
+              <div class="help-text"><p>{{localize reduceStatusTypeHint}}</p></div>
+              {{#if (eq system.reduceStatus.type "pause")}}
+              <div class="reduce-status-config__blocks">
+                <label>{{localize "PMTTRPG.StatusReduceStatusBlocks"}}</label>
+                <div class="help-text"><p>{{localize "PMTTRPG.StatusReduceStatusBlocksHint"}}</p></div>
+                {{#if reduceStatusBlocks.length}}
+                <ul class="reduce-status-config__chips">
+                  {{#each reduceStatusBlocks}}
+                  <li class="reduce-status-config__chip">
+                    <span>{{this}}</span>
+                    {{#if ../editable}}
+                    <button type="button"
+                            class="reduce-status-config__remove"
+                            data-action="remove-reduce-status-block"
+                            data-index="{{@index}}"
+                            aria-label="{{localize "PMTTRPG.StatusReduceStatusRemoveBlock"}}">
+                      <i class="fas fa-times" inert></i>
+                    </button>
+                    {{/if}}
+                  </li>
+                  {{/each}}
+                </ul>
+                {{/if}}
+                {{#if editable}}
+                <div class="reduce-status-config__add">
+                  <input type="text"
+                         data-reduce-status-block-input
+                         list="reduce-status-block-suggestions-{{item.id}}"
+                         placeholder="{{localize "PMTTRPG.StatusReduceStatusBlockPlaceholder"}}"
+                         spellcheck="false"/>
+                  <datalist id="reduce-status-block-suggestions-{{item.id}}">
+                    {{#each reduceStatusBlockSuggestions}}
+                    <option value="{{this}}"></option>
+                    {{/each}}
+                  </datalist>
+                  <button type="button" data-action="add-reduce-status-block">
+                    {{localize "PMTTRPG.StatusReduceStatusAddBlock"}}
+                  </button>
+                </div>
+                {{/if}}
+              </div>
+              {{/if}}
+            </div>
+
             <div class="resource horizontal">
               <label data-tooltip="{{localize "PMTTRPG.ShowHoverDetailsHint"}}">{{localize "PMTTRPG.ShowHoverDetails"}}</label>
               <input type="checkbox" name="system.showHoverDetails" {{checked system.showHoverDetails}}/>

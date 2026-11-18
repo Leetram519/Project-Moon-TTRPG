@@ -1,6 +1,6 @@
 # effects
 
-> **JSDoc coverage: -85/10 symbols (-850%)**
+> **JSDoc coverage: -112/14 symbols (-800%)**
 
 ## `src/module/effects/effect-summary.js`
 
@@ -105,6 +105,42 @@
 
 ---
 
+### Function: `getEffectTriggerClass(effect = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `effect = {}` | — | — |
+
+---
+
+### Function: `stripOuterBlockTags(html = "")`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `html = ""` | — | — |
+
+---
+
+### Function: `buildInlineEffectSummary(effect = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `effect = {}` | — | — |
+
+---
+
 ### Function: `computeEffectSummary(entries = [], epMax = 0)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -127,3 +163,27 @@
 | Name | Type | Description |
 |------|------|-------------|
 | `rawEffects = []` | — | — |
+
+---
+
+## `src/module/effects/effect-autocomplete.js`
+
+### Class: `EffectAutocomplete`
+
+EffectAutocomplete — single-select, close-on-pick.
+
+Each effect object:
+{
+  id:          string,
+  name:        string,
+  icon:        string,          // must be a src link
+  source:      string,
+  epCost:      number | null,   // null is displayed as "not specified" and has a value of 0.
+  tags: [{ name: string, icon?: string }]
+}
+
+Usage:
+  const ac = new EffectAutocomplete(el, {
+    effects: [...],
+    onSelect: (effect) => { ... }   // called with the full effect object
+  });

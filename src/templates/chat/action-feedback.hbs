@@ -1,0 +1,7 @@
+<p class="action-feedback">
+  <span class="action-feedback__action">{{actionLabel}}</span>
+  {{~#if targetName}} <span class="action-feedback__target">→ {{targetName}}</span>{{/if}}
+  {{~#if detail}}<span class="action-feedback__sep">&nbsp;·</span> <span class="action-feedback__detail">{{detail}}</span>{{/if}}
+  {{~#if economyLabel}}<span class="action-feedback__sep">&nbsp;·</span> <span class="action-feedback__economy">{{economyLabel}}</span>{{/if}}
+  {{~#each notes}}<span class="action-feedback__sep">&nbsp;·</span> <span class="action-feedback__note">{{this}}</span>{{/each}}
+</p>

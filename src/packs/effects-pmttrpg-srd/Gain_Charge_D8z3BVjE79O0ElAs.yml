@@ -40,7 +40,8 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Use]
-    gain N Charge;
+    require (clash.recycled) == 0 then gain N Charge;
+    require (clash.recycled) == 1 then gain (N // 2) Charge;
   allowMultiple: true
 effects: []
 sort: 0

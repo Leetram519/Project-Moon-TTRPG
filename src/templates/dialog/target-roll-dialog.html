@@ -1,39 +1,56 @@
 <div class="target-roll-dialog">
-  <form>
-    <div class="dialog-summary">
-      <div class="dialog-summary__weapon">
-        {{#if source.img}}<img class="dialog-summary__icon" src="{{source.img}}" title="{{source.name}}" alt="{{source.name}}"/>{{/if}}
-        <div class="dialog-summary__body">
-          <h3>{{#if source.name}}{{source.name}}{{else}}{{localize "PMTTRPG.Dialog.targetingTitle"}}{{/if}}</h3>
-          <div class="dialog-summary__meta">
-            <span class="tag">{{localize "PMTTRPG.Dialog.chooseTargetHint"}}</span>
-          </div>
+  <div class="dialog-summary">
+    <div class="dialog-summary__weapon">
+      {{#if source.img}}<img class="dialog-summary__icon" src="{{source.img}}" title="{{source.name}}" alt="{{source.name}}"/>{{/if}}
+      <div class="dialog-summary__body">
+        <h3>{{#if source.name}}{{source.name}}{{else}}{{localize "PMTTRPG.Dialog.targetingTitle"}}{{/if}}</h3>
+        <div class="dialog-summary__meta">
+          <span class="tag">{{localize "PMTTRPG.Dialog.chooseTargetHint"}}</span>
         </div>
       </div>
     </div>
+  </div>
 
-    {{#if options.length}}
-      <div class="target-choice-list">
-        {{#each options as |choice|}}
-          <label class="target-choice {{#if choice.isCurrent}}target-choice--current{{/if}} {{#ifEquals choice.outOfRange false}}target-choice--out-of-range{{/ifEquals}}">
-            <input type="radio" name="combatantId" value="{{choice.combatantId}}" {{#if choice.isDefault}}checked{{/if}} />
-            <img class="target-choice__icon" src="{{choice.img}}" title="{{choice.name}}" alt="{{choice.name}}"/>
-            <div class="target-choice__content">
-              <div class="target-choice__header">
-                <span class="target-choice__name">{{choice.name}}</span>
-                <span class="tag target-choice__initiative">{{choice.initiativeLabel}}</span>
-              </div>
-              <div class="target-choice__tags">
-                {{#if choice.isCurrent}}<span class="tag tag--current">{{localize "PMTTRPG.Dialog.currentTurn"}}</span>{{/if}}
-                {{#if choice.isSelf}}<span class="tag">{{localize "PMTTRPG.Dialog.selfTarget"}}</span>{{/if}}
-                {{#ifEquals choice.outOfRange false}}<span class="tag tag--out-of-range">{{localize "PMTTRPG.Dialog.outOfRange"}}</span>{{/ifEquals}}
-              </div>
+  {{#if options.length}}
+    <div class="target-choice-list">
+      {{#each options as |choice|}}
+        <label class="target-choice {{#if choice.isCurrent}}target-choice--current{{/if}} {{#ifEquals choice.outOfRange false}}target-choice--out-of-range{{/ifEquals}}">
+          <input type="radio" name="combatantId" value="{{choice.combatantId}}" {{#if choice.isDefault}}checked{{/if}} {{#if choice.blockedReason}}disabled{{/if}} />
+          <img class="target-choice__icon" src="{{choice.img}}" title="{{choice.name}}" alt="{{choice.name}}"/>
+          <div class="target-choice__content">
+            <div class="target-choice__header">
+              <span class="target-choice__name">{{choice.name}}</span>
+              <span class="tag target-choice__initiative">{{choice.initiativeLabel}}</span>
             </div>
-          </label>
+            <div class="target-choice__tags">
+              {{#if choice.isCurrent}}<span class="tag tag--current">{{localize "PMTTRPG.Dialog.currentTurn"}}</span>{{/if}}
+              {{#if choice.isSelf}}<span class="tag">{{localize "PMTTRPG.Dialog.selfTarget"}}</span>{{/if}}
+              {{#ifEquals choice.outOfRange false}}<span class="tag tag--out-of-range">{{localize "PMTTRPG.Dialog.outOfRange"}}</span>{{/ifEquals}}
+              {{#if choice.blockedReason}}<span class="tag tag--out-of-range">{{localize choice.blockedReason}}</span>{{/if}}
+            </div>
+          </div>
+        </label>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="target-roll-dialog__empty">{{localize "PMTTRPG.Dialog.noCombatantsToTarget"}}</p>
+  {{/if}}
+
+  {{#if assistOptions}}
+    <div class="form-group assist-choice">
+      <label for="assistEntryId">{{assistLabel}}</label>
+      <select id="assistEntryId" name="assistEntryId" class="form-control">
+        {{#each assistOptions}}
+          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
         {{/each}}
-      </div>
-    {{else}}
-      <p class="target-roll-dialog__empty">{{localize "PMTTRPG.Dialog.noCombatantsToTarget"}}</p>
+      </select>
+    </div>
+  {{/if}}
+
+  {{#if showConsumeAction}}
+    <label class="consume-toggle">
+      <input type="checkbox" name="consumeAction" {{#if consumeAction}}checked{{/if}} />
+      <span>{{localize consumeLabelKey}}</span>
+    </label>
     {{/if}}
-  </form>
 </div>

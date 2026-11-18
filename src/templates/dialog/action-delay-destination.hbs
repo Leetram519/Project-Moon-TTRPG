@@ -1,0 +1,34 @@
+<div class="action-weapon-form delay-destination-form">
+  <p class="action-weapon-form__hint">{{hint}}</p>
+  {{#if rows.length}}
+  <fieldset class="delay-destination-form__group">
+    <legend>{{roundGroup}}</legend>
+    {{#each rows}}
+    <div class="delay-destination-row" data-delay-combatant="{{id}}">
+      <label class="action-menu-option">
+        <input type="radio" name="delayAfter" value="{{id}}" {{#if selected}}checked{{/if}}>
+        {{#if img}}<img class="action-menu-option__img" src="{{img}}" alt="">{{/if}}
+        <span class="delay-destination-row__text">
+          <span class="action-menu-option__label">{{name}}</span>
+          {{#if sharedName}}<span class="delay-destination-row__speed">{{speedLabel}}</span>{{/if}}
+          <span class="delay-destination-row__follow">{{follow}}</span>
+        </span>
+        <button type="button" class="delay-destination-row__locate" data-action="locateDelayToken" aria-label="{{locateAria}}" data-tooltip="{{locateAria}}">
+          <i class="fas fa-arrows-to-dot" aria-hidden="true"></i>
+        </button>
+      </label>
+    </div>
+    {{/each}}
+  </fieldset>
+  {{/if}}
+  <fieldset class="delay-destination-form__group">
+    <legend>{{nextRoundGroup}}</legend>
+    <label class="action-menu-option">
+      <input type="radio" name="delayAfter" value="nextRound" {{#if nextRoundSelected}}checked{{/if}}>
+      <span class="delay-destination-row__text">
+        <span class="action-menu-option__label">{{nextRound}}</span>
+        <span class="delay-destination-row__follow">{{nextRoundHint}}</span>
+      </span>
+    </label>
+  </fieldset>
+</div>

@@ -1,15 +1,18 @@
 {{#if showUse}}
 <button type="button" class="item-control rollable tool-use" data-action="rollable" data-item-id="{{itemId}}" title='{{localize "PMTTRPG.UseTool"}}' aria-label='{{localize "PMTTRPG.UseTool"}}'><i class="fas fa-hand-sparkles" aria-hidden="true"></i></button>
 {{/if}}
-{{!-- readiness: handless = worn, 1H/2H = held. One toggle either way. --}}
+{{!-- readiness: handless = worn, 1H/2H = held. The button opens the carry menu. --}}
+{{#*inline "carryLabel"}}{{#if equipped}}{{#if (eq handProperty "handless")}}{{localize "PMTTRPG.CarryState.Worn"}}{{else if (eq handProperty "twoHanded")}}{{localize "PMTTRPG.CarryState.Held2H"}}{{else}}{{localize "PMTTRPG.CarryState.Held1H"}}{{/if}}{{else if dropped}}{{localize "PMTTRPG.CarryState.Dropped"}}{{else}}{{localize "PMTTRPG.CarryState.Stowed"}}{{/if}}{{/inline}}
 <button type="button"
-        class="item-control tool-equip{{#if equipped}} tool-equip--on{{else}} tool-equip--stowed{{/if}}"
+        class="item-control tool-equip{{#if equipped}} tool-equip--on{{else if dropped}} tool-equip--dropped{{else}} tool-equip--stowed{{/if}}"
         data-action="itemEquip"
         data-item-id="{{itemId}}"
-        title="{{#if equipped}}{{localize "PMTTRPG.ToolStow"}}{{else if (eq handProperty "handless")}}{{localize "PMTTRPG.ToolWear"}}{{else if (eq handProperty "twoHanded")}}{{localize "PMTTRPG.ToolHold2H"}}{{else}}{{localize "PMTTRPG.ToolHold1H"}}{{/if}}"
-        aria-label="{{#if equipped}}{{localize "PMTTRPG.ToolStow"}}{{else if (eq handProperty "handless")}}{{localize "PMTTRPG.ToolWear"}}{{else if (eq handProperty "twoHanded")}}{{localize "PMTTRPG.ToolHold2H"}}{{else}}{{localize "PMTTRPG.ToolHold1H"}}{{/if}}"
-        aria-pressed="{{#if equipped}}true{{else}}false{{/if}}">
-  {{#if (eq handProperty "handless")}}
+        title="{{> carryLabel}}"
+        aria-label="{{> carryLabel}}"
+        aria-haspopup="menu">
+  {{#if (and dropped (not equipped))}}
+  <i class="fa-solid fa-grip-lines" aria-hidden="true"></i>
+  {{else if (eq handProperty "handless")}}
   <i class="fa-solid fa-shirt" aria-hidden="true"></i>
   {{else}}
   <span class="tool-equip__hands" aria-hidden="true">

@@ -4,6 +4,17 @@ const { renderTemplate } = foundry.applications.handlebars;
 import { initiateAttack } from "./combat/clashing.js";
 import { findCombatant } from "./combat/combatant-match.js";
 import { promptRangedAmmo } from "./combat/clash-dialog.js";
+import { isWeaponHeldForAttack } from "./action-economy/attack-eligibility.js";
+import {
+  assistChoiceOptions,
+  claimAssistForRoll,
+  resolveAssistRecipient,
+} from "./action-economy/assist.js";
+import { addRollModeSources, applyRollModeFormula, resolveRollMode, rollModeCountsFromSticky, rollModeSourcesNoteKey } from "./roll-mode.js";
+import { rangedCoverBlock } from "./action-economy/cover.js";
+import { checkWorkflowTiming } from "./action-economy/timing.js";
+import { ACTION_KINDS, ECONOMY_TYPES } from "./action-economy/kinds.js";
+import { waitForChoice } from "./apps/dialog-wait.js";
 
 export class PMTTRPGRolls {
 
@@ -45,7 +56,7 @@ export class PMTTRPGRolls {
   static getSkillOptions(actor, skillType) {
     if (!actor) return [];
 
-    const items = actor.items.filter(item => skillType === 'attack' ? item.type === 'weapon' : item.type === 'outfit') ?? [];
+    const items = actor.items.filter(item => skillType === 'attack' ? isWeaponHeldForAttack(item) : item.type === 'outfit') ?? [];
     const isAttack = skillType === 'attack';
 
     return items
@@ -98,7 +109,7 @@ export class PMTTRPGRolls {
 
     if (PMTTRPGUtility.nightmode) dlgOptions.classes.push('nightmode');
 
-    return foundry.applications.api.DialogV2.wait({
+    return waitForChoice({
       window: { title: game.i18n.format('PMTTRPG.Dialog.skillRollTitle', { skill: skill.name }) },
       position: { width: 440 },
       classes: dlgOptions.classes,
@@ -173,12 +184,21 @@ export class PMTTRPGRolls {
         dryFire = ammoPick.dryFire;
       }
 
+      const assistRecipient = resolveAssistRecipient(actor, {});
+      const attackTiming = checkWorkflowTiming(actor, {
+        combatant: assistRecipient,
+        tokenId: assistRecipient?.tokenId ?? actor.token?.id ?? null,
+      }, { economyType: ECONOMY_TYPES.ACTION, kind: ACTION_KINDS.ATTACK });
       const targetSelection = await PMTTRPGTargetingAPI.promptTargetSelection({
         actor,
         title: skill.name,
         sourceName: hostItem.name,
         sourceImg: skill.img,
         preferredCombatantId: game.combat?.combatant?.id ?? null,
+        assistOptions: assistRecipient ? assistChoiceOptions(assistRecipient) : [],
+        isTargetBlocked: hostItem.system?.weaponType === "ranged" ? rangedCoverBlock(hostItem) : null,
+        consumeAction: game.combat?.started ? true : null,
+        consumeLabelKey: attackTiming.asReaction ? "PMTTRPG.Dialog.consumeReaction" : null,
       });
       if (targetSelection === null) return false;
 
@@ -192,6 +212,8 @@ export class PMTTRPGRolls {
         declaredSkill: skill,
         consumeSkillLight: promptResult.consumeLight,
         targetSelection,
+        tokenId: assistRecipient?.tokenId ?? actor.token?.id ?? null,
+        consumeAction: targetSelection?.consumeAction ?? true,
       });
     }
 
@@ -222,10 +244,15 @@ export class PMTTRPGRolls {
     });
   }
 
-  static async promptStatRoll(abilityLabel, rollMode = 'def') {
+  static async promptStatRoll(abilityLabel, rollMode = 'def', { assistOptions = null, rollModeSources = null } = {}) {
+    const assistRows = Array.isArray(assistOptions) && assistOptions.length ? assistOptions : null;
+    const noteKey = rollModeSourcesNoteKey(rollModeSources);
     let dialogData = {
       abilityLabel,
-      rollMode
+      rollMode,
+      rollModeNote: noteKey ? game.i18n.localize(noteKey) : null,
+      assistOptions: assistRows,
+      assistLabel: assistRows ? game.i18n.localize('PMTTRPG.Assist.ChoiceLabel') : null,
     };
     const html = await renderTemplate('systems/projectmoonttrpg/templates/dialog/stat-roll-dialog.html', dialogData);
     const dlgOptions = {
@@ -234,7 +261,7 @@ export class PMTTRPGRolls {
 
     if (PMTTRPGUtility.nightmode) dlgOptions.classes.push('nightmode');
 
-    return foundry.applications.api.DialogV2.wait({
+    return waitForChoice({
       window: { title: game.i18n.format('PMTTRPG.Dialog.statRollTitle', { ability: abilityLabel }) },
       classes: dlgOptions.classes,
       content: html,
@@ -244,7 +271,11 @@ export class PMTTRPGRolls {
         default: true,
         callback: (event, button, dialog) => {
           const form = dialog.element.querySelector('form');
-          return { rollMode: form.advantage.value, modifier: Number(form.modifier.value) || 0 };
+          return {
+            rollMode: form.advantage.value,
+            modifier: Number(form.modifier.value) || 0,
+            assistEntryId: String(form.assistEntryId?.value ?? '').trim() || null,
+          };
         }
       }, {
         action: 'cancel',
@@ -255,24 +286,63 @@ export class PMTTRPGRolls {
     });
   }
 
-  static async doStatRoll({ actor, stat, label = null, templateData = {}, statModifier = 0 } = {}) {
+  static async doStatRoll({
+    actor,
+    stat,
+    label = null,
+    templateData = {},
+    statModifier = 0,
+    tokenId = null,
+    combatant = null,
+    rollModeSources = null,
+    returnResult = false,
+  } = {}) {
     if (!actor || !stat) return false;
+    const choices = await this.collectStatRollChoices({ actor, stat, label, tokenId, combatant, rollModeSources });
+    if (!choices) return false;
+    return this.rollStatWithChoices({ actor, stat, choices, templateData, statModifier, rollModeSources, returnResult });
+  }
 
+  static async collectStatRollChoices({ actor, stat, label = null, tokenId = null, combatant = null, rollModeSources = null } = {}) {
+    if (!actor || !stat) return null;
+    const recipient = resolveAssistRecipient(actor, { tokenId, combatant });
+    const assistOptions = recipient ? assistChoiceOptions(recipient) : [];
+
+    const abilityLabel = label ?? game.i18n.localize(`PMTTRPG.${stat.toUpperCase()}`);
+    const rollDialog = await this.promptStatRoll(abilityLabel, actor.flags?.projectmoonttrpg?.rollMode ?? 'def', { assistOptions, rollModeSources });
+    if (!rollDialog) return null;
+
+    await actor.setFlag('projectmoonttrpg', 'rollMode', rollDialog.rollMode);
+    return { stat, rollDialog, recipient, recipientId: recipient?.id ?? null };
+  }
+
+  static async rollStatWithChoices({
+    actor,
+    stat,
+    choices,
+    templateData = {},
+    statModifier = 0,
+    rollModeSources = null,
+    returnResult = false,
+  } = {}) {
+    if (!actor || !stat || !choices?.rollDialog) return false;
     this.actor = actor;
     this.actorData = actor.system ?? {};
     this.item = null;
 
-    const abilityLabel = label ?? game.i18n.localize(`PMTTRPG.${stat.toUpperCase()}`);
-    const rollDialog = await this.promptStatRoll(abilityLabel, actor.flags?.projectmoonttrpg?.rollMode ?? 'def');
-    if (!rollDialog) return false;
-
-    await this.actor.setFlag('projectmoonttrpg', 'rollMode', rollDialog.rollMode);
-
+    const rollDialog = choices.rollDialog;
+    const recipient = choices.recipient
+      ?? (choices.recipientId ? game.combat?.combatants.get(choices.recipientId) ?? null : null);
     return this.rollMove({
       actor,
       formula: stat,
       templateData,
-      statModifier: Number(statModifier) + rollDialog.modifier
+      statModifier: Number(statModifier) + (Number(rollDialog.modifier) || 0),
+      assist: rollDialog.assistEntryId && recipient
+        ? { combatant: recipient, entryId: rollDialog.assistEntryId, combat: game.combat ?? null }
+        : null,
+      rollModeSources,
+      returnResult,
     });
   }
 
@@ -306,6 +376,11 @@ export class PMTTRPGRolls {
     // Grab the stat modifier (from stat roll dialog), if any.
     let statModifier = options?.statModifier ?? 0;
     const onBeforeChat = typeof options?.onBeforeChat === "function" ? options.onBeforeChat : null;
+    // the Assist grant picked for this one roll: { combatant, entryId, combat }
+    const assist = options?.assist?.entryId && options.assist.combatant ? options.assist : null;
+    // extra Advantage/Disadvantage sources the caller adds for just this roll
+    const extra = { rollModeSources: options?.rollModeSources ?? null };
+    const returnResult = options?.returnResult === true;
 
     // Prepare template data for the roll.
     let templateData = options.templateData ? foundry.utils.duplicate(options.templateData): {};
@@ -333,23 +408,24 @@ export class PMTTRPGRolls {
           }, templateData
         );
         data.roll = this.item.system.offensiveDiceComputed;
-        this.rollMoveExecute(data.roll, data, templateData, null, statModifier, onBeforeChat);
+        this.rollMoveExecute(data.roll, data, templateData, null, statModifier, onBeforeChat, assist, extra);
       }
       else if (this.item.type == 'outfit') {
-        this.rollMoveExecute(formula, data, templateData, null, statModifier, onBeforeChat);
+        this.rollMoveExecute(formula, data, templateData, null, statModifier, onBeforeChat, assist, extra);
       }
     }
     else {
-      this.rollMoveExecute(formula, data, templateData, null, statModifier, onBeforeChat);
+      const pending = this.rollMoveExecute(formula, data, templateData, null, statModifier, onBeforeChat, assist, extra);
+      if (returnResult) return pending;
     }
   }
 
-  static async rollMoveExecute(roll, dataset, templateData, form = null, statModifier = 0, onBeforeChat = null) {
+  static async rollMoveExecute(roll, dataset, templateData, form = null, statModifier = 0, onBeforeChat = null, assist = null, extra = {}) {
+    let rolledResult = null;
     // Render the roll.
     let template = 'systems/projectmoonttrpg/templates/chat/chat-move.html';
     let dice = PMTTRPGUtility.getRollFormula('2d6');
     let forwardUsed = false;
-    let rollModeUsed = false;
     let resultRangeNeeded = false;
     let rollData = this.actor.getRollData();
     // GM rolls.
@@ -431,40 +507,33 @@ export class PMTTRPGRolls {
         }
 
         // Handle adv/dis.
-        let rollMode = this.actor.flags?.projectmoonttrpg?.rollMode ?? 'def';
-        switch (rollMode) {
-          case 'adv':
-            rollModeUsed = true;
-            if (formula.includes('2d6')) {
-              formula = formula.replace('2d6', '{2d6, 2d6}kh');
-            }
-            else if (formula.includes('d6')) {
-              // Match the first d6 as (n)d6.
-              formula = formula.replace(/(\d*)(d6)/, (match, p1, p2, offset, string) => {
-                let count = keep + 1;
-                return `{${count}d6, ${count}d6}kh`; // Ex: 2d6 -> 3d6kh2
-              });
-            }
-            break;
+        const stickyMode = this.actor.flags?.projectmoonttrpg?.rollMode ?? 'def';
+        const counts = rollModeCountsFromSticky(stickyMode);
 
-          case 'dis':
-            rollModeUsed = true;
-            if (formula.includes('2d6')) {
-              formula = formula.replace('2d6', '{2d6, 2d6}kl');
-            }
-            else if (formula.includes('d6')) {
-              formula = formula.replace(/(\d*)(d6)/, (match, p1, p2, offset, string) => {
-                let count = keep + 1;
-                return `{${count}d6, ${count}d6}kl`;
-              });
-            }
-            break;
+        const deferredAttack = !!(templateData?.attackRoll && templateData?.target && this.item);
+        if (assist && !deferredAttack) {
+          let claimed = false;
+          try {
+            claimed = await claimAssistForRoll({
+              combatant: assist.combatant,
+              entryId: assist.entryId,
+              combat: assist.combat ?? game.combat ?? null,
+            });
+          } catch (error) {
+            console.warn("[PMTTRPG] Assist claim failed", error);
+          }
+          if (claimed) counts.advantage += 1;
+          else ui.notifications.warn(game.i18n.localize("PMTTRPG.Assist.Unavailable"));
         }
+        addRollModeSources(counts, extra.rollModeSources);
+
+        formula = applyRollModeFormula(formula, resolveRollMode(counts));
 
         // Append the modifiers.
         let modifiers = PMTTRPGRolls.getModifiers(this.actor);
         formula = `${formula}${modifiers}`;
-        forwardUsed = Number(this.actor.system.attributes?.forward?.value) != 0;
+        const rawForward = this.actor.system.attributes?.forward?.value;
+        forwardUsed = rawForward != null && rawForward !== "" && Number(rawForward) !== 0;
       }
       if (formula != null) {
         // Defer targeted weapon rolls until someone retaliates.
@@ -493,7 +562,7 @@ export class PMTTRPGRolls {
         await (roll.evaluate());
         let rollType = templateData.rollType ?? 'none';
         // Add success notification.
-        if (resultRangeNeeded) {
+        if (resultRangeNeeded && templateData.opposed !== true) {
           // Retrieve the result ranges.
           let resultRanges = CONFIG.PMTTRPG.rollResults;
           let resultType = null;
@@ -529,6 +598,7 @@ export class PMTTRPGRolls {
           templateData.resultLabel = resultRanges[resultType]?.label ?? resultType;
           templateData.result = resultType;
         }
+        rolledResult = { roll, total: roll.total, resultType: templateData.result ?? null };
 
         if (typeof onBeforeChat === "function") {
           try {
@@ -621,7 +691,7 @@ export class PMTTRPGRolls {
     // Update the combat flags.
     if (game.combat && game.combat.combatants) {
       const tokenId = this.actor?.token?.id ?? null;
-      let combatant = findCombatant({
+      const combatant = findCombatant({
         combatants: game.combat.combatants,
         tokenId,
         actorId: tokenId || this.actor?.isToken ? null : this.actor?.id,
@@ -643,13 +713,9 @@ export class PMTTRPGRolls {
     }
 
     // Update forward.
-    if (forwardUsed || rollModeUsed) {
-      let updates = {};
-      if (forwardUsed) updates['system.attributes.forward.value'] = 0;
-      if (rollModeUsed && game.settings.get('projectmoonttrpg', 'advForward')) {
-        updates['flags.projectmoonttrpg.rollMode'] = 'def';
-      }
-      await this.actor.update(updates);
+    if (forwardUsed) {
+      await this.actor.update({ 'system.attributes.forward.value': 0 });
     }
+    return rolledResult;
   }
 }

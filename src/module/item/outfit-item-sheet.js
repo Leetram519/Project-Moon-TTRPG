@@ -1,3 +1,4 @@
+import { RESISTANCE_DAMAGE_TYPE_CHOICES } from "../easy-effects/resistances.js";
 import { PMTTRPGItemSheet } from "./item-sheet.js";
 
 export class PMTTRPGOutfitItemSheet extends PMTTRPGItemSheet {
@@ -33,11 +34,7 @@ export class PMTTRPGOutfitItemSheet extends PMTTRPGItemSheet {
       ineffective: "PMTTRPG.ResistanceIneffective",
       immune: "PMTTRPG.ResistanceImmune"
     };
-    context.selects.damageTypes = {
-      slash: "PMTTRPG.DamageTypeSlash",
-      pierce: "PMTTRPG.DamageTypePierce",
-      blunt: "PMTTRPG.DamageTypeBlunt"
-    };
+    context.selects.damageTypes = { ...RESISTANCE_DAMAGE_TYPE_CHOICES };
 
     return context;
   }

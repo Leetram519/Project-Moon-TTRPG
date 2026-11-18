@@ -34,6 +34,8 @@ export function applyMathCall(name, args) {
       const [value, lo, hi] = nums;
       return Math.min(hi, Math.max(lo, value));
     }
+    case "abs":
+      return Math.abs(nums[0]);
     default:
       console.warn(`[EasyEffects] Unknown math function '${name}'`);
       return 0;

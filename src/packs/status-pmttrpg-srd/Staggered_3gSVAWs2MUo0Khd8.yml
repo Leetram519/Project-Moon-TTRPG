@@ -42,10 +42,16 @@ system:
     set flag "isStaggered" on self to 1;
     deal 5 sp damage to self;
     heal 1 light to self;
+    require hasStatus Staggered self == 1 then set action to 0 and set reaction to 0 and set movement to 0;
     proc Staggered on self;
 
     [Always Active]
     set resistances to fatal;
+
+    [Turn Start]
+    set action to 0;
+    set reaction to 0;
+    set movement to 0;
 
     [Start of Round]
     reduce flag "staggerRemain" on item by 1;
@@ -66,7 +72,13 @@ sort: 100000
 ownership:
   default: 0
   yWsvx4DXrmYcZsue: 3
-flags: {}
+flags:
+  projectmoonttrpg:
+    ruleContributions:
+      - subject: grapple
+        role: grappler
+        changes:
+          relationship.end: true
 _stats:
   coreVersion: '14.364'
   systemId: projectmoonttrpg

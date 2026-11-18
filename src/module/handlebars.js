@@ -34,6 +34,9 @@ export class PMTTRPGRegisterHelpers {
     );
 
     Handlebars.registerHelper("not", value => !value);
+    Handlebars.registerHelper("fallback", (value, replacement) => (
+      value == null || value === "" ? replacement : value
+    ));
 
     Handlebars.registerHelper("or", (...args) => {
       args.pop(); // options

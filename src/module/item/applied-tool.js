@@ -1,6 +1,7 @@
 import { PMTTRPGUtility } from "../utility.js";
 import { emitActorAction } from "../easy-effects/registry.js";
 import { canUseTool, consumeToolUse, getToolUsesRemaining, toolConsumesByDefault } from "./tool-use.js";
+import { waitForChoice } from "../apps/dialog-wait.js";
 const { renderTemplate } = foundry.applications.handlebars;
 
 export function isAppliedToolEligible(tool, applyTo) {
@@ -86,6 +87,7 @@ export async function emitAppliedToolHooks({
     item: tool,
     hostItem,
     actionType,
+    action: { reaction: false, kind: "tool", consumed: true, offTurn: false },
     target: target ?? null,
   });
 }
@@ -140,7 +142,7 @@ export async function promptAppliedToolDialog(actor, {
   const dlgOptions = { classes: ["projectmoonttrpg", "PMTTRPG-dialog"] };
   if (PMTTRPGUtility.nightmode) dlgOptions.classes.push("nightmode");
 
-  return foundry.applications.api.DialogV2.wait({
+  return waitForChoice({
     window: { title: game.i18n.localize("PMTTRPG.Dialog.chooseAppliedTool") },
     classes: dlgOptions.classes,
     content: html,

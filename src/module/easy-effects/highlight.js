@@ -7,7 +7,7 @@ const ACTIONS = new Set([
   "advantage", "disadvantage", "let",
 ]);
 
-const CALLS = new Set(["min", "max", "clamp"]);
+const CALLS = new Set(["min", "max", "clamp", "abs"]);
 const TAGS = new Set(["instant"]);
 
 const HOSTS = new Set([
@@ -25,19 +25,22 @@ const PATH_SEGMENTS = new Set([
   "uuid", "name", "id",
   "attr", "stat", "rank",
   "hp", "st", "sp", "light",
+  "reaction", "kind", "consumed", "offturn", "recycled", "reactionsused",
   ...HOSTS,
 ]);
 
 const KEYWORDS = new Set([
   ...[...LEXER_KEYWORDS].map((word) => word.toLowerCase()),
-  "action", "actions", "reaction", "reactions",
+  "action", "actions", "reaction", "reactions", "reactionsused",
+  "universal", "block", "evade", "counter", "opportunity", "defensive", "any", "or", "this",
   "movement", "square", "squares", "sqr", "sqrs",
   "hp", "st", "sp", "light", "stagger", "sanity",
   "temphp", "tempst", "tempsp",
   "maxhp", "maxst", "maxsp", "maxlight",
+  "dashsquares", "reducestatusstacks",
   "resistance", "resistances",
   "fatal", "weak", "normal", "endured", "ineffective", "immune",
-  "slash", "pierce", "blunt",
+  "slash", "pierce", "blunt", "force",
   "incoming", "damage", "heal", "changed", "depleted", "moved", "clash", "burst",
   "round", "pendingroll", "flag",
   "status", "uuid", "name", "id", "origin",
@@ -61,7 +64,7 @@ function span(cls, text) {
 
 /*
  * After a dot, only known path fields are highlighted. User-defined keys stay
- * plain. min/max/clamp count as calls only when followed by `(` so names like
+ * plain. min/max/clamp/abs count as calls only when followed by `(` so names like
  * `dice max` and `self.hp.max` are not misclassified. (big brain ik)
  */
 export function classifyEasyEffectsIdent(

@@ -1,0 +1,4 @@
+{{#if reactionDisplay.hasCredits}}
+<span class="combat-economy__credit-badge" {{#if reactionDisplay.canEdit}}data-action="editReactionCredits"{{/if}} data-tooltip-class="pm-reaction-credit-tooltip"
+  data-tooltip-text="{{i18nFormat "PMTTRPG.ReactionCredit.Available" n=reactionDisplay.effective}}{{#each reactionDisplay.groups as |credit|}}&#10;+{{credit.count}} {{credit.label}}{{/each}}">+{{reactionDisplay.credits}}</span>
+{{/if}}

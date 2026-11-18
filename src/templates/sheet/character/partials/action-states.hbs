@@ -1,0 +1,21 @@
+{{#*inline "actionStateBody"}}{{#if iconImg}}<img class="sheet-action-state__icon" src="{{iconImg}}" alt="" draggable="false">{{else if iconFa}}<i class="sheet-action-state__icon fa-solid {{iconFa}}" aria-hidden="true"></i>{{/if}}<span class="sheet-action-state__label">{{label}}</span>{{#if counterpartName}}<span class="sheet-action-state__counterpart">{{counterpartName}}</span>{{/if}}{{/inline}}
+<section class="equipment-section equipment-section--action-states">
+  <header class="tab-section-header tab-section-header--action-states">
+    <h3 class="tab-section-title">{{localize "PMTTRPG.ActionState.SheetTitle"}}</h3>
+    {{#if actionStates.length}}
+    <ul class="sheet-action-states">
+      {{#each actionStates as |state|}}
+      <li>
+        {{#if state.dismissible}}
+        <button type="button" class="sheet-action-state sheet-action-state--removable" data-action="dismissActionState" data-combatant-id="{{state.combatantId}}" data-entry-id="{{state.id}}" data-tooltip-text="{{state.removeTooltip}}">{{> actionStateBody state}}<i class="sheet-action-state__remove fa-solid fa-xmark" aria-hidden="true"></i></button>
+        {{else}}
+        <span class="sheet-action-state" data-tooltip-text="{{state.tooltip}}">{{> actionStateBody state}}</span>
+        {{/if}}
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <span class="tab-empty sheet-action-states__empty">{{localize "PMTTRPG.ActionState.SheetEmpty"}}</span>
+    {{/if}}
+  </header>
+</section>

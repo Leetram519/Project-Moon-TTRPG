@@ -1,0 +1,40 @@
+<div class="action-menu-form">
+  <div class="action-menu-form__groups">
+    {{#each groups}}
+    <section class="action-menu-form__group">
+      <h3 class="action-menu-form__heading">{{label}}</h3>
+      <div class="action-menu-form__options">
+        {{#each actions}}
+        <label class="action-menu-option{{#if custom}} action-menu-option--custom{{/if}}{{#if state}} action-menu-option--active{{/if}}{{#if disabled}} action-menu-option--disabled{{/if}}"{{#if disabledReason}} data-tooltip="{{disabledReason}}"{{/if}}>
+          <input type="radio" name="actionId" value="{{id}}" {{#if checked}}checked{{/if}} {{#if disabled}}disabled{{/if}}>
+          {{#if img}}<img class="action-menu-option__img" src="{{img}}" alt="">{{/if}}
+          {{#if custom}}
+          <span class="action-menu-option__text">
+            <span class="action-menu-option__label">{{label}}</span>
+            {{#if detail}}<span class="action-menu-option__detail">{{detail}}</span>{{/if}}
+          </span>
+          <span class="action-menu-option__meta">
+            {{#if optionsLabel}}<span class="action-menu-option__options">{{optionsLabel}}</span>{{/if}}
+            {{#if costLabel}}<span class="action-menu-option__cost">{{costLabel}}</span>{{/if}}
+          </span>
+          {{else}}
+          <span class="action-menu-option__label">{{label}}</span>
+          {{#if costLabel}}<span class="action-menu-option__meta"><span class="action-menu-option__cost">{{costLabel}}</span></span>{{/if}}
+          {{/if}}
+          {{#if state}}
+          <span class="action-menu-option__state" data-tooltip="{{state.tooltip}}" aria-label="{{state.ariaLabel}}">
+            {{#if state.iconFa}}<i class="fa-solid {{state.iconFa}}" aria-hidden="true"></i>{{/if}}
+            {{state.chip}}
+          </span>
+          {{/if}}
+        </label>
+        {{/each}}
+      </div>
+    </section>
+    {{/each}}
+  </div>
+  <label class="consume-toggle action-menu-form__consume" data-tooltip="{{i18n.consumeHint}}">
+    <input type="checkbox" name="consume" checked />
+    <span>{{i18n.consume}}</span>
+  </label>
+</div>

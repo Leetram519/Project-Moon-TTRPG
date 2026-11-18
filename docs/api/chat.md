@@ -1,6 +1,6 @@
 # chat
 
-> **JSDoc coverage: -95/11 symbols (-864%)**
+> **JSDoc coverage: -112/13 symbols (-862%)**
 
 ## `src/module/chat.js`
 
@@ -112,6 +112,31 @@
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 *No description provided.*
+
+---
+
+### Function: `_resolveDealerSourceItems(actor, ref)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `ref` | — | — |
+
+---
+
+### Function: `get(id)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `id` | — | — |
 
 ---
 

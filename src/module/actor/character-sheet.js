@@ -6,11 +6,33 @@ import { groupStatuses } from "../status/group-statuses.js";
 import { isPendingStatus } from "../status/pending.js";
 import { EasyEffectsEditor } from "../apps/easy-effects-editor.js";
 import { pmttrpgDialogClasses, pmttrpgDialogPosition } from "../apps/dialog-classes.js";
+import { cancelButton, confirmButton, waitForWindowChoice } from "../apps/dialog-wait.js";
 import { openEEFlagInspector } from "../apps/ee-flag-inspector.js";
 import { applyStatusFromDrop } from "../apps/status-drop-dialog.js";
-import { buildEffectiveResistanceDisplay, DAMAGE_TYPES } from "../damage-application.js";
+import { buildEffectiveResistanceDisplay, RESISTANCE_DAMAGE_TYPES } from "../damage-application.js";
 import { getDiceType } from "../integrations/dice-so-nice.js";
 import { sameActor } from "../easy-effects/burst-roles.js";
+import { declareManualEconomy, openActionMenu } from "../action-economy/action-menu.js";
+import { ACTION_KINDS, ECONOMY_TYPES } from "../action-economy/kinds.js";
+import { canPayDeclaration } from "../action-economy/declare.js";
+import {
+  applyHeldLoadoutTransitionForActor,
+  captureHeldWeaponIdsForActor,
+} from "../action-economy/held-weapon-reactions.js";
+import {
+  ACTING_PURPOSES,
+  combatantsActingFor,
+  resolveActingContext,
+  unlinkedTokenCombatants,
+} from "../action-economy/acting-token.js";
+import { prepareReactionDisplay } from "../action-economy/reaction-credits.js";
+import {
+  buildActionStateViews,
+  combatUpdateAffectsActionState,
+  confirmDismissActionState,
+  dismissActionState,
+} from "../action-economy/presentation.js";
+import { carryOptions, carryUpdate, openCarryMenu } from "./carry-menu.js";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -34,6 +56,56 @@ const TRACKER_DEFS = [
   { key: "sp", attr: "sp", icon: "SanityIcons_SanityBase.webp", labelKey: "PMTTRPG.TrackerSP"},
   { key: "lt", attr: "light", icon: "00_light.webp", labelKey: "PMTTRPG.TrackerLT" },
 ];
+
+function actorInCombat(actor) {
+  const combat = game.combat;
+  if (!combat?.started) return false;
+  return combatantsActingFor(actor, combat).length > 0 || unlinkedTokenCombatants(actor, combat).length > 0;
+}
+
+function canEditReactionCredits(actor) {
+  return (game.user.isGM || actor.isOwner) && actorInCombat(actor);
+}
+
+function sheetActionStates(combatant) {
+  if (!combatant) return [];
+  try {
+    return buildActionStateViews(combatant, { combat: combatant.combat ?? game.combat, user: game.user });
+  } catch (error) {
+    console.warn("[PMTTRPG] sheet action-state presentation failed", error);
+    return [];
+  }
+}
+
+async function confirmItemDelete(item) {
+  const answer = await waitForWindowChoice({
+    window: { title: game.i18n.format("PMTTRPG.Common.DeleteItemTitle", { name: item.name }) },
+    content: `<p>${game.i18n.localize("PMTTRPG.Common.DeleteItemConfirm")}</p>`,
+    buttons: [
+      cancelButton(),
+      confirmButton(() => true, { label: game.i18n.localize("PMTTRPG.Common.Delete"), icon: "fa-solid fa-trash" }),
+    ],
+    rejectClose: false,
+  });
+  return answer === true;
+}
+
+// the credits and action states live on the Combat and its Combatants (the sheet won't re-render for them on its own)
+export function registerSheetCombatRefresh() {
+  const renderSheets = (combatant) => combatant.actor?.render(false);
+  const renderCombat = (combat) => {
+    for (const combatant of combat.combatants) renderSheets(combatant);
+  };
+  Hooks.on("updateCombatant", (combatant, changed) => {
+    if (changed.flags?.projectmoonttrpg) renderSheets(combatant);
+  });
+  Hooks.on("createCombatant", (combatant) => renderSheets(combatant));
+  Hooks.on("deleteCombatant", (combatant) => renderSheets(combatant));
+  Hooks.on("updateCombat", (combat, changed) => {
+    if (combatUpdateAffectsActionState(changed)) renderCombat(combat);
+  });
+  Hooks.on("deleteCombat", (combat) => renderCombat(combat));
+}
 
 export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
@@ -80,6 +152,9 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
       rollable: PMTTRPGCharacterSheet.prototype._onRollable,
       initiativeRoll: PMTTRPGCharacterSheet.prototype._onInitiativeRoll,
       usedActionEconomy: PMTTRPGCharacterSheet.prototype._onUsedActionEconomy,
+      editReactionCredits: PMTTRPGCharacterSheet.prototype._onEditReactionCredits,
+      openActionMenu: PMTTRPGCharacterSheet.prototype._onOpenActionMenu,
+      dismissActionState: PMTTRPGCharacterSheet.prototype._onDismissActionState,
       toggleEdit: PMTTRPGCharacterSheet.prototype._onToggleEdit,
       toggleTracker: PMTTRPGCharacterSheet.prototype._onToggleTracker,
       itemCreate: PMTTRPGCharacterSheet.prototype._onItemCreate,
@@ -243,7 +318,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
         none: "PMTTRPG.OutfitPropertyNone", armored: "PMTTRPG.OutfitPropertyArmored",
         swift: "PMTTRPG.OutfitPropertySwift", balanced: "PMTTRPG.OutfitPropertyBalanced",
       },
-      damageTypes: { slash: "PMTTRPG.DamageTypeSlash", pierce: "PMTTRPG.DamageTypePierce", blunt: "PMTTRPG.DamageTypeBlunt" },
+      damageTypes: { slash: "PMTTRPG.DamageTypeSlash", pierce: "PMTTRPG.DamageTypePierce", blunt: "PMTTRPG.DamageTypeBlunt", force: "PMTTRPG.DamageTypeForce" },
       formPropertiesMelee: {
         small: "PMTTRPG.FormPropertySmall", medium: "PMTTRPG.FormPropertyMedium", long: "PMTTRPG.FormPropertyLong",
         sturdy: "PMTTRPG.FormPropertySturdy", hybrid: "PMTTRPG.FormPropertyHybridMelee",
@@ -359,6 +434,20 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
 
     context.equippedWeapons = (context.allWeapons ?? []).filter(w => w.system?.equipped);
     context.equippedOutfits = (context.outfits ?? []).filter(o => o.system?.equipped);
+    const shown = await resolveActingContext(this.actor, { sheetToken: this.token, purpose: ACTING_PURPOSES.DISPLAY });
+    context.reactionDisplay = prepareReactionDisplay(this.actor, {
+      combatant: shown?.actor === this.actor ? shown.combatant : null,
+      tokenId: shown?.tokenId ?? null,
+    });
+    context.reactionDisplay.canEdit = canEditReactionCredits(this.actor);
+    context.actionStates = sheetActionStates(shown?.actor === this.actor ? shown.combatant : null);
+    context.inCombat = actorInCombat(this.actor);
+    context.usedActionDisabled = context.inCombat && !canPayDeclaration(this.actor, {
+      economyType: ECONOMY_TYPES.ACTION,
+      kind: ACTION_KINDS.MANUAL,
+      combatant: shown?.actor === this.actor ? shown.combatant : null,
+      tokenId: shown?.tokenId ?? null,
+    });
 
     return context;
   }
@@ -514,7 +603,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     const buildRow = (pool, key, title) => ({
       key,
       title,
-      tiles: DAMAGE_TYPES.map(dmg => ({
+      tiles: RESISTANCE_DAMAGE_TYPES.map(dmg => ({
         dmg,
         icon: `${ASSET_PATH}/00_${dmg}.webp`,
         value: display?.[pool]?.[dmg] ?? "1x",
@@ -914,7 +1003,14 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     if (target.classList.contains("ability-rollable") && data.roll) {
       const flavorText = data.label;
       templateData = { title: flavorText, visualType: getDiceType(data.roll) };
-      return PMTTRPGRolls.doStatRoll({ actor: this.actor, stat: data.roll, label: flavorText, templateData });
+      const roller = await resolveActingContext(this.actor, { sheetToken: this.token, purpose: ACTING_PURPOSES.DISPLAY });
+      return PMTTRPGRolls.doStatRoll({
+        actor: this.actor,
+        stat: data.roll,
+        label: flavorText,
+        templateData,
+        tokenId: roller?.actor === this.actor ? (roller.tokenId ?? null) : null,
+      });
     }
     else if (item?.type === "outfit" && data.roll) {
       return item.roll({ mode: data.rollType || "block" });
@@ -936,7 +1032,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     await PMTTRPGTargetingAPI.rollInitiative(this.actor, { macroMisc, manualMisc });
   }
 
-  async _onApplyOutOfCombatHeal() {
+  async _onApplyOutOfCombatHeal(event) {
     event.preventDefault();
 
     const data = {
@@ -956,7 +1052,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     if(data.sanityAfter >= this.actor.system.sp.max) data.sanityAfter = this.actor.system.sp.max;
     if(data.lightAfter >= this.actor.system.light.max) data.lightAfter = this.actor.system.light.max;
 
-    const html = await renderTemplate("systems/projectmoonttrpg/templates/dialog/apply-end-of-combat-healing.hbs", { data });
+    const html = await foundry.applications.handlebars.renderTemplate("systems/projectmoonttrpg/templates/dialog/apply-end-of-combat-healing.hbs", { data });
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: game.i18n.localize("PMTTRPG.Sheet.Dialog.ApplyEOCHeal") },
       position: pmttrpgDialogPosition(),
@@ -970,7 +1066,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     }
   }
 
-  async _onApplyRest() {
+  async _onApplyRest(event) {
     event.preventDefault();
 
 
@@ -988,7 +1084,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
       lightMax: this.actor.system.light.max
     };
 
-    const html = await renderTemplate("systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs", { data });
+    const html = await foundry.applications.handlebars.renderTemplate("systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs", { data });
     const hours = await foundry.applications.api.DialogV2.prompt({
       window: { title: game.i18n.localize("PMTTRPG.Sheet.Dialog.ApplyOOCHeal") },
       position: pmttrpgDialogPosition(),
@@ -1007,11 +1103,59 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     await this.actor.applyRestHealing(hours);
   }
 
+  // only known for an unlinked token's sheet (a linked actor's sheet can't tell which token opened it)
+  get originatingToken() {
+    return this.token ?? this.actor.token ?? null;
+  }
+
+  async _onOpenActionMenu(event) {
+    event.preventDefault();
+    if (!this.actor.isOwner) return;
+    await openActionMenu(this.actor, { token: this.originatingToken });
+  }
+
   async _onUsedActionEconomy(event, target) {
     event.preventDefault();
     if (!this.actor.isOwner) return;
-    const kind = target?.dataset?.kind === "reaction" ? "reaction" : "action";
-    await this.actor.useActionEconomy(kind);
+    const economyType = target.dataset.kind === "reaction"
+      ? ECONOMY_TYPES.REACTION
+      : ECONOMY_TYPES.ACTION;
+    const acting = await resolveActingContext(this.actor, {
+      sheetToken: this.originatingToken,
+      purpose: economyType === ECONOMY_TYPES.REACTION ? ACTING_PURPOSES.REACTION : ACTING_PURPOSES.ACTION,
+    });
+    if (!acting) return;
+    await declareManualEconomy(acting.actor, economyType, {
+      combatant: acting.combatant,
+      tokenId: acting.tokenId,
+    });
+  }
+
+  async _onEditReactionCredits(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!game.user.isGM && !this.actor.isOwner) return;
+    const acting = await resolveActingContext(this.actor, {
+      sheetToken: this.originatingToken,
+      purpose: ACTING_PURPOSES.REACTION,
+    });
+    if (!acting?.combatant) {
+      ui.notifications.warn(game.i18n.localize("PMTTRPG.ReactionCredit.NeedsCombatant"));
+      return;
+    }
+    const { openReactionCreditsDialog } = await import("../action-economy/reaction-credit-dialog.js");
+    await openReactionCreditsDialog(acting.actor, acting.combatant, { onChange: () => this.render() });
+  }
+
+  async _onDismissActionState(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    const combat = game.combat;
+    const combatant = combat?.combatants.get(target.dataset.combatantId) ?? null;
+    const entryId = target.dataset.entryId;
+    if (!combatant || !entryId) return;
+    if (!(await confirmDismissActionState(combatant, entryId, { combat, user: game.user }))) return;
+    await dismissActionState(combatant, entryId, { combat, user: game.user });
   }
 
   async _onEditImage(event, target) {
@@ -1063,22 +1207,27 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     event.preventDefault();
     const itemId = this._itemIdFor(target);
     const item = itemId ? this.actor.items.get(itemId) : null;
-    await item?.delete();
+    if (!item || !(await confirmItemDelete(item))) return;
+    await this.actor.items.get(item.id)?.delete();
   }
 
-  async _onEquipEquipment(event, target) {
+  _onEquipEquipment(event, target) {
     event.preventDefault();
     event.stopPropagation();
     const itemId = this._itemIdFor(target);
     const item = itemId ? this.actor.items.get(itemId) : null;
-    if (!item) return;
+    if (!item || !this.isEditable) return;
+    // with only two choices (outfits) the button just flips to the other one
+    const options = carryOptions(item);
+    if (options.length === 2) return this._setCarryState(item, options.find((option) => !option.selected).state);
+    openCarryMenu(target, item, (state) => this._setCarryState(item, state));
+  }
 
-    // Prefer source so a leftover system.held overlay can't invert the toggle.
-    const source = item._source?.system ?? {};
-    const currentlyOn = !!(source.equipped || source.held || item.system?.equipped);
-    const update = { "system.equipped": !currentlyOn };
-    if (item.type === "tool") update["system.held"] = foundry.data.operators.ForcedDeletion;
-    await item.update(update);
+  /** Changing how something is carried from the sheet never costs an Action (Change Weapons is the one that charges). */
+  async _setCarryState(item, state) {
+    const captured = item.type === "weapon" ? captureHeldWeaponIdsForActor(this.actor) : null;
+    await item.update(carryUpdate(item, state));
+    if (captured) await applyHeldLoadoutTransitionForActor(this.actor, captured);
   }
 
   async _onAugmentActivate(event, target) {
@@ -1204,8 +1353,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
 
     if (pending) {
       if (action === "increase") {
-        const current = this.actor.getPendingStatusStacks(statusName, arrival);
-        await this.actor.setPendingStatusStacks(statusName, current + 1, { arrival });
+        await this.actor.addPendingStatusStacks(statusName, 1, { arrival });
       }
       else if (action === "decrease") {
         await this.actor.removePendingStatusStacks(statusName, 1, { arrival });

@@ -36,7 +36,9 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Always Active]
+    gain 1 Block Reaction;
   allowMultiple: false
 effects: []
 sort: 0

@@ -1,5 +1,6 @@
 import { evaluateNumericExpression } from "./easy-effects/numeric-expr.js";
 import { resolveTokenDocument } from "./acting-user.js";
+import { tokenDistanceSquares as spatialTokenDistanceSquares } from "./canvas/spatial.js";
 
 export class PMTTRPGUtility {
   static isEmpty(arg) {
@@ -133,13 +134,7 @@ export class PMTTRPGUtility {
    * @returns {number|null}
    */
   static tokenDistanceSquares(tokenA, tokenB) {
-    if (!tokenA || !tokenB || !canvas?.grid) return null;
-  
-    const a = canvas.grid.getOffset(tokenA.center);
-    const b = canvas.grid.getOffset(tokenB.center);
-    if (!a || !b) return null;
-  
-    return Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
+    return spatialTokenDistanceSquares(tokenA, tokenB);
   }
 
   /**

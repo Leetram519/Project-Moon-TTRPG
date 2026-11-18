@@ -1,4 +1,10 @@
 import { clampPoolValue } from "../pool-clamp.js";
+import {
+  getEffectiveReactionAvailability,
+  removeReactionAvailability,
+  resolveReactionCreditCombatant,
+} from "../action-economy/reaction-credits.js";
+import { reactionsUsedThisTurn } from "../action-economy/reaction-use.js";
 
 export const NOUNS = {
   // Resources
@@ -110,6 +116,10 @@ export const NOUNS = {
     pathShorthand: true,
     aliases: ["reactions"],
   },
+  reactionsUsed: {
+    kind: "readable",
+    ops: [],
+  },
   movement: {
     kind: "resource",
     path: "system.attributes.squares.value",
@@ -129,6 +139,20 @@ export const NOUNS = {
     alwaysActive: true,
     ops: ["gain", "lose"],
     pathShorthand: "speedBonus",
+  },
+  dashSquares: {
+    kind: "resource",
+    path: "system.attributes.dash.misc",
+    alwaysActive: true,
+    alwaysActiveModKey: "dashMisc",
+    ops: ["gain", "lose"],
+  },
+  reduceStatusStacks: {
+    kind: "resource",
+    path: "system.attributes.reduceStatus.misc",
+    alwaysActive: true,
+    alwaysActiveModKey: "reduceStatusMisc",
+    ops: ["gain", "lose"],
   },
 
   // Combat
@@ -256,9 +280,25 @@ export async function applyRuntimeResourceLocal(actor, nounId, { mode, amount } 
   const hit = lookupNoun(nounId);
   if (!hit || hit.def.kind !== "resource" || hit.def.alwaysActive || !hit.def.path) return false;
 
+  const n = Math.max(0, Math.round(Number(amount) || 0));
+  if (hit.id === "reaction" && mode === "remove") {
+    const result = await removeReactionAvailability(actor, n);
+    return result.ok !== false;
+  }
+  if (hit.id === "reaction" && mode === "set") {
+    const effective = getEffectiveReactionAvailability(actor).effective;
+    if (n < effective) {
+      const result = await removeReactionAvailability(actor, effective - n);
+      return result.ok !== false;
+    }
+    if (n > effective) {
+      await actor.update({ [hit.def.path]: readActorSystemPath(actor, hit.def.path) + (n - effective) });
+    }
+    return true;
+  }
+
   const path = hit.def.path;
   const current = readActorSystemPath(actor, path);
-  const n = Math.max(0, Math.round(Number(amount) || 0));
   let next = current;
   if (mode === "set") next = n;
   else if (mode === "add") next = current + n;
@@ -290,10 +330,6 @@ export function isBonusNoun(name) {
   return nounAllowsOp(name, "power up") || nounAllowsOp(name, "dice max up");
 }
 
-export function isRangeNoun(name) {
-  return nounAllowsOp(name, "range up");
-}
-
 export function isRegenNoun(name) {
   return nounAllowsOp(name, "regen");
 }
@@ -317,19 +353,11 @@ export function getPowerFields(name) {
   return def.powerField ? [def.powerField] : [];
 }
 
-export function getPowerField(name) {
-  return getPowerFields(name)[0] ?? null;
-}
-
 export function getMaxFields(name) {
   const def = lookupNoun(name)?.def;
   if (!def) return [];
   if (Array.isArray(def.maxFields) && def.maxFields.length) return def.maxFields;
   return def.maxField ? [def.maxField] : [];
-}
-
-export function getMaxField(name) {
-  return getMaxFields(name)[0] ?? null;
 }
 
 export function getAmountFields(name) {
@@ -415,10 +443,15 @@ export async function recoverPool(actor, name, amount) {
   return runAsOwnerOrGM(actor, "recoverPool", { noun: name, amount });
 }
 
-export function resolvePathShorthand(actor, segment) {
+export function resolvePathShorthand(actor, segment, options = {}) {
   const hit = lookupNoun(segment);
   if (!hit?.def) return null;
+  if (hit.id === "reactionsUsed") {
+    const combatant = resolveReactionCreditCombatant(actor, options);
+    return combatant ? reactionsUsedThisTurn(combatant, options.combat ?? combatant.parent ?? null) : 0;
+  }
   if (hit.def.pathShorthand === true && hit.def.path) {
+    if (hit.id === "reaction") return getEffectiveReactionAvailability(actor, options).effective;
     return readActorSystemPath(actor, hit.def.readPath ?? hit.def.path);
   }
   const sh = hit.def.pathShorthand;
@@ -446,6 +479,7 @@ export function emptyAlwaysActiveMods() {
     attackAmount: 0, blockAmount: 0, evadeAmount: 0, damageAmount: 0,
     lightBonus:  0, rangeBonus: 0,
     diceFormulas: emptyDiceFormulas(),
+    reactionGrants: [],
     overrides: {},
     overrideSources: {},
     resistanceOverrides: {},

@@ -50,14 +50,14 @@
           <strong>Total:</strong> {{roll.total}}
         </div>
       {{/if}}
-      {{#if resultLabel}}{{else}}
+      {{#unless (or resultLabel opposed)}}
         {{> "systems/projectmoonttrpg/templates/parts/chat-buttons.html" }}
-      {{/if}}
+      {{/unless}}
     {{else if rollDw}}
       <div class="roll{{#if result}} {{result}}{{/if}}">{{{rollDw}}}</div>
-      {{#if resultLabel}}{{else}}
+      {{#unless (or resultLabel opposed)}}
         {{> "systems/projectmoonttrpg/templates/parts/chat-buttons.html" }}
-      {{/if}}
+      {{/unless}}
     {{/if}}
   </div>
 </section>
