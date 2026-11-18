@@ -1,7 +1,30 @@
 // Dialog-specific styles extracted from _moves.scss
 
 &.PMTTRPG-dialog.dialog {
+  .window-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  form.dialog-form.standard-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .dialog-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
   .standard-form .form-footer {
+    flex: 0 0 auto;
     flex-direction: column;
     flex-wrap: nowrap;
   }
@@ -12,7 +35,8 @@
   }
 }
 
-.weapon-ammo-dialog {
+.weapon-ammo-dialog,
+.tool-use-dialog {
   .dialog-summary {
     margin-bottom: 0.9rem;
   }
@@ -320,4 +344,32 @@
 
     input { flex: 0 0 auto; }
   }
+}
+
+.delay-destination-row {
+  display: flex;
+}
+
+.delay-destination-row .action-menu-option {
+  flex: 1;
+  min-width: 0;
+}
+
+.delay-destination-row__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.delay-destination-row__speed,
+.delay-destination-row__follow {
+  color: var(--pmw-ink-dim);
+  font-size: 12px;
+}
+
+button.delay-destination-row__locate {
+  @include pmw-icon-button;
+  margin-left: auto;
 }

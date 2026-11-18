@@ -16,6 +16,8 @@
     "systems/projectmoonttrpg/templates/parts/easy-effects.html",
     "systems/projectmoonttrpg/templates/parts/item-slug-field.hbs",
     "systems/projectmoonttrpg/templates/apps/status-tray.hbs",
+    "systems/projectmoonttrpg/templates/chat/opportunity-card.hbs",
+    "systems/projectmoonttrpg/templates/chat/action-feedback.hbs",
     "systems/projectmoonttrpg/templates/apps/easy-effects-editor.hbs",
     "systems/projectmoonttrpg/templates/hud/waypoint-label.hbs",
     // Character sheet (AppV2) partials referenced by sheet.hbs
@@ -26,6 +28,8 @@
     "systems/projectmoonttrpg/templates/sheet/character/partials/tabs.hbs",
     "systems/projectmoonttrpg/templates/sheet/character/partials/panel-fx.hbs",
     "systems/projectmoonttrpg/templates/sheet/character/partials/tab-combat.hbs",
+    "systems/projectmoonttrpg/templates/sheet/character/partials/combat-economy-credits.hbs",
+    "systems/projectmoonttrpg/templates/sheet/character/partials/action-states.hbs",
     "systems/projectmoonttrpg/templates/sheet/character/partials/tab-skills.hbs",
     "systems/projectmoonttrpg/templates/sheet/character/partials/tab-equipment.hbs",
     "systems/projectmoonttrpg/templates/sheet/character/partials/tab-weapons.hbs",
@@ -69,6 +73,17 @@
     // Character sheet dialogs
     "systems/projectmoonttrpg/templates/dialog/apply-end-of-combat-healing.hbs",
     "systems/projectmoonttrpg/templates/dialog/apply-out-of-combat-healing.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-menu.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-custom-variant.hbs",
+    "systems/projectmoonttrpg/templates/dialog/radio-picker.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-convert-reactions.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-reduce-status-target.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-ready.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-delay-destination.hbs",
+    "systems/projectmoonttrpg/templates/dialog/action-take-cover.hbs",
+    "systems/projectmoonttrpg/templates/chat/grapple-contest.hbs",
+    "systems/projectmoonttrpg/templates/dialog/grapple-relationship-picker.hbs",
+    "systems/projectmoonttrpg/templates/dialog/grapple-upkeep.hbs",
     // Status Tooltip
     "systems/projectmoonttrpg/templates/hud/status-tooltip.hbs",
     // Settings partials

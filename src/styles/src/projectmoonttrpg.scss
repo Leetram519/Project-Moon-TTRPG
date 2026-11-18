@@ -1,6 +1,7 @@
 @import 'init';
 @import 'global/utils/tokens';
 @import 'global/canvas/token-ruler';
+@import 'global/canvas/token-hud';
 
 // Base styles.
 @import 'global/base/grid';
@@ -17,8 +18,14 @@
 }
 
 @import 'global/application/status-tray';
+@import 'global/application/opportunity-prompt';
+@import 'global/application/grapple';
 @import 'global/application/easy-effects-editor';
 @import 'global/application/ee-flag-inspector';
+@import 'global/application/pm-window';
+@import 'global/application/change-weapons';
+@import 'global/application/action-menu';
+@import 'global/application/reduce-status';
 
 .app {
   img {
