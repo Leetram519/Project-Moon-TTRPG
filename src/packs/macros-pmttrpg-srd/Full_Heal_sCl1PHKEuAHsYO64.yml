@@ -70,6 +70,8 @@ command: >-
       reset.push(actor.name);
     }
 
+    await actor.restoreSpentReactionCredits({ tokenId: token.id });
+
     const tokenDoc = token.document;
     if (typeof tokenDoc?.clearMovementHistory === "function") {
       await tokenDoc.clearMovementHistory();

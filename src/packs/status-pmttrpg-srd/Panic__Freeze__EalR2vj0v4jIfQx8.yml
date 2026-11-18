@@ -44,6 +44,12 @@ system:
 
     [On Removed]
     clear flag "isPanicking" on self;
+
+    [Turn Start]
+    let $actions = (self.action);
+    set action to 0;
+    gain ($actions) Reaction;
+    set movement to 0;
 effects: []
 sort: 0
 ownership:

@@ -45,9 +45,11 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    power up attack (clamp(self.reaction, 2, 6));
-    power up defense (clamp(self.reaction, 2, 6));
-    lose (self.reaction) Reaction;
+    require (self.reactionsUsed) == 0 and (clash.reaction) == 0 then power up attack (clamp(self.reaction, 2, 6));
+    require (self.reactionsUsed) == 0 and (clash.reaction) == 0 then power up defense (clamp(self.reaction, 2, 6));
+    require (self.reactionsUsed) == 0 and (clash.reaction) == 0 then lose (self.reaction) Reaction;
+    require (self.reactionsUsed) > 0 and (clash.reaction) == 0 then message "Single Strike: a Reaction was already used this turn";
+    require (clash.reaction) == 1 then message "Single Strike: it can't be used on a Reaction";
 effects: []
 sort: 0
 ownership:

@@ -40,6 +40,9 @@ system:
     [On Applied]
     set flag "staggerRemain" on item to 2;
     set flag "isStaggered" on self to 1;
+    set action to 0;
+    set reaction to 0;
+    set movement to 0;
     proc SelfStagger on self;
     proc Staggered on self;
     create dialog "Self-Stagger : Deal SP Damage to Self?":
@@ -53,6 +56,11 @@ system:
 
     [Always Active]
     set resistances to fatal;
+
+    [Turn Start]
+    set action to 0;
+    set reaction to 0;
+    set movement to 0;
 
     [Start of Round]
     reduce flag "staggerRemain" on item by 1;

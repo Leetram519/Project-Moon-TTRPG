@@ -35,7 +35,12 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: ''
+  easyEffects: |-
+    [Always Active]
+    positive:
+    gain (N*2) reduceStatusStacks;
+    negative:
+    lose (N*2) reduceStatusStacks;
   allowMultiple: true
 effects: []
 sort: 0

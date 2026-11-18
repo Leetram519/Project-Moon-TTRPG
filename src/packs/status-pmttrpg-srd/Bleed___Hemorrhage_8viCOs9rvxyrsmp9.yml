@@ -38,6 +38,10 @@ system:
     skillEffect: false
   customNotes: ''
   easyEffects: ''
+  reduceStatus:
+    type: pause
+    blocks:
+      - Bleed
 effects: []
 sort: 100000
 ownership:

@@ -47,6 +47,9 @@ system:
 
     require ("Burn - Renewed Blaze") >= 1 then lose 1 "Burn - Renewed Blaze" on
     self;
+  reduceStatus:
+    type: standard
+    blocks: []
 effects: []
 ownership:
   default: 0

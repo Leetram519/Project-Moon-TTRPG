@@ -37,7 +37,7 @@ system:
   customNotes: ''
   easyEffects: |-
     [Always Active]
-    gain 1 Reaction;
+    gain N Block Reaction;
 effects: []
 sort: 0
 ownership:

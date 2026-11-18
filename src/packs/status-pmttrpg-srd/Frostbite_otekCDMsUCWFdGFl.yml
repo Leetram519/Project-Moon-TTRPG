@@ -47,6 +47,9 @@ system:
 
     require ("Frostbite - Deep Chill") >= 1 then lose 1 "Frostbite - Deep Chill"
     on self;
+  reduceStatus:
+    type: standard
+    blocks: []
 effects: []
 ownership:
   default: 0
