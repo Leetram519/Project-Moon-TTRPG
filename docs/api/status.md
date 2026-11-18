@@ -1,6 +1,6 @@
 # status
 
-> **JSDoc coverage: -87/10 symbols (-870%)**
+> **JSDoc coverage: -113/15 symbols (-753%)**
 
 ## `src/module/status/pending.js`
 
@@ -25,6 +25,54 @@
 | Name | Type | Description |
 |------|------|-------------|
 | `arrival` | — | — |
+
+---
+
+## `src/module/status/lifecycle-pass.js`
+
+### `const removedKeys`
+
+Foundry may leave deleted statuses in `actor.items` until `updateCombat`
+finishes. Keep their identities here so later lifecycle phases do not
+collect them again.
+
+Overlapping updateCombat handlers share the same set since Foundry does not
+await async hook listeners.
+
+---
+
+### Function: `beginCombatLifecyclePass()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `endCombatLifecyclePass()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `noteRemovedStatusItem(item)`
+
+Record the key before deletion while the item's uuid and owner are still
+available.
+
+---
+
+### Function: `wasRemovedThisLifecyclePass(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
 
 ---
 

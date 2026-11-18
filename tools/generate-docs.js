@@ -6,6 +6,7 @@ import { relative } from "path";
 // ─── Module definitions ───────────────────────────────────────────────────────
 
 const modules = [
+  { name: "action-economy",     glob: "src/module/{action-economy/declare.js,action-economy/custom-actions.js,action-economy/kinds.js,movement/movement-processors.js,rules/rule-contributions.js}" },
   { name: "actor",              glob: "src/module/actor/**/*.js" },
   { name: "apps",               glob: "src/module/apps/**/*.js" },
   { name: "canvas",             glob: "src/module/canvas/**/*.js" },

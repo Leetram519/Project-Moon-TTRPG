@@ -1,6 +1,6 @@
 # easy-effects
 
-> **JSDoc coverage: -1380/193 symbols (-715%)**
+> **JSDoc coverage: -2322/336 symbols (-691%)**
 
 ## `src/module/easy-effects/sync-from-effects.js`
 
@@ -175,6 +175,30 @@
 
 ---
 
+### `const RESISTANCE_DAMAGE_TYPES`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### `const WEAPON_DAMAGE_TYPE_CHOICES`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### `const RESISTANCE_DAMAGE_TYPE_CHOICES`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
 ### `const RESISTANCE_MULTIPLIERS`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -200,6 +224,18 @@
 ### Function: `normalizeDamageType(raw)`
 
 @param {string} raw
+
+---
+
+### Function: `normalizeResistanceDamageType(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
 
 ---
 
@@ -333,14 +369,7 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 
 ### Function: `itemIsLoadoutActive(item, actor)`
 
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `item` | — | — |
-| `actor` | — | — |
+Weapon/outfit/tool equipped, augment on, or NPC skill. Tools also need quantity > 0.
 
 ---
 
@@ -358,7 +387,7 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 
 ---
 
-### Function: `collectSideClashItems(actor, usedItem, appliedTool, declaredSkill)`
+### Function: `collectSideClashItems(actor, usedItem, appliedTool, declaredSkill, ammo)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -370,10 +399,11 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 | `usedItem` | — | — |
 | `appliedTool` | — | — |
 | `declaredSkill` | — | — |
+| `ammo` | — | — |
 
 ---
 
-### Function: `usedStatBlockItems(usedItem, appliedTool, declaredSkill)`
+### Function: `usedStatBlockItems(usedItem, appliedTool, declaredSkill, ammo)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -384,6 +414,7 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 | `usedItem` | — | — |
 | `appliedTool` | — | — |
 | `declaredSkill` | — | — |
+| `ammo` | — | — |
 
 ---
 
@@ -465,6 +496,113 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 
 ---
 
+### Function: `onHitItems({ item, appliedTool, attacker, attackerSkill, ammo })`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ item` | — | — |
+| `appliedTool` | — | — |
+| `attacker` | — | — |
+| `attackerSkill` | — | — |
+| `ammo }` | — | — |
+
+---
+
+### Function: `onHitContext({ attacker, defender, clash, attackerSkill })`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ attacker` | — | — |
+| `defender` | — | — |
+| `clash` | — | — |
+| `attackerSkill }` | — | — |
+
+---
+
+### Function: `onBeingHitItems({ defender })`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ defender }` | — | — |
+
+---
+
+### Function: `onBeingHitContext({ attacker, defender, clash, attackerSkill })`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ attacker` | — | — |
+| `defender` | — | — |
+| `clash` | — | — |
+| `attackerSkill }` | — | — |
+
+---
+
+### Function: `onHealItems({ healer, item } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ healer` | — | — |
+| `item } = {}` | — | — |
+
+---
+
+### Function: `onHealContext(payload = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload = {}` | — | — |
+
+---
+
+### Function: `onBeingHealedItems({ actor } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ actor } = {}` | — | — |
+
+---
+
+### Function: `onBeingHealedContext(payload = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload = {}` | — | — |
+
+---
+
 ### Function: `buildClashWinContext(payload = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -501,81 +639,211 @@ accumulate correctly across [On Clash Start] → [On Damage Calc] etc.
 
 ---
 
+### Function: `combatLifecycleItems({ actor } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ actor } = {}` | — | — |
+
+---
+
+### Function: `allOwnedEasyEffectItems({ actor } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ actor } = {}` | — | — |
+
+---
+
+### Function: `combatLifecycleContext({ actor, combat } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `{ actor` | — | — |
+| `combat } = {}` | — | — |
+
+---
+
+### Function: `allowsClashWeapon(hookName)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `hookName` | — | — |
+
+---
+
+### Function: `isHookEmitting(hookName)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `hookName` | — | — |
+
+---
+
 ### Function: `registerEasyEffectsHooks()`
 
-Call once during system init:
-  Hooks.once("init", () => registerEasyEffectsHooks());
+One `Hooks.on` per unique Foundry hook name. Several TRIGGER_HOOKS defs
+can share that listener and run in array order.
+
+Call once at init: `Hooks.once("init", () => registerEasyEffectsHooks());`
 
 ---
 
 ### Function: `runItemEasyEffects(item, triggerName, context = {})`
 
-@param {Item} item
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `triggerName` | `string` | — |
-| `context` | `object` | — |
-
-**Returns** `Promise<boolean>` — true if a script ran
+Skip pending statuses. Returns whether a script actually ran.
 
 ---
 
 ### Function: `emitActorAction(payload)`
 
-@param {object} payload
+[On Action]. Clash callers should pass `clash`, `attacker`, and `defender`.
 
-**Returns** `Promise<void>` — —
+---
+
+### Function: `emitTurnStart(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
+
+---
+
+### Function: `emitEndOfTurn(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
+
+---
+
+### Function: `emitEndOfRound(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
+
+---
+
+### Function: `emitStartOfRound(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
+
+---
+
+### Function: `emitCombatStart(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
+
+---
+
+### Function: `emitCombatEnd(payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
 
 ---
 
 ### Function: `emitTokenMoved(payload)`
 
-@param {object} payload
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
-**Returns** `Promise<void>` — —
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload` | — | — |
 
 ---
 
 ### Function: `emitAttackConnected(payload)`
 
-@param {object} payload
+[On Hit] then [On Being Hit] share one emission (`event.flags` and overlay).
+Public hook `pmttrpg.attackConnected` fires after both slices.
 
-**Returns** `Promise<void>` — —
+---
+
+### Function: `emitHeal(payload)`
+
+[On Heal] then [On Being Healed] share one `heal` bag and one emission.
+`applyDamage({ op: "heal" })` must call this before writing pools.
+
+---
+
+### Function: `emitDamageCalc(payload)`
+
+[On Damage Calc], then the public `pmttrpg.damageCalc` hook.
+
+---
+
+### Function: `emitToolUsed(payload)`
+
+[On Use] for a tool, then `pmttrpg.toolUsed`.
 
 ---
 
 ### Function: `emitClashStarted(payload = {})`
 
-@param {object} payload
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `payload.side` *(optional, default: `"all"`)* | `"attacker"|"defender"|"all"` | — |
-
-**Returns** `Promise<object>` — the clash context (same reference as payload.clash)
+[On Clash] / [On Clash Start] for one side.
 
 ---
 
-### Function: `emitClashResolved(payload = {})`
+### Function: `emitClashResolved(payload = {}, { fireHook = true } = {})`
 
-Pause resolves before [On Being Hit] burst checks.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `payload` | `object` | — |
-
-**Returns** `Promise<void>` — —
+Clash Win/Lose. Pause statuses resolve here, before [On Being Hit] burst checks.
 
 ---
 
-### Function: `collectUsedSkills(owner, usedSkills)`
+### Function: `sideUsedClashKit(payload = {}, side)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -583,12 +851,12 @@ Pause resolves before [On Being Hit] burst checks.
 
 | Name | Type | Description |
 |------|------|-------------|
-| `owner` | — | — |
-| `usedSkills` | — | — |
+| `payload = {}` | — | — |
+| `side` | — | — |
 
 ---
 
-### Function: `collectBurstListenerItems(attacker, burstee, skipItemId, usedSkills = [])`
+### Function: `usedKitSideOfItem(item, payload = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -596,10 +864,91 @@ Pause resolves before [On Being Hit] burst checks.
 
 | Name | Type | Description |
 |------|------|-------------|
-| `attacker` | — | — |
+| `item` | — | — |
+| `payload = {}` | — | — |
+
+---
+
+### Function: `instantNamesForUsedItem(item, payload = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+| `payload = {}` | — | — |
+
+---
+
+### Function: `collectInstantStatusNames(items)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `items` | — | — |
+
+---
+
+### Function: `instantStatusFilter(names, mode)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `names` | — | — |
+| `mode` | — | — |
+
+---
+
+### Function: `emitStatusEasyEffects(hookName, payload)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `hookName` | — | — |
+| `payload` | — | — |
+
+---
+
+### Function: `emitClashOutcome(resolvedPayload, hitPayload = null)`
+
+Always Active `instant <Status>` on the used weapon/tool/skill/ammo copies that
+side's matching Clash Result gain/inflict/set live first, then
+[On Clash Win Before Results], then Specified status, then one Clash Win/Lose pass
+that skips those applies on the Instant kit only.
+
+---
+
+### Function: `collectBurstListenerItems(burster, burstee, skipItem, usedSkills = [])`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `burster` | — | — |
 | `burstee` | — | — |
-| `skipItemId` | — | — |
+| `skipItem` | — | — |
 | `usedSkills = []` | — | — |
+
+---
+
+### Function: `emitRoll(context = {})`
+
+Fires `[On Roll]` after the named roll resolves, before its bind is stored.
+The producing item can still listen. Listener `self` is the item owner, while
+`target` remains the rolling script's target.
 
 ---
 
@@ -616,29 +965,42 @@ Pause resolves before [On Being Hit] burst checks.
 
 ---
 
+### Function: `emitItemEquipped(item)`
+
+[On Equip] scripts. Call after a weapon, outfit, augment, or tool is equipped.
+
+---
+
+### Function: `emitItemUnequipped(item)`
+
+[On Unequip]. Needs an owning actor so `self` resolves. Loadout-active is not
+required: after an unequip update it is already false, and on delete it is
+still true.
+
+---
+
+### Function: `isAlwaysActiveParticipant(item, actor)`
+
+Owned content whose rules apply while the actor has it: statuses that aren't
+pending (shelved counts as pending too) and loadout-active gear. Stacks don't matter.
+
+---
+
 ### Function: `applyAlwaysActiveModifiers(actor)`
 
-Call at the END of _prepareCharacterData(), after all base values are set.
-Iterates all equipped items, runs their [Always Active] blocks synchronously,
-and returns a merged modifier object.
+Collects `[Always Active]` modifiers from the actor, equipped items, and
+active statuses into one merged result.
 
-Usage in actor.js:
+Weapon, outfit, and skill combat dice modifiers stay item-local. Clash rolls
+add the used skill separately, which prevents unused skills from affecting
+standing Attack, Block, or Evade modifiers.
 
-  // At the end of _prepareCharacterData():
-  const eeMods = applyAlwaysActiveModifiers(actorData);
-  data.attributes.attackModifier.value  += eeMods.attackPower;
-  data.attributes.evadeModifier.value   += eeMods.evadePower;
-  data.attributes.blockModifier.value   += eeMods.blockPower;
-  applyResourceModsToSystem(data, eeMods);
-  // damagePower / damageMax / attackMax etc. — apply to weapon dice fields
+---
 
-**Parameters**
+### Function: `getItemAlwaysActiveCombatMods(item, actor)`
 
-| Name | Type | Description |
-|------|------|-------------|
-| `actor` | `ActorPMTTRPG` | — |
-
-**Returns** `object` — merged modifier object
+Always Active Power / Max for this weapon, outfit, or skill.
+Other item types contribute those through `applyAlwaysActiveModifiers`.
 
 ---
 
@@ -656,18 +1018,83 @@ Usage in actor.js:
 
 ---
 
-### Function: `runOnTakingDamage(actor, damage, options = {})`
+### Function: `runDepletedEasyEffects(actor, depleted)`
 
-Mutates `damage.amount` and `damage.afterDeltaByPool`.
+[On Depleted] / [On Depleted HP] etc. Actor script first, then live statuses.
+Re-entry for the same actor+pool is ignored (heal/damage from the script
+must not retrigger depletion).
 
-**@param** — {{ amount: number, pool: string|string[], source: string, damageType: string, fromAttack?: boolean, afterDeltaByPool?: Record<string, number> }} damage  
-**@param** — {{ attacker?: Actor|null }} [options]
+---
+
+### Function: `queueDepletedEasyEffects(actor, jobs)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `actor` | `Actor` | — |
+| `actor` | — | — |
+| `jobs` | — | — |
+
+---
+
+### Function: `settleDepletedEasyEffects()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `runOnTakingDamage(actor, damage, options = {})`
+
+Fire `[On Taking Damage]` on the actor, then equipped items and live statuses.
+
+`applyDamage` already built `damage` and keeps using that same object.
+Scripts can change amount, before/after flats, or convert pool / type.
+After this returns, `applyDamage` writes those to each pool.
+
+---
+
+### Function: `runBeforeDealingDamage(actor, damage, options = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `damage` | — | — |
+| `options = {}` | — | — |
+
+---
+
+### Function: `runOnDealingDamage(actor, damage, options = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `damage` | — | — |
+| `options = {}` | — | — |
+
+---
+
+### Function: `collectDealerItems(actor, sourceItems = [])`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `sourceItems = []` | — | — |
 
 ---
 
@@ -689,27 +1116,32 @@ Returns all equipped weapons, outfits, skills, tools, and augments on an actor.
 
 ### Function: `canonicalizeProcName(name)`
 
-@param {string} name @returns {string}
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `name` | — | — |
 
 ---
 
 ### Function: `isReservedProcName(name)`
 
-@param {string} name @returns {boolean}
+Lifecycle trigger names cannot be used as `proc <Name>`.
 
 ---
 
 ### Function: `isReservedProcBindName(name)`
 
-@param {string} name @returns {boolean}
+Bind names that would collide with path roots (`self`, `heal`, `event`, …).
 
 ---
 
 ### Function: `normalizeProcTrigger(raw)`
 
-@param {string} raw
-
-**Returns** `{ matched: boolean, trigger: string` — }
+`[On <Name>]` when `<Name>` is not a reserved lifecycle trigger.
+Dialog / Roll / Burst mids are left unmatched so those parsers own them.
 
 ---
 
@@ -749,7 +1181,7 @@ Returns all equipped weapons, outfits, skills, tools, and augments on an actor.
 
 ### Function: `_canStartExprFactor(tok)`
 
-True when a token can begin a factor (so `%` is modulo and not a postfix percent).
+Next token can start a factor, so a following `%` is modulo, not postfix percent.
 
 ---
 
@@ -778,6 +1210,81 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 *No description provided.*
+
+---
+
+## `src/module/easy-effects/numeric-expr.js`
+
+### Function: `applyMathOp(op, left, right)`
+
+One binary EE op. Applies the operator to the left and right operands.
+`//` / `//f` floor, `//c` ceil.
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `op` | `string` | — |
+| `left` | `number` | — |
+| `right` | `number` | — |
+
+**Returns** `number` — —
+
+---
+
+### Function: `applyMathCall(name, args)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `name` | — | — |
+| `args` | — | — |
+
+---
+
+### Function: `isNumericAst(node)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `node` | — | — |
+
+---
+
+### Function: `evalNumericAst(node, effectN)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `node` | — | — |
+| `effectN` | — | — |
+
+---
+
+### Function: `evaluateNumericExpression(source, { effectN } = {})`
+
+Parse and eval a math string that is only numbers, `N`, and ops.
+Used for effect description `[…]` so we share the EE op table.
+Dice, paths, `$vars`, and parse errors return `null`.
+
+**@param** — {{ effectN?: number }} [options]
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `source` | `string` | — |
+
+**Returns** `number|null` — —
 
 ---
 
@@ -967,18 +1474,6 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 
 ---
 
-### Function: `getPowerField(name)`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `name` | — | — |
-
----
-
 ### Function: `getMaxFields(name)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -991,7 +1486,7 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 
 ---
 
-### Function: `getMaxField(name)`
+### Function: `getAmountFields(name)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1000,6 +1495,53 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 | Name | Type | Description |
 |------|------|-------------|
 | `name` | — | — |
+
+---
+
+### Function: `emptyDiceFormulas()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `cloneDiceFormulas(src)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `src` | — | — |
+
+---
+
+### Function: `resolveDiceFormula(die, ...sources)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `die` | — | — |
+| `...sources` | — | — |
+
+---
+
+### Function: `applyDiceFormulaMod(mods, die, formula)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `mods` | — | — |
+| `die` | — | — |
+| `formula` | — | — |
 
 ---
 
@@ -1043,7 +1585,7 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 
 ---
 
-### Function: `resolvePathShorthand(actor, segment)`
+### Function: `resolvePathShorthand(actor, segment, options = {})`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1053,6 +1595,15 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 |------|------|-------------|
 | `actor` | — | — |
 | `segment` | — | — |
+| `options = {}` | — | — |
+
+---
+
+### `const COMBAT_DICE_KEYS`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
 
 ---
 
@@ -1061,6 +1612,24 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 *No description provided.*
+
+---
+
+### Function: `pickCombatDiceMods(mods)`
+
+Combat power, max, amount, and formula slots. Weapon and outfit [Always Active] effects keep these on the item.
+
+---
+
+### Function: `zeroCombatDiceMods(mods)`
+
+Copy the modifiers, but reset combat dice modifiers and formula slots.
+
+---
+
+### Function: `addCombatDiceMods(a, b)`
+
+Combine the combat dice modifiers from two sets of modifiers.
 
 ---
 
@@ -1132,7 +1701,41 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 
 ## `src/module/easy-effects/lexer.js`
 
+### `const KEYWORDS`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `readVariable(source, index)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `source` | — | — |
+| `index` | — | — |
+
+---
+
 ### Function: `readFloorOperator(source, index)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `source` | — | — |
+| `index` | — | — |
+
+---
+
+### Function: `readDiceSoNiceFlavorSuffix(source, index)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1174,9 +1777,7 @@ True when a token can begin a factor (so `%` is modulo and not a postfix percent
 
 ### Function: `tokenize(source)`
 
-@param {string} source
-
-**Returns** `{ type: string, value: string` — []}
+Top-level EasyEffects tokens. Accessor interiors stay opaque until `tokenizeExpression`.
 
 ---
 
@@ -1196,13 +1797,7 @@ Tokenizes the interior of an accessor for math-expression parsing.
 
 ## `src/module/easy-effects/interpreter.js`
 
-### Function: `evaluateExprSync(node, context)`
-
-Synchronous version — used for [Always Active] (no dice allowed).
-
----
-
-### Function: `applyMathOp(op, left, right)`
+### Function: `skipNestedApply(context)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1210,9 +1805,80 @@ Synchronous version — used for [Always Active] (no dice allowed).
 
 | Name | Type | Description |
 |------|------|-------------|
-| `op` | — | — |
-| `left` | — | — |
-| `right` | — | — |
+| `context` | — | — |
+
+---
+
+### Function: `rejectIfDamageReadOnly(context, verb)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `verb` | — | — |
+
+---
+
+### Function: `lookupVariable(context, name)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `name` | — | — |
+
+---
+
+### Function: `declareVariable(context, name, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `name` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `readAmountSnapshot(context, node)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `node` | — | — |
+
+---
+
+### Function: `writeAmountSnapshot(context, node, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `node` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `evaluateExprSync(node, context)`
+
+Synchronous version — used for [Always Active] (no dice allowed).
 
 ---
 
@@ -1232,7 +1898,7 @@ Synchronous version — used for [Always Active] (no dice allowed).
 
 ### Function: `resolvePathPoolPercent(segments, context)`
 
-@returns {number|null}
+HP/ST/SP/Light as 0-100. Null if this isn't a pool percent path.
 
 ---
 
@@ -1248,32 +1914,49 @@ Synchronous version — used for [Always Active] (no dice allowed).
 
 ---
 
-### Function: `applyRollToContext(formula, context, bind = null)`
+### Function: `finiteNumber(value, fallback = 0)`
 
-@param {string} formula
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `context` | `object` | — |
-| `bind` | `string|null` | — |
+| `value` | — | — |
+| `fallback = 0` | — | — |
 
-**Returns** `Promise<number>` — —
+---
+
+### Function: `applyRollToContext(formula, context, bind = null)`
+
+Statement `on roll` / completed bind. Doesn't trigger [On Roll].
+
+---
+
+### Function: `applyPendingRollDelta(context, delta, verb)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `delta` | — | — |
+| `verb` | — | — |
 
 ---
 
 ### Function: `evaluateDiceFormula(formula, context = null)`
 
-@param {string} formula
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `context` *(optional)* | `object` | — |
-
-**Returns** `Promise<number>` — —
+| `formula` | — | — |
+| `context = null` | — | — |
 
 ---
 
@@ -1346,6 +2029,60 @@ Synchronous version — used for [Always Active] (no dice allowed).
 
 | Name | Type | Description |
 |------|------|-------------|
+| `context` | — | — |
+
+---
+
+### Function: `flagKeyFromSegments(segments, flagIndex)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `segments` | — | — |
+| `flagIndex` | — | — |
+
+---
+
+### Function: `resolveFlagHost(host, context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `host` | — | — |
+| `context` | — | — |
+
+---
+
+### Function: `readFlagValue(host, key, context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `host` | — | — |
+| `key` | — | — |
+| `context` | — | — |
+
+---
+
+### Function: `resolveFlagPathValue(host, key, context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `host` | — | — |
+| `key` | — | — |
 | `context` | — | — |
 
 ---
@@ -1446,6 +2183,105 @@ delta can be positive (up) or negative (down).
 
 ---
 
+### Function: `statusApplyFilterFromContext(context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+
+---
+
+### Function: `statusApplyFilterNames(filter)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `filter` | — | — |
+
+---
+
+### Function: `statusApplyFilterVerbs(filter)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `filter` | — | — |
+
+---
+
+### Function: `actionStatusName(action)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `action` | — | — |
+
+---
+
+### Function: `actionAllowedByStatusFilter(action, filter)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `action` | — | — |
+| `filter` | — | — |
+
+---
+
+### Function: `statementAllowedByStatusFilter(stmt, filter)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `stmt` | — | — |
+| `filter` | — | — |
+
+---
+
+### Function: `instantApplyIsLive(context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+
+---
+
+### Function: `resolveHasFlag(flagNode, context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `flagNode` | — | — |
+| `context` | — | — |
+
+---
+
 ### Function: `resolveFlag(flagNode, context)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -1512,6 +2348,18 @@ delta can be positive (up) or negative (down).
 
 ---
 
+### Function: `tokenDisposition(actor)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+
+---
+
 ### Function: `_isEnemy(other, self)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -1525,7 +2373,29 @@ delta can be positive (up) or negative (down).
 
 ---
 
-### Function: `applyAfterResistanceDelta(damage, delta, damageFilter = null)`
+### Function: `resolveProcTargetActor(procTarget, context)`
+
+Actor passed as `target` in a nested proc.
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `procTarget` | `string|null|undefined` | — |
+| `context` | `object` | — |
+
+**Returns** `Actor|null` — —
+
+---
+
+### Function: `execute(ast, trigger, context)`
+
+Runs matching trigger blocks inside an existing emission.
+Registry emitters already provide the shared event state and overlay.
+
+---
+
+### Function: `warnGrantOnce(actor, reason)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1533,23 +2403,33 @@ delta can be positive (up) or negative (down).
 
 | Name | Type | Description |
 |------|------|-------------|
-| `damage` | — | — |
-| `delta` | — | — |
-| `damageFilter = null` | — | — |
+| `actor` | — | — |
+| `reason` | — | — |
 
 ---
 
-### Function: `execute(ast, trigger, context)`
+### Function: `isCreditGrant(action)`
 
-Execute all statements in a Script that match the given trigger.
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `ast` | `object` | — |
-| `trigger` | `string` | — |
-| `context` | `object` | — { self, target, ally, item?, clash? } |
+| `action` | — | — |
+
+---
+
+### Function: `runLetStatementSync(stmt, context)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `stmt` | — | — |
+| `context` | — | — |
 
 ---
 
@@ -1652,15 +2532,20 @@ Dice and async operations are NOT allowed here.
 
 ### Function: `highlightEasyEffects(source)`
 
-@param {string} source
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `source` | — | — |
 
 ---
 
 ### Function: `bindEasyEffectsHighlighter(root, { signal } = {})`
 
-@param {ParentNode} root
-
-**@param** — {{ signal?: AbortSignal }} [options]
+Keeps the syntax layer aligned with each EasyEffects textarea. AbortSignal
+lets a re-render tear down the binding without leaving stale listeners.
 
 ---
 
@@ -1700,6 +2585,68 @@ Dice and async operations are NOT allowed here.
 
 ---
 
+### Function: `sanitizeActorUpdate(update)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `update` | — | — |
+
+---
+
+### Function: `sanitizeItemUpdate(update)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `update` | — | — |
+
+---
+
+### Function: `gmRouteSocketResult(result)`
+
+Plain data for the socket reply. A Document (or anything we can't serialize) just goes back as `true`.
+
+---
+
+### Function: `uuidFromDocOrString(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `pushUuid(out, seen, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `out` | — | — |
+| `seen` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `sanitizeDamageOptions(options = {})`
+
+Socket payload for applyDamage.
+
+---
+
 ### Function: `getPrimaryGM()`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -1716,9 +2663,26 @@ Dice and async operations are NOT allowed here.
 
 ---
 
+### Function: `getTurnEventGM()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `isTurnEventGM()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
 ### Function: `runAsOwnerOrGM(actor, op, payload = {})`
 
 Routes actor mutations through an owner or active GM.
+Persistent EE metadata uses `runEEMetaPatch` instead
 
 **Parameters**
 
@@ -1732,7 +2696,27 @@ Routes actor mutations through an owner or active GM.
 
 ---
 
-### Function: `sanitizeDamageOptions(options = {})`
+### Function: `runAsCombatantOwnerOrGM(combatant, op, payload = {})`
+
+Players can only update a Combatant if they can modify its Actor. A write to someone
+else's Combatant (like an Assist) goes through the GM instead.
+
+---
+
+### Function: `runOnPrimaryGM(op, payload = {})`
+
+Runs `op` on the primary GM (locally if that's us). Handlers get `{ fromUserId }` as a second argument.
+
+---
+
+### Function: `runOnTurnEventGM(op, payload = {})`
+
+Same socket as `runOnPrimaryGM`, but `game.users.activeGM` is the one that answers
+`delayForwardAdvance`. The Delay mask has to go on the client that runs Foundry's turn events.
+
+---
+
+### Function: `dispatchToPrimaryGM(op, wirePayload)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1740,7 +2724,20 @@ Routes actor mutations through an owner or active GM.
 
 | Name | Type | Description |
 |------|------|-------------|
-| `options = {}` | — | — |
+| `op` | — | — |
+| `wirePayload` | — | — |
+
+---
+
+### Function: `combatOfCombatant(combatant)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combatant` | — | — |
 
 ---
 
@@ -1752,6 +2749,14 @@ Routes actor mutations through an owner or active GM.
 
 ---
 
+### Function: `runEEMetaPatch(doc, patch = {})`
+
+Persistent EE metadata on Actor, Item, Combat, or Combatant
+Calls local applyEEMetaPatch when the user can mutate the host, otherwise asks
+the primary GM to patch it.
+
+---
+
 ### Function: `ensureGmRouteSocket()`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
@@ -1760,93 +2765,9 @@ Routes actor mutations through an owner or active GM.
 
 ---
 
-## `src/module/easy-effects/dice-formula.js`
+## `src/module/easy-effects/filters.js`
 
-### Function: `applyDiceMaxFloor(baseSides, maxDelta = 0)`
-
-Max below d1 becomes a Power penalty.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `baseSides` | `number` | — |
-| `maxDelta` | `number` | — |
-
-**Returns** `{ sides: number, powerAdjust: number` — }
-
----
-
-### Function: `parseSimpleDiceFormula(formula)`
-
-@param {string} formula
-
-**Returns** `{ count: number, sides: number, power: number` — |null}
-
----
-
-### Function: `formatDiceFormula(count, sides, power)`
-
-@param {number} count
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `sides` | `number` | — |
-| `power` | `number` | — |
-
-**Returns** `string` — —
-
----
-
-### Function: `expandSimpleDiceByMultiplier(formula, times)`
-
-Multiplies die count; flat Power applies once.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `formula` | `string` | — |
-| `times` | `number` | — |
-
-**Returns** `string|null` — —
-
----
-
-### Function: `resolveDiceBonuses(baseFormula, bonuses = {})`
-
-Max changes die size; Power stays flat.
-
-**@param** — {{ power?: number, max?: number }} [bonuses]
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `baseFormula` | `string` | — |
-
-**Returns** `{ formula: string, sides: number, power: number, powerAdjust: number, maxDelta: number` — }
-
----
-
-### Function: `applyDiceBonuses(baseFormula, bonuses = {})`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `baseFormula` | — | — |
-| `bonuses = {}` | — | — |
-
----
-
-## `src/module/easy-effects/damage-filter.js`
-
-### Function: `splitTakingDamageTokens(mid)`
+### Function: `splitDamageFilterTokens(mid)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -1872,13 +2793,57 @@ Max changes die size; Power stays flat.
 
 ### Function: `filterPoolValue(filter)`
 
+Pool named on a taking-damage filter, if any. Compound filters keep it on `.pool`.
+
+---
+
+### Function: `normalizePoolList(raw)`
+
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 **Parameters**
 
 | Name | Type | Description |
 |------|------|-------------|
-| `filter` | — | — |
+| `raw` | — | — |
+
+---
+
+### Function: `pendingDamagePools(damage)`
+
+Returns the pools this hit is about to touch.
+
+Missing pool defaults to HP.
+
+**@param** — {{ pool?: string|string[] }|null|undefined} damage
+
+**Returns** `string[]` — —
+
+---
+
+### Function: `applyPendingDamageDelta(damage, delta, options = {})`
+
+Apply one `reduce/increase` modifier to the pending hit.
+
+Negative delta reduces damage while positive delta increases it.
+
+After-resistance changes are always tracked per pool.
+
+Before resistance, a modifier that affects the whole hit can update
+`damage.amount` directly. Pool-specific changes use `beforeDeltaByPool`.
+
+**@param** — {{
+  damageFilter?: object|null,
+  actionPool?: string|string[]|null,
+  timing?: "before"|"after",
+}} [options]
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `damage` | `object` | Pending hit from `applyDamage`. |
+| `delta` | `number` | Signed amount. |
 
 ---
 
@@ -1920,9 +2885,37 @@ Max changes die size; Power stays flat.
 
 ---
 
+### Function: `buildDamageFilterAst(pool, attack, sourceOrType)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `pool` | — | — |
+| `attack` | — | — |
+| `sourceOrType` | — | — |
+
+---
+
+### Function: `normalizeDealingDamageTrigger(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
+
+---
+
 ### Function: `matchesDamageFilter(filter, damage)`
 
-Runtime check for block.damageFilter vs context.damage.
+Should this `[On Taking … Damage]` block run for the pending hit?
+HP matches when HP is anywhere on the hit, including HP+ST attacks.
+That is "does the block fire".
 
 ---
 
@@ -1963,6 +2956,12 @@ Runtime check for block.damageFilter vs context.damage.
 
 ---
 
+### Function: `shouldExecuteBurstBlock(block, execContext)`
+
+Actor [On X Burst] waits for the global pass so it doesn't also fire locally.
+
+---
+
 ### Function: `resolveDefenderClashStance(retaliationType, defenderItem = null, defenderSkill = null)`
 
 @param {string|null|undefined} retaliationType
@@ -1974,7 +2973,7 @@ Runtime check for block.damageFilter vs context.damage.
 | `defenderItem` | `Item|null|undefined` | — |
 | `defenderSkill` *(optional)* | `Item|null|undefined` | — |
 
-**Returns** `"attack"|"block"|"evade"|null` — —
+**Returns** `"counter"|"block"|"evade"|null` — —
 
 ---
 
@@ -1991,7 +2990,7 @@ Runtime check for block.damageFilter vs context.damage.
   defenderSkill?: Item|null,
 }} payload
 
-**Returns** `"attack"|"block"|"evade"|null` — —
+**Returns** `"attack"|"counter"|"block"|"evade"|null` — —
 
 ---
 
@@ -2007,7 +3006,7 @@ Runtime check for block.damageFilter vs context.damage.
 
 @param {string} raw
 
-**Returns** `{ matched: boolean, trigger: string, clashStanceFilter: { stance: "attack"|"block"|"evade"|"defense"` — |null }}
+**Returns** `{ matched: boolean, trigger: string, clashStanceFilter: { stance: "attack"|"counter"|"block"|"evade"|"defense"` — |null }}
 
 ---
 
@@ -2024,6 +3023,439 @@ Runtime check for block.damageFilter vs context.damage.
 
 ---
 
+### `const HEAL_TRIGGER_ORDER`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `snapshotPools(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
+
+---
+
+### Function: `createHealBag({ amount = 0, pool = "hp", source = "" } = {})`
+
+Pending restore for one `applyDamage({ op: "heal" })`.
+`originalPool` is snapshotted here and `pool` is whatever `convert` last wrote.
+
+---
+
+### Function: `parseHealPoolMid(mid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `mid` | — | — |
+
+---
+
+### Function: `normalizeHealTrigger(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
+
+---
+
+### Function: `normalizeBeingHealedTrigger(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
+
+---
+
+### Function: `matchesHealFilter(filter, heal)`
+
+Matches `originalPool`. This makes it so that a later `convert` doesn't skip this slice.
+
+---
+
+### Function: `collectUniqueHealItems(items = [], extraItem = null)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `items = []` | — | — |
+| `extraItem = null` | — | — |
+
+---
+
+### Function: `push(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+
+---
+
+### Function: `buildHealSliceContexts(payload = {})`
+
+Healer and patient share this `heal` object. No healer means no `[On Heal]`.
+
+---
+
+### Function: `planHealSlices(payload = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `payload = {}` | — | — |
+
+---
+
+### Function: `pendingRollTags(pendingRoll)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `pendingRoll` | — | — |
+
+---
+
+### Function: `normalizeOnRollTrigger(raw)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `raw` | — | — |
+
+---
+
+### Function: `matchesRollFilter(filter, pendingRoll)`
+
+Case-insensitive match on `pendingRoll.tags`.
+
+---
+
+## `src/module/easy-effects/ee-meta.js`
+
+### Function: `encodeFlagKey(key)`
+
+Foundry treats dots in update paths as nesting. Author-defined keys are
+stored as UTF-8 hex so they remain safe inside `doc.update` paths.
+
+---
+
+### Function: `decodeFlagKey(encoded)`
+
+Throws if the value is not one of our encoded keys.
+
+---
+
+### Function: `isValidFlagValue(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `isApprovedEEMetaHost(doc)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `doc` | — | — |
+
+---
+
+### Function: `canMutateEEMetaHost(doc)`
+
+Combat metadata is GM-only. Other supported documents follow their normal
+ownership rules, including embedded Items whose owning Actor is writable.
+
+---
+
+### Function: `createEEEmission()`
+
+Event flags and staged persistent writes live for one logical emission.
+Every script participating in that emission shares this state.
+
+---
+
+### Function: `attachEmitState(context, emission)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `context` | — | — |
+| `emission` | — | — |
+
+---
+
+### Function: `runLogicalEmission(fn)`
+
+Persistent changes flush when the logical emission ends, even if execution
+exits through an exception.
+
+---
+
+### Function: `overlayRow(emission, doc)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `doc` | — | — |
+
+---
+
+### Function: `getEventFlag(emission, key)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `key` | — | — |
+
+---
+
+### Function: `setEventFlag(emission, key, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `key` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `clearEventFlag(emission, key)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `key` | — | — |
+
+---
+
+### Function: `storedFlagMap(doc)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `doc` | — | — |
+
+---
+
+### Function: `listPersistentFlags(doc)`
+
+Persisted EE flags only.
+
+---
+
+### Function: `getPersistentFlag(emission, doc, key)`
+
+The emission overlay wins over persisted metadata. That makes staged writes
+visible immediately and staged clears behave as missing before Foundry is
+updated. A stored value of `0` is still present.
+
+---
+
+### Function: `hasPersistentFlag(emission, doc, key)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `doc` | — | — |
+| `key` | — | — |
+
+---
+
+### Function: `stagePersistentFlag(emission, doc, key, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `doc` | — | — |
+| `key` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `stageClearPersistentFlag(emission, doc, key)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `emission` | — | — |
+| `doc` | — | — |
+| `key` | — | — |
+
+---
+
+### Function: `flushEEEmission(emission)`
+
+Clear the overlay before applying patches so nested execution cannot flush
+the same staged rows twice.
+
+---
+
+### Function: `eeMetaUpdatePath(encodedKey)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `encodedKey` | — | — |
+
+---
+
+### Function: `applyEEMetaPatch(doc, { set = {}, unset = [] } = {})`
+
+Applies an EE metadata patch directly to the document. This is the low-level
+write path and does not perform permission checks or GM routing.
+
+Updates are sent as per-key diffs so the surrounding metadata blob is left
+intact.
+
+---
+
+## `src/module/easy-effects/dice-formula.js`
+
+### Function: `applyDiceMaxFloor(baseSides, maxDelta = 0)`
+
+Max that would drop a die below d1 becomes a Power penalty instead.
+
+---
+
+### Function: `parseSimpleDiceFormula(formula)`
+
+`NdX+P` only. Keep/drop and other Foundry syntax return null.
+
+---
+
+### Function: `parseDiceFormulaOverride(formula)`
+
+`2d10+8[slash]` and `2d10[slash]+8` both parse. Two flavors return null.
+A count or a face count below 1 also returns null.
+
+---
+
+### Function: `formatDiceFormula(count, sides, power)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `count` | — | — |
+| `sides` | — | — |
+| `power` | — | — |
+
+---
+
+### Function: `expandSimpleDiceByMultiplier(formula, times)`
+
+`deal 1d10 per N` becomes one `Nd10` roll. Flat Power is not multiplied.
+
+---
+
+### Function: `resolveDiceBonuses(baseFormula, bonuses = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `baseFormula` | — | — |
+| `bonuses = {}` | — | — |
+
+---
+
+### Function: `applyDiceBonuses(baseFormula, bonuses = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `baseFormula` | — | — |
+| `bonuses = {}` | — | — |
+
+---
+
 ## `src/module/easy-effects/choice-dialog.js`
 
 ### `const _pending`
@@ -2032,33 +3464,14 @@ Runtime check for block.damageFilter vs context.damage.
 
 ---
 
-### Function: `promptChoiceDialog({ prompt, choices, actor = null } = {})`
+### Function: `resolvePromptUser(actor, tokenId = null)`
 
-@param {{
-  prompt: string,
-  choices: { id: string, label: string }[],
-  actor?: Actor|null,
-}} options
-
-**Returns** `Promise<string|null>` — —
+Active non-GM owner of the token or actor, else the current user if they
+can act, else an active GM.
 
 ---
 
-### Function: `resolvePromptUser(actor)`
-
-Player owner first, then any owner, then an active GM.
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `actor` | `Actor|null|undefined` | — |
-
-**Returns** `User` — —
-
----
-
-### Function: `requestRemoteChoice({ userId, prompt, choices })`
+### Function: `requestRemoteChoice({ userId, prompt, choices, title = null, cancel = true, windowStyle = false, timeoutMs = CHOICE_TIMEOUT_MS, timeoutValue = null })`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -2068,7 +3481,12 @@ Player owner first, then any owner, then an active GM.
 |------|------|-------------|
 | `{ userId` | — | — |
 | `prompt` | — | — |
-| `choices }` | — | — |
+| `choices` | — | — |
+| `title = null` | — | — |
+| `cancel = true` | — | — |
+| `windowStyle = false` | — | — |
+| `timeoutMs = CHOICE_TIMEOUT_MS` | — | — |
+| `timeoutValue = null }` | — | — |
 
 ---
 
@@ -2085,6 +3503,78 @@ Player owner first, then any owner, then an active GM.
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 *No description provided.*
+
+---
+
+## `src/module/easy-effects/burst-roles.js`
+
+### Function: `actorIdentityKey(actor)`
+
+Unlinked token actors can share a world actor's id so we use uuid as the the real key.
+
+---
+
+### Function: `sameActor(a, b)`
+
+True when both refs are the same token actor
+
+---
+
+### Function: `selectRelativeActors(actors, self, kind, isEnemy)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actors` | — | — |
+| `self` | — | — |
+| `kind` | — | — |
+| `isEnemy` | — | — |
+
+---
+
+### Function: `itemIdentityKey(item)`
+
+Same embedded item id can exist on two different actors.
+
+---
+
+### Function: `resolveBurstBurster(context)`
+
+Dialog answerer if we're in one, else self
+
+---
+
+### Function: `uniqueBurstOwners(...actors)`
+
+First occurrence of each actor, keyed by `actorIdentityKey`.
+
+---
+
+### Function: `itemBelongsToActor(item, owner)`
+
+Owned by `owner`, including unlinked token copies of the same item.
+
+---
+
+### Function: `rememberBurstListenerItem(seenKeys, item, skipItemKey)`
+
+Dedupes burst/proc listeners. False if the item was skipped or already seen.
+
+---
+
+### Function: `collectUsedSkills(owner, usedSkills)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `owner` | — | — |
+| `usedSkills` | — | — |
 
 ---
 
@@ -2146,7 +3636,7 @@ Player owner first, then any owner, then an active GM.
 
 ---
 
-### Function: `clearActorScriptCache(actorId = null)`
+### Function: `clearActorScriptCache(actorOrKey = null)`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -2154,7 +3644,7 @@ Player owner first, then any owner, then an active GM.
 
 | Name | Type | Description |
 |------|------|-------------|
-| `actorId = null` | — | — |
+| `actorOrKey = null` | — | — |
 
 ---
 
@@ -2193,34 +3683,10 @@ Player owner first, then any owner, then an active GM.
 
 ### Function: `runActorEasyEffects(actor, triggerName, context = {})`
 
-@param {Actor} actor
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `triggerName` | `string` | — |
-| `context` | `object` | — |
-
-**Returns** `Promise<boolean>` — true if a script ran
-
----
-
-### Function: `runDepletedEasyEffects(actor, depleted)`
-
-@param {Actor} actor
-
-**@param** — {{ pool: string, before: number, max: number }} depleted
+Returns false if there is no matching block or nesting overflowed.
 
 ---
 
 ### Function: `runActorEasyEffectsFor(actors, triggerName, buildContext)`
 
-@param {Array<Actor|null>} actors
-
-**Parameters**
-
-| Name | Type | Description |
-|------|------|-------------|
-| `triggerName` | `string` | — |
-| `buildContext` | `(actor: Actor) => object` | — |
+One pass per actor uuid. `buildContext` returning falsy skips that actor.

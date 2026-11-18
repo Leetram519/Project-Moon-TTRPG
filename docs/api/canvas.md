@@ -1,18 +1,10 @@
 # canvas
 
-> **JSDoc coverage: -177/11 symbols (-1609%)**
+> **JSDoc coverage: -1588/197 symbols (-806%)**
 
 ## `src/module/canvas/token.js`
 
-### Function: `registerTokenStatusBadges()`
-
-> [WARNING] *No JSDoc comment — signature extracted from source.*
-
-*No description provided.*
-
----
-
-### Class: `TokenPMTTRPG` *(extends `BaseToken`)*
+### Class: `TokenPMTTRPG` *(extends `foundry`)*
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -28,260 +20,84 @@
 
 ---
 
+### Function: `refreshTokenActionStateBadgesForCombatant(combatant)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combatant` | — | — |
+
+---
+
+### Function: `refreshTokenActionStateBadgesForCombat(combat)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combat` | — | — |
+
+---
+
+### Function: `refreshAllTokenActionStateBadges()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `registerTokenActionStateBadges()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `registerTokenStatusBadges()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
 ### Function: `registerTokenStatusBadgeSettings()`
 
-/** @override */
-    _onHoverOut(event) {
-      this.#statusHover = false;
-      void this.drawStatusBadges();
-      return super._onHoverOut(event);
-    }
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
-    /* -------------------------------------------- */
+*No description provided.*
 
-    #clearPendingBreath() {
-      const ticker = canvas?.app?.ticker;
-      for (const tick of this.#pendingBreathTicks) {
-        ticker?.remove(tick);
-      }
-      this.#pendingBreathTicks.clear();
-    }
+---
 
-    #attachPendingBreath(entry) {
-      const ticker = canvas?.app?.ticker;
-      if (!ticker || !entry) return;
-      const start = performance.now();
-      const tick = () => {
-        if (!entry || entry.destroyed || !this.statusBadges || this.destroyed) {
-          ticker.remove(tick);
-          this.#pendingBreathTicks.delete(tick);
-          return;
-        }
-        const t = (performance.now() - start) / 2200;
-        const wave = 0.5 + 0.5 * Math.sin(t * Math.PI * 2);
-        entry.alpha = 0.38 + wave * 0.5;
-      };
-      this.#pendingBreathTicks.add(tick);
-      ticker.add(tick);
-      tick();
-    }
+### Function: `showWeaponRange(tokenId, weaponRange)`
 
-    #createStatusBadgeContainer() {
-      this.#clearPendingBreath();
-      this.statusBadges?.destroy({ children: true });
-      this.statusBadges = this.addChild(new PIXI.Container());
-      this.statusBadges.name = "pmttrpgStatusBadges";
-      this.statusBadges.eventMode = "none";
-      this.statusBadges.sortableChildren = false;
-    }
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
-    async drawStatusBadges() {
-      if (!this.statusBadges || this.destroyed) return;
+**Parameters**
 
-      const drawId = ++this.#badgeDrawId;
-      this.#clearPendingBreath();
-      for (const child of this.statusBadges.removeChildren()) {
-        child.destroy({ children: true });
-      }
+| Name | Type | Description |
+|------|------|-------------|
+| `tokenId` | — | — |
+| `weaponRange` | — | — |
 
-      const enabled = game.settings.get("projectmoonttrpg", "showTokenStatusBadges");
-      const actor = this.actor;
-      if (!enabled || !actor) {
-        this.statusBadges.visible = false;
-        return;
-      }
+---
 
-      const all = groupStatuses(actor, { sort: "display" });
-      if (!all.length) {
-        this.statusBadges.visible = false;
-        return;
-      }
+### Function: `hideWeaponRange(tokenId)`
 
-      const overflowCount = (!this.#statusHover && all.length > VISIBLE_CAP)
-        ? all.length - VISIBLE_CAP
-        : 0;
-      const visible = this.#statusHover ? all : all.slice(0, VISIBLE_CAP);
+> [WARNING] *No JSDoc comment — signature extracted from source.*
 
-      // Scale icons to fit the visible row across the token.
-      const pad = Math.max(2, Math.round(Math.min(this.w, this.h) * 0.03));
-      const maxRowWidth = Math.max(1, this.w - pad * 2);
-      const entryGap = Math.max(1, Math.round(maxRowWidth * 0.015));
-      const rowGap = Math.max(1, Math.round(maxRowWidth * 0.012));
-      const slots = VISIBLE_CAP;
-      const iconSize = Math.max(
-        10,
-        Math.min(
-          Math.floor((maxRowWidth - entryGap * (slots - 1)) / slots),
-          Math.floor(this.h * 0.34),
-        ),
-      );
-      const numSize = Math.max(10, Math.round(iconSize * 0.6));
+**Parameters**
 
-      const PreciseText = foundry.canvas.containers.PreciseText;
-      const textStyleOpts = {
-        fontFamily: CONFIG.defaultFontFamily || "Signika, sans-serif",
-        fontSize: numSize,
-        fill: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: Math.max(1, Math.round(numSize * 0.18)),
-        dropShadow: true,
-        dropShadowColor: "#000000",
-        dropShadowBlur: 1,
-        dropShadowDistance: 0,
-        dropShadowAlpha: 0.65,
-        align: "center",
-      };
-      const textStyle = PreciseText.getTextStyle(textStyleOpts);
-      const pendingTextStyle = PreciseText.getTextStyle({
-        ...textStyleOpts,
-        fill: "#c8c8c8",
-      });
-
-      const entries = [];
-      for (const status of visible) {
-        if (drawId !== this.#badgeDrawId) return;
-        const entry = await this.#buildBadgeEntry(
-          status,
-          iconSize,
-          status.pending ? pendingTextStyle : textStyle,
-          PreciseText,
-        );
-        if (drawId !== this.#badgeDrawId) {
-          entry?.destroy({ children: true });
-          return;
-        }
-        if (entry) entries.push(entry);
-      }
-
-      if (overflowCount > 0 && entries.length) {
-        this.#attachOverflowBadge(entries[entries.length - 1], iconSize, overflowCount, PreciseText);
-      }
-
-      if (drawId !== this.#badgeDrawId) {
-        for (const e of entries) e.destroy({ children: true });
-        return;
-      }
-
-      const slotW = iconSize;
-      const slotH = iconSize + Math.max(2, Math.round(iconSize * 0.12));
-      let cursorX = 0;
-      let cursorY = 0;
-      let rowHeight = 0;
-      let rowWidth = 0;
-      let maxWidth = 0;
-
-      for (const entry of entries) {
-        if (cursorX > 0 && cursorX + slotW > maxRowWidth + 0.5) {
-          maxWidth = Math.max(maxWidth, rowWidth);
-          cursorX = 0;
-          cursorY += rowHeight + rowGap;
-          rowHeight = 0;
-          rowWidth = 0;
-        }
-        entry.x = cursorX;
-        entry.y = cursorY;
-        this.statusBadges.addChild(entry);
-        if (entry._pmPending) this.#attachPendingBreath(entry);
-        cursorX += slotW + entryGap;
-        rowWidth = cursorX - entryGap;
-        rowHeight = Math.max(rowHeight, slotH);
-      }
-      maxWidth = Math.max(maxWidth, rowWidth);
-      const totalHeight = cursorY + rowHeight;
-      this.statusBadges.x = Math.max(pad, (this.w - maxWidth) / 2);
-      this.statusBadges.y = Math.max(pad, this.h - totalHeight - pad);
-      this.statusBadges.visible = true;
-    }
-
-    async #buildBadgeEntry(status, iconSize, textStyle, PreciseText) {
-      const entry = new PIXI.Container();
-      entry.eventMode = "none";
-      entry._pmPending = !!status.pending;
-
-      const src = status.img || "icons/svg/mystery-man.svg";
-      let texture = null;
-      try {
-        texture = await foundry.canvas.loadTexture(src, {
-          fallback: "icons/svg/mystery-man.svg",
-        });
-      } catch (err) {
-        console.warn(`PMTTRPG | Failed to load status icon for ${status.name}`, err);
-        return null;
-      }
-      if (!(texture instanceof PIXI.Texture)) return null;
-
-      const icon = new PIXI.Sprite(texture);
-      icon.width = iconSize;
-      icon.height = iconSize;
-      icon.eventMode = "none";
-      if (status.pending) icon.tint = 0x9a9a9a;
-      entry.addChild(icon);
-
-      // Max stack of 1 statuses only need the icon.
-      if (status.showCount !== false) {
-        const label = new PreciseText(String(status.count), textStyle);
-        label.eventMode = "none";
-        label.anchor.set(0, 1);
-        label.x = 0;
-        label.y = iconSize + Math.max(2, Math.round(iconSize * 0.06));
-        entry.addChild(label);
-      }
-
-      return entry;
-    }
-
-    #attachOverflowBadge(entry, iconSize, count, PreciseText) {
-      const badgeH = Math.max(8, Math.round(iconSize * 0.45));
-      const fontSize = Math.max(7, Math.round(badgeH * 0.72));
-
-      const style = PreciseText.getTextStyle({
-        fontFamily: CONFIG.defaultFontFamily || "Signika, sans-serif",
-        fontSize,
-        fontWeight: "700",
-        fill: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 1,
-        align: "center",
-      });
-
-      const label = new PreciseText(`+${count}`, style);
-      label.eventMode = "none";
-      label.anchor.set(0.5);
-
-      const padX = Math.max(3, Math.round(badgeH * 0.28));
-      const badgeW = Math.max(badgeH, Math.ceil(label.width + padX * 2));
-      const radius = badgeH / 2;
-
-      const bg = new PIXI.Graphics();
-      bg.eventMode = "none";
-      if (typeof bg.roundRect === "function") {
-        bg.roundRect(0, 0, badgeW, badgeH, radius).fill({ color: 0x141414, alpha: 0.82 });
-      } else {
-        bg.beginFill(0x141414, 0.82);
-        bg.drawRoundedRect(0, 0, badgeW, badgeH, radius);
-        bg.endFill();
-      }
-
-      label.x = badgeW / 2;
-      label.y = badgeH / 2;
-
-      const badge = new PIXI.Container();
-      badge.eventMode = "none";
-      badge.addChild(bg);
-      badge.addChild(label);
-      // Keep the overflow count clear of the stack count.
-      badge.x = iconSize - badgeW * 0.4;
-      badge.y = -badgeH * 0.35;
-      entry.addChild(badge);
-    }
-  }
-
-  CONFIG.Token.objectClass = TokenPMTTRPG;
-
-  onStatusItemChange(refreshTokenStatusBadgesForItem);
-}
-
-/* --------------------------------------------
+| Name | Type | Description |
+|------|------|-------------|
+| `tokenId` | — | — |
 
 ---
 
@@ -343,7 +159,7 @@
 
 ---
 
-### Function: `registerTokenRuler()`
+### Class: `TokenRulerPMTTRPG` *(extends `foundry`)*
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
@@ -351,8 +167,2253 @@
 
 ---
 
-### Class: `TokenRulerPMTTRPG` *(extends `Base`)*
+## `src/module/canvas/token-hud.js`
+
+### Function: `refusalKey(result)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `result` | — | — |
+
+---
+
+### Function: `warnFallRefused(result)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `result` | — | — |
+
+---
+
+### Function: `proneIconSrc()`
 
 > [WARNING] *No JSDoc comment — signature extracted from source.*
 
 *No description provided.*
+
+---
+
+### Function: `fallButton(availability)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `availability` | — | — |
+
+---
+
+### Function: `registerTokenHUDPMTTRPG()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Class: `TokenHUDPMTTRPG` *(extends `Current`)*
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+## `src/module/canvas/token-document.js`
+
+### Function: `startsNewMovement(options = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `options = {}` | — | — |
+
+---
+
+### Function: `refuseGrappledMovement(tokenDoc, options)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `tokenDoc` | — | — |
+| `options` | — | — |
+
+---
+
+### Function: `registerTokenDocumentPMTTRPG()`
+
+TokenDocument subclass so we see Foundry v14 movement before the private
+`#preUpdateMovement` freezes the waypoints. Drag, keyboard and `move()` all still
+end up in `_preUpdate` with `options.movement`, which is where the later checks run.
+
+---
+
+### Class: `TokenDocumentPMTTRPG` *(extends `Current`)*
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+## `src/module/canvas/status-tooltip.js`
+
+### Function: `preloadStatusTooltip()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `getElement()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `showStatusTooltip(status, rect)`
+
+@param {object} status  Grouped status (name, img, count, description, showCount, pending, showHoverDetails)
+
+**@param** — {{left:number, top:number, width:number, height:number}} rect  Client-space rect of the badge
+
+---
+
+### Function: `hideStatusTooltip()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+## `src/module/canvas/spatial.js`
+
+### Function: `tokenCenter(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `tokenIdOf(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `normalizeToken(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `tokenActor(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `tokenBelongsToActor(token, actor)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+| `actor` | — | — |
+
+---
+
+### Function: `resolveOriginatingToken(actor, provided = null)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `provided = null` | — | — |
+
+---
+
+### Function: `gridForToken(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `tokenGridOffset(token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+
+---
+
+### Function: `gridSpan(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `gridSpanGap(startA, spanA, startB, spanB)`
+
+Squares between two spans on one axis. Overlapping is 0 and touching is 1.
+
+---
+
+### Function: `gridBoxAt(grid, { x, y, width = 1, height = 1 } = {})`
+
+Turns a top-left pixel and a size in squares into `{ row, col, rows, cols }` (`i` is the row).
+On square grids we read the offset at the center of the top-left square (since the exact corner can land on the neighbouring square).
+
+---
+
+### Function: `tokenGridBox(token)`
+
+The squares a token takes up, from its committed position and size. Reads
+`_source` because Token#animate merges every frame into the TokenDocument (so
+`x` and `width` are in-between values while it slides or resizes).
+
+---
+
+### Function: `gridBoxGap(a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `tokenDistanceSquares(fromToken, toToken)`
+
+Squares between two tokens' occupied squares (adjacent is 1).
+
+---
+
+## `src/module/canvas/point-picker.js`
+
+### Function: `offsetOf(point, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `pointFromOffset(offset, grid, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `offset` | — | — |
+| `grid` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `snapPointToCell(point, grid, elevation = 0)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `grid` | — | — |
+| `elevation = 0` | — | — |
+
+---
+
+### Function: `gridSpacesBetween(a, b, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `cellsInReach(origin, maxSpaces, grid, measure, elevation = origin?.elevation ?? 0)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `origin` | — | — |
+| `maxSpaces` | — | — |
+| `grid` | — | — |
+| `measure` | — | — |
+| `elevation = origin?.elevation ?? 0` | — | — |
+
+---
+
+### Function: `pickerElevationForKey(elevation, key, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `elevation` | — | — |
+| `key` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `editableTarget(target)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `target` | — | — |
+
+---
+
+### Function: `keyStep(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `cellKey(cell)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+
+---
+
+### Function: `cellCenter(cell, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `claim(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `labelText(description)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `description` | — | — |
+
+---
+
+### Function: `withLines(description, extra)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `description` | — | — |
+| `extra` | — | — |
+
+---
+
+### Function: `shownDescription(description, { changed = false } = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `description` | — | — |
+| `{ changed = false } = {}` | — | — |
+
+---
+
+### Function: `invalidDescription(reasonKey = "PMTTRPG.PlannedMovement.PickOutOfRange")`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `reasonKey = "PMTTRPG.PlannedMovement.PickOutOfRange"` | — | — |
+
+---
+
+### Function: `makeGraphics()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `drawPolyline(graphics, points)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `graphics` | — | — |
+| `points` | — | — |
+
+---
+
+### Function: `drawDot(graphics, x, y, radius, color)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `graphics` | — | — |
+| `x` | — | — |
+| `y` | — | — |
+| `radius` | — | — |
+| `color` | — | — |
+
+---
+
+### Function: `drawCross(graphics, x, y, size)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `graphics` | — | — |
+| `x` | — | — |
+| `y` | — | — |
+| `size` | — | — |
+
+---
+
+### Function: `clearContainer(container)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `container` | — | — |
+
+---
+
+### Function: `ghostSprite(token, ghost, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `token` | — | — |
+| `ghost` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `labelNode(text, cell, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `text` | — | — |
+| `cell` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `labelBackdrop(label)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `label` | — | — |
+
+---
+
+### Function: `closePick(target, value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `target` | — | — |
+| `value` | — | — |
+
+---
+
+### Function: `currentCell()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `token()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `paintReach()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `paintOverlay(cell, description)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+| `description` | — | — |
+
+---
+
+### Function: `paintHover(cell, description)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+| `description` | — | — |
+
+---
+
+### Function: `outOfReach(cell)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+
+---
+
+### Function: `fitHeight(cell)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `cell` | — | — |
+
+---
+
+### Function: `applyElevation(next)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `next` | — | — |
+
+---
+
+### Function: `nudge(row, column)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `row` | — | — |
+| `column` | — | — |
+
+---
+
+### Function: `worldPoint(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `onMove(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `onDown(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `onKey(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `onWheel(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+### Function: `onTearDown()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `onDelete(doc)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `doc` | — | — |
+
+---
+
+### Function: `listen(type, handler)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `type` | — | — |
+| `handler` | — | — |
+
+---
+
+### Function: `swallow(event)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `event` | — | — |
+
+---
+
+## `src/module/canvas/landing-resolve.js`
+
+### Function: `num(value, fallback = 0)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+| `fallback = 0` | — | — |
+
+---
+
+### Function: `readGrid(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `additiveSquares(from, to, grid)`
+
+Flat Chebyshev distance plus the height, in squares (keeps the fractional square).
+
+---
+
+### Function: `pointAtFraction(from, to, fraction)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `from` | — | — |
+| `to` | — | — |
+| `fraction` | — | — |
+
+---
+
+### Function: `pointAlong(from, to, total, squares)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `from` | — | — |
+| `to` | — | — |
+| `total` | — | — |
+| `squares` | — | — |
+
+---
+
+### Function: `aimPoint(origin, destination, requested, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `origin` | — | — |
+| `destination` | — | — |
+| `requested` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `completedSquares(distance)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `distance` | — | — |
+
+---
+
+### Function: `fallingDice(squares, rank)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `squares` | — | — |
+| `rank` | — | — |
+
+---
+
+### Function: `diceResult(squares)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `squares` | — | — |
+
+---
+
+### Function: `pose(point, token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `token` | — | — |
+
+---
+
+### Function: `tokenOf(motion, origin)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `motion` | — | — |
+| `origin` | — | — |
+
+---
+
+### Function: `uniqueSorted(values)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `values` | — | — |
+
+---
+
+### Function: `levelBases(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `floorPlanes(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `surfacePlanes(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `supportAt(snapshot, position, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `position` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `surfaceAt(snapshot, position, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `position` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `firstSurface(snapshot, from, to, token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `from` | — | — |
+| `to` | — | — |
+| `token` | — | — |
+
+---
+
+### Function: `transitionAt(snapshot, position)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `position` | — | — |
+
+---
+
+### Function: `transitionFractions(snapshot, from, to, token, total)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `from` | — | — |
+| `to` | — | — |
+| `token` | — | — |
+| `total` | — | — |
+
+---
+
+### Function: `firstTransition(snapshot, from, to, token, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `from` | — | — |
+| `to` | — | — |
+| `token` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `kindAt(fraction)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `fraction` | — | — |
+
+---
+
+### Function: `blankRest(elevation, basis)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `elevation` | — | — |
+| `basis` | — | — |
+
+---
+
+### Function: `knownRest(floor)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `floor` | — | — |
+
+---
+
+### Function: `fallFrom(apex, restElevation, grid, rank, reportFalling, basis)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `apex` | — | — |
+| `restElevation` | — | — |
+| `grid` | — | — |
+| `rank` | — | — |
+| `reportFalling` | — | — |
+| `basis` | — | — |
+
+---
+
+### Function: `surfaceContact(snapshot, segment = {})`
+
+First floor or ceiling the segment runs into. `elevation` is the feet at contact (not snapped to a square).
+
+---
+
+### Function: `transitionEntry(snapshot, segment = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `segment = {}` | — | — |
+
+---
+
+### Function: `settleDown(snapshot, from, floor, token, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `from` | — | — |
+| `floor` | — | — |
+| `token` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `returnDown(snapshot, from, origin, token)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `from` | — | — |
+| `origin` | — | — |
+| `token` | — | — |
+
+---
+
+### Function: `resolveLanding(snapshot, motion = {})`
+
+If `landing` isn't "none" then settling can add a vertical leg (it doesn't count toward the actual or unspent squares).
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | `object` | Floor snapshot from `snapshotFromScene`. |
+| `motion` | `object` | Plain throw: origin, destination, requestedSpaces, token size and depth, rank, landing, plus the surfaces ("ignore"), transitions ("allow") and reportFalling switches. |
+
+---
+
+## `src/module/canvas/floor-snapshot.js`
+
+### Function: `firstNumber(...values)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `...values` | — | — |
+
+---
+
+### Function: `firstPositive(...values)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `...values` | — | — |
+
+---
+
+### Function: `gridKind(grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `grid` | — | — |
+
+---
+
+### Function: `gridFromScene(scene)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `scene` | — | — |
+
+---
+
+### Function: `pairPoints(points)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `points` | — | — |
+
+---
+
+### Function: `rectPoints(x, y, width, height)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `x` | — | — |
+| `y` | — | — |
+| `width` | — | — |
+| `height` | — | — |
+
+---
+
+### Function: `roundCoord(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `rotateRect(x, y, width, height, degrees)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `x` | — | — |
+| `y` | — | — |
+| `width` | — | — |
+| `height` | — | — |
+| `degrees` | — | — |
+
+---
+
+### Function: `normalizeShape(shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+
+---
+
+### Function: `holeRing(shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+
+---
+
+### Function: `groupShapes(shapes)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shapes` | — | — |
+
+---
+
+### Function: `shapesFromRegion(region)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `region` | — | — |
+
+---
+
+### Function: `levelIdsFrom(region)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `region` | — | — |
+
+---
+
+### Function: `elevationBand(region)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `region` | — | — |
+
+---
+
+### Function: `levelsFromScene(scene, state)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `scene` | — | — |
+| `state` | — | — |
+
+---
+
+### Function: `surfacesFromScene(scene, state)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `scene` | — | — |
+| `state` | — | — |
+
+---
+
+### Function: `transitionsFromScene(scene)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `scene` | — | — |
+
+---
+
+### Function: `snapshotFromScene(scene)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `scene` | — | — |
+
+---
+
+### Function: `queryFloorForToken(tokenDoc)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `tokenDoc` | — | — |
+
+---
+
+## `src/module/canvas/floor-query.js`
+
+### `const EPS`
+
+Works out the floor under a token from a plain scene snapshot.
+An upper level's base only counts as a floor when the level has no move surface right at its base.
+A floor on a shared boundary goes to the upper level (same as Foundry).
+Support uses the footprint inset by a quarter space, but Change Level and Teleport Token regions use the full footprint.
+(this also contains a piece of suffering)
+
+---
+
+### Function: `readNumber(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `readBound(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `spaces(value)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value` | — | — |
+
+---
+
+### Function: `gridOf(grid = {})`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `grid = {}` | — | — |
+
+---
+
+### Function: `signedArea(ring)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+
+---
+
+### Function: `clockwise(ring)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+
+---
+
+### Function: `samePoint(a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `orient(a, b, c)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+| `c` | — | — |
+
+---
+
+### Function: `onSegment(a, b, point)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+| `point` | — | — |
+
+---
+
+### Function: `pointInRing(point, ring)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `ring` | — | — |
+
+---
+
+### Function: `properIntersect(a, b, c, d)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+| `c` | — | — |
+| `d` | — | — |
+
+---
+
+### Function: `edgesCross(left, right)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `left` | — | — |
+| `right` | — | — |
+
+---
+
+### Function: `ringContains(outer, inner)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `outer` | — | — |
+| `inner` | — | — |
+
+---
+
+### Function: `ringsOverlap(left, right)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `left` | — | — |
+| `right` | — | — |
+
+---
+
+### Function: `rectRing(shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+
+---
+
+### Function: `pointInCircle(point, shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `shape` | — | — |
+
+---
+
+### Function: `pointInEllipse(point, shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `shape` | — | — |
+
+---
+
+### Function: `distanceToSegment(point, a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `point` | — | — |
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `shapeRing(shape)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+
+---
+
+### Function: `shapeContains(shape, footprint)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+| `footprint` | — | — |
+
+---
+
+### Function: `shapeOverlaps(shape, footprint)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shape` | — | — |
+| `footprint` | — | — |
+
+---
+
+### Function: `lineIntersect(first, second)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `first` | — | — |
+| `second` | — | — |
+
+---
+
+### Function: `centroid(ring)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+
+---
+
+### Function: `insetConvex(ring, margin)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+| `margin` | — | — |
+
+---
+
+### Function: `convexHull(points)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `points` | — | — |
+
+---
+
+### Function: `cross(origin, a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `origin` | — | — |
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `rectangularFootprint(position, size)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `position` | — | — |
+| `size` | — | — |
+
+---
+
+### Function: `hexVertices(cx, cy, radius, columns)`
+
+Foundry's hex size is the flat-to-flat span, so center to vertex is size / sqrt(3)
+(a pointy hex ends up `size` wide and a flat one `size` tall).
+
+---
+
+### Function: `hexCenters(position, size, columns, even)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `position` | — | — |
+| `size` | — | — |
+| `columns` | — | — |
+| `even` | — | — |
+
+---
+
+### Function: `occupiedRing(position, grid)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `position` | — | — |
+| `grid` | — | — |
+
+---
+
+### Function: `levelIds(surface)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `surface` | — | — |
+
+---
+
+### Function: `finiteBases(levels)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `levels` | — | — |
+
+---
+
+### Function: `usableSurfaces(surfaces)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `surfaces` | — | — |
+
+---
+
+### Function: `implicitGround(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `trustworthyScene(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `bandEnds(level)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `level` | — | — |
+
+---
+
+### Function: `inLevelBand(level, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `level` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `startsAt(level, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `level` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `levelAmong(ids, byId, elevation, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ids` | — | — |
+| `byId` | — | — |
+| `elevation` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `highestLevel(ids, byId, elevation, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ids` | — | — |
+| `byId` | — | — |
+| `elevation` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `levelsById(snapshot)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+
+---
+
+### Function: `containingIds(byId, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `byId` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `levelForElevation(snapshot, elevation, candidateIds, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `elevation` | — | — |
+| `candidateIds` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `pathLevelAt(snapshot, elevation, moverLevelId)`
+
+Which level's walls apply at a point on a path. It stays the mover's level while
+the elevation is inside it, and past that it's whatever level a floor at that
+elevation would get.
+
+---
+
+### Function: `ownsBase(surface, level)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `surface` | — | — |
+| `level` | — | — |
+
+---
+
+### Function: `baseChoice(lowest, snapshot, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `lowest` | — | — |
+| `snapshot` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `cleanRing(points)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `points` | — | — |
+
+---
+
+### Function: `lineSide(a, b, point)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `a` | — | — |
+| `b` | — | — |
+| `point` | — | — |
+
+---
+
+### Function: `segmentHit(p, q, a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `p` | — | — |
+| `q` | — | — |
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `chordOnSegment(ring, a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `splitConvexByLine(ring, a, b)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `ring` | — | — |
+| `a` | — | — |
+| `b` | — | — |
+
+---
+
+### Function: `unionCovers(footprint, shapes, depth = 0)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `footprint` | — | — |
+| `shapes` | — | — |
+| `depth = 0` | — | — |
+
+---
+
+### Function: `surfaceFloor(group, footprint, snapshot, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `group` | — | — |
+| `footprint` | — | — |
+| `snapshot` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `surfaceFloors(surfaces, footprint, snapshot, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `surfaces` | — | — |
+| `footprint` | — | — |
+| `snapshot` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `floorsAt(snapshot, footprint, tokenLevelId)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | — | — |
+| `footprint` | — | — |
+| `tokenLevelId` | — | — |
+
+---
+
+### Function: `highestAtOrBelow(floors, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `floors` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `inBand(elevation, region)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `elevation` | — | — |
+| `region` | — | — |
+
+---
+
+### Function: `shapesOverlap(shapes, footprint)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `shapes` | — | — |
+| `footprint` | — | — |
+
+---
+
+### Function: `transitionFlags(regions, footprint, elevation)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `regions` | — | — |
+| `footprint` | — | — |
+| `elevation` | — | — |
+
+---
+
+### Function: `emptyResult(transitions = { changeLevel: false, teleportToken: false })`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `transitions = { changeLevel: false` | — | — |
+| `teleportToken: false }` | — | — |
+
+---
+
+### Function: `queryFloor(snapshot, position = {})`
+
+`floor` is the highest floor at or below the token (null if there isn't one or we
+can't read the scene's floors). `supported` just means the token is standing right on it.
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `snapshot` | `object` | Plain scene copy from `snapshotFromScene`. |
+| `position` | `object` | Token top-left in pixels, size in grid spaces, elevation, and level id. |
+
+**Returns** `{
+  trustworthy: boolean,
+  supported: boolean,
+  floor: { elevation: number, levelId: string|null, owner: string|null, kind: "ground"|"base"|"surface"` — |null,
+  transitions: { changeLevel: boolean, teleportToken: boolean }
+}}

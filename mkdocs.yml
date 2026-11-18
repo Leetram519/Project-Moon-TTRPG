@@ -20,6 +20,7 @@ nav:
     - Internals: EasyEffects/03_internals.md
     - Cheat Sheet: EasyEffects/04_cheatsheet.md
   - API Reference:
+    - Action Economy: api/action-economy.md
     - Actor: api/actor.md
     - Apps: api/apps.md
     - Canvas: api/canvas.md

@@ -1,6 +1,6 @@
 # actor
 
-> **JSDoc coverage: -177/20 symbols (-885%)**
+> **JSDoc coverage: -331/38 symbols (-871%)**
 
 ## `src/module/actor/progression.js`
 
@@ -50,9 +50,7 @@
 
 ### Function: `getActionEconomyFromRank(rank)`
 
-@param {number} rank
-
-**Returns** `{ actions: number, reactions: number, movement: number` — }
+Actions/Reactions from rank. Movement is always 1 (tactical SQR pool is separate).
 
 ---
 
@@ -93,6 +91,74 @@
 ---
 
 ## `src/module/actor/character-sheet.js`
+
+### Function: `actorInCombat(actor)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+
+---
+
+### Function: `canEditReactionCredits(actor)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+
+---
+
+### Function: `sheetActionStates(combatant)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combatant` | — | — |
+
+---
+
+### Function: `registerSheetCombatRefresh()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
+### Function: `renderSheets(combatant)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combatant` | — | — |
+
+---
+
+### Function: `renderCombat(combat)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `combat` | — | — |
+
+---
 
 ### Class: `PMTTRPGCharacterSheet` *(extends `HandlebarsApplicationMixin`)*
 
@@ -168,7 +234,130 @@
 
 ---
 
+## `src/module/actor/carry-menu.js`
+
+### Function: `isWornItem(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+
+---
+
+### Function: `carryStateOf(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+
+---
+
+### Function: `carryStateLabelKey(item, state = carryStateOf(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+| `state = carryStateOf(item` | — | — |
+
+---
+
+### Function: `carryOptions(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+
+---
+
+### Function: `carryUpdate(item, state)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+| `state` | — | — |
+
+---
+
+### Function: `optionButton(option)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `option` | — | — |
+
+---
+
+### Function: `moveFocus(menu, step)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `menu` | — | — |
+| `step` | — | — |
+
+---
+
+### Function: `openCarryMenu(anchor, item, onPick)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `anchor` | — | — |
+| `item` | — | — |
+| `onPick` | — | — |
+
+---
+
+### Function: `close()`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+*No description provided.*
+
+---
+
 ## `src/module/actor/actor.js`
+
+### Function: `push(item)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `item` | — | — |
+
+---
 
 ### Function: `sourceSystemNumber(actorData, path)`
 
@@ -193,6 +382,33 @@
 |------|------|-------------|
 | `options = {}` | — | — |
 | `delta = 0` | — | — |
+
+---
+
+### Function: `withStatusLock(actor, statusName, task)`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `actor` | — | — |
+| `statusName` | — | — |
+| `task` | — | — |
+
+---
+
+### Function: `statusChange(value = [], events = [])`
+
+> [WARNING] *No JSDoc comment — signature extracted from source.*
+
+**Parameters**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `value = []` | — | — |
+| `events = []` | — | — |
 
 ---
 
