@@ -40,14 +40,17 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [Clash RESULT with CHOICE]
-    require (N*2) Charge then
-    create dialog "Charge : Inflict [Type] Protection": 
-      slash as "Slash Fragile",
-      pierce as "Pierce Fragile",
-      blunt as "Blunt Fragile"
-      to self;
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*2) then message "Not enough Charge for Charge - Type Protection: has ($charge), needs (N*2)." on self;
     lose (N*2) Charge;
+
+    [Clash RESULT with CHOICE]
+    create dialog "Charge : Gain [Type] Protection":
+      slash as "Slash Protection",
+      pierce as "Pierce Protection",
+      blunt as "Blunt Protection"
+      to self;
 
     [On Dialog Answer slash]
     gain (N*2) "Slash Protection" next round;

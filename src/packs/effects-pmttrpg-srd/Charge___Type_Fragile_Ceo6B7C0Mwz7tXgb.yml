@@ -39,14 +39,17 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |+
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*4) then message "Not enough Charge for Charge - Type Fragile: has ($charge), needs (N*4)." on self;
+    lose (N*4) Charge;
+
     [Clash RESULT with CHOICE]
-    require (N*4) Charge then
-    create dialog "Charge : Inflict [Type] Fragile": 
+    create dialog "Charge : Inflict [Type] Fragile":
       slash as "Slash Fragile",
       pierce as "Pierce Fragile",
       blunt as "Blunt Fragile"
       to self;
-    lose (N*4) Charge;
 
     [On Dialog Answer slash]
     inflict N "Slash Fragile" next round to target;

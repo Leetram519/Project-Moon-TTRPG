@@ -42,8 +42,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*2) then message "Not enough Charge for Charge - Protection: has ($charge), needs (N*2)." on self;
+    lose (N*2) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*2) Charge to gain (N*2) Protection next round;
+    gain (N*2) Protection next round;
 effects: []
 ownership:
   default: 0

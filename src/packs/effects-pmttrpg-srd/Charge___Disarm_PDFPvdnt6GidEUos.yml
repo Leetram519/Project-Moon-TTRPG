@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*6) then message "Not enough Charge for Charge - Disarm: has ($charge), needs (N*6)." on self;
+    lose (N*6) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*6) Charge to inflict (N) Disarm next round;
+    inflict (N) Disarm next round;
 effects: []
 sort: 3000000
 ownership:

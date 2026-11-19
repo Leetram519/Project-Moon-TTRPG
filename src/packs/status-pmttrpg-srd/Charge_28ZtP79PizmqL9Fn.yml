@@ -69,7 +69,8 @@ system:
       reduce flag "charge_consumed" on self by (((self.flag.charge_consumed) // 10) * 10);
 
     [End of Round]
-    require (Charge) > 15 then lose (3 * (((Charge - 1) // 15))) Charge;
+    require (self.flag.overcharge_enabled) == 1 then
+      require (Charge) > 15 then lose (3 * (((Charge - 1) // 15))) Charge;
 effects: []
 folder: OMSNi4hdekwHrB1H
 sort: 0

@@ -40,7 +40,7 @@ system:
   easyEffects: |-
     [On Rupture Burst]
     require (burst.amount) >= 4 then 
-      inflict 1 Ruin and 3 Devastation;
+      inflict 1 Ruin and inflict 3 Devastation;
 effects: []
 sort: 0
 ownership:

@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*4) then message "Not enough Charge for Charge - Paralysis: has ($charge), needs (N*4)." on self;
+    lose (N*4) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*4) Charge to inflict (N) Paralysis next round;
+    inflict (N) Paralysis next round;
 effects: []
 sort: 2700000
 ownership:

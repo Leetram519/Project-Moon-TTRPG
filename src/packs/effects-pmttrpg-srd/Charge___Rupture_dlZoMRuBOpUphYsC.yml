@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N) then message "Not enough Charge for Charge - Rupture: has ($charge), needs (N)." on self;
+    lose (N) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N) Charge to inflict (N) Rupture next round;
+    inflict (N) Rupture next round;
 effects: []
 sort: 1800000
 ownership:

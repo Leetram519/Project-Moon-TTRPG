@@ -36,8 +36,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (2*N) then message "Not enough Charge for Charge - Regen ST: has ($charge), needs (2*N)." on self;
+    lose (2*N) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (2*N) Charge to heal (N*2) damage on self;
+    heal (N*2) damage on self;
 effects: []
 sort: 900000
 ownership:

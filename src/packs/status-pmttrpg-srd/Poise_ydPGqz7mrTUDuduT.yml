@@ -30,48 +30,34 @@ system:
     alwaysActive: false
     skillEffect: false
   customNotes: ''
-  easyEffects: >-
+  easyEffects: |-
     [On Hit Before Results]
-
-    require ("Poise Pause") == 0 then 
+    require ("Poise Pause") == 0 then
       proc RollForNoStancePoise;
 
     [On RollForNoStancePoise]
-
     roll 1d10[poise] as poiseRoll tagged "critical-check"
-
-    require (poiseRoll) <= (Poise - (4 * "Slasher Stance")) then proc
-    AskForCritical
-
-    require (poiseRoll) > (Poise - (4 * "Slasher Stance")) then proc
-    FailedCriticalRoll
-
+    let $critAt = (Poise - (4 * "Slasher Stance"));
+    require (poiseRoll) <= ($critAt) then proc AskForCritical
+    require (poiseRoll) > ($critAt) then proc FailedCriticalRoll
 
     [On AskForCritical]
-
     create dialog "Proc Critical?":
       procCritical as "Do a Critical Hit",
       gainCritical as "Gain 1 Critical and reset Poise to 1"
       to self;
 
     [On Dialog Answer procCritical]
-
     proc Critical with (Critical) as amount and lose all Poise on self;
 
-
     [On Dialog Answer gainCritical]
-
     gain 1 Critical and lose (Poise - 1) Poise;
 
-
     [On Gain]
-
     require (changed.before) == 0 then
       require (Critical) == 0 then set Critical to 1;
 
-
     [On Lose]
-
     require (changed.after) == 0 then set Critical to 0;
 effects: []
 ownership:
