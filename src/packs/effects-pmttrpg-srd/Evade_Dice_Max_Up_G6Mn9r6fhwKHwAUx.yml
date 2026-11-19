@@ -30,7 +30,7 @@ system:
   procDice: any
   procAction: any
   procCondition: ''
-  positive: Increase the Block Dice Max by [N]
+  positive: Increase the Evade Dice Max by [N]
   negative: ''
   macro:
     uuid: ''

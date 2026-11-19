@@ -39,7 +39,7 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
+    [On Use]
     create dialog "Power Engine":
       powerengine as "Consume 8 Charge: +1 Dice Power",
       powerengineover as "Consume 1 Overcharge: +2 Dice Power",

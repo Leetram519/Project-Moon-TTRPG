@@ -40,8 +40,10 @@ system:
   customNotes: ''
   easyEffects: |-
     [Start of Round]
-    require (round) == 1 then
-      gain (N*3) tempHp;
+    positive:
+    require (round) == 1 then gain (N*3) tempHp;
+    negative:
+    require (round) == 1 then deal (min(N*3, self.hp - 1)) hp damage to self;
   allowMultiple: true
 effects: []
 sort: 0

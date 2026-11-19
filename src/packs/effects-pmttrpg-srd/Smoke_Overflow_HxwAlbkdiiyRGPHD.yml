@@ -43,8 +43,8 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
-    [On Clash Start]
-    require (Smoke) >= (4+4*N) then power up N;
+    [On Clash Start with CHOICE]
+    require (Smoke) >= (4+4*N) then power up CHOICE N;
 effects: []
 sort: 0
 ownership:

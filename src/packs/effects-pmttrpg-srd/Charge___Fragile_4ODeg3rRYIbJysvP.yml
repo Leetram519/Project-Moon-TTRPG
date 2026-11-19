@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*3) then message "Not enough Charge for Charge - Fragile: has ($charge), needs (N*3)." on self;
+    lose (N*3) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*3) Charge to inflict (N) Fragile next round;
+    inflict (N) Fragile next round;
 effects: []
 sort: 3400000
 ownership:

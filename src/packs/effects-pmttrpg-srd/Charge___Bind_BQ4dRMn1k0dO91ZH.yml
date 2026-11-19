@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*3) then message "Not enough Charge for Charge - Bind: has ($charge), needs (N*3)." on self;
+    lose (N*3) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*3) Charge to inflict (N) Bind next round;
+    inflict (N) Bind next round;
 effects: []
 sort: 2800000
 ownership:

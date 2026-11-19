@@ -46,15 +46,15 @@ system:
 
     [On Clash Win]
     require (target.status.Burn) > (item.flag.burnBeforeTarget) then
-      inflict (min(N, 3)) Bleed on target;
+      inflict (min(N, 3)) Burn on target;
     require (self.status.Burn) > (item.flag.burnBeforeSelf) then
-      inflict (min(N, 3)) Bleed on self;
+      inflict (min(N, 3)) Burn on self;
 
     [On Clash Lose]
     require (target.status.Burn) > (item.flag.burnBeforeTarget) then
-      inflict (min(N, 3)) Bleed on target;
+      inflict (min(N, 3)) Burn on target;
     require (self.status.Burn) > (item.flag.burnBeforeSelf) then
-      inflict (min(N, 3)) Bleed on self;
+      inflict (min(N, 3)) Burn on self;
 effects: []
 sort: 0
 ownership:

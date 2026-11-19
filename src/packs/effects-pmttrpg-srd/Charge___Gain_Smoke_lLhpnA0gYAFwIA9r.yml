@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (2*N) then message "Not enough Charge for Charge - Gain Smoke: has ($charge), needs (2*N)." on self;
+    lose (2*N) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (2*N) Charge to gain (N) Smoke;
+    gain (N) Smoke;
 effects: []
 sort: 1600000
 ownership:

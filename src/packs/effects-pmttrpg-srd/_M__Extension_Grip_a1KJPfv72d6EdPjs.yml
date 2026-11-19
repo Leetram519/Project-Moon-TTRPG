@@ -39,47 +39,37 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: >-
+  easyEffects: |-
     [Start of Turn]
-
     create dialog "Extension Grip":
       rangeup as "Spend 4 Charge, Range up 1",
-      rangeup_overcharge as "Spend 1 Overcharge, Range up 2"
+      rangeup_overcharge as "Spend 1 Overcharge, Range up 2",
+      norangeup as "Do not"
       to self;
 
     [On Dialog Answer rangeup]
-
     set flag "extensiongrip_rangeup" on self to 1;
-
-    create message "Extension Grip: Will spend 4 Charge on every Clash Start to
-    gain 1 Range." on self;
-
+    create message "Extension Grip: Will spend 4 Charge on every Clash Start to gain 1 Range." on self;
     range up 1;
 
-
     [On Dialog Answer rangeup_overcharge]
-
     set flag "extensiongrip_rangeup_overcharge" on self to 1;
-
-    create message "Extension Grip: Will spend 1 Overcharge on every Clash Start
-    to gain 2 Range." on self;
-
+    create message "Extension Grip: Will spend 1 Overcharge on every Clash Start to gain 2 Range." on self;
     range up 2;
 
-
     [On Clash Start]
-
     require (self.flag.extensiongrip_rangeup) == 1 then
-      remove 4 Charge;
+      lose 4 Charge;
     require (self.flag.extensiongrip_rangeup_overcharge) == 1 then
-      remove 1 Overcharge;
+      lose 1 Overcharge;
 
     [End of Turn]
-
     require (self.flag.extensiongrip_rangeup) == 1 then
       range down 1;
     require (self.flag.extensiongrip_rangeup_overcharge) == 1 then
       range down 2;
+    clear flag "extensiongrip_rangeup" on self;
+    clear flag "extensiongrip_rangeup_overcharge" on self;
   allowMultiple: false
 effects: []
 sort: 0

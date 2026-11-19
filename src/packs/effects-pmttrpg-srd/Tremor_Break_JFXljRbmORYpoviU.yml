@@ -32,8 +32,8 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>On [[/status Tremor]] Burst, inflict 3 [[/status Bind]] to the target
-    next round.</p>
+    <p>On [[/status Tremor]] Burst, inflict [[/status Stagger Fragile]] to the
+    target next round equal to half of the burst [[/status Tremor]] stacks.</p>
   negative: ''
   macro:
     uuid: ''

@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*3) then message "Not enough Charge for Charge - Haste: has ($charge), needs (N*3)." on self;
+    lose (N*3) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*3) Charge to gain (N) Haste next round;
+    gain (N) Haste next round;
 effects: []
 sort: 3200000
 ownership:

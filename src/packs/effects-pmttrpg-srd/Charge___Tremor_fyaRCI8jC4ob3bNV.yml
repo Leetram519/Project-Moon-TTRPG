@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*2) then message "Not enough Charge for Charge - Tremor: has ($charge), needs (N*2)." on self;
+    lose (N*2) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*2) Charge to inflict (N) Tremor next round;
+    inflict (N) Tremor next round;
 effects: []
 sort: 2000000
 ownership:

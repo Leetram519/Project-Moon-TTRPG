@@ -37,8 +37,9 @@ system:
 
     [On RollForRuin]
     roll 1d10[ruin] as RuinRoll
-    require (RuinRoll) <= Ruin then proc AskForDevastation
-    require (RuinRoll) > Ruin then
+    let $devastateAt = (Ruin);
+    require (RuinRoll) <= ($devastateAt) then proc AskForDevastation
+    require (RuinRoll) > ($devastateAt) then
       proc FailedDevastationRoll on attacker targeting self;
 
     [On AskForDevastation]

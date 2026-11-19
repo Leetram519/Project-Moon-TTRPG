@@ -43,24 +43,17 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: >-
+  easyEffects: |-
     [Always Active]
-
     power down attack 2;
 
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < 6 then message "Not enough Charge for Charge - Crowd Fighter: has ($charge), needs 6." on self;
+    lose 6 Charge;
 
     [On Clash Win]
-
-    require (Charge) >= 6 then
-
-    create message 
-
-    "[Attack Replacement / Crowd Fighter] Press [Shift + T] to target multiple
-    tokens. Apply the damage to three targets within [Weapon Range+1] SQRs of
-    the attacker, max 1 attack per target. Apply status inflictions at half
-    efficiency, rounded down, for any hits after the first.";
-
-    lose 6 Charge;
+    create message "[Attack Replacement / Crowd Fighter] Press [Shift + T] to target multiple tokens. Apply the damage to three targets within [Weapon Range+1] SQRs of the attacker, max 1 attack per target. Apply status inflictions at half efficiency, rounded down, for any hits after the first.";
 effects: []
 flags:
   projectmoonttrpg:

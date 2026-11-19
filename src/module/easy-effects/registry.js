@@ -15,6 +15,7 @@ import {
 import {
   actorIdentityKey,
   collectUsedSkills,
+  itemBelongsToActor,
   itemIdentityKey,
   rememberBurstListenerItem,
   sameActor,
@@ -1110,7 +1111,7 @@ export async function emitClashResolved(payload = {}, { fireHook = true } = {}) 
           if (!isDesignatedClashWeapon(item, payload)) continue;
           const context = def.buildContext(payload, item);
           if (!context) continue;
-          const instantNames = instantNamesForUsedItem(item, payload);
+          const instantNames = instantNamesForSideItem(item, payload);
           if (clash) {
             clash.statusApplyFilter = instantNames.size
               ? instantStatusFilter(instantNames, "except")
@@ -1147,15 +1148,15 @@ function sideUsedClashKit(payload = {}, side) {
   return [];
 }
 
-function usedKitSideOfItem(item, payload = {}) {
+function clashSideOfItem(item, payload = {}) {
   if (!item) return null;
-  if (sideUsedClashKit(payload, "attacker").some((it) => sameDocument(it, item))) return "attacker";
-  if (sideUsedClashKit(payload, "defender").some((it) => sameDocument(it, item))) return "defender";
+  if (itemBelongsToActor(item, payload.attacker)) return "attacker";
+  if (itemBelongsToActor(item, payload.defender)) return "defender";
   return null;
 }
 
-function instantNamesForUsedItem(item, payload = {}) {
-  const side = usedKitSideOfItem(item, payload);
+function instantNamesForSideItem(item, payload = {}) {
+  const side = clashSideOfItem(item, payload);
   if (!side) return new Set();
   return collectInstantStatusNames(sideUsedClashKit(payload, side));
 }
@@ -1195,7 +1196,7 @@ function instantStatusFilter(names, mode) {
   };
 }
 
-/** Clash Win/Lose gain/inflict/set of Instant-tagged statuses on the used kit only. */
+/** Clash Win/Lose gain/inflict/set of Instant-tagged statuses, on every item of the side whose used kit has the tag. */
 async function applyInstantClashStatuses(payload) {
   const clash = payload?.clash;
   if (!clash) return;
@@ -1203,7 +1204,7 @@ async function applyInstantClashStatuses(payload) {
   for (const def of eeDefs) {
     for (const item of def.getItems(payload)) {
       if (!isDesignatedClashWeapon(item, payload)) continue;
-      const names = instantNamesForUsedItem(item, payload);
+      const names = instantNamesForSideItem(item, payload);
       if (!names.size) continue;
       const context = def.buildContext(payload, item);
       if (!context) continue;
@@ -1254,9 +1255,9 @@ export async function emitStatusEasyEffects(hookName, payload) {
 
 /**
  * Always Active `instant <Status>` on the used weapon/tool/skill/ammo copies that
- * side's matching Clash Result gain/inflict/set live first, then
- * [On Clash Win Before Results], then Specified status, then one Clash Win/Lose pass
- * that skips those applies on the Instant kit only.
+ * side's matching Clash Result gain/inflict/set live first (augments, outfits and
+ * statuses included), then [On Clash Win Before Results], then Specified status,
+ * then one Clash Win/Lose pass that skips those applies on that side.
  */
 export async function emitClashOutcome(resolvedPayload, hitPayload = null) {
   await applyInstantClashStatuses(resolvedPayload);
@@ -1276,13 +1277,16 @@ function collectBurstListenerItems(burster, burstee, skipItem, usedSkills = []) 
   const out = [];
   const seen = new Set();
   const skipItemKey = itemIdentityKey(skipItem);
+  const skipStatusName = skipItem?.type === "status" ? String(skipItem.name ?? "").trim().toLowerCase() : "";
   for (const owner of uniqueBurstOwners(burster, burstee)) {
     if (!owner?.items) continue;
+    const skipsLocalStatus = skipStatusName && sameActor(owner, burstee);
     for (const item of [
       ...getEquippedItems(owner).filter((i) => i.type !== "skill"),
       ...collectUsedSkills(owner, usedSkills),
       ...uniqueStatusItems(owner.items),
     ]) {
+      if (skipsLocalStatus && item.type === "status" && String(item.name ?? "").trim().toLowerCase() === skipStatusName) continue;
       if (!rememberBurstListenerItem(seen, item, skipItemKey)) continue;
       out.push({ item, owner });
     }

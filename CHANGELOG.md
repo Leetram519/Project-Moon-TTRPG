@@ -96,6 +96,19 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - Status stacks no longer get lost when two changes happen at once.
 - [EasyEffects] Using a tool now runs `[On Action]` on equipped items and statuses.
 - [EasyEffects] Staggered from end-of-round damage now lasts through the next round.
+- [EasyEffects] `Burn+` now inflicts Burn instead of Bleed.
+- [EasyEffects] `instant` on the used kit now also covers that side's augments, outfits, and statuses, so `Instant Crit` counts their Poise and Critical before the crit roll.
+- [EasyEffects] A status that loses and regains itself during its own proc or burst no longer runs it again. `Cursed` no longer triggers Devastation twice.
+- [EasyEffects] `Poise` and `Ruin` no longer fire `[On FailedCriticalRoll]` / `[On FailedDevastationRoll]` after a successful roll.
+- [EasyEffects] `Tremor Shock` now triggers on Tremor Burst and no longer says it isn't implemented. `Tremor Break` shows its own description.
+- [EasyEffects] Outfit `Power Engine` now asks only when the outfit is used to Block or Evade.
+- `Evade Dice Max Up` now says Evade Dice in its description.
+- [EasyEffects] Charge is only lost at the end of the round when Overcharge is on.
+- [EasyEffects] Skill Charge effects now consume their Charge on use, win or lose.
+- [EasyEffects] `Charge - Bombardment`, `Charge - Type Fragile`, `Charge - Type Protection`, `Ruptured Omen`, `Smoke Overflow`, `[M] Extension Grip`, and `E.G.O. Attunement [Gloom]` now correctly parse.
+- [EasyEffects] `[M] Extension Grip` can be declined, and stops spending Charge after the turn it was chosen.
+- `Charge - Type Protection` now lists Protection types instead of Fragile.
+- [EasyEffects] Negative `Shock Absorbant` and `Padded Clothing` now deal ST and HP damage instead of granting temporary ST and HP.
 
 ## [0.1.3] - 2026-09-16
 

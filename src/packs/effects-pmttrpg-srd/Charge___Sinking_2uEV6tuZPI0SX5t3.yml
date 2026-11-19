@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*3) then message "Not enough Charge for Charge - Sinking: has ($charge), needs (N*3)." on self;
+    lose (N*3) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*3) Charge to inflict (N) Sinking next round;
+    inflict (N) Sinking next round;
 effects: []
 sort: 2300000
 ownership:

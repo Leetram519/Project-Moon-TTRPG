@@ -37,8 +37,10 @@ system:
   customNotes: ''
   easyEffects: |-
     [Start of Round]
-    require (round) == 1 then
-      gain (N*3) tempSt;
+    positive:
+    require (round) == 1 then gain (N*3) tempSt;
+    negative:
+    require (round) == 1 then deal (N*3) st damage to self;
   allowMultiple: true
 effects: []
 sort: 0

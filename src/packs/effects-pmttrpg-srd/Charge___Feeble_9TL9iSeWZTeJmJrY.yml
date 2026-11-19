@@ -38,8 +38,13 @@ system:
     uuid: ''
   customNotes: ''
   easyEffects: |-
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*6) then message "Not enough Charge for Charge - Feeble: has ($charge), needs (N*6)." on self;
+    lose (N*6) Charge;
+
     [On Clash RESULT with CHOICE]
-    spend (N*6) Charge to inflict (N) Feeble next round;
+    inflict (N) Feeble next round;
 effects: []
 sort: 2900000
 ownership:

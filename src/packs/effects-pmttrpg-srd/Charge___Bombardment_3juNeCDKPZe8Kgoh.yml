@@ -43,24 +43,17 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: >-
+  easyEffects: |-
     [Always Active]
-
     power down attack 2;
 
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < 6 then message "Not enough Charge for Charge - Bombardment: has ($charge), needs 6." on self;
+    lose 6 Charge;
 
     [On Clash Win]
-
-    require 6 <= (Charge) then
-
-    create message 
-
-    "[Attack Replacement / Bombardment] Press [Shift + T] to target multiple
-    tokens. Apply the damage to all targets within a 3x3 zone around the main
-    target. Apply status inflictions at half efficiency, rounded down, for any
-    hits on subtargets.";
-
-    lose 6 Charge;
+    create message "[Attack Replacement / Bombardment] Press [Shift + T] to target multiple tokens. Apply the damage to all targets within a 3x3 zone around the main target. Apply status inflictions at half efficiency, rounded down, for any hits on subtargets.";
 effects: []
 flags:
   projectmoonttrpg:

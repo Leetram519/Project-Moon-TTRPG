@@ -99,7 +99,7 @@ system:
 
     set flag "has_used_action_or_reaction" on item to 0;
 
-    heal ((N //c 2) * (item.flag.rank_difference) sp damage to self;
+    heal ((N //c 2) * (item.flag.rank_difference)) sp damage to self;
 
     proc Morositas_Attunement;
 effects: []

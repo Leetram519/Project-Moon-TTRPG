@@ -41,23 +41,17 @@ system:
   macro:
     uuid: ''
   customNotes: ''
-  easyEffects: >-
+  easyEffects: |-
     [Always Active]
-
     power down attack 2;
 
+    [On Use]
+    let $charge = (Charge);
+    require ($charge) < (N*6) then message "Not enough Charge for Charge - Multi-hit: has ($charge), needs (N*6)." on self;
+    lose (N*6) Charge;
 
     [On Clash Win]
-
-    require (N*6) <= (Charge) then
-
-    create message 
-
-    "[Attack Replacement / Multi-Hit] Press [T] to target a token. Apply Damage
-    twice to the same target. Apply status inflictions at half efficiency,
-    rounded down, for any hit after the first.";
-
-    lose (N*6) Charge;
+    create message "[Attack Replacement / Multi-Hit] Press [T] to target a token. Apply Damage twice to the same target. Apply status inflictions at half efficiency, rounded down, for any hit after the first.";
 effects: []
 flags:
   projectmoonttrpg:
