@@ -2011,120 +2011,108 @@
   color: var(--gold-tab);
 }
 
+.effect-summary-body,
 .pm-sheet .item-effect-summary__body {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 6px;
   font-size: 14px;
   line-height: 1.4;
 }
 
-.pm-sheet .item-effect-summary__body > br {
-  display: none;
-}
-
-.pm-sheet .effect-summary-block {
+.effect-summary-block {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
 }
 
-.pm-sheet .effect-summary-block:not(:first-child) {
-  margin-top: 6px;
+.effect-summary-block:not(:first-child) {
+  margin-top: 4px;
   padding-top: 6px;
   border-top: 1px solid rgba(215, 182, 106, 0.1);
 }
 
-.pm-sheet .effect-summary-block br {
-  display: none;
-}
-
-.pm-sheet .effect-summary-tag {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.25rem;
+.effect-summary-trigger {
+  display: inline;
   margin: 0;
-  padding: 1px 8px;
-  border-radius: 999px;
-  font-size: 11px;
+  padding: 0;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  background: rgba(212, 163, 96, 0.18);
-  color: var(--gold-tab);
-  border: 1px solid rgba(212, 163, 96, 0.28);
+  white-space: normal;
 }
 
-.pm-sheet .effect-summary-tag.effect-summary-tag--sub {
-  font-size: 10px;
-  background: rgba(111, 82, 56, 0.28);
-  color: rgba(244, 234, 210, 0.75);
-  border-color: rgba(214, 162, 74, 0.16);
-}
-
-.pm-sheet .effect-summary-tag[class*="alwaysactive"] {
-  background: rgba(126, 201, 127, 0.18);
-  color: #b9f0ba;
-  border-color: rgba(126, 201, 127, 0.36);
-}
-
-.pm-sheet .effect-summary-tag[class*="oncondition"] {
-  background: rgba(214, 162, 74, 0.22);
-  color: #f5d99e;
-  border-color: rgba(214, 162, 74, 0.35);
-}
-
-.pm-sheet .effect-summary-tag[class*="onclash-win"],
-.pm-sheet .effect-summary-tag[class*="onclashresult-win"],
-.pm-sheet .effect-summary-tag[class*="oneitherclashresult-win"] {
-  background: rgba(126, 201, 127, 0.22);
-  color: #b8f3ba;
-  border-color: rgba(126, 201, 127, 0.42);
-}
-
-.pm-sheet .effect-summary-tag[class*="onclash-lose"],
-.pm-sheet .effect-summary-tag[class*="onclashresult-lose"],
-.pm-sheet .effect-summary-tag[class*="oneitherclashresult-lose"] {
-  background: rgba(224, 120, 86, 0.22);
-  color: #ffc1ae;
-  border-color: rgba(224, 120, 86, 0.42);
-}
-
-.pm-sheet .effect-summary-tag[class*="onuse"],
-.pm-sheet .effect-summary-tag[class*="onaction"] {
-  background: rgba(110, 168, 255, 0.2);
-  color: #bfd9ff;
-  border-color: rgba(110, 168, 255, 0.38);
-}
-
-.pm-sheet .effect-summary-tag[class*="onburst"],
-.pm-sheet .effect-summary-tag[class*="oncritical"],
-.pm-sheet .effect-summary-tag[class*="ondevastating"] {
-  background: rgba(188, 111, 255, 0.2);
-  color: #e2c7ff;
-  border-color: rgba(188, 111, 255, 0.38);
-}
-
-.pm-sheet .effect-summary-subgroup {
+.effect-summary-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 3px;
-  margin-top: 2px;
-  padding-left: 8px;
-  border-left: 2px dashed rgba(215, 182, 106, 0.2);
+  gap: 1px;
+  width: 100%;
 }
 
-.pm-sheet .effect-summary-subgroup br {
-  display: none;
-}
-
-.pm-sheet .effect-summary-line {
+.effect-summary-item {
   display: block;
+  padding-left: 0.5rem;
+  color: rgba(244, 234, 210, 0.92);
+}
+
+.effect-summary-line {
+  display: inline;
   margin: 0;
-  padding-left: 2px;
+  padding: 0;
   color: rgba(244, 234, 210, 0.92);
   line-height: 1.38;
+}
+
+.effect-summary-condition {
+  opacity: 0.65;
+  font-style: italic;
+  white-space: normal;
+}
+
+.trigger-always-active {
+  color: #18c61e;
+}
+
+.trigger-on-clash {
+  color: #e65100;
+}
+
+.trigger-on-clash-lose {
+  color: #d31414;
+}
+
+.trigger-on-clash-win {
+  color: #e69200;
+}
+
+.trigger-on-hit,
+.trigger-on-being-hit,
+.trigger-on-kill {
+  color: #ddd61e;
+}
+
+.trigger-on-use {
+  color: #38bade;
+}
+
+.trigger-on-burst,
+.trigger-on-critical,
+.trigger-on-devastating {
+  color: #c6b70b;
+}
+
+.trigger-on-turn-start,
+.trigger-on-round-start,
+.trigger-on-movement,
+.trigger-on-combat-start {
+  color: #18c61e;
+}
+
+.trigger-on-action {
+  color: #2196f3;
+}
+
+.trigger-default {
+  color: inherit;
 }
 
 .pm-sheet .item-title-row strong,

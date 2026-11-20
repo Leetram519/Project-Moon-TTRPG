@@ -17,13 +17,8 @@
     {{#if item.system.descriptionEnriched}}
     <div class="item-flavor description">{{{item.system.descriptionEnriched}}}</div>
     {{/if}}
-    {{#if item.system.effectSummaryGroups.length}}
-      {{#with (lookup item.system.effectSummaryGroups 0) as |group|}}
-      <div class="item-effect-summary">
-        <h4 class="item-effect-summary__title">{{group.heading}}</h4>
-        <div class="item-effect-summary__body">{{{group.summaryText}}}</div>
-      </div>
-      {{/with}}
+    {{#if item.system.effectSummaryText}}
+      {{{item.system.effectSummaryText}}}
     {{/if}}
   </div>
 </li>

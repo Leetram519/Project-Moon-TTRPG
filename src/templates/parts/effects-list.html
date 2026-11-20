@@ -1,13 +1,56 @@
-<!--div class="resource-group effect-summary-panel">
-  {{#if system.effectSummaryGroups.length}}
-    {{#with (lookup system.effectSummaryGroups 0) as |group|}}
-      <div class="resource effect-summary-group">
-        <h4>{{group.heading}}</h4>
-        <div class="effect-summary-group__text">{{{group.summaryText}}}</div>
+
+<div class="resource-header">
+  <div class="resource ep-tooltip-container">
+    <label>{{localize "PMTTRPG.EP"}}</label>
+
+    <input
+      class="disabled ep-tooltip-trigger"
+      type="text"
+      value="{{sub system.effectsSummary.positiveSpent system.effectsSummary.negativeSpent}} / {{system.effectsSummary.epMax}}"
+      readonly
+    />
+
+    <div class="ep-tooltip">
+      <div class="ep-tooltip__header">
+        Effect Point Breakdown
       </div>
-    {{/with}}
-  {{/if}}
-</div-->
+
+      {{#if system.effects.length}}
+        <div class="ep-tooltip__list">
+          {{#each system.effects as |effect idx|}}
+            <div class="ep-tooltip__row {{#ifEquals effect.mode "positive"}}is-positive{{else}}is-negative{{/ifEquals}}">
+              <span class="ep-tooltip__name">
+                {{effect.name}} :
+              </span>
+
+              <span class="ep-tooltip__cost">
+                {{#ifEquals effect.mode "positive"}}+{{else}}-{{/ifEquals}}{{effect.cost}} EP * {{effect.stack}}
+
+                <span class="ep-tooltip__total">
+                  = {{#ifEquals effect.mode "positive"}}+{{else}}-{{/ifEquals}}{{mul effect.cost effect.stack}} EP
+                </span>
+              </span>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <div class="ep-tooltip__empty">
+          No active effects.
+        </div>
+      {{/if}}
+
+      <div class="ep-tooltip__footer">
+        <span class="is-positive">
+          Positive spent: {{system.effectsSummary.positiveSpent}} EP
+        </span>
+
+        <span class="is-negative">
+          Negative spent: -{{system.effectsSummary.negativeSpent}} EP
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="resource-group effect-picker-panel">
   <div class="resource">

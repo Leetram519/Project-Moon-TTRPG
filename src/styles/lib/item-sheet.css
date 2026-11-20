@@ -393,12 +393,23 @@
     font-size: 16px;
 }
 
+.effect-summary-item {
+  display: block;
+  padding-left: 0.5rem;
+}
+
 .effect-summary-line {
   display: inline;
 }
 
 .effect-summary-trigger {
   font-weight: bold;
+  white-space: nowrap;
+}
+
+.effect-summary-condition {
+  opacity: 0.65;
+  font-style:italic;
   white-space: nowrap;
 }
 
@@ -578,6 +589,128 @@
 .item-form .effect-tags button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+
+/*
+ * EP Tooltip
+*/
+.item-form .ep-tooltip-container {
+    position: relative;
+    z-index: 10;
+}
+
+.item-form .ep-tooltip-trigger {
+    cursor: help !important;
+}
+
+.item-form .ep-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translate(-50%, -5px);
+
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    padding: 10px;
+
+    background: #291e15;
+    outline: #513c29 solid 1px;
+    border: 1px solid #ffc100;
+    border-radius: 8px;
+
+    color: #fff;
+    font-size: 14px;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 150ms ease,
+        transform 150ms ease,
+        visibility 150ms ease;
+
+    z-index: 200;
+    box-shadow: 0 4px 12px #00000073;
+    text-align: left;
+}
+
+.item-form .ep-tooltip-container:hover .ep-tooltip,
+.item-form .ep-tooltip-container:focus-within .ep-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
+.item-form .ep-tooltip__header {
+    font-size: 20px;
+    color: #ffc100;
+    border-bottom: 1px solid #513c29;
+}
+
+.item-form .ep-tooltip__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.item-form .ep-tooltip__row {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    padding: 4px 4px;
+}
+
+.item-form .ep-tooltip__row:not(:last-child) {
+    border-bottom: 1px solid #443322;
+}
+
+.item-form .ep-tooltip__name {
+    font-size: 16px;
+    color: #fff;
+}
+
+.item-form .ep-tooltip__cost {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #b9a58e;
+}
+
+.item-form .ep-tooltip__total {
+    white-space: nowrap;
+    font-weight: bold !important;
+}
+
+/* Positive effects */
+.item-form .ep-tooltip .is-positive {
+    color: #ffc100;
+}
+
+/* Negative effects */
+.item-form .ep-tooltip .is-negative {
+    color: #18c61e;
+}
+
+.item-form .ep-tooltip__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    padding: 4px 4px 0;
+
+    border-top: 1px solid #513c29;
+
+    font-size: 14px;
+}
+
+.item-form .ep-tooltip__empty {
+    color: #b9a58e;
+    padding: 4px 4px;
+    font-size: 14px;
 }
 
 /*

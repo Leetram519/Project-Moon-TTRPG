@@ -1,5 +1,5 @@
 import { PMTTRPGUtility } from "../utility.js";
-import { buildEffectSummaryGroups, buildInlineEffectSummary, computeEffectSummary, effectShowsProcChoice } from "../effects/effect-summary.js";
+import { buildEffectSummaryText, buildInlineEffectSummary, computeEffectSummary, effectShowsProcChoice } from "../effects/effect-summary.js";
 import {
   buildEasyEffectsFromHostEffects,
   isEasyEffectsSyncDirty,
@@ -380,13 +380,12 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     if (this._supportsEffects()) {
       const effectContext = await this._prepareEffectHostContext();
+
+      console.log(effectContext);
+
       context.effectChoices = effectContext.effectChoices;
-
-      // TODO: Implement homebrew variations
-
-
       context.system.effects = effectContext.effects;
-      context.system.effectSummaryGroups = effectContext.effectSummaryGroups;
+      context.system.effectSummaryText = effectContext.effectSummaryText;
       context.system.effectSummary = effectContext.effectSummary;
       context.system.effectSearchPlaceholder = effectContext.effectSearchPlaceholder;
     }
@@ -813,17 +812,17 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     return effects;
   }
 
-  _buildEffectSummaryGroups(effects = []) {
-    return buildEffectSummaryGroups(effects);
+  async _buildEffectSummaryText(effects = []) {
+    return await buildEffectSummaryText(effects);
   }
 
   async _getEffectCatalog() {
     const hostType = this._effectHostType();
     const hostSubtype = this._effectHostSubtype();
-    PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
+    /*PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
     if (PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`]) {
       return PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`];
-    }
+    }*/
 
     const catalog = [];
     const packs = Array.from(game.packs ?? []).filter(pack => pack.documentName === 'Item');
@@ -877,33 +876,63 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
 
     catalog.sort((left, right) => left.name.localeCompare(right.name));
+    /*
     PMTTRPGItemSheet._effectCatalogCache = PMTTRPGItemSheet._effectCatalogCache || {};
     PMTTRPGItemSheet._effectCatalogCache[`${hostType}/${hostSubtype}`] = catalog;
+    */
     return catalog;
   }
 
   async _mountEffectAutocomplete(container, { signal } = {}) {
-    const catalog = await this._getEffectCatalog();
+    let autocomplete = null;
+    let timer = null;
 
-    const effects = catalog.map(entry => ({
-      id: entry.uuid,
-      name: entry.name,
-      icon: entry.icon,
-      source: entry.effect?.system.homebrew.source ?? "Your World",
-      epCost: entry.effect?.system?.cost ?? null,
-      tags: entry.effect?.system?.tags ?? [],
-      _catalogEntry: entry,
-    }));
+    const buildEffects = async () => {
+      this._effectCatalog = null;
+      const catalog = await this._getEffectCatalog();
 
-    new EffectAutocomplete(container, {
-      effects,
+      return catalog.map(entry => ({
+        id: entry.uuid,
+        name: entry.name,
+        icon: entry.icon,
+        source: entry.effect?.system.homebrew.source ?? "Your World",
+        epCost: entry.effect?.system?.cost ?? null,
+        tags: entry.effect?.system?.tags ?? [],
+        _catalogEntry: entry,
+      }));
+    };
+
+    const isRelevant = (doc) => doc.type === "effect";
+
+    const refresh = async () => {
+      const effects = await buildEffects();
+      autocomplete?.setEffects(effects);
+    };
+
+    // Debounce so bulk operations (e.g. creating 20 items at once) cause one refresh
+    const scheduleRefresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(refresh, 150);
+    };
+
+    const onDocChange = (doc) => {
+      if (isRelevant(doc)) scheduleRefresh();
+    };
+
+    const hookNames = ["createItem", "updateItem", "deleteItem"];
+    for (const name of hookNames) Hooks.on(name, onDocChange);
+
+    signal?.addEventListener("abort", () => {
+      clearTimeout(timer);
+      for (const name of hookNames) Hooks.off(name, onDocChange);
+      container.querySelector(".effect-autocomplete__input")?.blur();
+    }, { once: true });
+
+    autocomplete = new EffectAutocomplete(container, {
+      effects: await buildEffects(),
       onSelect: async (picked) => {
         await this._addEffectToHost(picked._catalogEntry);
       },
-    });
-
-    signal?.addEventListener('abort', () => {
-      container.querySelector('.effect-autocomplete__input')?.blur();
     });
   }
 
@@ -952,7 +981,7 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         effects,
         Number(this.document.system?.epMax ?? 0)
       ),
-      effectSummaryGroups: this._buildEffectSummaryGroups(effects),
+      effectSummaryText: await this._buildEffectSummaryText(effects),
       effectSearchPlaceholder: game.i18n.localize('PMTTRPG.EffectSearchPlaceholder')
     };
   }

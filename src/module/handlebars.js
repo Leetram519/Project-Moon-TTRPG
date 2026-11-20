@@ -55,5 +55,10 @@ export class PMTTRPGRegisterHelpers {
       if (length === 3) return 'input--medium';
       return 'input--small';
     });
+
+    Handlebars.registerHelper('add', (a, b) => a + b);   
+    Handlebars.registerHelper('sub', (a, b) => a - b);   
+    Handlebars.registerHelper('mul', (a, b) => a * b);   
+    Handlebars.registerHelper('divide', (a, b) => a / b);   
   }
 }

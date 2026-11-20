@@ -5,25 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 
-## [Unreleased]
+## Unreleased
 
 ### Added
 
-- [EasyEffects] `dice amount up` / `dice amount down` changes the number of dice. The count cannot go below 1. On `[Always Active]`, Amount on a weapon or outfit applies only to that item. Skill Amount applies when that skill is used. The clash breakdown shows Dice Amount.
-- [EasyEffects] `set dice formula` on `[Always Active]` replaces the base count, faces, and flat Power. Rank, hand, form, outfit property, Insight, Temperance, and Power, Max, and Amount from other effects still add. With no die name, a weapon sets Attack and a outfit sets Block and Evade. A formula on a weapon, outfit, or status shows on the standing die. `[flavor]` sets the Dice So Nice color.
-- Added a new system that allows players to hover and see statuses on any token.
-- Added New Item Sheets
-- Added Homebrew Settings
-- Added Status Icons in Descriptions
-- Added "Patreon Homebrew" Compendiums.
-- Added 7 Patreon effects :
-    - E.G.O. Attunement [Envy]
-    - E.G.O. Attunement [Gloom]
-    - E.G.O. Attunement [Gluttony]
-    - E.G.O. Attunement [Lust]
-    - E.G.O. Attunement [Pride]
-    - E.G.O. Attunement [Sloth]
-    - E.G.O. Attunement [Wrath]
 - Added the Action Menu to character and NPC sheets.
 - Added Dash, Disengage, Convert to Reactions, Protect, Take Cover, Ready, Assist and Reduce Status.
 - Added Grapple, Throw and Break Free.
@@ -40,13 +25,11 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] `gain N <Kind> Reaction` and `spend N Reaction to …` syntax added.
 - [EasyEffects] `dashSquares` and `reduceStatusStacks` added.
 - Added module APIs for the Action Economy.
+- Added Effect Summary Texts back in character/npc sheets.
+- Added EP count and breakdown into item sheets.
 
 ### Changed
 
-- [EasyEffects] SRD `[On Clash Start]` and `[On Clash RESULT]` effects now say `with CHOICE`.
-- [EasyEffects] Charge lost at the end of the round counts toward Overcharge.
-- [EasyEffects] Charge Barrier grants its temporary HP on `[Start of Round]`.
-- A migration rewrites those Charge, Charge Barrier, and `with CHOICE` scripts on actors and items already in the world.
 - Deleting an item from a sheet now asks first.
 - Weapons and tools can now be Held, Stowed or Dropped.
 - Actions taken outside your turn cost a Reaction.
@@ -60,6 +43,7 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - Range now counts from the edge of large tokens.
 - Difficult Terrain and Crawl cost extra Squares.
 - Removed the None damage type button. Click a selected type again to clear it.
+- Feeble & Strength now use the correct icon.
 - [EasyEffects] Updated SRD scripts for the Action Economy:
     - Staggered
     - Self-Staggered
@@ -81,19 +65,14 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] `With Counter` clash triggers only run for Counters now.
 - [Macros] Full Heal restores Reaction credits.
 
-### Cleanup
-
-- Removed an unused copy of the Combatant class.
-
 ### Fixed
 
-- Foundry combat tracker Roll All / Roll NPCs now use 1d6 + Justice + misc.
-- Each unlinked token has its own combatant. Combat start, combat end, turns, movement, targeting, and clash chat use that token. EasyEffects `enemies`, `allies`, and `all` use that token too.
 - Cancelling a dialog no longer counts as a choice.
 - Retaliating twice on the same attack card no longer starts two clashes.
 - Previous Turn and Previous Round no longer rerun turn and round triggers.
 - Removing the current Combatant now starts the next turn.
 - Status stacks no longer get lost when two changes happen at once.
+- When renaming, adding, or removing an effect, the auto-complete now updates itself.
 - [EasyEffects] Using a tool now runs `[On Action]` on equipped items and statuses.
 - [EasyEffects] Staggered from end-of-round damage now lasts through the next round.
 - [EasyEffects] `Burn+` now inflicts Burn instead of Bleed.
@@ -109,6 +88,42 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] `[M] Extension Grip` can be declined, and stops spending Charge after the turn it was chosen.
 - `Charge - Type Protection` now lists Protection types instead of Fragile.
 - [EasyEffects] Negative `Shock Absorbant` and `Padded Clothing` now deal ST and HP damage instead of granting temporary ST and HP.
+
+## [0.1.4 / INDEV-1] - 2026-10-30
+
+### Added
+
+- [EasyEffects] `dice amount up` / `dice amount down` changes the number of dice. The count cannot go below 1. On `[Always Active]`, Amount on a weapon or outfit applies only to that item. Skill Amount applies when that skill is used. The clash breakdown shows Dice Amount.
+- [EasyEffects] `set dice formula` on `[Always Active]` replaces the base count, faces, and flat Power. Rank, hand, form, outfit property, Insight, Temperance, and Power, Max, and Amount from other effects still add. With no die name, a weapon sets Attack and a outfit sets Block and Evade. A formula on a weapon, outfit, or status shows on the standing die. `[flavor]` sets the Dice So Nice color.
+- Added a new system that allows players to hover and see statuses on any token.
+- Added New Item Sheets
+- Added Homebrew Settings
+- Added Status Icons in Descriptions
+- Added "Patreon Homebrew" Compendiums.
+- Added 7 Patreon effects :
+    - E.G.O. Attunement [Envy]
+    - E.G.O. Attunement [Gloom]
+    - E.G.O. Attunement [Gluttony]
+    - E.G.O. Attunement [Lust]
+    - E.G.O. Attunement [Pride]
+    - E.G.O. Attunement [Sloth]
+    - E.G.O. Attunement [Wrath]
+
+### Changed
+
+- [EasyEffects] SRD `[On Clash Start]` and `[On Clash RESULT]` effects now say `with CHOICE`.
+- [EasyEffects] Charge lost at the end of the round counts toward Overcharge.
+- [EasyEffects] Charge Barrier grants its temporary HP on `[Start of Round]`.
+- A migration rewrites those Charge, Charge Barrier, and `with CHOICE` scripts on actors and items already in the world.
+
+### Cleanup
+
+- Removed an unused copy of the Combatant class.
+
+### Fixed
+
+- Foundry combat tracker Roll All / Roll NPCs now use 1d6 + Justice + misc.
+- Each unlinked token has its own combatant. Combat start, combat end, turns, movement, targeting, and clash chat use that token. EasyEffects `enemies`, `allies`, and `all` use that token too.
 
 ## [0.1.3] - 2026-09-16
 

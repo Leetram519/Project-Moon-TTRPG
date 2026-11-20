@@ -1,7 +1,7 @@
 import { PMTTRPGUtility } from "../utility.js";
 import { PMTTRPGRolls } from "../rolls.js";
 import { PMTTRPGTargetingAPI } from "../targeting.js";
-import { buildEffectSummaryGroups } from "../effects/effect-summary.js";
+import { buildEffectSummaryText } from "../effects/effect-summary.js";
 import { groupStatuses } from "../status/group-statuses.js";
 import { isPendingStatus } from "../status/pending.js";
 import { EasyEffectsEditor } from "../apps/easy-effects-editor.js";
@@ -289,7 +289,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     context.allWeapons = context.items
       .filter(item => item.type === "weapon")
       .sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.augments = context.items
+    context.augments = await context.items
       .filter(item => item.type === "augment")
       .map((augment) => {
         const augmentDocument = this.actor.items.get(augment._id);
@@ -302,7 +302,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
         }
         try {
           augment.system = augment.system || {};
-          augment.system.effectSummaryGroups = buildEffectSummaryGroups(augment.system?.effects ?? []);
+          augment.system.effectSummaryText = buildEffectSummaryText(augment.system?.effects ?? []);
         }
         catch (err) { /* ignore */ }
         return augment;
@@ -381,9 +381,7 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     context.profileHeader = this._buildProfileHeader(context.system.attributes ?? {});
 
     // TODO: Make this better!
-    context.pointsRemaining = 4 + (context.system.level.value * 2) - (context.system.abilities.cha.value + context.system.abilities.for.value + context.system.abilities.ins.value + context.system.abilities.jus.value + context.system.abilities.pru.value + context.system.abilities.tem.value);
-
-    console.log(context.system);
+    context.pointsRemaining = 6 + (context.system.level.value * 2) - (context.system.abilities.cha.value + context.system.abilities.for.value + context.system.abilities.ins.value + context.system.abilities.jus.value + context.system.abilities.pru.value + context.system.abilities.tem.value);
 
     const recycled = this.actor.getFlag("projectmoonttrpg", "recycledEvade");
     const recycledActive = recycled?.active === true && game.combat;
@@ -902,17 +900,17 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     sheetData.tools = tools;
     sheetData.skills = skills;
 
-    const buildGroupsFor = (item) => {
+    const buildTextFor = async (item) => {
       try {
         item.system = item.system || {};
-        item.system.effectSummaryGroups = buildEffectSummaryGroups(item.system?.effects ?? []);
+        item.system.effectSummaryText = await buildEffectSummaryText(item.system?.effects ?? []);
       }
       catch (err) { /* ignore */ }
     };
-    for (const w of weapons) buildGroupsFor(w);
-    for (const o of outfits) buildGroupsFor(o);
-    for (const s of skills) buildGroupsFor(s);
-    for (const a of ammunition) buildGroupsFor(a);
+    for (const w of weapons) await buildTextFor(w);
+    for (const o of outfits) await buildTextFor(o);
+    for (const s of skills) await buildTextFor(s);
+    for (const a of ammunition) await buildTextFor(a);
 
     const equippedWeapon = this.actor.items.find(i => i.type === "weapon" && i.system?.equipped)
       || this.actor.items.find(i => i.type === "weapon");

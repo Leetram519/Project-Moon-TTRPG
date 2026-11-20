@@ -2,6 +2,7 @@ import { PMTTRPGUtility } from "../utility.js";
 
 const CLASH_PROC_TYPES = new Set(["onClash", "onClashResult", "onEitherClashResult"]);
 const CHOICE_PROC_TYPES = new Set(["onClash", "onClashResult", "onEitherClashResult", "onCondition"]);
+//const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 export function effectShowsProcChoice(procOn = "alwaysActive") {
   return CHOICE_PROC_TYPES.has(procOn);
@@ -51,111 +52,126 @@ export function getEffectStack(effect = {}) {
   return Math.max(1, Math.min(stackMax, Number.isFinite(stackRaw) ? stackRaw : 1));
 }
 
-export function buildEffectSummaryGroups(effects = []) {
+export async function buildEffectSummaryText(effects = []) {
   const topGroups = new Map();
 
-  const addLine = (groupKey, groupLabel, groupSort, subKey, subLabel, lineText) => {
+  const addLine = (groupKey, groupLabel, groupSort, line) => {
     if (!topGroups.has(groupKey)) {
       topGroups.set(groupKey, {
         key: groupKey,
         heading: groupLabel,
         sort: groupSort,
-        lines: [],
-        subgroups: new Map(),
-        subgroupOrder: []
+        lines: []
       });
     }
 
     const group = topGroups.get(groupKey);
     group.sort = Math.min(group.sort ?? groupSort, groupSort);
-
-    if (subKey) {
-      if (!group.subgroups.has(subKey)) {
-        group.subgroups.set(subKey, {
-          key: subKey,
-          heading: subLabel,
-          lines: []
-        });
-        group.subgroupOrder.push(subKey);
-      }
-
-      group.subgroups.get(subKey).lines.push(lineText);
-      return;
-    }
-
-    group.lines.push(lineText);
+    group.lines.push(line);
   };
 
   for (const effect of effects ?? []) {
     const stack = getEffectStack(effect);
+
     const textSource = effect.mode === "negative"
       ? (effect.negative || effect.positive || "")
       : (effect.positive || effect.negative || "");
+
     const text = PMTTRPGUtility.expandEffectText(textSource, stack).trim();
-    const lineText = foundry.utils.escapeHTML(text || game.i18n.localize("PMTTRPG.EffectNoSummaryText"));
-    const procOn = effect?.procOn ?? "alwaysActive";
+    const fallback = game.i18n.localize("PMTTRPG.EffectNoSummaryText");
+
+    const enrichedText = await TextEditor.enrichHTML(text || fallback);
+    const cleanText = stripOuterBlockTags(enrichedText);
+
     const procCondition = `${effect?.procCondition ?? ""}`.trim();
 
-    if (procOn === "alwaysActive") {
-      const groupLabel = game.i18n.localize("PMTTRPG.EffectProcAlwaysActive");
-      const groupSort = getGroupSort({ procOn: "alwaysActive" });
+    const enrichedCondition = procCondition
+      ? await TextEditor.enrichHTML(procCondition)
+      : "";
 
-      if (procCondition) {
-        addLine("alwaysActive", groupLabel, groupSort, `condition:${procCondition.toLowerCase()}`, procCondition, lineText);
-      }
-      else {
-        addLine("alwaysActive", groupLabel, groupSort, "", "", lineText);
-      }
-      continue;
+    const conditionHtml = enrichedCondition
+      ? `<span class="effect-summary-condition">${enrichedCondition}</span>, `
+      : "";
+
+    const lineText = `
+      <span class="effect-summary-line">
+        ${conditionHtml}${cleanText}
+      </span>
+    `;
+
+    const procOn = effect?.procOn ?? "alwaysActive";
+
+    let groupKey;
+    let groupLabel;
+    let groupSort;
+
+    if (procOn === "alwaysActive") {
+      groupKey = "alwaysActive";
+      groupLabel = game.i18n.localize("PMTTRPG.EffectProcAlwaysActive");
+      groupSort = getGroupSort({ procOn: "alwaysActive" });
+    } else {
+      const procResult = effect?.procResult ?? "none";
+      const procChoice = effect?.procChoice ?? "none";
+
+      groupKey = CLASH_PROC_TYPES.has(procOn)
+        ? `${procOn}:${procResult}:${procChoice}`
+        : (CHOICE_PROC_TYPES.has(procOn) ? `${procOn}:${procChoice}` : procOn);
+
+      groupLabel = PMTTRPGUtility.formatEffectProcLabel(effect);
+      groupSort = getGroupSort(effect);
     }
 
-    const procResult = effect?.procResult ?? "none";
-    const procChoice = effect?.procChoice ?? "none";
-    const groupKey = CLASH_PROC_TYPES.has(procOn)
-      ? `${procOn}:${procResult}:${procChoice}`
-      : (CHOICE_PROC_TYPES.has(procOn) ? `${procOn}:${procChoice}` : procOn);
-    const groupLabel = PMTTRPGUtility.formatEffectProcLabel(effect);
-    const groupSort = getGroupSort(effect);
-    addLine(groupKey, groupLabel, groupSort, "", "", lineText);
+    addLine(groupKey, groupLabel, groupSort, {
+      condition: !!procCondition,
+      html: lineText
+    });
   }
 
-  const renderLines = (lines = []) => lines.map(line => `<span class="effect-summary-line">${foundry.utils.unescapeHTML(line)}</span>`);
+  const renderLines = (lines = []) =>
+    [...lines]
+      .sort((a, b) => Number(a.condition) - Number(b.condition))
+      .map(line => `<div class="effect-summary-item">- ${line.html}</div>`)
+      .join("");
+
   const renderGroup = (group) => {
-    const groupClass = toCssToken(group.key || group.heading || "group");
-    const parts = [`<span class="effect-summary-tag effect-summary-tag--${groupClass}">${foundry.utils.escapeHTML(group.heading)}</span>`];
+    const triggerClass = getEffectTriggerClass({
+      procOn: group.key.split(":")[0],
+      procResult: group.key.split(":")[1]
+    });
 
-    if (group.lines.length) {
-      parts.push(renderLines(group.lines).join("<br/>"));
-    }
-
-    for (const subKey of group.subgroupOrder) {
-      const subgroup = group.subgroups.get(subKey);
-      const subgroupClass = toCssToken(subgroup.key || subgroup.heading || "subgroup");
-      parts.push(`
-        <div class="effect-summary-subgroup">
-          <span class="effect-summary-tag effect-summary-tag--sub effect-summary-tag--${subgroupClass}">${foundry.utils.escapeHTML(subgroup.heading).trim()}</span>
-          ${renderLines(subgroup.lines)}
-        </div>`);
-    }
-
-    return `<div class="effect-summary-block">${parts.join("<br/>")}</div>`;
+    return `
+      <div class="effect-summary-block">
+        <span class="effect-summary-trigger ${triggerClass}">
+          [${foundry.utils.escapeHTML(group.heading)}]
+        </span>
+        <div class="effect-summary-list">
+          ${renderLines(group.lines)}
+        </div>
+      </div>
+    `;
   };
 
-  const orderedKeys = Array.from(topGroups.values())
+  const orderedGroups = Array.from(topGroups.values())
     .sort((left, right) => {
       if ((left.sort ?? 999) !== (right.sort ?? 999)) {
         return (left.sort ?? 999) - (right.sort ?? 999);
       }
 
       return (left.heading ?? "").localeCompare(right.heading ?? "");
-    })
-    .map(group => group.key);
+    });
 
-  return [{
-    key: "combined",
-    heading: game.i18n.localize("PMTTRPG.Effects"),
-    summaryText: orderedKeys.map(key => renderGroup(topGroups.get(key))).join("<br><br>")
-  }];
+  if (!orderedGroups.length) return "";
+
+  return `
+    <div class="item-effect-summary">
+      <h4 class="item-effect-summary__title">
+        ${foundry.utils.escapeHTML(game.i18n.localize("PMTTRPG.Effects"))}
+      </h4>
+      <div class="item-effect-summary__body">
+        ${orderedGroups.map(renderGroup).join("")}
+      </div>
+    </div>
+  `;
 }
 
 function getEffectTriggerClass(effect = {}) {
@@ -211,12 +227,21 @@ export async function buildInlineEffectSummary(effect = {}) {
 
   const enrichedText = await TextEditor.enrichHTML(text || fallback);
   const cleanText = stripOuterBlockTags(enrichedText);
+  const procCondition = await TextEditor.enrichHTML(effect.procCondition);
 
   const triggerHtml = trigger
     ? `<span class="effect-summary-trigger ${triggerClass}">[${foundry.utils.escapeHTML(trigger)}]</span> `
     : "";
 
-  return `<span class="effect-summary-line">${triggerHtml}${cleanText}</span>`;
+  const conditionHtml = procCondition
+    ? `<span class="effect-summary-condition">${foundry.utils.escapeHTML(procCondition)},</span> `
+    : "";
+
+  return `
+    <span class="effect-summary-line">
+      ${triggerHtml}${conditionHtml}${cleanText}
+    </span>
+  `;
 }
 
 export function computeEffectSummary(entries = [], epMax = 0) {

@@ -32,6 +32,11 @@ export class EffectAutocomplete {
     this._bindEvents();
   }
 
+  setEffects(effects) {
+    this.effects = effects;
+    this._filter?.(this.input?.value ?? "");
+  }
+
   _bindElements() {
     this.input = this.container.querySelector('.effect-autocomplete__input');
     this.dropdown = this.container.querySelector('.effect-autocomplete__dropdown');
