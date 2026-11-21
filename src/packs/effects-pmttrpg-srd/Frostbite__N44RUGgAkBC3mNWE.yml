@@ -39,19 +39,19 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "frostbiteBeforeTarget" on item to (target.status.Frostbite);
-    set flag "frostbiteBeforeSelf" on item to (self.status.Frostbite);
+    set flag "frostbiteBeforeTarget" on item to (target.status.Frostbite + target.status.Frostbite.pending);
+    set flag "frostbiteBeforeSelf" on item to (self.status.Frostbite + self.status.Frostbite.pending);
 
-    [On Clash Win]
-    require (target.status.Frostbite) > (item.flag.frostbiteBeforeTarget) then
+    [After Clash Win]
+    require (target.status.Frostbite + target.status.Frostbite.pending) > (item.flag.frostbiteBeforeTarget) then
       inflict (min(N, 3)) Frostbite on target;
-    require (self.status.Frostbite) > (item.flag.frostbiteBeforeSelf) then
+    require (self.status.Frostbite + self.status.Frostbite.pending) > (item.flag.frostbiteBeforeSelf) then
       inflict (min(N, 3)) Frostbite on self;
 
-    [On Clash Lose]
-    require (target.status.Frostbite) > (item.flag.frostbiteBeforeTarget) then
+    [After Clash Lose]
+    require (target.status.Frostbite + target.status.Frostbite.pending) > (item.flag.frostbiteBeforeTarget) then
       inflict (min(N, 3)) Frostbite on target;
-    require (self.status.Frostbite) > (item.flag.frostbiteBeforeSelf) then
+    require (self.status.Frostbite + self.status.Frostbite.pending) > (item.flag.frostbiteBeforeSelf) then
       inflict (min(N, 3)) Frostbite on self;
 effects: []
 sort: 100000

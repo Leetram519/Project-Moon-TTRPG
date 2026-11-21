@@ -205,7 +205,7 @@ export class ActorPMTTRPG extends Actor {
     if (data.attributes.hp.value === undefined || data.attributes.hp.value === null) {
       data.attributes.hp.value = data.attributes.hp.max;
     } else {
-      data.attributes.hp.value = Math.clamp(Number(data.attributes.hp.value) || 0, 0, data.attributes.hp.max);
+      data.attributes.hp.value = Math.max(0, Number(data.attributes.hp.value) || 0);
     }
 
     // Stagger Threshold (ST): 20 + (Charm*4) + (Rank*4)
@@ -217,7 +217,7 @@ export class ActorPMTTRPG extends Actor {
     if (data.attributes.st.value === undefined || data.attributes.st.value === null) {
       data.attributes.st.value = data.attributes.st.max;
     } else {
-      data.attributes.st.value = Math.clamp(Number(data.attributes.st.value) || 0, 0, data.attributes.st.max);
+      data.attributes.st.value = Math.max(0, Number(data.attributes.st.value) || 0);
     }
     // Sanity Points (SP): 15 + (Prudence*3)
     let spMaxBase = 15 + (pru * 3);
@@ -240,7 +240,7 @@ export class ActorPMTTRPG extends Actor {
     if (data.attributes.sp.value === undefined || data.attributes.sp.value === null) {
       data.attributes.sp.value = data.attributes.sp.max;
     } else {
-      data.attributes.sp.value = clampPoolValue("sp", data.attributes.sp.value, data.attributes.sp.max);
+      data.attributes.sp.value = Number(data.attributes.sp.value) || 0;
     }
 
     // Light: 3 + Rank. Clamp after equipment bonuses.

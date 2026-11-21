@@ -52,7 +52,7 @@ system:
     create message 
 
     "[Attack Replacement / Multi-Hit] Press [T] to target a token. Apply Damage
-    twice to the same target. Apply status inflictions at half efficiency,
+    (N+1) times to the same target. Apply status inflictions at half efficiency,
     rounded down, for any hit after the first."
 effects: []
 sort: 0

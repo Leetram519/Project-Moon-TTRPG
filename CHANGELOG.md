@@ -27,6 +27,8 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - Added module APIs for the Action Economy.
 - Added Effect Summary Texts back in character/npc sheets.
 - Added EP count and breakdown into item sheets.
+- [EasyEffects] `status.<Name>.pending` reads stacks that arrive next round or next turn.
+- [EasyEffects] `[After Clash Win]` and `[After Clash Lose]` run after both sides’ Clash Win and Clash Lose effects. Effects can use `[After Clash RESULT with CHOICE]`.
 
 ### Changed
 
@@ -64,6 +66,7 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] `self.reaction`, `lose N Reaction` and `set reaction to N` include Reaction credits.
 - [EasyEffects] `With Counter` clash triggers only run for Counters now.
 - [Macros] Full Heal restores Reaction credits.
+- Skills can now cost 0 Light.
 
 ### Fixed
 
@@ -85,9 +88,13 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - [EasyEffects] Charge is only lost at the end of the round when Overcharge is on.
 - [EasyEffects] Skill Charge effects now consume their Charge on use, win or lose.
 - [EasyEffects] `Charge - Bombardment`, `Charge - Type Fragile`, `Charge - Type Protection`, `Ruptured Omen`, `Smoke Overflow`, `[M] Extension Grip`, and `E.G.O. Attunement [Gloom]` now correctly parse.
-- [EasyEffects] `[M] Extension Grip` can be declined, and stops spending Charge after the turn it was chosen.
+- [EasyEffects] `[M] Extension Grip` can be declined and stops spending Charge after the turn it was chosen.
 - `Charge - Type Protection` now lists Protection types instead of Fragile.
 - [EasyEffects] Negative `Shock Absorbant` and `Padded Clothing` now deal ST and HP damage instead of granting temporary ST and HP.
+- [EasyEffects] `Rupture+`, `Tremor+`, `Sinking+`, `Burn+`, `Bleed+` and `Frostbite+` now trigger on any inflict in the clash, including next-round ones. Rupture+, Tremor+ and Sinking+ add their extra stacks next round.
+- [EasyEffects] A dice amount with a Dice So Nice flavor, like `gain 1d6[burn] Burn per 4`, now rolls one die per repeat instead of multiplying a single roll.
+- [EasyEffects] HP, ST and SP can be healed up to a max raised by `[Always Active]` `gain N maxHp`, `maxSt` or `maxSp`.
+- `Blitz - Multi-Hit` can now stack to 2. The `Blitz - Multi-Hit`, `Multi-hit` and `Charge - Multi-hit` chat messages now say how many times to apply damage.
 
 ## [0.1.4 / INDEV-1] - 2026-10-30
 

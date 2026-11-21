@@ -91,9 +91,10 @@ export function formatDiceFormula(count, sides, power) {
 export function expandSimpleDiceByMultiplier(formula, times) {
   const n = Math.max(0, Math.round(Number(times) || 0));
   if (n <= 0) return "0";
-  const parsed = parseSimpleDiceFormula(formula);
+  const [, base, flavor] = String(formula ?? "").trim().match(/^(.*?)((?:\[[^\]]*\])*)$/);
+  const parsed = parseSimpleDiceFormula(base);
   if (!parsed) return null;
-  return formatDiceFormula(parsed.count * n, parsed.sides, parsed.power);
+  return formatDiceFormula(parsed.count * n, parsed.sides, parsed.power) + flavor;
 }
 
 export function resolveDiceBonuses(baseFormula, bonuses = {}) {

@@ -11,6 +11,7 @@
  *   pmttrpg.clashResolved      { winner, loser, attackerItem, defenderItem,
  *                                attackerRoll, defenderRoll, clash }
  *   pmttrpg.clashBeforeResults [On Clash Win Before Results] (winner kit)
+ *   pmttrpg.clashEnded         [After Clash Win] / [After Clash Lose], after both sides' Clash Win/Lose
  *   pmttrpg.hitBeforeResults   [On Hit Before Results] / [On Being Hit Before Results]
  *   pmttrpg.attackConnected    { attacker, defender, item, clash } after Clash Win/Lose
  *   pmttrpg.damageCalc         { attacker, defender, attackerItem, clash }

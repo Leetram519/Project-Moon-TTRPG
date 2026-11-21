@@ -40,20 +40,20 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "ruptureBeforeTarget" on item to (target.status.Rupture);
-    set flag "ruptureBeforeSelf" on item to (self.status.Rupture);
+    set flag "ruptureBeforeTarget" on item to (target.status.Rupture + target.status.Rupture.pending);
+    set flag "ruptureBeforeSelf" on item to (self.status.Rupture + self.status.Rupture.pending);
 
-    [On Clash Win]
-    require (target.status.Rupture) > (item.flag.ruptureBeforeTarget) then
-      inflict (min(N, 3)) Rupture on target;
-    require (self.status.Rupture) > (item.flag.ruptureBeforeSelf) then
-      inflict (min(N, 3)) Rupture on self;
+    [After Clash Win]
+    require (target.status.Rupture + target.status.Rupture.pending) > (item.flag.ruptureBeforeTarget) then
+      inflict (min(N, 3)) Rupture next round on target;
+    require (self.status.Rupture + self.status.Rupture.pending) > (item.flag.ruptureBeforeSelf) then
+      inflict (min(N, 3)) Rupture next round on self;
 
-    [On Clash Lose]
-    require (target.status.Rupture) > (item.flag.ruptureBeforeTarget) then
-      inflict (min(N, 3)) Rupture on target;
-    require (self.status.Rupture) > (item.flag.ruptureBeforeSelf) then
-      inflict (min(N, 3)) Rupture on self;
+    [After Clash Lose]
+    require (target.status.Rupture + target.status.Rupture.pending) > (item.flag.ruptureBeforeTarget) then
+      inflict (min(N, 3)) Rupture next round on target;
+    require (self.status.Rupture + self.status.Rupture.pending) > (item.flag.ruptureBeforeSelf) then
+      inflict (min(N, 3)) Rupture next round on self;
 effects: []
 sort: 100000
 ownership:

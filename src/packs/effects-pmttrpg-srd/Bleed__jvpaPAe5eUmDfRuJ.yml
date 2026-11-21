@@ -40,19 +40,19 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "bleedBeforeTarget" on item to (target.status.Bleed);
-    set flag "bleedBeforeSelf" on item to (self.status.Bleed);
+    set flag "bleedBeforeTarget" on item to (target.status.Bleed + target.status.Bleed.pending);
+    set flag "bleedBeforeSelf" on item to (self.status.Bleed + self.status.Bleed.pending);
 
-    [On Clash Win]
-    require (target.status.Bleed) > (item.flag.bleedBeforeTarget) then
+    [After Clash Win]
+    require (target.status.Bleed + target.status.Bleed.pending) > (item.flag.bleedBeforeTarget) then
       inflict (min(N, 3)) Bleed on target;
-    require (self.status.Bleed) > (item.flag.bleedBeforeSelf) then
+    require (self.status.Bleed + self.status.Bleed.pending) > (item.flag.bleedBeforeSelf) then
       inflict (min(N, 3)) Bleed on self;
 
-    [On Clash Lose]
-    require (target.status.Bleed) > (item.flag.bleedBeforeTarget) then
+    [After Clash Lose]
+    require (target.status.Bleed + target.status.Bleed.pending) > (item.flag.bleedBeforeTarget) then
       inflict (min(N, 3)) Bleed on target;
-    require (self.status.Bleed) > (item.flag.bleedBeforeSelf) then
+    require (self.status.Bleed + self.status.Bleed.pending) > (item.flag.bleedBeforeSelf) then
       inflict (min(N, 3)) Bleed on self;
 effects: []
 sort: 100000

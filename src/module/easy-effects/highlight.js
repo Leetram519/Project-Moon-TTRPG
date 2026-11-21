@@ -17,7 +17,7 @@ const HOSTS = new Set([
 ]);
 
 const PATH_SEGMENTS = new Set([
-  "status", "flag", "amount", "pool", "originalpool", "origin",
+  "status", "flag", "amount", "pool", "originalpool", "origin", "pending",
   "source", "damagetype", "attack",
   "before", "after", "max",
   "squares", "spaces", "movement", "forced", "method",
