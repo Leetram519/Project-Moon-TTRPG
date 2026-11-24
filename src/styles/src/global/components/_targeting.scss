@@ -1,3 +1,5 @@
+@use '../application/pm-window-mixins' as *;
+
 .target-roll-dialog {
   display: flex;
   flex-direction: column;

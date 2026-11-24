@@ -57,7 +57,7 @@ This is not yet possible. We're working on it, and it'll come with the MVP 1.0.0
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v20 or higher
+- [Node.js](https://nodejs.org/) v24 or higher
 - npm (comes with Node.js)
 
 ### Steps

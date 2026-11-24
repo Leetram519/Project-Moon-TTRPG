@@ -19,7 +19,7 @@ This repository is divided into two directories:
 
 ### Requirements
 
-* Node.js 12 or later
+* Node.js 24 or later
 * npm
 
 ### Build
@@ -84,6 +84,15 @@ New dialogs use the dark and gold `pm-window` theme in `src/styles/src/global/ap
 
 * For a fixed set of choices, render a template from `src/templates/dialog/` and open it with `waitForWindowChoice` from `src/module/apps/dialog-wait.js`, using `cancelButton()` and `confirmButton()`. `waitForWindowChoice` puts the default button last, and Enter presses it.
 * Do not start a dialog template with a `<form>`. DialogV2 already wraps its content in one, and the browser drops a form nested inside another.
+
+### TypeScript
+
+New modules in `src/module/` can be written in TypeScript. The build removes the types and writes each `.ts` file to `dist/` as a `.js` file with the same line numbers.
+
+* Import a TypeScript module by its `.js` name, for example `import { parse } from "./parser.js"` for `parser.ts`.
+* Use `import type` for imports that are only types.
+* `npm run typecheck` checks the TypeScript files.
+* `src/types/fvtt-types.d.ts` gives `actor.system` and `item.system` their types and should be updated whenever `src/yaml/template.yml` or the derived data in `ActorPMTTRPG.prepareData` changes.
 
 ## Reporting Bugs
 

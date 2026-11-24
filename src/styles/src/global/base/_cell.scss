@@ -1,3 +1,5 @@
+@use '../utils/variables' as *;
+
 .cell__title,
 .cell__subtitle {
   display: flex;

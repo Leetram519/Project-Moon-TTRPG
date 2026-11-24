@@ -1,5 +1,7 @@
 // Dialog-specific styles extracted from _moves.scss
 
+@use '../application/pm-window-mixins' as *;
+
 &.PMTTRPG-dialog.dialog {
   .window-content {
     display: flex;

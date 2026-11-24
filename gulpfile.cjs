@@ -8,6 +8,9 @@ const git = require('gulp-git');
 const tagVersion = require('gulp-tag-version');
 const jsYaml = require('js-yaml');
 const replace = require('gulp-replace');
+const picomatch = require('picomatch');
+const through2 = require('through2');
+const { stripTypeScriptTypes } = require('module');
 
 // Dependencies for compendium tasks.
 const fs = require('fs');
@@ -15,7 +18,7 @@ const shell = require('gulp-shell')
 const mergeStream = require("merge-stream");
 const path = require("path");
 const clean = require("gulp-clean");
-const { effectPackMigrations, migrateYamlDirectory } = require('./tools/migrate-pack-files.js');
+const { effectPackMigrations, migrateYamlDirectory } = require('./tools/migrate-pack-files.cjs');
 
 // Constants.
 const PACK_SRC = "src/packs";
@@ -92,9 +95,9 @@ function handleError(err) {
 
 const SYSTEM_SCSS = ["src/styles/src/**/*.scss"];
 function compileScss() {
-  // Configure options for sass output. For example, 'expanded' or 'nested'
+  // Configure options for sass output. For example, 'expanded' or 'compressed'
   let options = {
-    outputStyle: 'compressed'
+    style: 'compressed'
   };
   return gulp.src(SYSTEM_SCSS)
     .pipe(
@@ -138,6 +141,7 @@ const SYSTEM_COPY = [
   'src/assets/**/*',
   '!src/assets/**/*.{png,jpeg,jpg}',
   'src/module/**/*',
+  '!src/module/**/*.ts',
   'src/packs/**/*.db',
   'src/scripts/**/*',
   'src/styles/lib/**/*',
@@ -146,10 +150,34 @@ const SYSTEM_COPY = [
   '!src/tokens/**/*.{png,jpeg,jpg}'
 ];
 function copyFiles() {
-  return gulp.src(SYSTEM_COPY, {base: 'src'})
+  return gulp.src(SYSTEM_COPY, {base: 'src', encoding: false})
+    // A failed write also errors this stream; dest() already reports it, and unhandled it would end the watch.
+    .on('error', () => {})
     .pipe(gulp.dest('./dist'))
 }
 const copyTask = gulp.series(copyFiles);
+
+/* ----------------------------------------- */
+/* Compile TypeScript
+/* ----------------------------------------- */
+const SYSTEM_TS = ['src/module/**/*.ts'];
+function compileTs() {
+  return gulp.src(SYSTEM_TS, {base: 'src'})
+    .pipe(through2.obj((file, enc, done) => {
+      try {
+        file.contents = Buffer.from(stripTypeScriptTypes(file.contents.toString()));
+        file.extname = '.js';
+        done(null, file);
+      } catch (err) {
+        // We skip the file and just fail the build at the end (erroring the stream would end the watch).
+        console.log(`${file.relative}: ${err.message}`);
+        process.exitCode = 1;
+        done();
+      }
+    }))
+    .pipe(gulp.dest('./dist'));
+}
+const tsTask = gulp.series(compileTs);
 
 /* ----------------------------------------- */
 /* Convert images
@@ -159,7 +187,7 @@ const SYSTEM_IMAGES = [
   'src/tokens/**/*.{png,jpeg,jpg}'
 ];
 function compileImages() {
-  return gulp.src(SYSTEM_IMAGES, {base: 'src'})
+  return gulp.src(SYSTEM_IMAGES, {base: 'src', encoding: false})
     .pipe(webp())
     .pipe(gulp.dest('./dist'));
 };
@@ -236,11 +264,23 @@ function commitTag() {
 /* Watch Updates
 /* ----------------------------------------- */
 
+// Watching globs makes chokidar add a listener on every folder event and never remove it,
+// so watch the folders the globs start from and skip the files they don't match.
+function watchGlobs(globs, task) {
+  const include = globs.filter((glob) => !glob.startsWith('!'));
+  const exclude = globs.filter((glob) => glob.startsWith('!')).map((glob) => glob.slice(1));
+  const isMatch = picomatch(include, { ignore: exclude });
+  const folders = [...new Set(include.map((glob) => picomatch.scan(glob).base))];
+  const ignored = (file, stats) => stats !== undefined && stats.isFile() && !isMatch(path.relative('.', file).split(path.sep).join('/'));
+  return gulp.watch(folders, { ignored }, task);
+}
+
 function watchUpdates() {
-  gulp.watch(SYSTEM_YAML, yamlTask);
-  gulp.watch(SYSTEM_IMAGES, compileImages);
-  gulp.watch(SYSTEM_SCSS, gulp.series(compileScss, copyFiles));
-  gulp.watch(SYSTEM_COPY, copyTask);
+  watchGlobs(SYSTEM_YAML, yamlTask);
+  watchGlobs(SYSTEM_IMAGES, compileImages);
+  watchGlobs(SYSTEM_SCSS, gulp.series(compileScss, copyFiles));
+  watchGlobs(SYSTEM_COPY, copyTask);
+  watchGlobs(SYSTEM_TS, tsTask);
 }
 
 /* ----------------------------------------- */
@@ -253,6 +293,7 @@ const defaultTask = gulp.series(
   compileImages,
   compileScss,
   copyFiles,
+  compileTs,
   watchUpdates
 );
 const buildTask = gulp.series(
@@ -263,6 +304,7 @@ const buildTask = gulp.series(
     compileScss,
     compileImages,
     copyFiles,
+    compileTs,
     compilePacks
   )
 );
@@ -274,6 +316,7 @@ exports.copy = copyTask;
 exports.images = imageTask;
 exports.css = cssTask;
 exports.yaml = yamlTask;
+exports.ts = tsTask;
 
 exports.cleanPacks = gulp.series(cleanPacks);
 exports.compilePacks = gulp.series(cleanPacks, compilePacks);

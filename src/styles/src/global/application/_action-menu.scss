@@ -1,3 +1,5 @@
+@use 'pm-window-mixins' as *;
+
 .application.pm-action-menu {
   .dialog-content {
     overflow: hidden;
