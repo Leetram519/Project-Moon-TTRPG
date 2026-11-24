@@ -1,8 +1,24 @@
 <div class="action-weapon-form">
-  <p class="action-weapon-form__hint">{{hint}}</p>
+  {{#if host}}
+  <div class="dialog-summary"{{#if host.tooltip}} data-tooltip-html="{{host.tooltip}}" data-tooltip-class="pmttrpg-status-tip" data-tooltip-direction="RIGHT"{{/if}}>
+    <div class="dialog-summary__weapon">
+      <img class="dialog-summary__icon" src="{{host.img}}" alt="">
+      <div class="dialog-summary__body">
+        <h3>{{host.name}}</h3>
+        {{#if (or host.meta host.damageType)}}
+        <div class="dialog-summary__meta">
+          {{#if host.meta}}<span>{{host.meta}}</span>{{/if}}
+          {{#if host.damageType}}{{> "systems/projectmoonttrpg/templates/sheet/character/partials/damage-type-icon.hbs" assetPath="systems/projectmoonttrpg/assets/icons/sheet" damageType=host.damageType}}{{/if}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  {{/if}}
+  {{#if hint}}<p class="action-weapon-form__hint">{{hint}}</p>{{/if}}
   <div class="action-weapon-form__options">
     {{#each rows}}
-    <label class="action-menu-option">
+    <label class="action-menu-option"{{#if tooltip}} data-tooltip-html="{{tooltip}}" data-tooltip-class="pmttrpg-status-tip" data-tooltip-direction="RIGHT"{{/if}}>
       <input type="radio" name="{{../inputName}}" value="{{id}}" {{#if checked}}checked{{/if}}>
       {{#if img}}
       <img class="action-menu-option__img" src="{{img}}" alt="">
@@ -11,7 +27,22 @@
         {{name}}
         {{#if tag}}<span class="action-menu-option__held">{{tag}}</span>{{/if}}
       </span>
+      {{#if (or meta damageType dice)}}
+      <span class="action-menu-option__meta">
+        {{#if meta}}<span class="action-menu-option__cost">{{meta}}</span>{{/if}}
+        {{#if damageType}}{{> "systems/projectmoonttrpg/templates/sheet/character/partials/damage-type-icon.hbs" assetPath="systems/projectmoonttrpg/assets/icons/sheet" damageType=damageType}}{{/if}}
+        {{#each dice}}
+        <span class="action-menu-option__dice"><span class="action-menu-option__cost">{{formula}}</span><img class="action-menu-option__stat-icon" src="{{icon}}" alt="{{label}}"></span>
+        {{/each}}
+      </span>
+      {{/if}}
     </label>
     {{/each}}
   </div>
+  {{#if toggle}}
+  <label class="consume-toggle">
+    <input type="checkbox" name="toggle" {{#if toggle.checked}}checked{{/if}}>
+    <span>{{toggle.label}}</span>
+  </label>
+  {{/if}}
 </div>

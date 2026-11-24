@@ -116,7 +116,8 @@ async function promptWeaponChoice(actor, weapons, weaponType) {
       : game.i18n.localize("PMTTRPG.ActionMenu.MeleeAttack"),
     hint: game.i18n.localize("PMTTRPG.ActionMenu.ChooseWeapon"),
     inputName: "weaponId",
-    rows: itemPickerRows(weapons, game.i18n.localize("PMTTRPG.ToolHeld")),
+    rows: (await itemPickerRows(weapons, game.i18n.localize("PMTTRPG.ToolHeld")))
+      .map((row, i) => ({ ...row, meta: weapons[i].system?.offensiveDiceComputed ?? "" })),
   });
   return itemId ? actor.items.get(itemId) ?? null : null;
 }

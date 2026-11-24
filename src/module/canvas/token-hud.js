@@ -1,12 +1,13 @@
 /**
- * Adds the Fall button to the Token HUD after every render (core replaces the HUD
- * root each time). What we read at render only decides if the button shows and how
- * it looks, since the click checks the token again anyway.
+ * Adds the Actions and Fall buttons to the Token HUD after every render (core replaces
+ * the HUD root each time). What we read at render only decides if the Fall button shows
+ * and how it looks, since the click checks the token again anyway.
  */
 
 import { FALL_REASON, fallAvailability, startFallDescent } from "../falling/fall-descent.js";
 
 const ACTION = "pmttrpgFall";
+const ACTION_MENU = "pmttrpgActionMenu";
 
 const REFUSAL_KEYS = {
   "support-changed": "PMTTRPG.Falling.Unavailable.Support",
@@ -72,6 +73,29 @@ function fallButton(availability) {
   return button;
 }
 
+async function onActionMenuClick(event) {
+  event.preventDefault();
+  const doc = this.document;
+  if (!doc?.actor?.isOwner) return;
+  const { openActionMenu } = await import("../action-economy/action-menu.js");
+  await openActionMenu(doc.actor, { token: doc });
+}
+
+function actionMenuButton() {
+  const button = document.createElement("button");
+  const label = game.i18n.localize("PMTTRPG.ActionMenu.Open");
+  button.type = "button";
+  button.className = "control-icon pmttrpg-action-menu";
+  button.dataset.action = ACTION_MENU;
+  button.setAttribute("data-tooltip", "");
+  button.setAttribute("aria-label", label);
+  const icon = document.createElement("i");
+  icon.className = "fa-solid fa-sword";
+  icon.setAttribute("inert", "");
+  button.append(icon);
+  return button;
+}
+
 export function registerTokenHUDPMTTRPG() {
   const Current = CONFIG.Token.hudClass;
   if (Current.name === "TokenHUDPMTTRPG") return Current;
@@ -80,6 +104,7 @@ export function registerTokenHUDPMTTRPG() {
     static DEFAULT_OPTIONS = {
       actions: {
         [ACTION]: onFallClick,
+        [ACTION_MENU]: onActionMenuClick,
       },
     };
 
@@ -99,11 +124,17 @@ export function registerTokenHUDPMTTRPG() {
       const column = this.element.querySelector(".col.left");
       const elevation = column?.querySelector(".attribute.elevation");
       if (!elevation) return;
+      for (const existing of column.querySelectorAll(".pmttrpg-action-menu")) existing.remove();
       for (const existing of column.querySelectorAll(".pmttrpg-fall")) existing.remove();
+      let anchor = elevation;
+      if (this.document?.actor?.isOwner) {
+        anchor = actionMenuButton();
+        elevation.insertAdjacentElement("afterend", anchor);
+      }
       const availability = context.pmttrpgFall;
       if (!availability.visible) return;
       const button = fallButton(availability);
-      elevation.insertAdjacentElement("afterend", button);
+      anchor.insertAdjacentElement("afterend", button);
     }
   }
 

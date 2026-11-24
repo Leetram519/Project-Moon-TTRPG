@@ -507,6 +507,20 @@ const TRIGGER_HOOKS = [
     buildContext: buildClashLoseContext,
   },
 
+  // ── [After Clash Win] / [After Clash Lose] ──────────────────────────────────
+  {
+    hook: "pmttrpg.clashEnded",
+    triggerName: "After Clash Win",
+    getItems: clashWinItems,
+    buildContext: buildClashWinContext,
+  },
+  {
+    hook: "pmttrpg.clashEnded",
+    triggerName: "After Clash Lose",
+    getItems: clashLoseItems,
+    buildContext: buildClashLoseContext,
+  },
+
   // ── [On Hit] / [On Hit Before Results] ──────────────────────────────────────
   {
     hook: "pmttrpg.attackConnected",
@@ -827,6 +841,7 @@ let _emittingAttackConnected = false;
 let _emittingClashStarted = false;
 let _emittingClashResolved = false;
 let _emittingClashBeforeResults = false;
+let _emittingClashEnded = false;
 let _emittingHitBeforeResults = false;
 let _emittingActorActionDepth = 0;
 let _emittingTokenMoved = false;
@@ -875,7 +890,8 @@ async function runActorScriptsForDef(def, payload, emission = null) {
 function allowsClashWeapon(hookName) {
   return hookName === "pmttrpg.clashStarted"
     || hookName === "pmttrpg.clashResolved"
-    || hookName === "pmttrpg.clashBeforeResults";
+    || hookName === "pmttrpg.clashBeforeResults"
+    || hookName === "pmttrpg.clashEnded";
 }
 
 async function runTriggerDefs(hookName, payload, emission) {
@@ -905,6 +921,7 @@ function isHookEmitting(hookName) {
   if (hookName === "pmttrpg.clashStarted") return _emittingClashStarted;
   if (hookName === "pmttrpg.clashResolved") return _emittingClashResolved;
   if (hookName === "pmttrpg.clashBeforeResults") return _emittingClashBeforeResults;
+  if (hookName === "pmttrpg.clashEnded") return _emittingClashEnded;
   if (hookName === "pmttrpg.hitBeforeResults") return _emittingHitBeforeResults;
   if (hookName === "pmttrpg.actorAction") return _emittingActorActionDepth > 0;
   if (hookName === "pmttrpg.tokenMoved") return _emittingTokenMoved;
@@ -1222,6 +1239,7 @@ async function applyInstantClashStatuses(payload) {
 
 async function emitNamedHook(hookName, payload, { fireHook = true } = {}) {
   if (hookName === "pmttrpg.clashBeforeResults") _emittingClashBeforeResults = true;
+  if (hookName === "pmttrpg.clashEnded") _emittingClashEnded = true;
   if (hookName === "pmttrpg.hitBeforeResults") _emittingHitBeforeResults = true;
   if (hookName === "pmttrpg.turnStart") _emittingTurnStart = true;
   if (hookName === "pmttrpg.endOfTurn") _emittingEndOfTurn = true;
@@ -1238,6 +1256,7 @@ async function emitNamedHook(hookName, payload, { fireHook = true } = {}) {
     if (fireHook) Hooks.callAll(hookName, payload);
   } finally {
     if (hookName === "pmttrpg.clashBeforeResults") _emittingClashBeforeResults = false;
+    if (hookName === "pmttrpg.clashEnded") _emittingClashEnded = false;
     if (hookName === "pmttrpg.hitBeforeResults") _emittingHitBeforeResults = false;
     if (hookName === "pmttrpg.turnStart") _emittingTurnStart = false;
     if (hookName === "pmttrpg.endOfTurn") _emittingEndOfTurn = false;
@@ -1269,6 +1288,8 @@ export async function emitClashOutcome(resolvedPayload, hitPayload = null) {
   }
 
   await emitClashResolved(resolvedPayload);
+
+  await emitNamedHook("pmttrpg.clashEnded", resolvedPayload);
 }
 
 const BURST_NEST_MAX_DEPTH = 8;

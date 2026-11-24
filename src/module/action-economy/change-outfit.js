@@ -8,6 +8,8 @@ import { pruneContentReactionCredits } from "./held-weapon-reactions.js";
 import { checkWorkflowTiming, warnNotYourTurn } from "./timing.js";
 import { itemPickerRows, pickRadioRow } from "../apps/dialog-wait.js";
 
+const ICONS = "systems/projectmoonttrpg/assets/icons/sheet";
+
 export function getEligibleOutfits(actor) {
   if (!actor) return [];
   return actor.items
@@ -43,7 +45,13 @@ async function promptOutfitChoice(actor, outfits) {
     title: game.i18n.localize("PMTTRPG.ActionMenu.ChangeOutfit"),
     hint: game.i18n.localize("PMTTRPG.ActionMenu.ChooseOutfit"),
     inputName: "outfitId",
-    rows: itemPickerRows(outfits, game.i18n.localize("PMTTRPG.ToolWorn"), preferred?.id),
+    rows: (await itemPickerRows(outfits, game.i18n.localize("PMTTRPG.ToolWorn"), preferred?.id)).map((row, i) => ({
+      ...row,
+      dice: [
+        { formula: outfits[i].system?.blockDiceComputed, icon: `${ICONS}/01_defense.webp`, label: game.i18n.localize("PMTTRPG.Clash.Block") },
+        { formula: outfits[i].system?.evadeDiceComputed, icon: `${ICONS}/01_evade.webp`, label: game.i18n.localize("PMTTRPG.Clash.Evade") },
+      ],
+    })),
   });
   return itemId ? actor.items.get(itemId) ?? null : null;
 }

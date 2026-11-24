@@ -768,6 +768,11 @@ function resolvePath(segments, context) {
         ? actor.getStatusOrigin(sub[1])
         : "";
     }
+    if (sub[2] === "pending" && sub.length === 3) {
+      return typeof actor.getPendingStatusStacks === "function"
+        ? actor.getPendingStatusStacks(sub[1])
+        : 0;
+    }
     if (sub.length === 2) return actor.getStatusStacks(sub[1]);
   }
 

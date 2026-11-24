@@ -1,178 +1,7 @@
 // The sleek dark and gold window theme. An application opts in with the `pm-window` class and
-// styles its own parts with the tokens and mixins below.
+// styles its own parts with the tokens below and the mixins in _pm-window-mixins.scss.
 
-@mixin pmw-label {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  color: var(--pmw-muted);
-  font-family: var(--pmw-body);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-// A radio or checkbox inside a label that is the visible control.
-@mixin pmw-hidden-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-@mixin pmw-choice {
-  position: relative;
-  margin: 0;
-  border: 0;
-  border-radius: 4px;
-  background: var(--pmw-well);
-  box-shadow: inset 0 0 0 1px rgba(215, 182, 106, 0.12);
-  cursor: pointer;
-  transition: background-color 0.16s ease, box-shadow 0.16s ease;
-
-  &:not(:has(input:disabled)):hover {
-    background: rgba(17, 13, 10, 0.68);
-  }
-
-  &:has(input:checked) {
-    background: rgba(215, 182, 106, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(243, 194, 103, 0.5), inset 3px 0 0 var(--pmw-gold-line);
-  }
-
-  &:has(input:disabled) {
-    cursor: default;
-  }
-
-  &:has(input:focus-visible) {
-    outline: 1px solid var(--pmw-gold-line);
-    outline-offset: 1px;
-  }
-}
-
-@mixin pmw-button {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: auto;
-  min-width: 0;
-  height: 36px;
-  margin: 0;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 3px;
-  color: var(--pmw-muted);
-  font-family: var(--pmw-display);
-  font-size: 18px;
-  line-height: 1;
-  background: transparent;
-  box-shadow: none;
-  cursor: pointer;
-  transition: background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pmw-cream);
-    background: transparent;
-    box-shadow: 0 2px 0 rgba(243, 194, 103, 0.5);
-    outline: 0;
-  }
-}
-
-@mixin pmw-icon-button {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 28px;
-  min-width: 28px;
-  height: 28px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 3px;
-  color: var(--pmw-muted);
-  font-size: 12px;
-  line-height: 1;
-  background: transparent;
-  box-shadow: inset 0 0 0 1px rgba(215, 182, 106, 0.3);
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pmw-gold-line);
-    background: rgba(215, 182, 106, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(243, 194, 103, 0.6);
-    outline: 0;
-  }
-}
-
-@mixin pmw-tag {
-  display: inline-block;
-  padding: 1px 6px;
-  border: 0;
-  border-radius: 999px;
-  color: var(--pmw-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.4;
-  white-space: nowrap;
-  background: transparent;
-  box-shadow: inset 0 0 0 1px rgba(215, 182, 106, 0.3);
-}
-
-@mixin pmw-control {
-  width: 100%;
-  min-width: 0;
-  min-height: 36px;
-  margin: 0;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 3px;
-  color: var(--pmw-ink);
-  font-family: var(--pmw-body);
-  font-size: 15px;
-  background-color: rgba(17, 13, 10, 0.45);
-  box-shadow: inset 0 0 0 1px rgba(215, 182, 106, 0.16);
-  transition: background-color 0.16s ease, box-shadow 0.16s ease;
-
-  &::placeholder {
-    color: rgba(244, 234, 210, 0.38);
-  }
-
-  &:hover,
-  &:focus,
-  &:focus-visible {
-    background-color: rgba(17, 13, 10, 0.7);
-    box-shadow: 0 2px 0 var(--pmw-gold-line);
-    outline: 0;
-  }
-}
-
-// Include after pmw-button.
-@mixin pmw-button-primary {
-  color: var(--pmw-ground-deep);
-  background: var(--pmw-gold);
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pmw-ground-deep);
-    background: var(--pmw-gold-line);
-    box-shadow: 0 0 0 1px var(--pmw-gold-line), 0 0 10px rgba(243, 194, 103, 0.35);
-  }
-
-  &:disabled {
-    color: rgba(23, 19, 16, 0.7);
-    background: rgba(215, 182, 106, 0.35);
-    box-shadow: none;
-    cursor: not-allowed;
-  }
-}
+@use 'pm-window-mixins' as *;
 
 .application.pm-window {
   --pmw-ink: #f4ead2;
@@ -330,6 +159,68 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 1.4;
+  }
+
+  .dialog-summary {
+    margin: 0;
+  }
+
+  .dialog-summary__weapon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dialog-summary__icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .dialog-summary__body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--pmw-cream);
+      font-family: var(--pmw-display);
+      font-size: 20px;
+      font-weight: 400;
+    }
+  }
+
+  .dialog-summary__meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pmw-ink-dim);
+    font-size: 13px;
+  }
+
+  .dialog-summary__details {
+    color: var(--pmw-ink-dim);
+    font-size: 13px;
+  }
+
+  .damage-type-icon,
+  .action-menu-option__stat-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  .action-menu-option__dice {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
   }
 
   .action-weapon-form__options {

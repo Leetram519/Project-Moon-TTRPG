@@ -31,7 +31,7 @@ system:
   procAction: any
   procCondition: ''
   positive: >-
-    <p>When inflict [[/status Tremor]], inflit an additional [N] [[/status
+    <p>When inflicting [[/status Tremor]], inflict an additional [N] [[/status
     Tremor]].</p>
   negative: ''
   macro:
@@ -39,20 +39,20 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "tremorBeforeTarget" on item to (target.status.Tremor);
-    set flag "tremorBeforeSelf" on item to (self.status.Tremor);
+    set flag "tremorBeforeTarget" on item to (target.status.Tremor + target.status.Tremor.pending);
+    set flag "tremorBeforeSelf" on item to (self.status.Tremor + self.status.Tremor.pending);
 
-    [On Clash Win]
-    require (target.status.Tremor) > (item.flag.tremorBeforeTarget) then
-      inflict (min(N, 3)) Tremor on target;
-    require (self.status.Tremor) > (item.flag.tremorBeforeSelf) then
-      inflict (min(N, 3)) Tremor on self;
+    [After Clash Win]
+    require (target.status.Tremor + target.status.Tremor.pending) > (item.flag.tremorBeforeTarget) then
+      inflict (min(N, 3)) Tremor next round on target;
+    require (self.status.Tremor + self.status.Tremor.pending) > (item.flag.tremorBeforeSelf) then
+      inflict (min(N, 3)) Tremor next round on self;
 
-    [On Clash Lose]
-    require (target.status.Tremor) > (item.flag.tremorBeforeTarget) then
-      inflict (min(N, 3)) Tremor on target;
-    require (self.status.Tremor) > (item.flag.tremorBeforeSelf) then
-      inflict (min(N, 3)) Tremor on self;
+    [After Clash Lose]
+    require (target.status.Tremor + target.status.Tremor.pending) > (item.flag.tremorBeforeTarget) then
+      inflict (min(N, 3)) Tremor next round on target;
+    require (self.status.Tremor + self.status.Tremor.pending) > (item.flag.tremorBeforeSelf) then
+      inflict (min(N, 3)) Tremor next round on self;
 effects: []
 sort: 0
 ownership:

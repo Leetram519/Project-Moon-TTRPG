@@ -51,7 +51,7 @@ system:
     lose (N*6) Charge;
 
     [On Clash Win]
-    create message "[Attack Replacement / Multi-Hit] Press [T] to target a token. Apply Damage twice to the same target. Apply status inflictions at half efficiency, rounded down, for any hit after the first.";
+    create message "[Attack Replacement / Multi-Hit] Press [T] to target a token. Apply Damage (N+1) times to the same target. Apply status inflictions at half efficiency, rounded down, for any hit after the first.";
 effects: []
 flags:
   projectmoonttrpg:

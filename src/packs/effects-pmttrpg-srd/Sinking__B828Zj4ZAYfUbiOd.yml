@@ -40,20 +40,20 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "sinkingBeforeTarget" on item to (target.status.Sinking);
-    set flag "sinkingBeforeSelf" on item to (self.status.Sinking);
+    set flag "sinkingBeforeTarget" on item to (target.status.Sinking + target.status.Sinking.pending);
+    set flag "sinkingBeforeSelf" on item to (self.status.Sinking + self.status.Sinking.pending);
 
-    [On Clash Win]
-    require (target.status.Sinking) > (item.flag.sinkingBeforeTarget) then
-      inflict (min(N, 3)) Sinking on target;
-    require (self.status.Sinking) > (item.flag.sinkingBeforeSelf) then
-      inflict (min(N, 3)) Sinking on self;
+    [After Clash Win]
+    require (target.status.Sinking + target.status.Sinking.pending) > (item.flag.sinkingBeforeTarget) then
+      inflict (min(N, 3)) Sinking next round on target;
+    require (self.status.Sinking + self.status.Sinking.pending) > (item.flag.sinkingBeforeSelf) then
+      inflict (min(N, 3)) Sinking next round on self;
 
-    [On Clash Lose]
-    require (target.status.Sinking) > (item.flag.sinkingBeforeTarget) then
-      inflict (min(N, 3)) Sinking on target;
-    require (self.status.Sinking) > (item.flag.sinkingBeforeSelf) then
-      inflict (min(N, 3)) Sinking on self;
+    [After Clash Lose]
+    require (target.status.Sinking + target.status.Sinking.pending) > (item.flag.sinkingBeforeTarget) then
+      inflict (min(N, 3)) Sinking next round on target;
+    require (self.status.Sinking + self.status.Sinking.pending) > (item.flag.sinkingBeforeSelf) then
+      inflict (min(N, 3)) Sinking next round on self;
 effects: []
 sort: 100000
 ownership:

@@ -41,19 +41,19 @@ system:
   customNotes: ''
   easyEffects: |-
     [On Clash Start]
-    set flag "burnBeforeTarget" on item to (target.status.Burn);
-    set flag "burnBeforeSelf" on item to (self.status.Burn);
+    set flag "burnBeforeTarget" on item to (target.status.Burn + target.status.Burn.pending);
+    set flag "burnBeforeSelf" on item to (self.status.Burn + self.status.Burn.pending);
 
-    [On Clash Win]
-    require (target.status.Burn) > (item.flag.burnBeforeTarget) then
+    [After Clash Win]
+    require (target.status.Burn + target.status.Burn.pending) > (item.flag.burnBeforeTarget) then
       inflict (min(N, 3)) Burn on target;
-    require (self.status.Burn) > (item.flag.burnBeforeSelf) then
+    require (self.status.Burn + self.status.Burn.pending) > (item.flag.burnBeforeSelf) then
       inflict (min(N, 3)) Burn on self;
 
-    [On Clash Lose]
-    require (target.status.Burn) > (item.flag.burnBeforeTarget) then
+    [After Clash Lose]
+    require (target.status.Burn + target.status.Burn.pending) > (item.flag.burnBeforeTarget) then
       inflict (min(N, 3)) Burn on target;
-    require (self.status.Burn) > (item.flag.burnBeforeSelf) then
+    require (self.status.Burn + self.status.Burn.pending) > (item.flag.burnBeforeSelf) then
       inflict (min(N, 3)) Burn on self;
 effects: []
 sort: 0

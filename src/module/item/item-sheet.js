@@ -381,8 +381,6 @@ export class PMTTRPGItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     if (this._supportsEffects()) {
       const effectContext = await this._prepareEffectHostContext();
 
-      console.log(effectContext);
-
       context.effectChoices = effectContext.effectChoices;
       context.system.effects = effectContext.effects;
       context.system.effectSummaryText = effectContext.effectSummaryText;

@@ -17,7 +17,7 @@ system:
     author: ''
     source: Community Rules
   cost: 4
-  stackMax: 1
+  stackMax: 2
   appliesTo: skill
   subtypeWhitelist:
     - regular
@@ -36,8 +36,8 @@ system:
   procCondition: ''
   positive: >-
     <p>[Attack Replacement] You must have at least [N*2] [[/status Haste]] to
-    activate this effect.</p><p>Replaces Attack with [N+1] Attacks, to a max of
-    3 overall.</p>
+    activate this effect.</p><p>Replaces Attack with [N+1] consecutive Attacks.
+    This stacks with any effects of the same name, to a max of 2 overall.</p>
   negative: ''
   macro:
     uuid: ''
@@ -55,7 +55,7 @@ system:
     create message 
 
     "[Attack Replacement / Blitz Multi-Hit] Press [T] to target a token. Apply
-    Damage twice to the same target. Apply status inflictions at half
+    Damage (N+1) times to the same target. Apply status inflictions at half
     efficiency, rounded down, for any hit after the first."
 effects: []
 sort: 0

@@ -457,102 +457,19 @@
 
 /* ── Retaliation dialog ───────────────────────────────────────────────────── */
 
-.clash-retaliation-form {
-  display:        flex;
-  flex-direction: column;
-  gap:            0.75rem;
-  padding:        0.5rem;
-}
-
-.clash-retaliation-form__context {
-  display:     flex;
-  align-items: center;
-  gap:         0.6rem;
-  padding:     0.5rem;
-}
-
-.clash-retaliation-form__context-text {
-  display:        flex;
-  flex-direction: column;
-}
-
-.clash-retaliation-form__attacked-by {
-  font-weight: bold;
-  font-size:   0.9rem;
-}
-
-.clash-retaliation-form__weapon {
-  font-size: 0.75rem;
-}
-
-.clash-retaliation-form__divider {
-  margin:     0.25rem 0;
-}
-
-.clash-retaliation-form__options {
-  display:        flex;
-  flex-direction: column;
-  gap:            0.4rem;
-}
-
-.clash-option {
-  display:       flex;
-  align-items:   center;
-  gap:           0.5rem;
-  padding:       0.4rem 0.6rem;
-  border-radius: 3px;
-  cursor:        pointer;
-  transition:    background 0.12s, border-color 0.12s;
-}
-
-.clash-option:hover {
-  border-color: #ccc;
-}
-
-.clash-option:has(input:checked) {
-  background:   rgba(255, 255, 255, 0.1);
-  border-color: #0066cc;
-}
-
-.clash-option input[type="radio"] {
-  accent-color: #0066cc;
-}
-
-.clash-option__icon {
-  width:       1.2rem;
-  text-align:  center;
-  flex-shrink: 0;
-  font-size:   1.1rem;
-}
-
-.clash-option__label {
-  font-size:   0.85rem;
-  font-weight: 500;
+.clash-option__range-tag,
+.clash-option__unavailable-tag {
+  margin-left: auto;
+  font-size:   12px;
+  white-space: nowrap;
 }
 
 .clash-option__range-tag {
-  margin-left: auto;
-  font-size:   0.7rem;
-  font-weight: 600;
-  color:       #d7a34b;
-  white-space: nowrap;
-}
-
-.clash-option--unavailable {
-  opacity: 0.55;
-  cursor:  not-allowed;
-}
-
-.clash-option--unavailable:hover {
-  border-color: transparent;
+  color: var(--pmw-muted);
 }
 
 .clash-option__unavailable-tag {
-  margin-left: auto;
-  font-size:   0.7rem;
-  font-weight: 600;
-  color:       #c0392b;
-  white-space: nowrap;
+  color: var(--pmw-danger);
 }
 
 .clash-card__status--committed {
@@ -593,47 +510,4 @@
 
 .clash-range-notice__text {
   margin: 0;
-}
-
-.clash-item-picker,
-.clash-assist-picker {
-  display:        flex;
-  flex-direction: column;
-  gap:            0.3rem;
-  padding:        0.5rem;
-}
-
-.clash-skill-picker,
-.clash-tool-picker {
-  display:        flex;
-  flex-direction: column;
-  gap:            0.3rem;
-  padding:        0 0.5rem;
-}
-
-.clash-item-picker__label {
-  font-size:   0.75rem;
-  font-weight: bold;
-  display:     flex;
-  gap:         0.35rem;
-  align-items: center;
-}
-
-.clash-item-picker__select {
-  border-radius:   3px;
-  color:           var(--sheet-ink);
-  background-color: rgba(17, 13, 10, 0.45);
-  padding:         0.35rem;
-  font-size:       0.85rem;
-}
-
-.clash-item-picker__select option {
-  color:      var(--sheet-ink);
-  background: var(--sheet-paper);
-}
-
-.clash-item-picker__select:focus {
-  outline:     none;
-  border-color: #0066cc;
-  box-shadow:  0 0 4px rgba(0, 102, 204, 0.3);
 }

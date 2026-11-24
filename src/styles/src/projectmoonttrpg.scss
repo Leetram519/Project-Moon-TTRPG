@@ -1,31 +1,32 @@
-@import 'init';
-@import 'global/utils/tokens';
-@import 'global/canvas/token-ruler';
-@import 'global/canvas/token-hud';
+@use 'sass:meta';
+@use 'init' as *;
+@use 'global/utils/tokens' as *;
+@use 'global/canvas/token-ruler';
+@use 'global/canvas/token-hud';
 
 // Base styles.
-@import 'global/base/grid';
-@import 'global/base/overrides';
+@use 'global/base/grid';
+@use 'global/base/overrides';
 
 // Tags.
-@import 'global/base/tags';
+@use 'global/base/tags';
 
 // Theme overrides.
 .vtt {
-  @import 'global/application/chat';
-  @import 'global/application/sidebar';
-  @import 'global/combat/index';
+  @include meta.load-css('global/application/chat');
+  @include meta.load-css('global/application/sidebar');
+  @include meta.load-css('global/combat/index');
 }
 
-@import 'global/application/status-tray';
-@import 'global/application/opportunity-prompt';
-@import 'global/application/grapple';
-@import 'global/application/easy-effects-editor';
-@import 'global/application/ee-flag-inspector';
-@import 'global/application/pm-window';
-@import 'global/application/change-weapons';
-@import 'global/application/action-menu';
-@import 'global/application/reduce-status';
+@include meta.load-css('global/application/status-tray');
+@include meta.load-css('global/application/opportunity-prompt');
+@include meta.load-css('global/application/grapple');
+@include meta.load-css('global/application/easy-effects-editor');
+@include meta.load-css('global/application/ee-flag-inspector');
+@include meta.load-css('global/application/pm-window');
+@include meta.load-css('global/application/change-weapons');
+@include meta.load-css('global/application/action-menu');
+@include meta.load-css('global/application/reduce-status');
 
 .app {
   img {
@@ -34,10 +35,10 @@
 }
 
 .projectmoonttrpg {
-  @import 'global/application/window';
-  @import 'global/components/dialogs';
-  @import 'global/components/targeting';
-  @import 'global/components/initiative';
+  @include meta.load-css('global/application/window');
+  @include meta.load-css('global/components/dialogs');
+  @include meta.load-css('global/components/targeting');
+  @include meta.load-css('global/components/initiative');
 
   font-family: $font-stack-base;
   color: var(--sheet-ink);
@@ -93,20 +94,20 @@
   // Import components, scoped within the sheet.
   &.sheet {
     // Generic.
-    @import 'global/base/input';
-    @import 'global/base/cell';
-    @import 'global/components/tabs';
-    @import 'global/components/editor';
-    @import 'global/components/attributes/index';
-    @import 'global/components/abilities';
-    @import 'global/components/biography';
-    @import 'global/components/statuses/index';
-    @import 'global/components/look';
-    @import 'global/components/augment/index';
-    @import 'global/components/weapons/index';
-    @import 'global/components/outfits/index';
-    @import 'global/components/npc';
-    @import 'global/components/pmttrpg-level-up';
+    @include meta.load-css('global/base/input');
+    @include meta.load-css('global/base/cell');
+    @include meta.load-css('global/components/tabs');
+    @include meta.load-css('global/components/editor');
+    @include meta.load-css('global/components/attributes/index');
+    @include meta.load-css('global/components/abilities');
+    @include meta.load-css('global/components/biography');
+    @include meta.load-css('global/components/statuses/index');
+    @include meta.load-css('global/components/look');
+    @include meta.load-css('global/components/augment/index');
+    @include meta.load-css('global/components/weapons/index');
+    @include meta.load-css('global/components/outfits/index');
+    @include meta.load-css('global/components/npc');
+    @include meta.load-css('global/components/pmttrpg-level-up');
   }
 }
 

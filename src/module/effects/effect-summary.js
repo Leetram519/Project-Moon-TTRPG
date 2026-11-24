@@ -2,7 +2,7 @@ import { PMTTRPGUtility } from "../utility.js";
 
 const CLASH_PROC_TYPES = new Set(["onClash", "onClashResult", "onEitherClashResult"]);
 const CHOICE_PROC_TYPES = new Set(["onClash", "onClashResult", "onEitherClashResult", "onCondition"]);
-//const TextEditor = foundry.applications.ux.TextEditor.implementation;
+const TextEditor = foundry.applications.ux.TextEditor.implementation;
 
 export function effectShowsProcChoice(procOn = "alwaysActive") {
   return CHOICE_PROC_TYPES.has(procOn);
@@ -85,9 +85,7 @@ export async function buildEffectSummaryText(effects = []) {
 
     const procCondition = `${effect?.procCondition ?? ""}`.trim();
 
-    const enrichedCondition = procCondition
-      ? await TextEditor.enrichHTML(procCondition)
-      : "";
+    const enrichedCondition = await enrichProcCondition(effect);
 
     const conditionHtml = enrichedCondition
       ? `<span class="effect-summary-condition">${enrichedCondition}</span>, `
@@ -116,6 +114,8 @@ export async function buildEffectSummaryText(effects = []) {
       groupKey = CLASH_PROC_TYPES.has(procOn)
         ? `${procOn}:${procResult}:${procChoice}`
         : (CHOICE_PROC_TYPES.has(procOn) ? `${procOn}:${procChoice}` : procOn);
+
+      if (procOn === "onCondition") groupKey += `:${procCondition.toLowerCase()}`;
 
       groupLabel = PMTTRPGUtility.formatEffectProcLabel(effect);
       groupSort = getGroupSort(effect);
@@ -178,8 +178,12 @@ function getEffectTriggerClass(effect = {}) {
   const triggerClasses = {
     alwaysActive: "trigger-always-active",
     onClash: "trigger-on-clash",
+    onClashResult: "trigger-on-clash",
+    onEitherClashResult: "trigger-on-clash",
     onClashLose: "trigger-on-clash-lose",
     onClashWin: "trigger-on-clash-win",
+    onCritical: "trigger-on-critical",
+    onDevastating: "trigger-on-devastating",
     onHit: "trigger-on-hit",
     onBeingHit: "trigger-on-being-hit",
     onUse: "trigger-on-use",
@@ -192,7 +196,18 @@ function getEffectTriggerClass(effect = {}) {
     onAction: "trigger-on-action"
   };
 
-  return triggerClasses[effect.procOn] ?? "trigger-default";
+  const triggerClass = triggerClasses[effect.procOn] ?? "trigger-default";
+  if (CLASH_PROC_TYPES.has(effect.procOn) && ["win", "lose"].includes(effect.procResult)) {
+    return `${triggerClass}-${effect.procResult}`;
+  }
+  return triggerClass;
+}
+
+// onCondition already names its condition in the trigger label.
+async function enrichProcCondition(effect = {}) {
+  if (effect?.procOn === "onCondition") return "";
+  const procCondition = `${effect?.procCondition ?? ""}`.trim().replace(/,$/, "");
+  return procCondition ? TextEditor.enrichHTML(procCondition) : "";
 }
 
 function stripOuterBlockTags(html = "") {
@@ -227,14 +242,14 @@ export async function buildInlineEffectSummary(effect = {}) {
 
   const enrichedText = await TextEditor.enrichHTML(text || fallback);
   const cleanText = stripOuterBlockTags(enrichedText);
-  const procCondition = await TextEditor.enrichHTML(effect.procCondition);
+  const procCondition = await enrichProcCondition(effect);
 
   const triggerHtml = trigger
     ? `<span class="effect-summary-trigger ${triggerClass}">[${foundry.utils.escapeHTML(trigger)}]</span> `
     : "";
 
   const conditionHtml = procCondition
-    ? `<span class="effect-summary-condition">${foundry.utils.escapeHTML(procCondition)},</span> `
+    ? `<span class="effect-summary-condition">${procCondition},</span> `
     : "";
 
   return `
@@ -242,6 +257,19 @@ export async function buildInlineEffectSummary(effect = {}) {
       ${triggerHtml}${conditionHtml}${cleanText}
     </span>
   `;
+}
+
+export async function buildItemEffectsTooltip(item) {
+  const effects = item?.system?.effects ?? [];
+  if (!effects.length) return "";
+  const lines = await Promise.all(effects.map(async (effect) => {
+    const name = effect?.name ? `<strong>${foundry.utils.escapeHTML(effect.name)}</strong><br>` : "";
+    return `<p>${name}${await buildInlineEffectSummary(effect)}</p>`;
+  }));
+  return `<section class="pmttrpg-status-tip__inner">
+    <header><strong>${foundry.utils.escapeHTML(item.name ?? "")}</strong></header>
+    <div class="pmttrpg-status-tip__body">${lines.join("")}</div>
+  </section>`;
 }
 
 export function computeEffectSummary(entries = [], epMax = 0) {

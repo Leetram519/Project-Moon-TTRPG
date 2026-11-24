@@ -289,9 +289,9 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
     context.allWeapons = context.items
       .filter(item => item.type === "weapon")
       .sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.augments = await context.items
+    context.augments = (await Promise.all(context.items
       .filter(item => item.type === "augment")
-      .map((augment) => {
+      .map(async (augment) => {
         const augmentDocument = this.actor.items.get(augment._id);
         if (augmentDocument) {
           augment.system = foundry.utils.mergeObject(
@@ -302,11 +302,11 @@ export class PMTTRPGCharacterSheet extends HandlebarsApplicationMixin(ActorSheet
         }
         try {
           augment.system = augment.system || {};
-          augment.system.effectSummaryText = buildEffectSummaryText(augment.system?.effects ?? []);
+          augment.system.effectSummaryText = await buildEffectSummaryText(augment.system?.effects ?? []);
         }
         catch (err) { /* ignore */ }
         return augment;
-      })
+      })))
       .sort((a, b) => (a.sort || 0) - (b.sort || 0));
     context.statuses = this._prepareStatusItems(context.items);
 

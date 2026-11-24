@@ -1,5 +1,7 @@
 // Dialog-specific styles extracted from _moves.scss
 
+@use '../application/pm-window-mixins' as *;
+
 &.PMTTRPG-dialog.dialog {
   .window-content {
     display: flex;
@@ -35,7 +37,6 @@
   }
 }
 
-.weapon-ammo-dialog,
 .tool-use-dialog {
   .dialog-summary {
     margin-bottom: 0.9rem;
@@ -51,8 +52,7 @@
     box-shadow: inset 0 0 0 1px rgba(214, 162, 74, 0.12);
   }
 
-  .dialog-summary__icon,
-  .ammo-choice__icon {
+  .dialog-summary__icon {
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 8px;
@@ -68,72 +68,6 @@
 
     h3 { margin: 0; }
   }
-
-  .ammo-choice-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    margin-bottom: 0.85rem;
-  }
-
-  .ammo-choice {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 0.75rem;
-    border: 1px solid rgba(214, 162, 74, 0.18);
-    border-radius: 10px;
-    background: rgba(61, 42, 31, 0.55);
-    cursor: pointer;
-
-    input { flex: 0 0 auto; }
-  }
-
-  .ammo-choice__content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  .ammo-choice__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.65rem;
-  }
-
-  .ammo-choice__name { font-weight: 700; color: var(--sheet-ink); }
-
-  .ammo-choice__quantity {
-    flex: 0 0 auto;
-    min-width: 1.5rem;
-    text-align: center;
-    font-weight: 700;
-    color: var(--sheet-ink);
-  }
-
-  .ammo-choice__tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-  .consume-toggle { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--sheet-ink); }
-
-  .ammo-choice__empty { margin: 0; color: var(--sheet-ink-muted); font-style: italic; }
-
-  .damage-icon {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-left: 0.45rem;
-    flex: 0 0 auto;
-  }
-
-  .damage-icon[data-damage="slash"] { background-image: url('../../assets/icons/sheet/00_slash.webp'); }
-  .damage-icon[data-damage="pierce"] { background-image: url('../../assets/icons/sheet/00_pierce.webp'); }
-  .damage-icon[data-damage="blunt"] { background-image: url('../../assets/icons/sheet/00_blunt.webp'); }
 }
 
 .stat-roll-dialog {
@@ -169,146 +103,6 @@
     gap: 0.35rem;
     margin: 0.35rem 0;
   }
-}
-
-.skill-roll-dialog {
-  .dialog-summary {
-    margin-bottom: 0.9rem;
-  }
-
-  .dialog-summary__weapon {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.8rem;
-    border-radius: 12px;
-    background: rgba(42, 31, 20, 0.42);
-    box-shadow: inset 0 0 0 1px rgba(214, 162, 74, 0.12);
-  }
-
-  .dialog-summary__icon {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 8px;
-    object-fit: cover;
-    flex: 0 0 auto;
-  }
-
-  .dialog-summary__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    min-width: 0;
-    flex: 1 1 auto;
-
-    h3 {
-      margin: 0;
-    }
-  }
-
-  .dialog-summary__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .dialog-summary__details {
-    color: var(--sheet-ink-muted);
-    font-size: 0.92rem;
-    max-height: 4.5rem;
-    overflow-y: auto;
-
-    img {
-      max-width: 100%;
-      max-height: 2.5rem;
-      width: auto;
-      height: auto;
-    }
-  }
-
-  .skill-choice-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    margin-bottom: 0.85rem;
-  }
-
-  .skill-choice {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 0.75rem;
-    border: 1px solid rgba(214, 162, 74, 0.18);
-    border-radius: 10px;
-    background: rgba(61, 42, 31, 0.55);
-    cursor: pointer;
-
-    input {
-      flex: 0 0 auto;
-    }
-  }
-
-  .skill-choice__icon {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 8px;
-    object-fit: cover;
-    flex: 0 0 auto;
-  }
-
-  .skill-choice__content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  .skill-choice__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.65rem;
-  }
-
-  .skill-choice__name {
-    font-weight: 700;
-    color: var(--sheet-ink);
-  }
-
-  .skill-choice__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    align-items: center;
-  }
-
-  .consume-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    color: var(--sheet-ink);
-  }
-
-  .skill-roll-dialog__empty {
-    margin: 0;
-    color: var(--sheet-ink-muted);
-    font-style: italic;
-  }
-
-  .damage-icon {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    flex: 0 0 auto;
-  }
-
-  .damage-icon[data-damage="slash"] { background-image: url('../../assets/icons/sheet/00_slash.webp'); }
-  .damage-icon[data-damage="pierce"] { background-image: url('../../assets/icons/sheet/00_pierce.webp'); }
-  .damage-icon[data-damage="blunt"] { background-image: url('../../assets/icons/sheet/00_blunt.webp'); }
 }
 
 .status-drop-dialog {

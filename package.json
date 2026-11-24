@@ -2,6 +2,7 @@
   "name": "projectmoonttrpg",
   "version": "1.0.0",
   "description": "Compiler for the Project Moon TTRPG system",
+  "type": "module",
   "scripts": {
     "build": "gulp build",
     "compile": "gulp css",
@@ -15,6 +16,7 @@
     "minor": "gulp minor",
     "major": "gulp major",
     "symlinks:create": "node ./tools/create-symlink.mjs",
+    "typecheck": "tsc",
     "docs:generate": "node tools/generate-docs.js",
     "docs:serve": "mkdocs serve"
   },
@@ -28,12 +30,12 @@
     "del": "^6.1.1",
     "fs": "^0.0.1-security",
     "glob": "^13.0.6",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.1",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-git": "^2.10.1",
     "gulp-replace": "^1.1.3",
-    "gulp-sass": "^5.1.0",
+    "gulp-sass": "^6.0.1",
     "gulp-tag-version": "^1.3.1",
     "gulp-webp": "^4.0.1",
     "gulp-yaml": "^2.0.4",
@@ -43,6 +45,7 @@
     "mkdocs": "^0.0.1",
     "nedb": "^1.8.0",
     "path": "^0.12.7",
+    "picomatch": "^2.3.2",
     "sass": "^1.52.1",
     "through2": "^4.0.2",
     "yargs": "^17.5.1"
@@ -51,7 +54,9 @@
     "@eslint/js": "^10.0.1",
     "@foundryvtt/foundryvtt-cli": "^3.0.4",
     "eslint": "^10.6.0",
+    "fvtt-types": "npm:@league-of-foundry-developers/foundry-vtt-types@^14.370.0-beta.20261107215328",
     "globals": "^17.7.0",
-    "gulp-shell": "^0.8.0"
+    "gulp-shell": "^0.8.0",
+    "typescript": "^7.0.2"
   }
 }

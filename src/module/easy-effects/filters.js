@@ -459,7 +459,7 @@ export function resolveActorClashStance(actor, payload = {}) {
 export function normalizeClashStanceTrigger(raw) {
   const text = String(raw ?? "").trim();
   const m = text.match(
-    /^(On Clash Win Before Results|Clash Win Before Results|Before Clash Results|On Clash Start|On Clash Win|Clash Win|On Clash Lose|Clash Lose|On Clash)\s+With\s+(.+)$/i
+    /^(On Clash Win Before Results|Clash Win Before Results|Before Clash Results|After Clash Win|After Clash Lose|On Clash Start|On Clash Win|Clash Win|On Clash Lose|Clash Lose|On Clash)\s+With\s+(.+)$/i
   );
   if (!m) return { matched: false, trigger: text, clashStanceFilter: null };
 
@@ -470,6 +470,8 @@ export function normalizeClashStanceTrigger(raw) {
   else if (baseLower === "on clash win before results") base = "On Clash Win Before Results";
   else if (baseLower === "clash win before results") base = "Clash Win Before Results";
   else if (baseLower === "before clash results") base = "Before Clash Results";
+  else if (baseLower === "after clash win") base = "After Clash Win";
+  else if (baseLower === "after clash lose") base = "After Clash Lose";
   else if (baseLower === "on clash win") base = "On Clash Win";
   else if (baseLower === "clash win") base = "Clash Win";
   else if (baseLower === "on clash lose") base = "On Clash Lose";

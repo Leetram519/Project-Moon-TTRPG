@@ -101,6 +101,7 @@ A trigger tells the system **when** to fire your effect. Write it in square brac
 | `[Clash Win With Attack]` / `[… With Counter\|Block\|Evade\|Defense]`                     | Same listeners as Clash Win, only when the winner's stance matches                                                                                                                                                                                                   |
 | `[Clash Lose]` / `[On Clash Lose]`                                                        | Same listeners on the loser. Does not fire on a one-sided attack                                                                                                                                                                                                     |
 | `[Clash Lose With Attack]` / `[… With Counter\|Block\|Evade\|Defense]`                    | Same listeners as Clash Lose, only when the loser's stance matches                                                                                                                                                                                                   |
+| `[After Clash Win]` / `[After Clash Lose]`                                                | Same listeners as Clash Win / Clash Lose, once both sides’ `[Clash Win]` / `[Clash Lose]` blocks are done and before `[On Hit]`. Takes `With …` too. Damage is not applied at this point.                                             |
 | `[On Damage Calc]`                                                                        | Before damage is finalized. Used attacker kit only (weapon, applied tool, skill, ammo)                                                                                                                                                                               |
 | `[On Clash Win Before Results]` / `[Clash Win Before Results]` / `[Before Clash Results]` | Same listeners as Clash Win. After the result card and Instant, before `[Clash Win]`                                                                                                                                                                                 |
 | `[On Hit Before Results]` / `[On Being Hit Before Results]`                               | Same listeners as On Hit / On Being Hit. After the result card and Instant, before `[Clash Win]` / `[Clash Lose]`                                                                                                                                                    |
@@ -263,6 +264,7 @@ pause Tremor on target;
 ```
 
 - Arrival: `next round` arrives after `[End of Round]` (after clears like “lose all Tremor”). `next turn` arrives at that actor’s Turn Start. `[Start of Round]` runs after arrival, so the new stacks tick and the ones that just expired do not.
+- `(target.status.Tremor)` counts live stacks only. Read pending ones with `(target.status.Tremor.pending)`.
 - `pause <Status>` changes the **same** live status item to pending (default next round) without running Burst or On Lose. Effect List Pause skills run on Clash Win, which finishes **before** `[On Being Hit]`.
 
 
@@ -489,7 +491,8 @@ On a clash:
 7. `[On Clash Win Before Results]`
 8. `[On Hit Before Results]` / `[On Being Hit Before Results]` if the attack (or a connecting Counter) hits
 9. `[Clash Win]` / `[Clash Lose]` (`[Clash Lose]` skips a one-sided attack)
-10. `[On Hit]` / `[On Being Hit]` if that hit connected
+10. `[After Clash Win]` / `[After Clash Lose]` (`[After Clash Lose]` skips a one-sided attack)
+11. `[On Hit]` / `[On Being Hit]` if that hit connected
 
 
 
@@ -1026,7 +1029,7 @@ inflict 2 Burn;
 
 Leave Attack/Defense unset to stamp `[Clash Win]` with no `with`.
 
-`[Clash RESULT With Evade]` and `[On Clash RESULT]` work the same way.
+`[Clash RESULT With Evade]`, `[On Clash RESULT]` and `[After Clash RESULT with CHOICE]` work the same way.
 
 Augment conditionals such as Burn Bonus use `CHOICE` without `RESULT`:
 
@@ -1317,7 +1320,7 @@ power down evade 1 on target;
 
 ## Triggers
 
-`[Always Active]` · `[Clash Win]` / `[On Clash Win]` · `[Clash Lose]` / `[On Clash Lose]` · `[… With Attack|Block|Evade|Defense|Counter]` · `[On Clash]` / `[On Clash Start]` · `[On Use]` · `[On Action]` · `[On Clash Win Before Results]` / `[Clash Win Before Results]` / `[Before Clash Results]` · `[On Hit Before Results]` / `[On Being Hit Before Results]` · `[On Hit]` · `[On Being Hit]` · `[On Damage Calc]` · `[On Burst]` · `[On <Status> Burst]` · `[On <Name>]` · `[On Applied]` · `[On Equip]` · `[On Unequip]` · `[On Gain]` · `[On Lose]` · `[On Removed]` · `[On Dialog Answer <id>]` · `[Turn Start]` / `[On Turn Start]` / `[Start of Turn]` / `[On Start of Turn]` · `[End of Turn]` / `[On End of Turn]` · `[On Move]` · `[On Combat Start]` / `[Combat Start]` / `[Start of Combat]` · `[Start of Round]` / `[On Start of Round]` · `[End of Round]` / `[On End of Round]` · `[On Combat End]` / `[Combat End]` / `[End of Combat]` · `[Before Dealing <Filter> Damage]` · `[On Taking <Filter> Damage]` · `[On Dealing <Filter> Damage]` · `[On Roll]` / `[On Roll "<tag>"]` · `[On Depleted]` / `[On Depleted <Pool>]` · `[On Heal]` / `[On Being Healed]` · `[On Heal HP]` / `[On Being Healed ST]`
+`[Always Active]` · `[Clash Win]` / `[On Clash Win]` · `[Clash Lose]` / `[On Clash Lose]` · `[After Clash Win]` / `[After Clash Lose]` · `[… With Attack|Block|Evade|Defense|Counter]` · `[On Clash]` / `[On Clash Start]` · `[On Use]` · `[On Action]` · `[On Clash Win Before Results]` / `[Clash Win Before Results]` / `[Before Clash Results]` · `[On Hit Before Results]` / `[On Being Hit Before Results]` · `[On Hit]` · `[On Being Hit]` · `[On Damage Calc]` · `[On Burst]` · `[On <Status> Burst]` · `[On <Name>]` · `[On Applied]` · `[On Equip]` · `[On Unequip]` · `[On Gain]` · `[On Lose]` · `[On Removed]` · `[On Dialog Answer <id>]` · `[Turn Start]` / `[On Turn Start]` / `[Start of Turn]` / `[On Start of Turn]` · `[End of Turn]` / `[On End of Turn]` · `[On Move]` · `[On Combat Start]` / `[Combat Start]` / `[Start of Combat]` · `[Start of Round]` / `[On Start of Round]` · `[End of Round]` / `[On End of Round]` · `[On Combat End]` / `[Combat End]` / `[End of Combat]` · `[Before Dealing <Filter> Damage]` · `[On Taking <Filter> Damage]` · `[On Dealing <Filter> Damage]` · `[On Roll]` / `[On Roll "<tag>"]` · `[On Depleted]` / `[On Depleted <Pool>]` · `[On Heal]` / `[On Being Healed]` · `[On Heal HP]` / `[On Being Healed ST]`
 
 ## Targets
 
@@ -1397,6 +1400,7 @@ power down evade 1 on target;
 | `self.stat.for` / `pru` / `jus` / `cha` / `ins` / `tem`                          | Ability scores                                                                                |
 | `self.status.Burn`                                                               | Stack count of Burn on self                                                                   |
 | `self.status.Burn.origin`                                                        | Actor UUID that applied Burn (empty if unknown)                                               |
+| `self.status.Tremor.pending`                                                     | Stacks of Tremor waiting to arrive (`next round` / `next turn`). Not counted in `status.Tremor` |
 | `self.flag.<key>` / `item.flag.<key>` / `combat.flag.<key>` / `event.flag.<key>` | Metadata flag (missing is 0)                                                                  |
 | `self.uuid` / `self.id` / `self.name`                                            | This actor’s UUID / id / name (`(self)` alone -> name)                                        |
 | `item.origin`                                                                    | Applier UUID on the status/item running this script                                           |

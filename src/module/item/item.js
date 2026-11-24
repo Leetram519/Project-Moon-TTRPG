@@ -494,7 +494,10 @@ export class ItemPMTTRPG extends Item {
 
     if (itemData.type == 'skill') {
       const rank = Math.max(0, Number(data.rank ?? 0));
-      const lightCost = Math.max(1, Number(data.lightCost ?? 1));
+      const rawLight = data.lightCost;
+      const lightCost = (rawLight == null || rawLight === "" || !Number.isFinite(Number(rawLight)))
+        ? 1
+        : Math.max(0, Number(rawLight));
       const actorLightMax = Number(actorData?.system?.attributes?.light?.max ?? 0);
 
       data.rank = rank;
@@ -763,9 +766,6 @@ export class ItemPMTTRPG extends Item {
       }
 
       if (blockUnheldWeaponAttack(this, "item.roll:ammo")) return;
-
-      // A targeted shot turns into a clash and only uses the ammo once the ATTACK declaration
-      // goes through. An untargeted shot will not declare.
       const willConsumeAmmo = !isDryFire && consumeAmmo && !!ammo;
       const deferAmmoToClash = willConsumeAmmo && !!targetSelection;
       if (willConsumeAmmo && !deferAmmoToClash) {

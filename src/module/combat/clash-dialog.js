@@ -42,7 +42,8 @@ import { assistChoiceOptions } from "../action-economy/assist.js";
 import { canPayReactionForDeclaration, combatantForReactionToken } from "../action-economy/reaction-credits.js";
 import { ACTION_KINDS } from "../action-economy/kinds.js";
 import { findRelationshipForTarget } from "../grapple/grapple-state.js";
-import { waitForChoice } from "../apps/dialog-wait.js";
+import { cancelButton, confirmButton, itemPickerHost, itemPickerRows, pickRadioRow, waitForWindowChoice } from "../apps/dialog-wait.js";
+import { buildItemEffectsTooltip } from "../effects/effect-summary.js";
 
 function canBreakFreeAfterHit(actor, combatant, combat) {
   if (!combatant || !combat) return false;
@@ -53,7 +54,6 @@ function canBreakFreeAfterHit(actor, combatant, combat) {
 const { renderTemplate } = foundry.applications.handlebars;
 
 const TEMPLATE_RETALIATION = "systems/projectmoonttrpg/templates/dialog/clash/retaliation-dialog.hbs";
-const TEMPLATE_AMMO = "systems/projectmoonttrpg/templates/dialog/weapon-ammo-dialog.html";
 
 // ── Intercept confirmation ────────────────────────────────────────────────────
 
@@ -63,13 +63,14 @@ const TEMPLATE_AMMO = "systems/projectmoonttrpg/templates/dialog/weapon-ammo-dia
  * @returns {Promise<boolean>}
  */
 export async function showInterceptConfirmDialog(actorName = "") {
-  const result = await foundry.applications.api.DialogV2.confirm({
+  const result = await waitForWindowChoice({
     window: { title: game.i18n.localize("PMTTRPG.Clash.InterceptTitle") },
-    content: `<p>${game.i18n.format("PMTTRPG.Clash.InterceptConfirm", { name: actorName })}</p>`,
-    classes: _dialogClasses(),
+    content: `<p>${game.i18n.format("PMTTRPG.Clash.InterceptConfirm", { name: foundry.utils.escapeHTML(actorName) })}</p>`,
+    buttons: [
+      cancelButton(),
+      confirmButton(() => true, { label: game.i18n.localize("PMTTRPG.Clash.InterceptConfirmYes"), icon: "fa-solid fa-person-running" }),
+    ],
     rejectClose: false,
-    yes: { label: game.i18n.localize("PMTTRPG.Clash.InterceptConfirmYes"), icon: "fa-solid fa-person-running" },
-    no:  { label: game.i18n.localize("PMTTRPG.Dialog.cancel"),             icon: "fa-solid fa-xmark" },
   });
   return result === true;
 }
@@ -147,9 +148,16 @@ export async function showRetaliationDialog(actor, state, {
     ? { label: game.i18n.localize("PMTTRPG.Grapple.BreakFreeAfterHit") }
     : null;
 
+  // the hover card for whatever each dropdown has selected
+  const effects = Object.fromEntries(await Promise.all(
+    [...new Set([...equippedWeapons, ...equippedOutfits, ...skills, ...appliedTools].map((entry) => entry.id))]
+      .map(async (id) => [id, await buildItemEffectsTooltip(actor.items.get(id))]),
+  ));
+
   const templateData = {
     actor,
     state,
+    effects,
     equippedWeapons,
     equippedOutfits,
     skills,
@@ -196,10 +204,8 @@ export async function showRetaliationDialog(actor, state, {
     if (retaliatorTokenId) hideWeaponRange(retaliatorTokenId);
   };
 
-  return waitForChoice({
+  return waitForWindowChoice({
     window: { title: templateData.i18n.title },
-    classes: _dialogClasses(),
-    position: { width: 320 },
     content: html,
     buttons: [
       {
@@ -215,7 +221,6 @@ export async function showRetaliationDialog(actor, state, {
       {
         action: "cancel",
         label: templateData.i18n.cancel,
-        icon: "fa-solid fa-xmark",
         callback: () => {
           hideRange();
           return null;
@@ -417,82 +422,32 @@ function _readRetaliationForm(dialog, actor) {
  *
  * @param {ActorPMTTRPG} actor
  * @param {Item} weapon
- * @param {{ shootLabel?: string }} [options]
  * @returns {Promise<{ ammo: Item|null, consumeAmmo: boolean, dryFire: boolean }|null>}
  */
-export async function promptRangedAmmo(actor, weapon, { shootLabel } = {}) {
-  const ammoOptions = (actor.items ?? [])
-    .filter(i => i.type === "ammunition" && Number(i.system?.quantity ?? 0) > 0)
-    .map((item, index) => ({
-      id: item.id,
-      name: item.name,
-      img: item.img,
-      quantity: Number(item.system?.quantity ?? 0),
-      ammoType: item.system?.ammoType ?? null,
-      damageType: item.system?.damageType ?? null,
-      isDefault: index === 0,
-      ammoTypeLabel: item.system?.ammoType
-        ? game.i18n.localize(`PMTTRPG.Ammo${item.system.ammoType[0].toUpperCase()}${item.system.ammoType.slice(1)}`)
-        : null,
-      damageTypeLabel: item.system?.damageType
-        ? game.i18n.localize(`PMTTRPG.DamageType${item.system.damageType[0].toUpperCase()}${item.system.damageType.slice(1)}`)
-        : null,
-    }));
-
-  const html = await renderTemplate(TEMPLATE_AMMO, {
-    weapon: {
-      name: weapon.name,
-      img: weapon.img,
-      offensiveDiceComputed: weapon.system?.offensiveDiceComputed,
-      system: { damageType: weapon.system?.damageType },
-    },
-    ammoOptions,
+export async function promptRangedAmmo(actor, weapon) {
+  const ammoItems = (actor.items ?? []).filter(i => i.type === "ammunition" && Number(i.system?.quantity ?? 0) > 0);
+  const quantity = game.i18n.localize("PMTTRPG.Quantity");
+  const rows = (await itemPickerRows(ammoItems, "")).map((row, i) => {
+    const ammoType = ammoItems[i].system?.ammoType;
+    return {
+      ...row,
+      tag: ammoType ? game.i18n.localize(`PMTTRPG.Ammo${ammoType[0].toUpperCase()}${ammoType.slice(1)}`) : "",
+      meta: `${quantity}: ${Number(ammoItems[i].system?.quantity ?? 0)}`,
+    };
   });
 
-  const buttons = [];
-  if (ammoOptions.length) {
-    buttons.push({
-      action: "shoot",
-      label: shootLabel || game.i18n.localize("PMTTRPG.Dialog.roll"),
-      icon: "fa-solid fa-bullseye",
-      default: true,
-      callback: (event, button, dialog) => {
-        const form = dialog.element?.querySelector("form");
-        const ammoId = form?.ammoId?.value;
-        const ammo = ammoId ? actor.items.get(ammoId) ?? null : null;
-        if (!ammo) {
-          ui.notifications.warn(game.i18n.localize("PMTTRPG.Clash.NoAmmoSelected"));
-          return null;
-        }
-        return {
-          ammo,
-          consumeAmmo: form?.consumeAmmo?.checked !== false,
-          dryFire: false,
-        };
-      },
-    });
-  }
-  buttons.push({
-    action: "dryfire",
-    label: game.i18n.localize("PMTTRPG.Clash.DryFire"),
-    icon: "fa-solid fa-triangle-exclamation",
-    default: !ammoOptions.length,
-    callback: () => ({ ammo: null, consumeAmmo: false, dryFire: true }),
+  const picked = await pickRadioRow({
+    title: game.i18n.localize("PMTTRPG.Dialog.chooseAmmunition"),
+    hint: ammoItems.length ? "" : game.i18n.localize("PMTTRPG.Dialog.noAvailableAmmunition"),
+    host: await itemPickerHost(weapon, weapon.system?.offensiveDiceComputed),
+    inputName: "ammoId",
+    rows: [...rows, { id: "", name: game.i18n.localize("PMTTRPG.Clash.DryFire"), checked: !ammoItems.length }],
+    toggle: ammoItems.length ? { label: game.i18n.localize("PMTTRPG.Dialog.consumeAmmunition"), checked: true } : null,
   });
-  buttons.push({
-    action: "cancel",
-    label: game.i18n.localize("PMTTRPG.Dialog.cancel"),
-    icon: "fa-solid fa-xmark",
-    callback: () => null,
-  });
-
-  return waitForChoice({
-    window: { title: game.i18n.localize("PMTTRPG.Dialog.chooseAmmunition") },
-    classes: _dialogClasses(),
-    content: html,
-    buttons,
-    rejectClose: false,
-  });
+  if (picked === null) return null;
+  const ammo = actor.items.get(ammoItems.length ? picked.id : picked) ?? null;
+  if (!ammo) return { ammo: null, consumeAmmo: false, dryFire: true };
+  return { ammo, consumeAmmo: picked.checked, dryFire: false };
 }
 
 function _counterRangeFromOption(src) {
@@ -560,6 +515,18 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
     if (!breakFreeToggle) return;
     const selected = el.querySelector("[name='retaliationType']:checked")?.value;
     breakFreeToggle.style.display = selected === RETALIATION_TYPES.ONESIDED ? "" : "none";
+  };
+
+  const effectsFor = (select, source) => {
+    if (!select) return;
+    const html = select.value ? el.querySelector(`${source}[data-item-id="${select.value}"]`)?.dataset.effects : "";
+    if (html) select.dataset.tooltipHtml = html;
+    else delete select.dataset.tooltipHtml;
+  };
+  const refreshEffects = () => {
+    effectsFor(itemSelect, ".clash-item-option");
+    effectsFor(skillSelect, ".clash-skill-option");
+    effectsFor(toolSelect, ".clash-tool-option");
   };
 
   const fillNoneOption = (select, label) => {
@@ -686,6 +653,7 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
     refreshCounterRange();
     refreshAssist();
     refreshBreakFree();
+    refreshEffects();
   };
 
   for (const radio of radios) {
@@ -694,9 +662,16 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
   skillSelect?.addEventListener("change", () => {
     refreshConsume();
     refreshTools();
+    refreshEffects();
   });
-  toolSelect?.addEventListener("change", refreshToolConsume);
-  itemSelect?.addEventListener("change", refreshCounterRange);
+  toolSelect?.addEventListener("change", () => {
+    refreshToolConsume();
+    refreshEffects();
+  });
+  itemSelect?.addEventListener("change", () => {
+    refreshCounterRange();
+    refreshEffects();
+  });
   consumeReaction?.addEventListener("change", () => {
     refreshAffordability();
     refreshPicker();
@@ -704,10 +679,4 @@ function _bindRetaliationDialogListeners(dialog, { retaliatorTokenId = null } = 
 
   refreshAffordability();
   refreshPicker();
-}
-
-function _dialogClasses() {
-  const classes = ["projectmoonttrpg", "PMTTRPG-dialog"];
-  if (PMTTRPGUtility.nightmode) classes.push("nightmode");
-  return classes;
 }

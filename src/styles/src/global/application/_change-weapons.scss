@@ -1,3 +1,5 @@
+@use 'pm-window-mixins' as *;
+
 .application.pm-change-weapons {
   .pm-change-weapons__item input {
     @include pmw-hidden-input;

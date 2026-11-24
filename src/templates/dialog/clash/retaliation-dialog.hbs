@@ -1,20 +1,20 @@
-<form class="clash-retaliation-form">
+<form class="clash-retaliation-form action-weapon-form">
 
   {{!-- Context header: who is attacking you --}}
-  <div class="clash-retaliation-form__context">
-    <img class="clash-card__avatar" src="{{state.attackerImg}}" alt="{{state.attackerName}}">
-    <div class="clash-retaliation-form__context-text">
-      <span class="clash-retaliation-form__attacked-by">{{i18n.attackedBy}}</span>
-      <span class="clash-retaliation-form__weapon">{{state.attackerName}} using {{state.attackerItemName}}</span>
+  <div class="dialog-summary">
+    <div class="dialog-summary__weapon">
+      <img class="dialog-summary__icon" src="{{state.attackerImg}}" alt="{{state.attackerName}}">
+      <div class="dialog-summary__body">
+        <h3>{{i18n.attackedBy}}</h3>
+        <div class="dialog-summary__meta"><span>{{state.attackerName}} using {{state.attackerItemName}}</span></div>
+      </div>
     </div>
   </div>
 
-  <hr class="clash-retaliation-form__divider">
-
   {{!-- Option list --}}
-  <div class="clash-retaliation-form__options">
+  <div class="action-weapon-form__options">
     {{#each options}}
-      <label class="clash-option
+      <label class="clash-option action-menu-option
         {{#if requiresItem}}clash-option--has-items{{/if}}
         {{#if unavailable}}clash-option--unavailable{{/if}}"
         data-type="{{type}}">
@@ -27,14 +27,9 @@
           {{#if unavailable}}disabled{{/if}}
         >
 
-        <span class="clash-option__icon">
-          <img
-            class=""
-            src="{{icon}}.webp"
-          >
-        </span>
+        <img class="action-menu-option__img clash-option__icon" src="{{icon}}.webp" alt="">
 
-        <span class="clash-option__label">
+        <span class="action-menu-option__label">
           {{#if labelText}}
             {{labelText}}
           {{else}}
@@ -56,6 +51,7 @@
               data-type="{{../type}}"
               data-item-id="{{id}}"
               data-item-name="{{name}}"
+              data-effects="{{lookup @root.effects id}}"
               data-affordable="{{#if (eq affordable false)}}0{{else}}1{{/if}}"
               {{#if (eq ../type "counter")}}
               data-in-range="{{#if inRange}}1{{else}}0{{/if}}"
@@ -84,18 +80,18 @@
   {{/if}}
 
   {{!-- Item picker — shown only when counter/evade/block/recycled is selected --}}
-  <div class="clash-item-picker" style="display: none;">
-    <label class="clash-item-picker__label">
+  <fieldset class="clash-item-picker" style="display: none;">
+    <legend>
       <i class="fa-solid fa-list"></i>
       <span
         class="clash-item-picker__kind"
         data-weapon="{{i18n.weapon}}"
         data-outfit="{{i18n.outfit}}"
       >{{i18n.weapon}}</span>
-    </label>
-    <select name="retaliationItemId" class="clash-item-picker__select">
+    </legend>
+    <select name="retaliationItemId" class="clash-item-picker__select" data-tooltip-class="pmttrpg-status-tip" data-tooltip-direction="RIGHT">
     </select>
-  </div>
+  </fieldset>
 
   <div class="clash-range-notice" hidden>
     <i class="fa-solid fa-ruler-combined" aria-hidden="true"></i>
@@ -103,12 +99,12 @@
   </div>
 
   {{!-- Optional Skill matching the chosen Reaction --}}
-  <div class="clash-skill-picker" data-none-label="{{i18n.skillNone}}" style="display: none;">
-    <label class="clash-item-picker__label">
+  <fieldset class="clash-skill-picker" data-none-label="{{i18n.skillNone}}" style="display: none;">
+    <legend>
       <i class="fa-solid fa-bolt"></i>
       {{i18n.skillOptional}}
-    </label>
-    <select name="declaredSkillId" class="clash-item-picker__select">
+    </legend>
+    <select name="declaredSkillId" class="clash-item-picker__select" data-tooltip-class="pmttrpg-status-tip" data-tooltip-direction="RIGHT">
       <option value="">{{i18n.skillNone}}</option>
     </select>
     {{#each skills}}
@@ -117,6 +113,7 @@
         data-skill-type="{{skillType}}"
         data-item-id="{{id}}"
         data-item-name="{{name}}"
+        data-effects="{{lookup @root.effects id}}"
         hidden
       ></span>
     {{/each}}
@@ -124,15 +121,15 @@
       <input type="checkbox" name="consumeSkillLight" checked />
       <span>{{i18n.consumeLight}}</span>
     </label>
-  </div>
+  </fieldset>
 
   {{!-- Applied Tool hidden while a Skill is selected --}}
-  <div class="clash-tool-picker" data-none-label="{{i18n.toolNone}}" style="display: none;">
-    <label class="clash-item-picker__label">
+  <fieldset class="clash-tool-picker" data-none-label="{{i18n.toolNone}}" style="display: none;">
+    <legend>
       <i class="fa-solid fa-wrench"></i>
       {{i18n.toolOptional}}
-    </label>
-    <select name="appliedToolId" class="clash-item-picker__select">
+    </legend>
+    <select name="appliedToolId" class="clash-item-picker__select" data-tooltip-class="pmttrpg-status-tip" data-tooltip-direction="RIGHT">
       <option value="">{{i18n.toolNone}}</option>
     </select>
     {{#each appliedTools}}
@@ -143,6 +140,7 @@
         data-item-name="{{name}}"
         data-remaining="{{remaining}}"
         data-consumes="{{#if consumes}}1{{else}}0{{/if}}"
+        data-effects="{{lookup @root.effects id}}"
         hidden
       ></span>
     {{/each}}
@@ -150,21 +148,21 @@
       <input type="checkbox" name="consumeAppliedTool" checked />
       <span>{{i18n.consumeTool}}</span>
     </label>
-  </div>
+  </fieldset>
 
   {{!-- Assist picker for the retaliator (hidden for One-Sided) --}}
   {{#if assistOptions}}
-  <div class="clash-assist-picker">
-    <label class="clash-item-picker__label">
+  <fieldset class="clash-assist-picker">
+    <legend>
       <i class="fa-solid fa-handshake-angle"></i>
       {{i18n.assist}}
-    </label>
+    </legend>
     <select name="assistEntryId" class="clash-item-picker__select">
       {{#each assistOptions}}
         <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
       {{/each}}
     </select>
-  </div>
+  </fieldset>
   {{/if}}
 
 </form>
