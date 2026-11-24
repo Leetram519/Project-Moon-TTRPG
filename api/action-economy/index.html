@@ -1,0 +1,5958 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="System documentation">
+      
+      
+      
+      
+        <link rel="prev" href="../../EasyEffects/04_cheatsheet/">
+      
+      
+        <link rel="next" href="../actor/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Action Economy - PMTTRPG FoundryVTT Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#action-economy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-header__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMTTRPG FoundryVTT Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Action Economy
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../EasyEffects/01_userguide/" class="md-tabs__link">
+          
+  
+  
+  EasyEffects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PMTTRPG FoundryVTT Documentation" class="md-nav__button md-logo" aria-label="PMTTRPG FoundryVTT Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMTTRPG FoundryVTT Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EasyEffects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/01_userguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/02_devguide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/03_internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../EasyEffects/04_cheatsheet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheat Sheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Economy
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Action Economy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economydeclarejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/declare.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/declare.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const processors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-actordeclarationlockkeyactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: actorDeclarationLockKey(actor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-withactordeclarationlockactor-task-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: withActorDeclarationLock(actor, task, owner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isactordeclarationbusyactor-owner-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isActorDeclarationBusy(actor, owner = null)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-failreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: fail(reason)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isactordocumentvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isActorDocument(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isitemdocumentvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isItemDocument(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizekindkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeKind(kind)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizecostcost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeCost(cost)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvetargetraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveTarget(raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-tokenonotherscenecombat-tokenid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: tokenOnOtherScene(combat, tokenId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvecombatcontextactor-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveCombatContext(actor, options = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sortedprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sortedProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractiondeclarationprocessor-id-order-0-fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionDeclarationProcessor({ id, order = 0, fn } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractiondeclarationprocessorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionDeclarationProcessor(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactiondeclarationprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionDeclarationProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayactioncostactor-cost-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPayActionCost(actor, cost = 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvedeclarationpayment-economytype-cost-asreaction-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveDeclarationPayment({ economyType, cost, asReaction = false } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-reactionpaymentrequest-kind-itemid-cost-asreaction-acceptkinds-null-paymentorder-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: reactionPaymentRequest({ kind, itemId, cost, asReaction, acceptKinds = null, paymentOrder = null })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayreactioncostactor-combat-combatant-tokenid-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPayReactionCost(actor, { combat, combatant, tokenId, ...request })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warncannotpayactor-reaction-false-offturn-false-reactionmessagekey-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnCannotPay(actor, { reaction = false, offTurn = false, reactionMessageKey = null } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-applydeclaredactorupdateactor-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: applyDeclaredActorUpdate(actor, update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-applydeclaredowneditemupdateactor-item-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: applyDeclaredOwnedItemUpdate(actor, item, update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-declareactoractionoptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: declareActorAction(options = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-declarationactiontypedeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: declarationActionType(declaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-builddeclarationactionpayloaddeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildDeclarationActionPayload(declaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerdeclarationonactionemit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerDeclarationOnActionEmit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economycustom-actionsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/custom-actions.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/custom-actions.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-custom_action_row_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const CUSTOM_ACTION_ROW_PREFIX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-plaindatavalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: plainData(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-logwarningmessage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: logWarning(message, data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const categories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-seedcategories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: seedCategories()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractionmenucategory-id-labelkey-null-label-null-order-500" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionMenuCategory({ id, labelKey = null, label = null, order = 500 } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractionmenucategoryid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionMenuCategory(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactionmenucategories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionMenuCategories()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasactionmenucategoryid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: hasActionMenuCategory(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-executors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const executors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registercustomactionexecutortype-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerCustomActionExecutor(type, handler)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregistercustomactionexecutortype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterCustomActionExecutor(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hascustomactionexecutortype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: hasCustomActionExecutor(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-executecustomactiondescriptor-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: executeCustomAction(descriptor, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bindingspecdescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: bindingSpec(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-targetbindinguuidtarget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: targetBindingUuid(target)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractionprovider-id-order-0-getactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionProvider({ id, order = 0, getActions } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractionproviderid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionProvider(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactionproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactionidentitydescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionIdentity(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizecustomactiondescriptorraw-providerid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeCustomActionDescriptor(raw, { providerId } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rejectreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: reject(reason)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvesourcedocumentuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveSourceDocument(uuid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sourceislivesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sourceIsLive(source)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectprovidedactionscontext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: collectProvidedActions(context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactionrowiddescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionRowId(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-iscustomactionrowidvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isCustomActionRowId(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-descriptorsforrowdescriptors-rowid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: descriptorsForRow(descriptors, rowId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-costlabelcost-asreaction-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: costLabel(cost, { asReaction = false } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-descriptorlabeldescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: descriptorLabel(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactiontimingdescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionTiming(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customtimingcheckdescriptor-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customTimingCheck(descriptor, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayactor-cost-combat-null-combatant-null-timing-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPay(actor, cost, { combat = null, combatant = null, timing = null } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-buildcustomactionmenurowsdescriptors-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildCustomActionMenuRows(descriptors, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sameidentitya-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sameIdentity(a, b)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-targetactortarget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: targetActor(target)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isselftargettarget-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isSelfTarget(target, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warnusermessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnUser(message)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-notifykey-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: notify(key, data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-runcustomactionmenuchoicerowid-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: runCustomActionMenuChoice(rowId, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sourcenamedescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sourceName(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economykindsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/kinds.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/kinds.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-economy_types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ECONOMY_TYPES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_KINDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-kinds_without_action_effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const KINDS_WITHOUT_ACTION_EFFECTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-declaration_failure_reasons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DECLARATION_FAILURE_REASONS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_declared_hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_DECLARED_HOOK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_TIMING
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-actioneconomyappliescombat-combatant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: actionEconomyApplies(combat, combatant)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-defaulttimingforeconomytype-kind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defaultTimingFor(economyType, kind)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-kindtriggersactioneffectskind-explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: kindTriggersActionEffects(kind, explicit)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmodulemovementmovement-processorsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/movement/movement-processors.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/movement/movement-processors.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-movement_phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const MOVEMENT_PHASES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registermovementprocessor-id-order-0-phase-claims-null-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerMovementProcessor({ id, order = 0, phase, claims = null, process } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregistermovementprocessorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterMovementProcessor(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listmovementprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listMovementProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sorted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sorted()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-movementprocessorclaimscontext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: movementProcessorClaims(context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-runmovementphasephase-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: runMovementPhase(phase, pending)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmodulerulesrule-contributionsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/rules/rule-contributions.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/rules/rule-contributions.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-rule_merges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const RULE_MERGES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-subjects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const subjects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-providers_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warnoncekey-message-extra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnOnce(key, message, extra)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-readpathtarget-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: readPath(target, path)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-writepathtarget-path-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: writePath(target, path, value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizefieldspecfield-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeFieldSpec(field, spec)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-definerulesubjectsubject-roles-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defineRuleSubject(subject, { roles = [], fields = {} } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getrulesubjectsubject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getRuleSubject(subject)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerrulecontributionprovider-id-order-0-getcontributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerRuleContributionProvider({ id, order = 0, getContributions } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisterrulecontributionproviderid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterRuleContributionProvider(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listrulecontributionproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listRuleContributionProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sortedproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sortedProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-validfieldvaluespec-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: validFieldValue(spec, value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectrulecontributionssubject-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: collectRuleContributions(subject, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mergefieldspec-field-basevalue-values-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: mergeField(spec, field, baseValue, values, warnings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolveruleprofilesubject-baseline-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveRuleProfile(subject, baseline = {}, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-owned_content_provider_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const OWNED_CONTENT_PROVIDER_ID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-readitemrulecontributionsitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: readItemRuleContributions(item)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactiveownedcontentactor-isactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActiveOwnedContent(actor, { isActive } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-participantsofvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: participantsOf(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-entriesfromitemitem-subject-role-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: entriesFromItem(item, { subject, role, actor })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ownedcontentrulecontributionscontext-isactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: ownedContentRuleContributions(context = {}, { isActive } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerownedcontentruleprovider-isactive-order-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerOwnedContentRuleProvider({ isActive, order = 0 } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Actor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canvas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canvas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../combat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../easy-effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyEffects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Effects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../item/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Item
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../damage-application/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Damage Application
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handlebars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handlebars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pool-clamp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pool Clamp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../projectmoonttrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rolls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rolls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slug/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../status-macro-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macro API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../targeting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Targeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Templates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utilities.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economydeclarejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/declare.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/declare.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const processors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-actordeclarationlockkeyactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: actorDeclarationLockKey(actor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-withactordeclarationlockactor-task-owner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: withActorDeclarationLock(actor, task, owner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isactordeclarationbusyactor-owner-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isActorDeclarationBusy(actor, owner = null)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-failreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: fail(reason)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isactordocumentvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isActorDocument(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isitemdocumentvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isItemDocument(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizekindkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeKind(kind)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizecostcost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeCost(cost)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvetargetraw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveTarget(raw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-tokenonotherscenecombat-tokenid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: tokenOnOtherScene(combat, tokenId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvecombatcontextactor-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveCombatContext(actor, options = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sortedprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sortedProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractiondeclarationprocessor-id-order-0-fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionDeclarationProcessor({ id, order = 0, fn } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractiondeclarationprocessorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionDeclarationProcessor(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactiondeclarationprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionDeclarationProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayactioncostactor-cost-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPayActionCost(actor, cost = 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvedeclarationpayment-economytype-cost-asreaction-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveDeclarationPayment({ economyType, cost, asReaction = false } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-reactionpaymentrequest-kind-itemid-cost-asreaction-acceptkinds-null-paymentorder-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: reactionPaymentRequest({ kind, itemId, cost, asReaction, acceptKinds = null, paymentOrder = null })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayreactioncostactor-combat-combatant-tokenid-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPayReactionCost(actor, { combat, combatant, tokenId, ...request })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warncannotpayactor-reaction-false-offturn-false-reactionmessagekey-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnCannotPay(actor, { reaction = false, offTurn = false, reactionMessageKey = null } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-applydeclaredactorupdateactor-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: applyDeclaredActorUpdate(actor, update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-applydeclaredowneditemupdateactor-item-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: applyDeclaredOwnedItemUpdate(actor, item, update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-declareactoractionoptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: declareActorAction(options = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-declarationactiontypedeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: declarationActionType(declaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-builddeclarationactionpayloaddeclaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildDeclarationActionPayload(declaration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerdeclarationonactionemit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerDeclarationOnActionEmit()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economycustom-actionsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/custom-actions.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/custom-actions.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-custom_action_row_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const CUSTOM_ACTION_ROW_PREFIX
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-plaindatavalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: plainData(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-logwarningmessage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: logWarning(message, data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const categories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-seedcategories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: seedCategories()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractionmenucategory-id-labelkey-null-label-null-order-500" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionMenuCategory({ id, labelKey = null, label = null, order = 500 } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractionmenucategoryid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionMenuCategory(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactionmenucategories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionMenuCategories()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasactionmenucategoryid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: hasActionMenuCategory(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-executors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const executors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registercustomactionexecutortype-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerCustomActionExecutor(type, handler)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregistercustomactionexecutortype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterCustomActionExecutor(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hascustomactionexecutortype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: hasCustomActionExecutor(type)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-executecustomactiondescriptor-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: executeCustomAction(descriptor, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bindingspecdescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: bindingSpec(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-targetbindinguuidtarget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: targetBindingUuid(target)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registeractionprovider-id-order-0-getactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerActionProvider({ id, order = 0, getActions } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisteractionproviderid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterActionProvider(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactionproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActionProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactionidentitydescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionIdentity(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizecustomactiondescriptorraw-providerid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeCustomActionDescriptor(raw, { providerId } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rejectreason" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: reject(reason)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolvesourcedocumentuuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveSourceDocument(uuid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sourceislivesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sourceIsLive(source)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectprovidedactionscontext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: collectProvidedActions(context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactionrowiddescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionRowId(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-iscustomactionrowidvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isCustomActionRowId(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-descriptorsforrowdescriptors-rowid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: descriptorsForRow(descriptors, rowId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-costlabelcost-asreaction-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: costLabel(cost, { asReaction = false } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-descriptorlabeldescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: descriptorLabel(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customactiontimingdescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customActionTiming(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-customtimingcheckdescriptor-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: customTimingCheck(descriptor, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-canpayactor-cost-combat-null-combatant-null-timing-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: canPay(actor, cost, { combat = null, combatant = null, timing = null } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-buildcustomactionmenurowsdescriptors-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: buildCustomActionMenuRows(descriptors, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sameidentitya-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sameIdentity(a, b)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-targetactortarget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: targetActor(target)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isselftargettarget-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: isSelfTarget(target, context)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warnusermessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnUser(message)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-notifykey-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: notify(key, data)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-runcustomactionmenuchoicerowid-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: runCustomActionMenuChoice(rowId, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sourcenamedescriptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sourceName(descriptor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmoduleaction-economykindsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/action-economy/kinds.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/action-economy/kinds.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-economy_types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ECONOMY_TYPES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_KINDS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-kinds_without_action_effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const KINDS_WITHOUT_ACTION_EFFECTS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-declaration_failure_reasons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const DECLARATION_FAILURE_REASONS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_declared_hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_DECLARED_HOOK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-action_timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const ACTION_TIMING
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-actioneconomyappliescombat-combatant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: actionEconomyApplies(combat, combatant)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-defaulttimingforeconomytype-kind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defaultTimingFor(economyType, kind)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-kindtriggersactioneffectskind-explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: kindTriggersActionEffects(kind, explicit)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmodulemovementmovement-processorsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/movement/movement-processors.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/movement/movement-processors.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-movement_phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const MOVEMENT_PHASES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registermovementprocessor-id-order-0-phase-claims-null-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerMovementProcessor({ id, order = 0, phase, claims = null, process } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregistermovementprocessorid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterMovementProcessor(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listmovementprocessors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listMovementProcessors()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sorted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sorted()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-movementprocessorclaimscontext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: movementProcessorClaims(context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-runmovementphasephase-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: runMovementPhase(phase, pending)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#srcmodulerulesrule-contributionsjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        src/module/rules/rule-contributions.js
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src/module/rules/rule-contributions.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#const-rule_merges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const RULE_MERGES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-subjects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const subjects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-providers_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const providers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-warnoncekey-message-extra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: warnOnce(key, message, extra)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-readpathtarget-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: readPath(target, path)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-writepathtarget-path-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: writePath(target, path, value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-normalizefieldspecfield-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: normalizeFieldSpec(field, spec)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-definerulesubjectsubject-roles-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: defineRuleSubject(subject, { roles = [], fields = {} } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getrulesubjectsubject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: getRuleSubject(subject)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerrulecontributionprovider-id-order-0-getcontributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerRuleContributionProvider({ id, order = 0, getContributions } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-unregisterrulecontributionproviderid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: unregisterRuleContributionProvider(id)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listrulecontributionproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listRuleContributionProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sortedproviders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: sortedProviders()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-validfieldvaluespec-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: validFieldValue(spec, value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectrulecontributionssubject-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: collectRuleContributions(subject, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mergefieldspec-field-basevalue-values-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: mergeField(spec, field, baseValue, values, warnings)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resolveruleprofilesubject-baseline-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: resolveRuleProfile(subject, baseline = {}, context = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#const-owned_content_provider_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        const OWNED_CONTENT_PROVIDER_ID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-readitemrulecontributionsitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: readItemRuleContributions(item)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-listactiveownedcontentactor-isactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: listActiveOwnedContent(actor, { isActive } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-participantsofvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: participantsOf(value)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-entriesfromitemitem-subject-role-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: entriesFromItem(item, { subject, role, actor })
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ownedcontentrulecontributionscontext-isactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: ownedContentRuleContributions(context = {}, { isActive } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-registerownedcontentruleprovider-isactive-order-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function: registerOwnedContentRuleProvider({ isActive, order = 0 } = {})
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="action-economy">action-economy</h1>
+<blockquote>
+<p><strong>JSDoc coverage: -841/109 symbols (-772%)</strong></p>
+</blockquote>
+<h2 id="srcmoduleaction-economydeclarejs"><code>src/module/action-economy/declare.js</code></h2>
+<h3 id="const-processors"><code>const processors</code></h3>
+<p>@type {{ id: string, order: number, seq: number, fn: Function }[]}</p>
+<hr />
+<h3 id="function-actordeclarationlockkeyactor">Function: <code>actorDeclarationLockKey(actor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-withactordeclarationlockactor-task-owner">Function: <code>withActorDeclarationLock(actor, task, owner)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>task</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>owner</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-isactordeclarationbusyactor-owner-null">Function: <code>isActorDeclarationBusy(actor, owner = null)</code></h3>
+<p>Is some other declaration still running for the actor? (one with this owner doesn't count)</p>
+<hr />
+<h3 id="function-failreason">Function: <code>fail(reason)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reason</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-isactordocumentvalue">Function: <code>isActorDocument(value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-isitemdocumentvalue">Function: <code>isItemDocument(value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-normalizekindkind">Function: <code>normalizeKind(kind)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-normalizecostcost">Function: <code>normalizeCost(cost)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cost</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-resolvetargetraw">Function: <code>resolveTarget(raw)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>raw</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-tokenonotherscenecombat-tokenid">Function: <code>tokenOnOtherScene(combat, tokenId)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>combat</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tokenId</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-resolvecombatcontextactor-options">Function: <code>resolveCombatContext(actor, options = {})</code></h3>
+<p>A token with no Combatant only declares without one if this Actor has no Combatant
+in the combat or the token is on another scene. Otherwise it would skip that
+Combatant's credit ledger.</p>
+<hr />
+<h3 id="function-sortedprocessors">Function: <code>sortedProcessors()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-registeractiondeclarationprocessor-id-order-0-fn">Function: <code>registerActionDeclarationProcessor({ id, order = 0, fn } = {})</code></h3>
+<p>Adds a processor that gets awaited after every successful declaration (cost 0 too),
+lower <code>order</code> first. Registering the same <code>id</code> again replaces the old one. Processors
+also run when <code>triggersActionEffects</code> is false.</p>
+<hr />
+<h3 id="function-unregisteractiondeclarationprocessorid">Function: <code>unregisterActionDeclarationProcessor(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listactiondeclarationprocessors">Function: <code>listActionDeclarationProcessors()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-canpayactioncostactor-cost-1">Function: <code>canPayActionCost(actor, cost = 1)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cost = 1</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-resolvedeclarationpayment-economytype-cost-asreaction-false">Function: <code>resolveDeclarationPayment({ economyType, cost, asReaction = false } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{ economyType</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>asReaction = false } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-reactionpaymentrequest-kind-itemid-cost-asreaction-acceptkinds-null-paymentorder-null">Function: <code>reactionPaymentRequest({ kind, itemId, cost, asReaction, acceptKinds = null, paymentOrder = null })</code></h3>
+<p>An Action taken as a Reaction and the sheet's Used Reaction only take Universal credits
+and the pool. Used Reaction starts with the pool so its number drops first.</p>
+<hr />
+<h3 id="function-canpayreactioncostactor-combat-combatant-tokenid-request">Function: <code>canPayReactionCost(actor, { combat, combatant, tokenId, ...request })</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ combat</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>combatant</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tokenId</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>...request }</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-warncannotpayactor-reaction-false-offturn-false-reactionmessagekey-null">Function: <code>warnCannotPay(actor, { reaction = false, offTurn = false, reactionMessageKey = null } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ reaction = false</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>offTurn = false</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>reactionMessageKey = null } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-applydeclaredactorupdateactor-update">Function: <code>applyDeclaredActorUpdate(actor, update)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-applydeclaredowneditemupdateactor-item-update">Function: <code>applyDeclaredOwnedItemUpdate(actor, item, update)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-declareactoractionoptions">Function: <code>declareActorAction(options = {})</code></h3>
+<p>Commits one Action or Reaction: validate, turn rule, spend, processors, then the <code>pmttrpg.actionDeclared</code> hook.</p>
+<p>Off turn an <code>ownTurn</code> kind like Dash or Ready gets refused with <code>not-active-turn</code>.
+Other Actions are taken as a Reaction and pay one Reaction no matter their cost, but a
+Free Action stays free. Pass <code>asReaction: true</code> when the caller already decided that
+(like an attack card made off turn that resolves later). <code>timing: { mode: "anytime", source }</code>
+skips the turn rule at the normal cost. Out of combat it's always cost 0.</p>
+<p>Calls for the same Actor run one at a time, even at cost 0. <code>precheck</code> and <code>apply</code> run in
+that same queue so no other declaration of this Actor can get in between. <code>precheck</code>
+refuses on <code>false</code> or <code>{ ok: false, reason }</code>. Keep <code>apply</code> to writes. A dialog in there
+would block every later declaration of this Actor.</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>options</code></td>
+<td><code>object</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>options.actor</code></td>
+<td><code>Actor</code></td>
+<td>the Actor taking it</td>
+</tr>
+<tr>
+<td><code>options.economyType</code></td>
+<td><code>string</code></td>
+<td>"action" or "reaction"</td>
+</tr>
+<tr>
+<td><code>options.kind</code></td>
+<td><code>string</code></td>
+<td>one of <code>game.projectmoonttrpg.actions.ACTION_KINDS</code></td>
+</tr>
+<tr>
+<td><code>options.cost</code> <em>(optional, default: <code>1</code>)</em></td>
+<td><code>number</code></td>
+<td>a whole number, 0 for a free one</td>
+</tr>
+<tr>
+<td><code>options.consume</code> <em>(optional, default: <code>true</code>)</em></td>
+<td><code>boolean</code></td>
+<td>false declares at cost 0, but processors, [On Action] and the hook still run</td>
+</tr>
+<tr>
+<td><code>options.asReaction</code> <em>(optional, default: <code>false</code>)</em></td>
+<td><code>boolean</code></td>
+<td>pay an Action with a Reaction</td>
+</tr>
+<tr>
+<td><code>options.timing</code> <em>(optional)</em></td>
+<td><code>object</code></td>
+<td><code>{ mode: "anytime", source }</code> skips the turn rule</td>
+</tr>
+<tr>
+<td><code>options.item</code> <em>(optional)</em></td>
+<td><code>Item</code></td>
+<td>the Item it was taken with</td>
+</tr>
+<tr>
+<td><code>options.target</code> <em>(optional)</em></td>
+<td><code>Actor</code></td>
+<td>the target, or <code>{ actor }</code> or <code>{ actorId }</code></td>
+</tr>
+<tr>
+<td><code>options.combat</code> <em>(optional)</em></td>
+<td><code>Combat</code></td>
+<td>defaults to the Combatant's combat, then <code>game.combat</code></td>
+</tr>
+<tr>
+<td><code>options.combatant</code> <em>(optional)</em></td>
+<td><code>Combatant</code></td>
+<td>the acting Combatant, whose Reaction credits get used</td>
+</tr>
+<tr>
+<td><code>options.token</code> <em>(optional)</em></td>
+<td><code>TokenDocument</code></td>
+<td>the acting token (or pass <code>tokenId</code>)</td>
+</tr>
+<tr>
+<td><code>options.metadata</code> <em>(optional)</em></td>
+<td><code>object</code></td>
+<td>copied onto the declaration for processors and hook listeners</td>
+</tr>
+<tr>
+<td><code>options.triggersActionEffects</code> <em>(optional)</em></td>
+<td><code>boolean</code></td>
+<td>overrides whether [On Action] runs, otherwise the kind decides</td>
+</tr>
+<tr>
+<td><code>options.warn</code> <em>(optional, default: <code>true</code>)</em></td>
+<td><code>boolean</code></td>
+<td>false hides the turn and pool warnings</td>
+</tr>
+<tr>
+<td><code>options.precheck</code> <em>(optional)</em></td>
+<td><code>Function</code></td>
+<td>gets <code>{ actor, combat, combatant }</code> before anything is spent</td>
+</tr>
+<tr>
+<td><code>options.apply</code> <em>(optional)</em></td>
+<td><code>Function</code></td>
+<td>gets the declaration after the processors</td>
+</tr>
+<tr>
+<td><code>options.acceptKinds</code> <em>(optional)</em></td>
+<td><code>string[]</code></td>
+<td>credit kinds a Reaction may be paid with, by default just <code>kind</code> if it's a typed Reaction</td>
+</tr>
+<tr>
+<td><code>options.paymentOrder</code> <em>(optional)</em></td>
+<td><code>string</code></td>
+<td><code>restrictedFirst</code>, <code>poolFirst</code> or <code>any</code>: how Reaction credits and the pool get picked</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns</strong> <code>Promise&lt;object&gt;</code> — <code>{ ok: true, declaration }</code>, or <code>{ ok: false, reason }</code> when it's refused</p>
+<hr />
+<h3 id="function-declarationactiontypedeclaration">Function: <code>declarationActionType(declaration)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>declaration</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-builddeclarationactionpayloaddeclaration">Function: <code>buildDeclarationActionPayload(declaration)</code></h3>
+<p><code>[On Action]</code> treats a truthy <code>item</code> as a scope and only runs that item's scripts.
+A declaration is the whole actor acting so the weapon, outfit or tool goes in
+<code>usedItem</code> and <code>item</code> stays null.</p>
+<hr />
+<h3 id="function-registerdeclarationonactionemit">Function: <code>registerDeclarationOnActionEmit()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h2 id="srcmoduleaction-economycustom-actionsjs"><code>src/module/action-economy/custom-actions.js</code></h2>
+<h3 id="const-custom_action_row_prefix"><code>const CUSTOM_ACTION_ROW_PREFIX</code></h3>
+<p>Custom Action Menu rows that content and modules add through providers. Core only
+reads the descriptor. The provider and its executor decide what the Action does.</p>
+<p>A provider returns one object per Action:</p>
+<p>id              unique within that source
+  sourceUuid      the document that grants the Action
+  source          optional live document, otherwise resolved from sourceUuid
+  label, img      just for display, never used as identity
+  category        Action Menu category id, unknown ids fall back to "other"
+  order           sort within the category
+  economy         { type: "action", cost: integer &gt;= 0 }
+  targeting       { mode: "none" | "single", allowSelf: boolean }
+  timing          "reactionOffTurn" is the default and costs one Reaction off turn, or nothing at
+                  cost 0. "ownTurn" can't be used off turn and "anytime" can at the usual cost
+  family          optional { key: "namespace.family", label, img }, same key means one shared row
+  variant         optional { key, label, img }, key is local to the source
+  bindings        optional { namespace, capacity, scope: "combat" | "persistent" }
+  executor        { type: registered executor id, data: plain data }
+  disabledReason  optional, the row stays visible but you can't use it
+  detail          optional short text under the label</p>
+<hr />
+<h3 id="function-plaindatavalue">Function: <code>plainData(value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-logwarningmessage-data">Function: <code>logWarning(message, data)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="const-categories"><code>const categories</code></h3>
+<p>@type {Map<string, { id: string, labelKey: string|null, label: string|null, order: number, builtIn: boolean }>}</p>
+<hr />
+<h3 id="function-seedcategories">Function: <code>seedCategories()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-registeractionmenucategory-id-labelkey-null-label-null-order-500">Function: <code>registerActionMenuCategory({ id, labelKey = null, label = null, order = 500 } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{ id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>labelKey = null</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>label = null</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>order = 500 } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-unregisteractionmenucategoryid">Function: <code>unregisterActionMenuCategory(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listactionmenucategories">Function: <code>listActionMenuCategories()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-hasactionmenucategoryid">Function: <code>hasActionMenuCategory(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="const-executors"><code>const executors</code></h3>
+<p>@type {Map<string, { availability?: Function, execute: Function }>}</p>
+<hr />
+<h3 id="function-registercustomactionexecutortype-handler">Function: <code>registerCustomActionExecutor(type, handler)</code></h3>
+<p><code>handler</code> can be just <code>execute(descriptor, context)</code> or an object with <code>execute</code>
+and an optional <code>availability(descriptor, context)</code>. Availability runs before the
+declaration and returns <code>{ available, reason, detail }</code>.</p>
+<hr />
+<h3 id="function-unregistercustomactionexecutortype">Function: <code>unregisterCustomActionExecutor(type)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-hascustomactionexecutortype">Function: <code>hasCustomActionExecutor(type)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-executecustomactiondescriptor-context">Function: <code>executeCustomAction(descriptor, context = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>context = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-bindingspecdescriptor">Function: <code>bindingSpec(descriptor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-targetbindinguuidtarget">Function: <code>targetBindingUuid(target)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="const-providers"><code>const providers</code></h3>
+<p>@type {Map<string, { id: string, order: number, seq: number, getActions: Function }>}</p>
+<hr />
+<h3 id="function-registeractionprovider-id-order-0-getactions">Function: <code>registerActionProvider({ id, order = 0, getActions } = {})</code></h3>
+<p>Registering the same id again just replaces the old one.</p>
+<hr />
+<h3 id="function-unregisteractionproviderid">Function: <code>unregisterActionProvider(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listactionproviders">Function: <code>listActionProviders()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-customactionidentitydescriptor">Function: <code>customActionIdentity(descriptor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-normalizecustomactiondescriptorraw-providerid">Function: <code>normalizeCustomActionDescriptor(raw, { providerId } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>raw</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ providerId } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-rejectreason">Function: <code>reject(reason)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reason</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-resolvesourcedocumentuuid">Function: <code>resolveSourceDocument(uuid)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uuid</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-sourceislivesource">Function: <code>sourceIsLive(source)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-collectprovidedactionscontext">Function: <code>collectProvidedActions(context = {})</code></h3>
+<p>Duplicates and entries whose source document is gone get dropped.</p>
+<hr />
+<h3 id="function-customactionrowiddescriptor">Function: <code>customActionRowId(descriptor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-iscustomactionrowidvalue">Function: <code>isCustomActionRowId(value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-descriptorsforrowdescriptors-rowid">Function: <code>descriptorsForRow(descriptors, rowId)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptors</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>rowId</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-costlabelcost-asreaction-false">Function: <code>costLabel(cost, { asReaction = false } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cost</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ asReaction = false } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-descriptorlabeldescriptor">Function: <code>descriptorLabel(descriptor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-customactiontimingdescriptor">Function: <code>customActionTiming(descriptor)</code></h3>
+<p>The <code>timing</code> option for declareActorAction. Null keeps the kind's default, reactionOffTurn.</p>
+<hr />
+<h3 id="function-customtimingcheckdescriptor-context">Function: <code>customTimingCheck(descriptor, context)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-canpayactor-cost-combat-null-combatant-null-timing-null">Function: <code>canPay(actor, cost, { combat = null, combatant = null, timing = null } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ combat = null</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>combatant = null</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>timing = null } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-buildcustomactionmenurowsdescriptors-context">Function: <code>buildCustomActionMenuRows(descriptors, context = {})</code></h3>
+<p>A family is always one row no matter how many sources add variants, and a row
+with nothing usable behind it gets disabled instead of hidden.</p>
+<hr />
+<h3 id="function-sameidentitya-b">Function: <code>sameIdentity(a, b)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-targetactortarget">Function: <code>targetActor(target)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-isselftargettarget-context">Function: <code>isSelfTarget(target, context)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-warnusermessage">Function: <code>warnUser(message)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-notifykey-data">Function: <code>notify(key, data)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-runcustomactionmenuchoicerowid-context">Function: <code>runCustomActionMenuChoice(rowId, context = {})</code></h3>
+<p>We only trust <code>rowId</code> from the menu and collect the descriptors again before spending
+anything. If the executor fails after the declaration whatever it cost stays spent.</p>
+<hr />
+<h3 id="function-sourcenamedescriptor">Function: <code>sourceName(descriptor)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>descriptor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmoduleaction-economykindsjs"><code>src/module/action-economy/kinds.js</code></h2>
+<h3 id="const-economy_types"><code>const ECONOMY_TYPES</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-action_kinds"><code>const ACTION_KINDS</code></h3>
+<p>Anything not in this list gets refused before it spends anything. Content-specific actions use <code>custom</code>.</p>
+<hr />
+<h3 id="const-kinds_without_action_effects"><code>const KINDS_WITHOUT_ACTION_EFFECTS</code></h3>
+<p>Kinds that still spend but don't emit [On Action] by default.</p>
+<hr />
+<h3 id="const-declaration_failure_reasons"><code>const DECLARATION_FAILURE_REASONS</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-action_declared_hook"><code>const ACTION_DECLARED_HOOK</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-action_timing"><code>const ACTION_TIMING</code></h3>
+<p>When a declaration can be made in a started combat.</p>
+<hr />
+<h3 id="function-actioneconomyappliescombat-combatant">Function: <code>actionEconomyApplies(combat, combatant)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>combat</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>combatant</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-defaulttimingforeconomytype-kind">Function: <code>defaultTimingFor(economyType, kind)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>economyType</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-kindtriggersactioneffectskind-explicit">Function: <code>kindTriggersActionEffects(kind, explicit)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>explicit</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmodulemovementmovement-processorsjs"><code>src/module/movement/movement-processors.js</code></h2>
+<h3 id="const-movement_phases"><code>const MOVEMENT_PHASES</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-registermovementprocessor-id-order-0-phase-claims-null-process">Function: <code>registerMovementProcessor({ id, order = 0, phase, claims = null, process } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{ id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>order = 0</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>phase</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>claims = null</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>process } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-unregistermovementprocessorid">Function: <code>unregisterMovementProcessor(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listmovementprocessors">Function: <code>listMovementProcessors()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-sorted">Function: <code>sorted()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-movementprocessorclaimscontext">Function: <code>movementProcessorClaims(context = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>context = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-runmovementphasephase-pending">Function: <code>runMovementPhase(phase, pending)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>phase</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>pending</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="srcmodulerulesrule-contributionsjs"><code>src/module/rules/rule-contributions.js</code></h2>
+<h3 id="const-rule_merges"><code>const RULE_MERGES</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="const-subjects"><code>const subjects</code></h3>
+<p>@type {Map&lt;string, { roles: Set<string>, fields: Map<string, object> }&gt;}</p>
+<hr />
+<h3 id="const-providers_1"><code>const providers</code></h3>
+<p>@type {{ id: string, order: number, seq: number, getContributions: Function }[]}</p>
+<hr />
+<h3 id="function-warnoncekey-message-extra">Function: <code>warnOnce(key, message, extra)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>extra</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-readpathtarget-path">Function: <code>readPath(target, path)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-writepathtarget-path-value">Function: <code>writePath(target, path, value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-normalizefieldspecfield-spec">Function: <code>normalizeFieldSpec(field, spec)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>spec</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-definerulesubjectsubject-roles-fields">Function: <code>defineRuleSubject(subject, { roles = [], fields = {} } = {})</code></h3>
+<p>Core only. Redefining a subject just replaces it.</p>
+<p><strong>@param</strong> — {{ roles: string[], fields: Record<string, { type: string, merge: string, values?: any[], prefer?: any, min?: number }> }} definition</p>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subject</code></td>
+<td><code>string</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-getrulesubjectsubject">Function: <code>getRuleSubject(subject)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subject</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-registerrulecontributionprovider-id-order-0-getcontributions">Function: <code>registerRuleContributionProvider({ id, order = 0, getContributions } = {})</code></h3>
+<p>Registering the same <code>id</code> again replaces the earlier one. <code>getContributions(context)</code>
+has to be synchronous and return an array of entries.</p>
+<hr />
+<h3 id="function-unregisterrulecontributionproviderid">Function: <code>unregisterRuleContributionProvider(id)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listrulecontributionproviders">Function: <code>listRuleContributionProviders()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-sortedproviders">Function: <code>sortedProviders()</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><em>No description provided.</em></p>
+<hr />
+<h3 id="function-validfieldvaluespec-value">Function: <code>validFieldValue(spec, value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>spec</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-collectrulecontributionssubject-context">Function: <code>collectRuleContributions(subject, context = {})</code></h3>
+<p>Entries for other subjects get skipped quietly so one provider can serve several subjects.</p>
+<p><strong>Returns</strong> <code>{ entries: object[], warnings: string[]</code> — }</p>
+<hr />
+<h3 id="function-mergefieldspec-field-basevalue-values-warnings">Function: <code>mergeField(spec, field, baseValue, values, warnings)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>spec</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>field</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>baseValue</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>warnings</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-resolveruleprofilesubject-baseline-context">Function: <code>resolveRuleProfile(subject, baseline = {}, context = {})</code></h3>
+<p>The baseline plus every valid contribution. <code>changed</code> is false if the result matches the baseline field by field.</p>
+<p><strong>Returns</strong> <code>{ profile: object, sources: object[], warnings: string[], changed: boolean</code> — }</p>
+<hr />
+<h3 id="const-owned_content_provider_id"><code>const OWNED_CONTENT_PROVIDER_ID</code></h3>
+<p>The built-in rule-contribution provider for owned content. Content opts in with
+<code>flags.projectmoonttrpg.ruleContributions</code>, an array of <code>{ subject, role, changes }</code> entries.
+Only entries matching the participant's role count (a status on the Grappler only counts as <code>grappler</code> content).
+A participant can also name an Item, which counts even if it isn't active on anyone.</p>
+<hr />
+<h3 id="function-readitemrulecontributionsitem">Function: <code>readItemRuleContributions(item)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-listactiveownedcontentactor-isactive">Function: <code>listActiveOwnedContent(actor, { isActive } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>actor</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ isActive } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-participantsofvalue">Function: <code>participantsOf(value)</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-entriesfromitemitem-subject-role-actor">Function: <code>entriesFromItem(item, { subject, role, actor })</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>{ subject</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>actor }</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="function-ownedcontentrulecontributionscontext-isactive">Function: <code>ownedContentRuleContributions(context = {}, { isActive } = {})</code></h3>
+<p>@param {object} context <code>{ subject, roles }</code>, where each role is a participant
+  <code>{ actor, item? }</code> or an array of them</p>
+<hr />
+<h3 id="function-registerownedcontentruleprovider-isactive-order-0">Function: <code>registerOwnedContentRuleProvider({ isActive, order = 0 } = {})</code></h3>
+<blockquote>
+<p>[WARNING] <em>No JSDoc comment — signature extracted from source.</em></p>
+</blockquote>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{ isActive</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>order = 0 } = {}</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.suggest"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
