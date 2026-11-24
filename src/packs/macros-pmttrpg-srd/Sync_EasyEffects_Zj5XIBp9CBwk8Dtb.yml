@@ -1,0 +1,106 @@
+name: Sync EasyEffects
+type: script
+img: icons/svg/clockwork.svg
+scope: global
+command: |-
+  if (!game.user.isGM) {
+    ui.notifications.warn("Only a GM can sync EasyEffects for every actor.");
+    return;
+  }
+
+  const ee = game.projectmoonttrpg.easyEffects;
+
+  const HOST_TYPES = new Set(["weapon", "outfit", "skill", "augment", "tool", "ammunition", "status", "effect"]);
+
+  const items = game.actors.contents.flatMap((actor) => actor.items.contents);
+  for (const scene of game.scenes) {
+    for (const token of scene.tokens) {
+      if (token.actorLink || !token.actor) continue;
+      items.push(...token.actor.items.filter((item) => token.delta?.items.manages(item.id)));
+    }
+  }
+
+  const toSync = [];
+  const rebuilt = new Set();
+  const ownScript = [];
+  for (const item of items) {
+    if (!HOST_TYPES.has(item.type)) continue;
+    const expected = await ee.buildEasyEffectsFromHostEffects(item);
+    if (!expected.trim()) continue;
+    const script = item.system?.easyEffects ?? "";
+    if (!ee.isEasyEffectsSyncDirty(script, expected)) {
+      toSync.push(item);
+    } else if (ee.splitManagedRegion(script).hasRegion) {
+      toSync.push(item);
+      rebuilt.add(item);
+    } else {
+      ownScript.push(item);
+    }
+  }
+
+  const count = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+  const label = (item) => `${item.name} (${item.actor?.name ?? "no actor"})`;
+  if (ownScript.length) console.log("Sync EasyEffects skipped these items (no synced block in their script):", ownScript.map(label));
+  if (!toSync.length) {
+    ui.notifications.info(ownScript.length
+      ? `Nothing to sync. Skipped ${count(ownScript.length, "item")} whose script has no synced block (listed in the console).`
+      : "No items have Effects with EasyEffects to sync.");
+    return;
+  }
+
+  const owners = new Set(toSync.map((item) => item.actor));
+  const reequip = await foundry.applications.api.DialogV2.wait({
+    window: { title: "Sync EasyEffects" },
+    classes: ["projectmoonttrpg", "pm-window"],
+    position: { width: 420 },
+    content: `
+      <p>This will sync EasyEffects with the current Effects on ${count(toSync.length, "item")} across ${count(owners.size, "actor")} (unlinked tokens included). Script text outside the sync blocks aren't affected.</p>
+      ${rebuilt.size ? `<p>On ${count(rebuilt.size, "item")} the synced block doesn't match the item's Effects anymore. It gets rebuilt and any edits inside are lost.</p>` : ""}
+      ${ownScript.length ? `<p>It also skips ${count(ownScript.length, "item")} whose script has no synced block (listed in the console).</p>` : ""}
+      <label class="consume-toggle" data-tooltip="Equipped items whose script changes run [On Unequip] with the old script and [On Equip] with the new one.">
+        <input type="checkbox" name="reequip">
+        <span>Unequip, sync, then re-equip</span>
+      </label>
+      <p><strong>This can't be undone.</strong> Back up your world first.</p>`,
+    buttons: [
+      { action: "cancel", label: "Cancel", type: "button" },
+      { action: "sync", label: "Sync", icon: "fa-solid fa-rotate", default: true, callback: (event, button) => button.form.elements.reequip.checked },
+    ],
+    rejectClose: false,
+    modal: true,
+  });
+  if (typeof reequip !== "boolean") return;
+
+  ui.notifications.info(`Syncing EasyEffects on ${count(toSync.length, "item")}...`);
+  let updated = 0;
+  const failed = [];
+  for (const item of toSync) {
+    try {
+      const result = await ee.syncEasyEffectsFromHostEffects(item, { force: rebuilt.has(item), reequip });
+      if (result.changed) updated++;
+    } catch (err) {
+      failed.push(item);
+      console.error(`Sync EasyEffects failed on ${label(item)}`, err);
+    }
+  }
+
+  const upToDate = toSync.length - updated - failed.length;
+  const skippedNote = ownScript.length ? `, ${ownScript.length} skipped (no synced block, listed in the console)` : "";
+  ui.notifications.info(`EasyEffects sync done: ${updated} updated, ${upToDate} already up to date${skippedNote}.`);
+  if (failed.length) ui.notifications.error(`EasyEffects sync failed on ${count(failed.length, "item")}: ${failed.map(label).join(", ")}. Details are in the console.`);
+ownership:
+  default: 0
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+  coreVersion: '14.370'
+  systemId: projectmoonttrpg
+  systemVersion: 0.1.0
+  createdTime: 1795345259474
+  modifiedTime: 1795345259474
+  lastModifiedBy: null
+_id: Zj5XIBp9CBwk8Dtb
+sort: 300000
+_key: '!macros!Zj5XIBp9CBwk8Dtb'

@@ -1,4 +1,5 @@
 import { pmWindowClasses } from "./dialog-classes.js";
+import { RESISTANCE_DAMAGE_TYPES } from "../easy-effects/resistances.js";
 
 const NO_CHOICE = Symbol("pmttrpg.noChoice");
 const WINDOW_WIDTH = 420;
@@ -66,25 +67,53 @@ export async function waitForWindowChoice({ classes = [], position = {}, buttons
   });
 }
 
-export function itemPickerRows(items, tag, checkedId = items[0]?.id) {
-  return items.map((item) => ({
+// only Slash, Pierce and Blunt have an icon
+function iconDamageType(item) {
+  const type = item?.system?.damageType;
+  return RESISTANCE_DAMAGE_TYPES.includes(type) ? type : "";
+}
+
+export async function itemPickerRows(items, tag, checkedId = items[0]?.id) {
+  // not imported at the top (the EE parser ends up importing this file and has to load without Foundry)
+  const { buildItemEffectsTooltip } = await import("../effects/effect-summary.js");
+  return Promise.all(items.map(async (item) => ({
     id: item.id,
     name: item.name,
     img: item.img,
     tag: item.system?.equipped ? tag : "",
     checked: item.id === checkedId,
-  }));
+    damageType: iconDamageType(item),
+    tooltip: await buildItemEffectsTooltip(item),
+  })));
 }
 
-/** Shows one radio list and resolves the checked row's id (or null if they cancel or close it). */
-export async function pickRadioRow({ title, hint, inputName, rows }) {
-  const content = await foundry.applications.handlebars.renderTemplate(RADIO_PICKER_TEMPLATE, { hint, inputName, rows });
+export async function itemPickerHost(item, meta = "") {
+  const { buildItemEffectsTooltip } = await import("../effects/effect-summary.js");
+  return {
+    name: item.name,
+    img: item.img,
+    meta,
+    damageType: iconDamageType(item),
+    tooltip: await buildItemEffectsTooltip(item),
+  };
+}
+
+/**
+ * Shows one radio list and resolves the checked row's id (or null if they cancel or close it).
+ * A None row can use "" as its id, and with a toggle ({ label, checked }) you get { id, checked } back instead.
+ */
+export async function pickRadioRow({ title, hint = "", inputName, rows, toggle = null, host = null }) {
+  const content = await foundry.applications.handlebars.renderTemplate(RADIO_PICKER_TEMPLATE, { hint, inputName, rows, toggle, host });
   return waitForWindowChoice({
     window: { title },
     content,
     buttons: [
       cancelButton(),
-      confirmButton((_event, _button, dialog) => dialog.element?.querySelector(`[name='${inputName}']:checked`)?.value?.trim() || null),
+      confirmButton((_event, _button, dialog) => {
+        const id = dialog.element?.querySelector(`[name='${inputName}']:checked`)?.value ?? null;
+        if (id === null || !toggle) return id;
+        return { id, checked: !!dialog.element.querySelector("[name='toggle']")?.checked };
+      }),
     ],
     rejectClose: false,
   });

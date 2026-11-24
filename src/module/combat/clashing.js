@@ -389,9 +389,7 @@ async function _retaliate(state, {
       return;
     }
     if (choice.type === RETALIATION_TYPES.COUNTER && PMTTRPGUtility.isRangedWeapon(choice.item)) {
-      const ammoPick = await promptRangedAmmo(actor, choice.item, {
-        shootLabel: game.i18n.localize("PMTTRPG.Clash.Counter"),
-      });
+      const ammoPick = await promptRangedAmmo(actor, choice.item);
       if (!ammoPick) return;
       choice.ammo = ammoPick.ammo;
       choice.consumeAmmo = ammoPick.consumeAmmo;

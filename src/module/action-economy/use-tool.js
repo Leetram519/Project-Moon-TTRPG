@@ -30,7 +30,7 @@ async function promptToolChoice(actor, tools) {
     title: game.i18n.localize("PMTTRPG.ActionMenu.UseTool"),
     hint: game.i18n.localize("PMTTRPG.ActionMenu.ChooseTool"),
     inputName: "toolId",
-    rows: itemPickerRows(tools, game.i18n.localize("PMTTRPG.ToolHeld")),
+    rows: await itemPickerRows(tools, game.i18n.localize("PMTTRPG.ToolHeld")),
   });
   return itemId ? actor.items.get(itemId) ?? null : null;
 }

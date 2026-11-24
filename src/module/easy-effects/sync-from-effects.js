@@ -1,4 +1,5 @@
 import { getEffectStack } from "../effects/effect-summary.js";
+import { emitItemEquipped, emitItemUnequipped, itemIsLoadoutActive } from "./registry.js";
 
 // The lexer ignores these marker lines.
 export const SYNC_START = "# >>> synced effects";
@@ -280,6 +281,7 @@ export async function buildEasyEffectsFromHostEffects(hostItem) {
 export async function syncEasyEffectsFromHostEffects(hostItem, {
   force = false,
   previousEffects = undefined,
+  reequip = false,
 } = {}) {
   if (!hostItem) {
     return { script: "", skipped: true, dirty: false, changed: false };
@@ -305,6 +307,9 @@ export async function syncEasyEffectsFromHostEffects(hostItem, {
     return { script: current, skipped: false, dirty: false, changed: false };
   }
 
+  const rerun = reequip && itemIsLoadoutActive(hostItem, hostItem.actor);
+  if (rerun) await emitItemUnequipped(hostItem);
   await hostItem.update({ "system.easyEffects": next });
+  if (rerun) await emitItemEquipped(hostItem);
   return { script: next, skipped: false, dirty: false, changed: true };
 }

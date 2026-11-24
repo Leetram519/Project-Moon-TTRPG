@@ -18,13 +18,8 @@
       {{#if augment.system.descriptionEnriched}}
       <div class="item-flavor description">{{{augment.system.descriptionEnriched}}}</div>
       {{/if}}
-      {{#if augment.system.effectSummaryGroups.length}}
-        {{#with (lookup augment.system.effectSummaryGroups 0) as |group|}}
-        <div class="item-effect-summary">
-          <h4 class="item-effect-summary__title">{{group.heading}}</h4>
-          <div class="item-effect-summary__body">{{{group.summaryText}}}</div>
-        </div>
-        {{/with}}
+      {{#if augment.system.effectSummaryText}}
+        {{{augment.system.effectSummaryText}}}
       {{/if}}
     </div>
   </li>

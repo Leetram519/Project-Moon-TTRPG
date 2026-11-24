@@ -58,6 +58,7 @@ import { registerGmRouteSocket } from "./easy-effects/gm-route.js";
 import { registerStatusTray, registerStatusTraySettings } from "./apps/status-tray.js";
 import { registerWorldEasyEffectsSettings } from "./apps/easy-effects-editor.js";
 import { eeFlagsAPI } from "./apps/ee-flag-inspector.js";
+import { buildEasyEffectsFromHostEffects, isEasyEffectsSyncDirty, splitManagedRegion, syncEasyEffectsFromHostEffects } from "./easy-effects/sync-from-effects.js";
 import { getActorWeaponDamageType, isSelectableDamageType } from "./damage-application.js";
 import { actorFromSpeaker } from "./acting-user.js";
 import {
@@ -224,6 +225,12 @@ Hooks.once("init", async function() {
       setAdministrativeMovementHeld,
     },
     eeFlags: eeFlagsAPI,
+    easyEffects: {
+      buildEasyEffectsFromHostEffects,
+      isEasyEffectsSyncDirty,
+      splitManagedRegion,
+      syncEasyEffectsFromHostEffects,
+    },
     rules: {
       registerRuleContributionProvider,
       unregisterRuleContributionProvider,

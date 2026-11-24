@@ -14,7 +14,7 @@ import { addRollModeSources, applyRollModeFormula, resolveRollMode, rollModeCoun
 import { rangedCoverBlock } from "./action-economy/cover.js";
 import { checkWorkflowTiming } from "./action-economy/timing.js";
 import { ACTION_KINDS, ECONOMY_TYPES } from "./action-economy/kinds.js";
-import { waitForChoice } from "./apps/dialog-wait.js";
+import { itemPickerHost, itemPickerRows, pickRadioRow, waitForChoice } from "./apps/dialog-wait.js";
 
 export class PMTTRPGRolls {
 
@@ -38,21 +38,6 @@ export class PMTTRPGRolls {
     return result;
   }
 
-  static getSkillTypeLabel(skillType) {
-    switch (skillType) {
-    case 'attack':
-      return game.i18n.localize('PMTTRPG.SkillTypeAttack');
-    case 'block':
-      return game.i18n.localize('PMTTRPG.SkillTypeBlock');
-    case 'evade':
-      return game.i18n.localize('PMTTRPG.SkillTypeEvade');
-    case 'stat':
-      return game.i18n.localize('PMTTRPG.SkillTypeStatUse');
-    default:
-      return skillType;
-    }
-  }
-
   static getSkillOptions(actor, skillType) {
     if (!actor) return [];
 
@@ -61,7 +46,6 @@ export class PMTTRPGRolls {
 
     return items
       .map(item => {
-        const isEquipped = !!item.system?.equipped;
         const formula = isAttack
           ? (item.system?.offensiveDiceComputed || '1d10')
           : (skillType === 'block'
@@ -71,12 +55,8 @@ export class PMTTRPGRolls {
         return {
           id: item.id,
           name: item.name,
-          img: item.img,
           formula,
-          damageType: isAttack ? (item.system?.damageType ?? null) : null,
-          typeLabel: isAttack ? game.i18n.localize('PMTTRPG.Weapon') : game.i18n.localize('PMTTRPG.Outfits'),
-          isEquipped,
-          isDefault: isEquipped,
+          isDefault: !!item.system?.equipped,
         };
       })
       .sort((left, right) => {
@@ -89,49 +69,21 @@ export class PMTTRPGRolls {
     if (!actor || !skill) return null;
 
     const defaultOption = options.find(option => option.isDefault) ?? options[0] ?? null;
-    const dialogData = {
-      skill: {
-        name: skill.name,
-        img: skill.img,
-        typeLabel: this.getSkillTypeLabel(skillType),
-        lightCost: Number(skill.system?.lightCost ?? 0),
-        description: skill.system?.description ?? '',
-      },
-      options,
-      selectedOption: defaultOption,
-      consumeLight: true,
-    };
-
-    const html = await renderTemplate('systems/projectmoonttrpg/templates/dialog/skill-roll-dialog.html', dialogData);
-    const dlgOptions = {
-      classes: ['projectmoonttrpg', 'PMTTRPG-dialog']
-    };
-
-    if (PMTTRPGUtility.nightmode) dlgOptions.classes.push('nightmode');
-
-    return waitForChoice({
-      window: { title: game.i18n.format('PMTTRPG.Dialog.skillRollTitle', { skill: skill.name }) },
-      position: { width: 440 },
-      classes: dlgOptions.classes,
-      content: html,
-      buttons: [{
-        action: 'roll',
-        label: game.i18n.localize('PMTTRPG.Dialog.roll'),
-        default: true,
-        callback: (event, button, dialog) => {
-          const form = dialog.element.querySelector('form');
-          return {
-            itemId: form.itemId?.value ?? defaultOption?.id ?? null,
-            consumeLight: !!form.consumeLight?.checked,
-          };
-        }
-      }, {
-        action: 'cancel',
-        label: game.i18n.localize('PMTTRPG.Dialog.cancel'),
-        callback: () => null
-      }],
-      rejectClose: false
+    const isAttack = skillType === 'attack';
+    const rows = await itemPickerRows(
+      options.map(option => actor.items.get(option.id)),
+      game.i18n.localize(isAttack ? 'PMTTRPG.ToolHeld' : 'PMTTRPG.ToolWorn'),
+      defaultOption?.id,
+    );
+    const lightCost = `${game.i18n.localize('PMTTRPG.SkillLightCost')}: ${Math.max(0, Number(skill.system?.lightCost ?? 0))}`;
+    const pick = await pickRadioRow({
+      title: game.i18n.localize(isAttack ? 'PMTTRPG.ActionMenu.ChooseWeapon' : 'PMTTRPG.ActionMenu.ChooseOutfit'),
+      host: await itemPickerHost(skill, lightCost),
+      inputName: 'itemId',
+      rows: rows.map((row, i) => ({ ...row, meta: options[i].formula })),
+      toggle: { label: game.i18n.localize('PMTTRPG.Dialog.consumeLight'), checked: true },
     });
+    return pick ? { itemId: pick.id, consumeLight: pick.checked } : null;
   }
 
   static async doSkillRoll({ actor, skill, templateData = {} } = {}) {

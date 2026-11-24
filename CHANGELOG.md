@@ -10,6 +10,9 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 ### Added
 
 - Added the Action Menu to character and NPC sheets.
+- Added a sword button to the Token HUD that opens the Action Menu for that token.
+- Hovering an item in a weapon, outfit, tool, ammunition or Skill picker, or a dropdown in the Retaliate window, shows its Effects.
+- The weapon and outfit pickers show each item's dice, and weapons show their damage type.
 - Added Dash, Disengage, Convert to Reactions, Protect, Take Cover, Ready, Assist and Reduce Status.
 - Added Grapple, Throw and Break Free.
 - Added Opportunity Attacks.
@@ -29,9 +32,11 @@ and this project adheres to [Leetram Versioning](https://leetramversioning.com).
 - Added EP count and breakdown into item sheets.
 - [EasyEffects] `status.<Name>.pending` reads stacks that arrive next round or next turn.
 - [EasyEffects] `[After Clash Win]` and `[After Clash Lose]` run after both sides’ Clash Win and Clash Lose effects. Effects can use `[After Clash RESULT with CHOICE]`.
+- [Macros] Sync EasyEffects macro added. A GM can rebuild the synced EasyEffects block from each item's Effects on every actor and unlinked token. Equipped items it changes can run [On Unequip] before the sync and [On Equip] after.
 
 ### Changed
 
+- Choose a Skill, the Applied Tool and ammunition choices, the outfit or weapon choice for a Skill roll, the Retaliate window and the Intercept confirmation use the same window style as the Action Menu.
 - Deleting an item from a sheet now asks first.
 - Weapons and tools can now be Held, Stowed or Dropped.
 - Actions taken outside your turn cost a Reaction.

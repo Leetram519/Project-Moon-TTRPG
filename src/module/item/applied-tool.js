@@ -1,8 +1,6 @@
-import { PMTTRPGUtility } from "../utility.js";
 import { emitActorAction } from "../easy-effects/registry.js";
 import { canUseTool, consumeToolUse, getToolUsesRemaining, toolConsumesByDefault } from "./tool-use.js";
-import { waitForChoice } from "../apps/dialog-wait.js";
-const { renderTemplate } = foundry.applications.handlebars;
+import { itemPickerHost, itemPickerRows, pickRadioRow } from "../apps/dialog-wait.js";
 
 export function isAppliedToolEligible(tool, applyTo) {
   if (tool?.type !== "tool") return false;
@@ -103,67 +101,33 @@ export async function promptAppliedToolDialog(actor, {
   if (!tools.length) return { tool: null, consume: false };
 
   const damageTypeLabel = (type) => {
-    if (!type) return null;
+    if (!type) return "";
     const key = `PMTTRPG.DamageType${type[0].toUpperCase()}${type.slice(1)}`;
     return game.i18n.localize(key);
   };
 
-  const dialogData = {
-    host: {
-      name: hostItem.name,
-      img: hostItem.img,
-      formula: applyTo === "weapon"
-        ? (hostItem.system?.offensiveDiceComputed ?? "")
-        : (defenseType === "evade"
-          ? (hostItem.system?.evadeDiceComputed ?? "")
-          : (hostItem.system?.blockDiceComputed ?? "")),
-      damageType: hostItem.system?.damageType ?? null,
-    },
-    applyTo,
-    defenseType,
-    toolOptions: tools.map((item) => ({
-      id: item.id,
-      name: item.name,
-      img: item.img,
-      remaining: getToolUsesRemaining(item),
-      damageType: item.system?.damageType ?? null,
-      damageTypeLabel: damageTypeLabel(item.system?.damageType),
-      isDefault: false,
-    })),
-    consume: tools.some(item => toolConsumesByDefault(item)),
-    showConsume: tools.some(item => toolConsumesByDefault(item)),
-  };
-
-  const html = await renderTemplate(
-    "systems/projectmoonttrpg/templates/dialog/applied-tool-dialog.html",
-    dialogData
-  );
-
-  const dlgOptions = { classes: ["projectmoonttrpg", "PMTTRPG-dialog"] };
-  if (PMTTRPGUtility.nightmode) dlgOptions.classes.push("nightmode");
-
-  return waitForChoice({
-    window: { title: game.i18n.localize("PMTTRPG.Dialog.chooseAppliedTool") },
-    classes: dlgOptions.classes,
-    content: html,
-    buttons: [{
-      action: "confirm",
-      label: game.i18n.localize("PMTTRPG.Dialog.roll"),
-      default: true,
-      callback: (event, button, dialog) => {
-        const form = dialog.element.querySelector("form");
-        const toolId = form.toolId?.value ?? "";
-        const consume = !!form.consumeTool?.checked;
-        if (!toolId) return { tool: null, consume: false };
-        const tool = actor.items.get(toolId);
-        if (!tool || !canUseTool(tool)) return { tool: null, consume: false };
-        return { tool, consume };
-      },
-    }, {
-      action: "cancel",
-      label: game.i18n.localize("PMTTRPG.Dialog.cancel"),
-      callback: () => null,
-    }],
-    rejectClose: false,
+  const formula = applyTo === "weapon"
+    ? hostItem.system?.offensiveDiceComputed
+    : (defenseType === "evade" ? hostItem.system?.evadeDiceComputed : hostItem.system?.blockDiceComputed);
+  const showConsume = tools.some(item => toolConsumesByDefault(item));
+  const uses = game.i18n.localize("PMTTRPG.ToolUses");
+  const rows = await itemPickerRows(tools, "", null);
+  const picked = await pickRadioRow({
+    title: game.i18n.localize("PMTTRPG.Dialog.chooseAppliedTool"),
+    host: await itemPickerHost(hostItem, formula),
+    inputName: "toolId",
+    rows: [
+      { id: "", name: game.i18n.localize("PMTTRPG.Dialog.noAppliedTool"), checked: true },
+      ...rows.map((row, i) => ({
+        ...row,
+        tag: damageTypeLabel(tools[i].system?.damageType),
+        meta: `${uses}: ${getToolUsesRemaining(tools[i])}`,
+      })),
+    ],
+    toggle: showConsume ? { label: game.i18n.localize("PMTTRPG.Dialog.consumeToolUse"), checked: true } : null,
   });
+  if (picked === null) return null;
+  const tool = actor.items.get(showConsume ? picked.id : picked) ?? null;
+  if (!tool || !canUseTool(tool)) return { tool: null, consume: false };
+  return { tool, consume: showConsume && picked.checked };
 }

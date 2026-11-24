@@ -316,13 +316,8 @@
           {{#if ammo.system.descriptionEnriched}}
           <div class="item-flavor description">{{{ammo.system.descriptionEnriched}}}</div>
           {{/if}}
-          {{#if ammo.system.effectSummaryGroups.length}}
-            {{#with (lookup ammo.system.effectSummaryGroups 0) as |group|}}
-            <div class="item-effect-summary">
-              <h4 class="item-effect-summary__title">{{group.heading}}</h4>
-              <div class="item-effect-summary__body">{{{group.summaryText}}}</div>
-            </div>
-            {{/with}}
+          {{#if ammo.system.effectSummaryText}}
+            {{{ammo.system.effectSummaryText}}}
           {{/if}}
         </div>
       </li>

@@ -332,6 +332,68 @@
     line-height: 1.4;
   }
 
+  .dialog-summary {
+    margin: 0;
+  }
+
+  .dialog-summary__weapon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dialog-summary__icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .dialog-summary__body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+
+    h3 {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: var(--pmw-cream);
+      font-family: var(--pmw-display);
+      font-size: 20px;
+      font-weight: 400;
+    }
+  }
+
+  .dialog-summary__meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pmw-ink-dim);
+    font-size: 13px;
+  }
+
+  .dialog-summary__details {
+    color: var(--pmw-ink-dim);
+    font-size: 13px;
+  }
+
+  .damage-type-icon,
+  .action-menu-option__stat-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  .action-menu-option__dice {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
   .action-weapon-form__options {
     display: flex;
     flex-direction: column;
